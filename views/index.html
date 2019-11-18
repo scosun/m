@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>龙居里® Meeting++</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../layuiadmin/style/admin.css" media="all">
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="/m/js/scosun.js"></script>	
+	</head>
+	<body class="layui-layout-body">
+
+		<div id="LAY_app">
+			<div class="layui-layout layui-layout-admin">
+				<div class="layui-header">
+					<!-- 头部区域 -->
+					<ul class="layui-nav layui-layout-left">
+						<li class="layui-nav-item layadmin-flexible" lay-unselect>
+							<a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+								<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+							</a>
+						</li>
+
+						<li class="layui-nav-item" lay-unselect>
+							<a href="javascript:;" layadmin-event="refresh" title="刷新">
+								<i class="layui-icon layui-icon-refresh-3"></i>
+							</a>
+						</li>
+
+					</ul>
+					<ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+						<li class="layui-nav-item layui-hide-xs" lay-unselect>
+							<a href="javascript:;" layadmin-event="theme">
+								<i class="layui-icon layui-icon-theme"></i>
+							</a>
+						</li>
+
+						<li class="layui-nav-item layui-hide-xs" lay-unselect>
+							<a href="javascript:;" layadmin-event="fullscreen">
+								<i class="layui-icon layui-icon-screen-full"></i>
+							</a>
+						</li>
+						<li class="layui-nav-item" lay-unselect>
+							<a href="javascript:;">
+								<cite>admin</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd><a lay-href="set/user/info.html">基本资料</a></dd>
+								<dd><a lay-href="set/user/password.html">修改密码</a></dd>
+								<hr>
+								<dd layadmin-event="logout" id="logout"><a>退出</a></dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+
+				<!-- 侧边菜单 -->
+				<div class="layui-side layui-side-menu">
+					<div class="">
+						<div class="layui-logo layui-icon" lay-href="home/console.html">
+							<span><img src="../layuiadmin/style/res/logo.svg"/></span>
+
+						</div>
+
+						<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+							<li data-name="home" class="layui-nav-item ">
+								<a href="javascript:;" lay-tips="主页" lay-direction="2">
+									<i class="layui-icon layui-icon-home"></i>
+									<cite>座区编排</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd><a lay-href="arrange/meet/meet.html">我的会议</a></dd>
+									<!-- <dd data-name="property"><a>会议管理</a>
+										<dl class="layui-nav-child">
+											<dd><a lay-href="arrange/meet/meet.html">列表</a></dd>
+											<dd data-name="metingman"><a lay-href="arrange/model/model.html">对应关系</a></a></dd>
+										</dl>
+									</dd> -->
+
+									<dd data-name="property"><a>我的会场</a>
+										<dl class="layui-nav-child">
+											<dd><a lay-href="arrange/meeting/meeting_room.html">会场列表</a></dd>
+											<dd data-name="metingman"><a lay-href="arrange/model/model.html">会场座区设定</a></a></dd>
+											<!-- <dd data-name="metingman"><a lay-href="arrange/model/model.html">所在地列表</a></a></dd>
+											<dd data-name="metingman"><a lay-href="arrange/model/model.html">贵宾室列表</a></a></dd> -->
+											<dd data-name="metingman"><a lay-href="arrange/model/model.html">会场编辑器</a></a></dd>
+										</dl>
+									</dd>
+
+									<dd data-name="property"><a>参会人员</a>
+										<dl class="layui-nav-child">
+											<dd><a lay-href="arrange/attender/attender_list.html">出席</a></dd>
+											<dd><a lay-href="arrange/attender/attender_list1.html">列席</a></dd>
+											<dd><a lay-href="arrange/attender/attender_list2.html">工作人员</a></dd>
+											<!-- <dd><a lay-href="arrange/peotype/typelist/typelist.html">属性</a></dd> -->
+											<dd data-name="property"><a>属性</a>
+												<dl class="layui-nav-child no2">
+													<dd><a lay-href="arrange/1.html">组别</a></dd>
+													<dd><a lay-href="arrange/2.html">党派</a></dd>
+													<dd><a lay-href="arrange/3.html">界别</a></dd>
+													<dd><a lay-href="arrange/4.html">角色</a></dd>
+													<!-- <dd><a lay-href="arrange/peotype/typelist/typelist.html">属性</a></dd> -->
+												</dl>
+											</dd>
+										</dl>
+									</dd>
+
+									<dd data-name="property"><a>编排规则库</a>
+										<dl class="layui-nav-child">
+											<dd><a lay-href="arrange/arrangeman/arrangeman.html">规则列表</a></dd>
+											<dd><a lay-href="arrange/arrangeman/arrangeman.html">对应关系列表</a></dd>
+										</dl>
+									</dd>
+								</dl>
+							</li>
+
+							<!-- <li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-component"></i>
+									<cite>参会人员</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="button">
+										<a lay-href="arrange/attender/attender_list.html">人员列表</a></dd>
+									<dd data-name="property"><a>人员属性</a>
+										<dl class="layui-nav-child">
+											<dd><a lay-href="arrange/peotype/typelist/typelist.html">属性列表</a></dd>
+											<dd><a lay-href="arrange/peotype/scope/scopelist.html">界别</a></dd>
+											<dd><a lay-href="arrange/peotype/identity/identitylist.html">身份</a></dd>
+											<dd><a lay-href="arrange/peotype/group/grouplist.html">组别</a></dd>
+											<dd><a lay-href="arrange/peotype/party/partylist.html">党派</a></dd>
+										</dl>
+									</dd>
+								</dl>
+							</li> -->
+							
+							<li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-rate"></i>
+									<cite>电子席签</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>
+									<dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">会场绑定</a></dd>
+								</dl>
+							</li>
+
+							<li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-rate"></i>
+									<cite>人像识别</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid">
+										<a lay-href="arrange/meetings/meetings_list.html">签到</a>
+									</dd>
+								</dl>
+							</li>
+							
+							<!-- <li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-form"></i>
+									<cite>发通知</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid">
+										<a href="javascript:;">通知列表</a>
+									</dd>
+									<dd data-name="button">
+										<a lay-href="#">短信模板</a>
+									</dd>
+									<dd data-name="form">
+										<a href="javascript:;">通讯录</a>
+									</dd>
+								</dl>
+							</li>
+
+							<li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-read"></i>
+									<cite>APP</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid">
+										<a href="javascript:;">座次查询菜单</a>
+									</dd>
+									<dd data-name="button">
+										<a lay-href="#">RFID标签绑定</a>
+									</dd>
+								</dl>
+							</li>
+							
+							<li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-user"></i>
+									<cite>人脸识别</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid">
+										<a lay-href="">人脸识别</a>
+									</dd>
+								</dl>
+							</li>
+							
+							<li data-name="component" class="layui-nav-item" id="avirGroup">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-user"></i>
+									<cite>管理组</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid" id="user">
+										<a lay-href="arrange/user/user.html">用户管理</a>
+									</dd>
+									<dd data-name="button" id="role">
+										<a lay-href="arrange/role/role.html">管理组管理</a>
+									</dd>
+								</dl>
+							</li>
+							
+							<li data-name="component" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="组件" lay-direction="2">
+									<i class="layui-icon layui-icon-user"></i>
+									<cite>关于我们</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd data-name="grid">
+										<a lay-href="https://www.meetingjiajia.com/index.html#x">咪叮加加官网</a>
+									</dd>
+								</dl>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+
+				<!-- 页面标签 -->
+				<div class="layadmin-pagetabs" id="LAY_app_tabs">
+					<div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+					<div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+					<div class="layui-icon layadmin-tabs-control layui-icon-down">
+						<ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+							<li class="layui-nav-item" lay-unselect>
+								<a href="javascript:;"></a>
+								<dl class="layui-nav-child layui-anim-fadein">
+									<dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+									<dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+									<dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+					<div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+						<ul class="layui-tab-title" id="LAY_app_tabsheader">
+							<li lay-id="home/console.html" lay-attr="home/console.html" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+						</ul>
+					</div>
+				</div>
+
+
+				<!-- 主体内容 -->
+				<div class="layui-body" id="LAY_app_body">
+					<div class="layadmin-tabsbody-item layui-show">
+						<iframe src="home/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+					</div>
+				</div>
+
+				<!-- 辅助元素，一般用于移动设备下遮罩 -->
+				<div class="layadmin-body-shade" layadmin-event="shade"></div>
+			</div>
+		</div>
+
+		<script src="../layuiadmin/layui/layui.js"></script>
+		<script>
+				$(document).ready(function(){
+					$.ajax({
+						async: false,
+						type: "get",
+						url: "http://140.143.237.247:8083/permission/getpremission",
+						datatype: 'json',
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
+						//成功的回调函数
+						success: function(msg) {
+							var data = msg.data;
+							if (msg.code != 0) {
+								location.href = "user/login.html"
+							}
+							if (isEmptyObject(data)!=0) {
+								console.log("1")
+								var a=[]
+								$.each(data, function(index, item) {
+									var url = item.split("/")
+									a.push(url[1])
+								})
+								console.log(a)
+								if(a.indexOf("user")==-1&&a.indexOf("manage")==-1){
+									$('#user').hide();
+								}
+								if(a.indexOf("role")==-1){
+									$('#role').hide();
+								}
+							} else {
+								console.log("2")
+								$('#user').hide();
+								$('#role').hide();
+								$('#avirGroup').hide();
+							}
+						},
+						error: function(error) {
+							console.log(error)
+						},
+					})
+				});
+			
+				function isEmptyObject(obj) {
+			
+					var jlength=0;
+					for (var key in obj) {
+						if(key!="null"){
+							jlength++;
+						}
+					};
+					return jlength
+				};
+				
+			layui.config({
+				base: '../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use('index', function() {
+				var $ = layui.$;
+				// 				$.ajax({
+				// 					async: false,
+				// 					type: "post",
+				// 					url: "http://127.0.0.1:8083/user/test3",
+				// 					datatype: 'json',
+				// 
+				// 					xhrFields: {
+				// 						withCredentials: true
+				// 					},
+				// 					//成功的回调函数
+				// 					success: function(msg) {
+				// 						console.log(msg)
+				// 					},
+				// 					error: function(error) {
+				// 						console.log(error)
+				// 					},
+				// 				})
+				$("#logout").click(function() {
+					$.ajax({
+						async: false,
+						type: "get",
+						url: "http://140.143.237.247:8083/logout",
+						datatype: 'json',
+						xhrFields: {
+							withCredentials: true
+						},
+						//成功的回调函数
+						success: function(msg) {
+							console.log(msg)
+						},
+						error: function(error) {
+							console.log(error)
+						},
+					})
+				})
+			})
+		</script>
+	</body>
+</html>
+<script type="text/javascript">
+	$("")
+</script>
