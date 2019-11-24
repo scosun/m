@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<style type="text/css">
+			header {
+				box-shadow: 0px 0px 5px gray;
+				height: 3.5rem;
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				z-index: 9999;
+				background-color: white;
+			}
+			body {
+				background-color: #f1f1f1;
+			}
+			/*右侧菜单*/
+			.layui-right-nav{
+				position: absolute;
+				right:20px;
+				top:0;
+				height: 3.5rem;
+				line-height: 3.5rem;
+				background-color: #fff;
+			}
+			.layui-right-nav i{
+				display: block;
+				height: 20px;
+				width: 20px;
+				float: left;
+				margin-top:18px;
+				padding-left:7px;
+				padding-right:7px;
+			}
+			.layui-right-nav i img{
+				width: 100%;
+				display: block;
+			}
+			/*隐藏浏览器滚动条*/
+			::-webkit-scrollbar {display:none;width: 0px;}
+		</style>
+	</head>
+	<body>
+		<header>
+			<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+				<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
+				<a onclick="asd()"><cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新 </cite></a>
+			</span>
+			<!-- 右侧菜单 -->
+			<span class="layui-right-nav">
+				<i id="nav-parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
+				<i id="nav-lock" data="锁定"><img src="../../../images/lock.png"></i>
+				<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
+				<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
+				<i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i>
+				<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
+				<i id="nav-save" data="保存"><img src="../../../images/save.png"></i>
+				<i id="nav-import" data="导入座区数据"><img src="../../../images/import.png"></i>
+				<i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i>
+				<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
+				<i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i>
+				<i id="nav-print" data="设定打印区域"><img src="../../../images/print.png"></i>
+			</span>
+			<!-- 右侧菜单 end-->
+		</header>
+	</body>
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+	<script type="text/javascript">
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'user', 'table'], function() {
+			var $ = layui.$,
+				form = layui.form,
+				element = layui.element,
+				table = layui.table,
+				layer = layui.layer,
+				router = layui.router();
+			/*右侧菜单HOVER显示提示文字*/
+			$('.layui-right-nav i').each(function(){
+				var _id = $(this).attr('id');
+				var _data = $(this).attr('data');
+				$("#" + _id).hover(function() {
+					openMsg();
+				}, function() {
+					layer.close(subtips);
+				});
+				function openMsg() {
+					subtips = layer.tips(_data, '#'+_id,{tips:[3,'#666'],time: 30000});
+				}
+			})
+			/*右侧菜单HOVER显示提示文字 end*/
+		})
+	</script>
+</html>
