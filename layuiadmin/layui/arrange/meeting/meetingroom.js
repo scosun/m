@@ -248,8 +248,11 @@ layui.config({
 					// ,maxmin: true
 					,
 				area: ['60%', '80%'],
-				btn: ['确定', '取消'],
-				yes: function(index, layero) {
+				btn: ['座区编辑','确定', '取消'],
+				yes:function(index,layer0){
+					location.href= "seatmapseditor.html";
+				},
+				btn2: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
 					$.ajax({
 						url: "https://www.longjuli.com/ajax?",

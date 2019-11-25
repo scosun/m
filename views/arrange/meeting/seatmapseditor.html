@@ -4,6 +4,9 @@
 	<meta charset="utf-8">
 	<title></title>
 	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<style type="text/css">
 		header {
 			box-shadow: 0px 0px 5px gray;
@@ -43,6 +46,80 @@
 		}
 		/*隐藏浏览器滚动条*/
 		::-webkit-scrollbar {display:none;width: 0px;}
+
+
+		.reseled {
+			border: 1px solid #21c2f2 !important;
+		}
+
+
+		.seatdiv{
+			/* float:left; */
+			width:40px;
+			height:40px;
+			text-align:center;
+			line-height:40px;
+			font-size:12px;
+			border:1px solid #ccc;
+			position: absolute;
+			/* margin-right:7px;
+			margin-bottom:10px; */
+		}
+		.seled {
+			background-color: #D6DFF7;
+		}
+		.aisleseats{
+			border:1px dashed #ccc;
+		}
+		.rownumseats{
+			border:1px dashed #ccc;
+			color:#ff0000;
+		}
+		.deleteseats{
+			border:1px dashed #ccc;
+			opacity: 0.5;
+		}
+		
+		.clear{ clear:both} 
+
+		.dragcontainer{
+			position:absolute;
+			width:0px;height:0px;
+			margin:0px;padding:0px;
+			left:0px;top:0px;
+			cursor: all-scroll;
+			border:1px dashed #0099FF;
+			/* background-color:#C3D5ED; */
+			z-index:1;
+			opacity:0.6;
+			display:none;
+		}
+
+		.seatcontainer{
+			position: relative;
+			/* user-select: none; */
+			width: 100%;
+			height: 800px;
+
+			background: aliceblue;
+		}
+		
+		.dragbg{
+			background-color: #efe92a4a;
+		}
+		.locked{
+			border: 1px solid #e80a0a;
+		}
+
+		.colDiv {
+			position:absolute;
+			width: 40px;
+			height: 40px;
+			text-align: center;
+			line-height: 40px;
+			font-size: 12px;
+			color: red;
+		}
 	</style>
 </head>
 <body>
@@ -52,11 +129,23 @@
 		</span>
 		<!-- 右侧菜单 -->
 		<span class="layui-right-nav">
+			<i id="completebtn" data="完成"><img src="../../../images/rollback.png"></i>
+			<i id="savelocalbtn" data="临时保存"><img src="../../../images/rollback.png"></i>
+			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/rollback.png"></i>
+			<i id="dleftmovebtn" data="左移"><img src="../../../images/rollback.png"></i>
+			<i id="drightmovebtn" data="右移"><img src="../../../images/rollback.png"></i>
+			<i id="dtopmovebtn" data="上移"><img src="../../../images/rollback.png"></i>
+			<i id="dbottommovebtn" data="下移"><img src="../../../images/rollback.png"></i>
+			<i id="rightbtn" data="右键"><img src="../../../images/rollback.png"></i>
+			<i id="cancelrightbtn" data="取消右键"><img src="../../../images/rollback.png"></i>
+			
+
 			<i id="nav-rollback" data="回退"><img src="../../../images/rollback.png"></i>
 			<i id="nav-forward" data="前进"><img src="../../../images/forward.png"></i>
 			<i id="nav-pladd" data="批量新建"><img src="../../../images/pladd.png"></i>
 			<i id="nav-down" data="设置行列" style="margin-left:-12px;"><img src="../../../images/angle-down.png" style="width: 14px;margin-top: 4px;"></i>
 			<i id="nav-add" data="新建"><img src="../../../images/add.png"></i>
+			
 			<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
 			<i id="nav-mark" data="标注"><img src="../../../images/mark.png"></i>
 			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
@@ -67,14 +156,27 @@
 			<i id="nav-align-left" data="左对齐"><img src="../../../images/align-left.png"></i>
 			<i id="nav-align-center" data="左右居中"><img src="../../../images/align-center.png"></i>
 			<i id="nav-align-right" data="右对齐"><img src="../../../images/align-right.png"></i>
-			<i id="nav-vertical-c" data="垂直分布"><img src="../../../images/vertical-distribution-center.png"></i>
-			<i id="nav-horizontal-c" data="水平分布"><img src="../../../images/horizontal-distribution-center.png"></i>
+			<i id="nav-vertical-c" data="水平分布"><img src="../../../images/vertical-distribution-center.png"></i>
+			<i id="nav-horizontal-c" data="垂直分布"><img src="../../../images/horizontal-distribution-center.png"></i>
 			<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
 		</span>
 		<!-- 右侧菜单 end-->
 	</header>
+
+	<div id="seatcontainer" class="seatcontainer" >
+		<div id="seatcontainerId">
+			<!-- <div class="seatdiv" style="top:100px; left:100px;" id="1-1">1</div> -->
+			
+		</div>
+
+		<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;">
+		</div>
+		<div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;">
+		</div>
+	</div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="seatscontrol_temp.js"></script>
 <script type="text/javascript">
 layui.config({
 	base: '../../../layuiadmin/' //静态资源所在路径
@@ -89,7 +191,7 @@ layui.config({
 		router = layui.router();
 		
 		/*右侧菜单 设置行列弹框*/
-		$('#nav-down img').on('click', function(){
+		$('#nav-down img,#nav-add img').on('click', function(){
 			layer.open({
 				type: 2,
 				title: '设置行列',
@@ -99,6 +201,11 @@ layui.config({
 				content: 'seatmapseditor_pop.html',
 				btn: ['提交', '取消'],
 				yes: function(index, layero) {
+					var rownum = +layero.find('iframe').contents().find("#rownum").val();
+					var colnum = +layero.find('iframe').contents().find("#colnum").val()
+					creatSeats(rownum,colnum);
+
+					layer.close(index);
 				}
 			});
 		});
