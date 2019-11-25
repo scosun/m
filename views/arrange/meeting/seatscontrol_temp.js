@@ -2,31 +2,13 @@
 
 
 $(function(){
-	$("#dragbtn").bind("click",dragSeats);
-	$("#canceldragbtn").bind("click",cancelDragSeats);
-	$("#lockbtn").bind("click",bindLockSeats);
-	$("#resetbtn").bind("click",resetSeats);
-	$("#rownumbtn").bind("click",setRowNum);
-	$("#revertbtn").bind("click",revertSeats);
-
+	// $("#dragbtn").bind("click",dragSeats);
+	// $("#canceldragbtn").bind("click",cancelDragSeats);
+	// $("#lockbtn").bind("click",bindLockSeats);
+	
 
 
 	
-	$("#rightbtn").bind("click",bindContextMenu);
-	$("#cancelrightbtn").bind("click",removeContextMenu);
-
-	$("#dleftmovebtn").bind("click",leftMoveSeats);
-	$("#drightmovebtn").bind("click",rightMoveSeats);
-	$("#dtopmovebtn").bind("click",topMoveSeats);
-	$("#dbottommovebtn").bind("click",bottomMoveSeats);
-
-
-	$("#savelocalbtn").bind("click",saveLocalSeats);
-	$("#restorelocalbtn").bind("click",restoreLocalSeats);
-	$("#completebtn").bind("click",completeSeats);
-
-
-
 
 	// $("#createareabtn").bind("click",createArea);
 	
@@ -36,11 +18,26 @@ $(function(){
 	// $("#createacolbtn").bind("click",createColAisle);
 	// $("#createarowbtn").bind("click",createRowAisle);
 
+
+
+
+	
+	$("#rightbtn").bind("click",bindContextMenu);
+	$("#cancelrightbtn").bind("click",removeContextMenu);
+	$("#dleftmovebtn").bind("click",leftMoveSeats);
+	$("#drightmovebtn").bind("click",rightMoveSeats);
+	$("#dtopmovebtn").bind("click",topMoveSeats);
+	$("#dbottommovebtn").bind("click",bottomMoveSeats);
+	$("#savelocalbtn").bind("click",saveLocalSeats);
+	$("#restorelocalbtn").bind("click",restoreLocalSeats);
+	$("#completebtn").bind("click",completeSeats);
+
+	$("#nav-rollback").bind("click",resetSeats);
+	$("#nav-forward").bind("click",revertSeats);
+
 	$("#createbtn").bind("click",creatSeats);
-
-
 	$("#nav-delete").bind("click",deleteSeats);
-
+	$("#nav-mark").bind("click",setRowNum);
 	$("#nav-radio").bind("click",bindOneSeats);
 	$("#nav-selection").bind("click",selectSeats);
 
@@ -52,7 +49,6 @@ $(function(){
 	$("#nav-align-right").bind("click",rightSeats);
 	$("#nav-align-up").bind("click",topSeats);
 	$("#nav-align-down").bind("click",bottomSeats);
-
 	$("#nav-drag").bind("click",dragMoveSeats);
 });
 
@@ -62,25 +58,43 @@ var meetingid  = 0;
 
 var areas = [];
 
-var maxSeatNum = 0;
+// var maxSeatNum = 0;
 function creatSeats(rownum,colnum){
-	// var aid = $("#areaselset").val();
-	// var seatnum = +$("#seatnum").val();
-	// var arearule = +$("#arearule").val();
-	// var rownum = +$("#rownum").val();
-	// var colnum = +$("#colnum").val();
-
-	if(colnum > maxSeatNum){
-		maxSeatNum = colnum;
-	}
-	// console.log(aid,seatnum,rownum,seatrule);
-	countMaxWidth();
+	// if(colnum > maxSeatNum){
+	// 	maxSeatNum = colnum;
+	// }
+	countMaxWidth(+rownum,+colnum);
 	bulidSeatsContainer(rownum,colnum);
 
 	// getAllSeatsNode();
 
 	clearCompleteSeats();
 	selectSeats();
+}
+
+
+function countMaxWidth(rownum,colnum){
+
+	$(".seatcontainer").width(colnum*50 + 200);
+	$(".seatcontainer").height(rownum*50 + 200);
+
+	// var arearule = +$("#arearule").val();
+	// if(arearule == 1){
+	// 	if(addwidth){
+	// 		var w = $(".seatcontainer").width();
+	// 		$(".seatcontainer").width(w + addwidth);
+	// 	}else{
+	// 		$(".seatcontainer").width(maxSeatNum*50 + 200);
+	// 	}
+	// }else{
+	// 	if(addwidth){
+	// 		var h = $(".seatcontainer").height();
+	// 		$(".seatcontainer").height(h + addwidth);
+	// 	}else{
+	// 		$(".seatcontainer").height(maxSeatNum*50 + 200);
+	// 	}
+	// }
+	
 }
 
 var sTop = 100;
@@ -128,25 +142,6 @@ function bulidSeatsContainer(rownum,colnum){
 	$("#seatcontainerId").html(seathtml.join(''));
 }
 
-function countMaxWidth(addwidth){
-	var arearule = +$("#arearule").val();
-	if(arearule == 1){
-		if(addwidth){
-			var w = $(".seatcontainer").width();
-			$(".seatcontainer").width(w + addwidth);
-		}else{
-			$(".seatcontainer").width(maxSeatNum*50 + 200);
-		}
-	}else{
-		if(addwidth){
-			var h = $(".seatcontainer").height();
-			$(".seatcontainer").height(h + addwidth);
-		}else{
-			$(".seatcontainer").height(maxSeatNum*50 + 200);
-		}
-	}
-	
-}
 
 function oddAndEven(n){
 	//求偶奇数
@@ -738,61 +733,43 @@ function bindMenu(seatno){
 				}
 			}
 		},
-		{
-			name:"改名",
-			id:"menu1",
-			seatno:seatno,
-			callback: function(seatno) {
-				console.log(this,seatno);
-				currseatno = seatno;
-				var name = $("#"+seatno).text();
-				var regnum = /^\d*$/;
-				// && !regnum.test(name)
-				if(name != "空座" ){
-					// $("#username").val(name);
-					var newname = window.prompt("请输入名字",name);
-					$("#"+seatno).text(newname);
-				}else{
-					// $("#username").val('');
-				}
-				
-				// $('#doc-modal-2').modal({
-				// 	relatedTarget: this,
-				// 	onConfirm: function(e) {
-				// 		var name = $("#username").val() || "";
-				// 		if(name){
-				// 			if(addnames[name]){
-				// 				alert(name + "已添加到" + currseatno);
-				// 			}else{
-				// 				$("#"+currseatno).text(name);
-				// 			}
-				// 		}
-						
-				// 		$('#doc-modal-2').modal('close');
-				// 	},
-				// 	onCancel: function(e) {
-				// 	}
-				// });
-			}
-		},
-		{
-			name:"空座",
-			id:"menu2",
-			seatno:seatno,
-			callback: function(seatno) {
-				$("#"+seatno).html('空座');
-				// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
-			}
-		},
-		{
-			name:"发送短信",
-			id:"menu3",
-			seatno:seatno,
-			callback: function(seatno) {
-				$("#"+seatno).html('空座');
-				// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
-			}
-		}
+		// {
+		// 	name:"改名",
+		// 	id:"menu1",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		console.log(this,seatno);
+		// 		currseatno = seatno;
+		// 		var name = $("#"+seatno).text();
+		// 		var regnum = /^\d*$/;
+		// 		// && !regnum.test(name)
+		// 		if(name != "空座" ){
+		// 			// $("#username").val(name);
+		// 			var newname = window.prompt("请输入名字",name);
+		// 			$("#"+seatno).text(newname);
+		// 		}else{
+		// 			// $("#username").val('');
+		// 		}
+		// 	}
+		// },
+		// {
+		// 	name:"空座",
+		// 	id:"menu2",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		$("#"+seatno).html('空座');
+		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 	}
+		// },
+		// {
+		// 	name:"发送短信",
+		// 	id:"menu3",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		$("#"+seatno).html('空座');
+		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 	}
+		// }
 		// ,{
 		// 	name:"状态刷新",
 		// 	id:"menu-delete",
@@ -816,60 +793,17 @@ function deleteSeats(){
 
 	seled.removeClass(seledClass);
 	delSeatsData.push(seled);
-	// seled.addClass("deleteseats")
-	// seled.html("删除");
-	seled.css("display","none");
-	
-	// //一个模板只能使用一个规则/横向或纵向
-	// var arearule = +$(seled[0]).attr("data").split("-")[1];
-	
-	// var seledgroup = {};
-	// seled.each(function(){
-	// 	var id = this.id;
-	// 	if(arearule == 1){
-	// 		var kid = id.split('-')[0]+"-";
-	// 	}else{
-	// 		var kid = "-"+id.split('-')[1];
-	// 	}
-	// 	if(seledgroup[kid]){
-	// 		seledgroup[kid].push("#"+id);
-	// 	}else{
-	// 		seledgroup[kid] = [];
-	// 		seledgroup[kid].push("#"+id);
-	// 	}
-	// });
 
-	// for(var gk in seledgroup){
-	// 	if(arearule == 1){
-	// 		var newseats = $("div[id^=" + gk + "]").not(seledgroup[gk].join(','));
-	// 	}else{
-	// 		var newseats = $("div[id$=" + gk + "]").not(seledgroup[gk].join(','));	
-	// 	}
-	// 	var oae = oddAndEven(newseats.length);
-	// 	//获取排序规则
-	// 	var data = $(newseats[0]).attr("data").split('-');
-	// 	var seatrule = data[0];
-	// 	var seatsnum = [];
-	// 	if(+seatrule == 1){
-	// 		seatsnum = oae.odd.concat(oae.even.reverse());
-	// 	}else if(+seatrule == 2){
-	// 		seatsnum = oae.even.concat(oae.odd.reverse());
-	// 	}else if(+seatrule == 3){
-	// 		seatsnum = oae.desc.reverse();
-	// 	}else if(+seatrule == 4){
-	// 		seatsnum = oae.desc;
-	// 	}
-	// 	// console.log(seatsnum);
-	// 	newseats.each(function(_i){
-	// 		$(this).html(seatsnum[_i]);
-	// 	})
-	// }
+	seled.css("display","none");
 }
 
 function resetSeats(){
-	delSeatsData.forEach(function(seled){
-		seled.css("display","block");
-	});
+	var pop = delSeatsData.pop();
+	if(pop && pop.length > 0){
+		pop.each(function(){
+			$(this).css("display","block");
+		});
+	}
 
 	// var seled =  $("#seatcontainerId ."+seledClass);
 	// if(seled.length == 0){return;}
@@ -893,18 +827,12 @@ function setRowNum(){
 		var topb = parseFloat($(b).css("top"));
 		return topa - topb;
 	});
-	// console.log(seled)
 
 	seled.removeClass(seledClass);
 	seled.addClass("rownumseats");
 	seled.each(function(_i){
 		$(this).html((_i+1) + "排");
 	});
-
-	// seled.removeClass(seledClass);
-	// // delSeatsData.push(seled);
-	// seled.addClass("aisleseats");
-	// seled.html("过道");
 }
 
 function revertSeats(){
@@ -1422,13 +1350,21 @@ function completeSeats(){
 	
 	saveCompleteSeats();
 
-	location.href = "meeting_room.html";
+
+	var topLayui = parent === self ? layui : top.layui;
+	if(topLayui){
+		topLayui.index.openTabsPage("arrange/meeting/meeting_room.html", "会场列表");
+	}else{
+		alert("数据已保存");
+	}
+
+	// location.href = "meeting_room.html";
 	// var html = '<div id="seatcontainerId">' + seats.html() + rownum.html() + '</div>';
 	// localStorage.setItem("_completeSeats",html);
 }
 
 function saveCompleteSeats(){
-	var seathtml = $("#seatcontainer").html();
+	var seathtml = $("#seatcontainer").html().trim();
 	sessionStorage.setItem("_seatscomplete",seathtml);
 }
 function clearCompleteSeats(){

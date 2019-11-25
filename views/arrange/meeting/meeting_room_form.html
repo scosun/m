@@ -49,5 +49,18 @@
 
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script src="../../../layuiadmin/layui/arrange/meeting/meetingroomfrom.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    function setSeatCode(){
+        var code = sessionStorage.getItem("_seatscomplete") || "";
+        if(code != ""){
+            document.getElementById("templatecode").value = code;
+            sessionStorage.setItem("_seatscomplete","")
+        }
+        setTimeout(function(){
+            setSeatCode();
+        },1000);
+    }
+    setSeatCode();
+</script>
 </body>
 </html>

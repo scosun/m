@@ -250,7 +250,10 @@ layui.config({
 				area: ['60%', '80%'],
 				btn: ['座区编辑','确定', '取消'],
 				yes:function(index,layer0){
-					location.href= "seatmapseditor.html";
+					// location.href= "seatmapseditor.html";
+					//执行跳转
+					var topLayui = parent === self ? layui : top.layui;
+					topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
 				},
 				btn2: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
