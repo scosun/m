@@ -4,6 +4,9 @@
 		<meta charset="utf-8">
 		<title></title>
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
 		<style type="text/css">
 			header {
 				box-shadow: 0px 0px 5px gray;
@@ -42,6 +45,79 @@
 			}
 			/*隐藏浏览器滚动条*/
 			::-webkit-scrollbar {display:none;width: 0px;}
+
+			.reseled {
+			border: 1px solid #21c2f2 !important;
+		}
+
+
+		.seatdiv{
+			/* float:left; */
+			width:40px;
+			height:40px;
+			text-align:center;
+			line-height:40px;
+			font-size:12px;
+			border:1px solid #ccc;
+			position: absolute;
+			/* margin-right:7px;
+			margin-bottom:10px; */
+		}
+		.seled {
+			background-color: #D6DFF7;
+		}
+		.aisleseats{
+			border:1px dashed #ccc;
+		}
+		.rownumseats{
+			border:1px dashed #ccc;
+			color:#ff0000;
+		}
+		.deleteseats{
+			border:1px dashed #ccc;
+			opacity: 0.5;
+		}
+		
+		.clear{ clear:both} 
+
+		.dragcontainer{
+			position:absolute;
+			width:0px;height:0px;
+			margin:0px;padding:0px;
+			left:0px;top:0px;
+			cursor: all-scroll;
+			border:1px dashed #0099FF;
+			/* background-color:#C3D5ED; */
+			z-index:1;
+			opacity:0.6;
+			display:none;
+		}
+
+		.seatcontainer{
+			position: relative;
+			/* user-select: none; */
+			width: 100%;
+			height: 600px;
+
+			background: aliceblue;
+		}
+		
+		.dragbg{
+			background-color: #efe92a4a;
+		}
+		.locked{
+			border: 1px solid #e80a0a;
+		}
+
+		.colDiv {
+			position:absolute;
+			width: 40px;
+			height: 40px;
+			text-align: center;
+			line-height: 40px;
+			font-size: 12px;
+			color: red;
+		}
 		</style>
 	</head>
 	<body>
@@ -67,9 +143,82 @@
 			</span>
 			<!-- 右侧菜单 end-->
 		</header>
+
+		<div id="seatcontainer" class="seatcontainer" >
+			<div id="seatcontainerId">
+				<div class="seatdiv" style="top:100px; left:100px;" id="1-1">1</div>
+				<div class="seatdiv" style="top:100px; left:150px;" id="1-2">2</div>
+				<div class="seatdiv" style="top:100px; left:200px;" id="1-3">3</div>
+	
+				<div class="seatdiv" style="top:100px; left:300px;" id="1-4">4</div>
+				<div class="seatdiv" style="top:100px; left:350px;" id="1-5">5</div>
+				<div class="seatdiv" style="top:100px; left:400px;" id="1-6">6</div>
+				<div class="seatdiv" style="top:100px; left:500px;" id="1-7">7</div>
+	
+				<div class="seatdiv" style="top:150px; left:100px;" id="2-1">1</div>
+				<div class="seatdiv" style="top:150px; left:150px;" id="2-2">2</div>
+				<div class="seatdiv" style="top:150px; left:200px;" id="2-3">3</div>
+				<div class="seatdiv" style="top:150px; left:250px;" id="2-4">4</div>
+				<div class="seatdiv" style="top:150px; left:300px;" id="2-5">5</div>
+				<div class="seatdiv" style="top:150px; left:400px;" id="2-6">6</div>
+				<div class="seatdiv" style="top:150px; left:450px;" id="2-7">7</div>
+				<div class="seatdiv" style="top:150px; left:550px;" id="2-8">8</div>
+				<div class="seatdiv" style="top:150px; left:600px;" id="2-9">9</div>
+				<div class="seatdiv" style="top:150px; left:700px;" id="2-10">10</div>
+				
+				<div class="seatdiv" style="top:200px; left:400px;" id="3-1">1</div>
+				<div class="seatdiv" style="top:200px; left:450px;" id="3-2">2</div>
+				<div class="seatdiv" style="top:200px; left:550px;" id="3-3">3</div>
+				<div class="seatdiv" style="top:200px; left:600px;" id="3-4">4</div>
+				<div class="seatdiv" style="top:200px; left:700px;" id="3-5">5</div>
+				<div class="seatdiv" style="top:250px; left:200px;" id="4-1">1</div>
+				<div class="seatdiv" style="top:250px; left:250px;" id="4-2">2</div>
+				<div class="seatdiv" style="top:250px; left:350px;" id="4-3">3</div>
+				<div class="seatdiv" style="top:250px; left:400px;" id="4-4">4</div>
+				<div class="seatdiv" style="top:250px; left:450px;" id="4-5">5</div>
+				<div class="seatdiv" style="top:250px; left:500px;" id="4-6">6</div>
+				<div class="seatdiv" style="top:250px; left:550px;" id="4-7">7</div>
+	
+				<div class="seatdiv" style="top:300px; left:500px;" id="5-1">1</div>
+				<div class="seatdiv" style="top:300px; left:550px;" id="5-2">2</div>
+				<div class="seatdiv" style="top:300px; left:600px;" id="5-3">3</div>
+				<div class="seatdiv" style="top:300px; left:650px;" id="5-4">4</div>
+				<div class="seatdiv" style="top:300px; left:700px;" id="5-5">5</div>
+	
+	
+				<div class="seatdiv" style="top:350px; left:580px;" id="6-1">1</div>
+				<div class="seatdiv" style="top:350px; left:630px;" id="6-2">2</div>
+				<div class="seatdiv" style="top:350px; left:680px;" id="6-3">3</div>
+				<div class="seatdiv" style="top:350px; left:730px;" id="6-4">4</div>
+				<div class="seatdiv" style="top:350px; left:780px;" id="6-5">5</div>
+	
+	
+				<div class="seatdiv" style="top:400px; left:500px;" id="7-1">1</div>
+				<div class="seatdiv" style="top:400px; left:550px;" id="7-2">2</div>
+				<div class="seatdiv" style="top:400px; left:600px;" id="7-3">3</div>
+				<div class="seatdiv" style="top:400px; left:650px;" id="7-4">4</div>
+				<div class="seatdiv" style="top:400px; left:700px;" id="7-5">5</div>
+	
+				<div class="seatdiv" style="top:450px; left:500px;" id="8-1">1</div>
+				<div class="seatdiv" style="top:450px; left:550px;" id="8-2">2</div>
+				<div class="seatdiv" style="top:450px; left:600px;" id="8-3">3</div>
+				<div class="seatdiv" style="top:450px; left:650px;" id="8-4">4</div>
+				<div class="seatdiv" style="top:450px; left:700px;" id="8-5">5</div>
+	
+	
+				<div class="seatdiv" style="top:550px; left:500px;" id="9-1">1</div>
+				<div class="seatdiv" style="top:550px; left:550px;" id="9-2">2</div>
+				<div class="seatdiv" style="top:550px; left:600px;" id="9-3">3</div>
+				<div class="seatdiv" style="top:550px; left:650px;" id="9-4">4</div>
+				<div class="seatdiv" style="top:550px; left:700px;" id="9-5">5</div>
+			</div>
+			<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;">
+			</div>
+		</div>
 	</body>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 	<!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+	<script src="seatscontrol_drag.js"></script>
 	<script type="text/javascript">
 		layui.config({
 			base: '../../../layuiadmin/' //静态资源所在路径
