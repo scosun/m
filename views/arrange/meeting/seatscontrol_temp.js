@@ -713,10 +713,19 @@ function bindMenu(seatno){
 			callback: function(seatno) {
 				currseatno = seatno;
 				var newno = window.prompt("请输入编号X-Y");
+				var reg = /^\d+\-\d+$/g;
 				if(newno){
-					var id = newno.split("-");
-					$("#"+seatno).attr("id",newno);
-					$("#"+newno).text(id[1])
+					if(reg.test(newno)){
+						if($("#"+newno).length == 0){
+							var id = newno.split("-");
+							$("#"+seatno).attr("id",newno);
+							$("#"+newno).text(id[1]);
+						}else{
+							alert("编号已存在");
+						}
+					}else{
+						alert("编号输入不合法");
+					}
 				}
 			}
 		},
