@@ -17,7 +17,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://www.qgfan.com/v1/attendee2rules?page=1&limit=10&q="+key,//修改为 参会人员和座区规则对应关系方案 表
+			url: "https://m.longjuli.com/v1/attendee2rules?page=1&limit=10&q="+key,//修改为 参会人员和座区规则对应关系方案 表
 			dataType: "json",
 			//成功的回调函数
 			// data: {
@@ -105,7 +105,7 @@ layui.config({
 			type: "post",
 			data: JSON.stringify(condi),
 			contentType: 'application/json', 
-			url: "https://www.qgfan.com/v1/attendee2rules",
+			url: "https://m.longjuli.com/v1/attendee2rules",
 			dataType: "json",
 			success: function(obj) {
 				// console.log("--saveAttendee2rules---",condi);
@@ -196,7 +196,7 @@ layui.config({
 			};
 			layer.confirm('真的删除吗？', function() {
 				$.ajax({
-					url: "https://www.qgfan.com/v1/attendee2rules/batch_delete",
+					url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
 					type: "POST",
 					data: JSON.stringify(condi),
 					contentType: 'application/json', 

@@ -26,7 +26,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://www.qgfan.com/v1/meetings",
+		url: "https://m.longjuli.com/v1/meetings",
 		dataType: "json",
 		success: function(obj) {
 			let data = obj.meetings || null;
@@ -48,7 +48,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://www.qgfan.com/v1/attributes",
+		url: "https://m.longjuli.com/v1/attributes",
 		dataType: "json",
 		success: function(obj) {
 			// console.log("----",obj)
@@ -76,7 +76,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://www.qgfan.com/v1/sort_items",
+		url: "https://m.longjuli.com/v1/sort_items",
 		dataType: "json",
 		success: function(obj) {
 			console.log("----",obj)
@@ -108,7 +108,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://www.qgfan.com/v1/rulesetups?meeting_id="+meeting_id,
+			url: "https://m.longjuli.com/v1/rulesetups?meeting_id="+meeting_id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
@@ -150,7 +150,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://www.qgfan.com/v1/attendees/count?meeting_id="+meeting_id+"&attribute_ids="+attribute_ids.join(','),
+			url: "https://m.longjuli.com/v1/attendees/count?meeting_id="+meeting_id+"&attribute_ids="+attribute_ids.join(','),
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
@@ -411,7 +411,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://www.qgfan.com/v1/attributes?parent_id=" + parent.id,
+			url: "https://m.longjuli.com/v1/attributes?parent_id=" + parent.id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
