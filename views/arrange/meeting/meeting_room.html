@@ -9,29 +9,31 @@
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
-		<script src="/m/js/scosun.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+		<script src="../../../js/scosun.js"></script>
+        <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<div class="layui-fluid">
 			<div class="layui-col-md12">
 				<div class="layui-row grid-demo grid-demo-bg1">
 					<div class="layui-col-md12">
-
-					</div>
-					<div class="layui-col-md12">
 						<div class="layui-card">
-							<div class="layui-card">
-								<div class="layui-card-header">会议室</div>
 								<div class="layui-card-body">
-									<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-										<button class="layui-btn layui-ds" data-type="add">增加</button>
-										<!-- <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-										<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-										<button class="layui-btn" data-type="isAll">验证是否全选</button> -->
-										<button class="layui-btn" data-type="getCheckData">全选</button>
-										<button class="layui-btn" data-type="getCheckLength">批量删除</button>
-										<button class="layui-btn" data-type="isAll">清空</button>
-									</div>
+                                    <div>
+                                        <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                                        </div>
+                                        <!-- 右侧筛选条件 -->
+                                        <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                            <div class="layui-inline">
+                                                <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+                                                    autocomplete="off">
+                                            </div>
+                                            <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                                        </div>
+                                        <!-- 右侧筛选条件 end-->
+                                    </div>
+									
 									<div>
 										<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
 									</div>
@@ -39,8 +41,15 @@
 										<a class=" layui-icon " lay-event="zonelist" id="zonelist">&#xe62d;</a>
 									</script>
 									<script type="text/html" id="table-content-list">
-										<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>
-               							<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+										
+               							
+                                        {{#  if($.inArray("uproom", a) != -1){ }}
+                                      <a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>
+                                         		{{#  } }}
+                                         {{#  if($.inArray("delroom", a) != -1){ }}
+                                         		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+                                         				{{#  } }}
+                                        								  
             						</script>
 								</div>
 							</div>
@@ -49,7 +58,7 @@
 				</div>
 			</div>
 		</div>
-		</div>
+		
 		<script src="../../../layuiadmin/layui/layui.js"></script>
 		<script src="../../../layuiadmin/layui/arrange/meeting/meetingroom.js" type="text/javascript" charset="utf-8"></script>
 	</body>
