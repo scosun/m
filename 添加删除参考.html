@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态表格</title>
+    <style>
+        a{
+            text-decoration: none;
+        }
+        .one{
+            margin: 0 auto;
+            width: 1000px;
+        }
+        .btns {
+            margin-bottom: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: .3em 1.2em;
+            border-radius: 3px;
+            background-color: teal;
+            color: #fff;
+            cursor :pointer;
+        }
+        table.table {
+            box-sizing: border-box;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.table td ,
+        table.table th {
+            border: 1px solid #ccc;
+            line-height: 2em;
+            text-align: center;
+        }
+        .none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="one">
+        <div class="btns">
+            <div class="btn" id="btn_add">添加</div>
+            <div class="btn">批量导入</div>
+            <div class="btn">批量删除</div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="80px">编号</th>
+                    <th width="100px">班级</th>
+                    <th width="220px">姓名</th>
+                    <th width="80px">性别</th>
+                    <th width="80px">年龄</th>
+                    <th>邮箱</th>
+                    <th>手机</th>
+                    <th width="100px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="none" >
+                    <td><input type="checkbox"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a class="btn_del" href="javascript:void(0)">删除</a>
+                        <a class="btn_upd" href="javascript:void(0)">修改</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        //获取Id为btn_add的元素，并将其赋值给btn_add
+        var btn_add = document.getElementById("btn_add");
+
+        //获取标签名字为tbody的第一个标签，并将其赋值给tbody
+        var tbody = document.getElementsByTagName("tbody")[0];
+
+        // 为删除按钮绑定事件处理函数
+        tbody.onclick = function(event){
+            //新建触发事件=触发事件的Dom元素本身（触发事件即点击事件）
+            var target = event.target;
+
+            //如果触发事件的节点名字===a（如果点击a标签）
+            if(target.nodeName === "A"){
+
+                //如果触发事件的class名字===btn_del（如果点击class名字===btn_del的a标签）
+                if(target.className === "btn_del"){
+                    //移除tody下的孩子（删除点击事件的父节点的父节点，即删除点击的a标签的父节点（td标签)的父节点（tr标签）
+                    tbody.removeChild(target.parentNode.parentNode)
+                }
+                //如果触发事件的class名字===btn_upd（如果点击class名字===btn_upd的a标签）
+                if(target.className === "btn_upd"){
+                    alert("修改");
+                }
+            }
+        }
+
+        // 为添加按钮绑定事件处理函数 
+        btn_add.onclick = function(event){
+
+             // 产生一个tr，新添加行等于复制隐藏行
+             var newTr = tbody.firstElementChild.cloneNode(true);
+
+             //新添加行的第2+1列的值为0-1之间的随机小数
+             newTr.children[2].innerHTML = "<strong>"+Math.random()+"</strong>";
+
+             //新添加行的class名字为0-1之间的随机小数，使其与复制的行不同，避免首CSS影响被隐藏
+             newTr.className = Math.random();
+
+             // 将一个tr追加到tbody
+             tbody.appendChild(newTr);
+        };
+    </script>    
+</body>
+</html>

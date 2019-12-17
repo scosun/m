@@ -50,7 +50,37 @@ $(function(){
 	$("#nav-align-up").bind("click",topSeats);
 	$("#nav-align-down").bind("click",bottomSeats);
 	$("#nav-drag").bind("click",dragMoveSeats);
+
+	$("#createbtn2").bind("click",creatSeats2);
 });
+
+
+
+function creatSeats2(){
+	var rownum = +$("#rownum2").val();
+	var colnum = +$("#colnum2").val();
+	countMaxWidth();
+	appendSeatsContainer(rownum,colnum);
+
+	getAllSeatsNode();
+}
+function appendSeatsContainer(rownum,colnum){
+	var seathtml = [];
+	
+	var stop = 0;
+	var sleft = 0;
+
+	for(var j = 1; j <= +rownum; j++){
+		for(var i = 0; i < +colnum; i ++){
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-a">' + (i+1) + '</div>');
+			sleft = sleft + 50;
+		}
+		sleft = 0;
+		stop = stop + 50;
+	}
+
+	$("#seatcontainerId").append(seathtml.join(''));
+}
 
 var isDrop = false;
 var meetingid  = 0;
@@ -856,6 +886,14 @@ function revertSeats(){
 	});
 }
 
+function isRow(seledgroup,d,h){
+	for(var k in seledgroup){
+		if(+k >= d && +k <= h){
+			return k;
+		}
+	}
+	return false;
+}
 var movecontainerId = "movecontainerId";
 var moveStartLeft = 0;
 var moveStartTop = 0;
@@ -869,17 +907,19 @@ function xCenterSeats(){
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
 
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = id.split('-')[0]+"-";
-		if(seledgroup[kid]){
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
 		}
 	}
 
@@ -915,18 +955,26 @@ function yCenterSeats(){
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
+		var w = $(seled[i]).width();
 
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = "-"+id.split('-')[1];
-		if(seledgroup[kid]){
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
 		}
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
 	}
 
 	lefts = lefts.sort(function(a,b){return a - b;});
@@ -934,7 +982,7 @@ function yCenterSeats(){
 	// console.log(lefts,tops);
 
 	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 10;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 8;
 	var l = lefts[0];
 	var t = tops[0];
 
@@ -942,7 +990,7 @@ function yCenterSeats(){
 		var gids = seledgroup[gk];
 		var sh = gids.length * 50;
 		if(h > sh){
-			var movetop = h/2 - sh/2;
+			var movetop = Math.floor(h/2 - sh/2);
 			gids.forEach(function(_id,i){
 				$("#" + _id).css("top", (t + 50*i + movetop) +"px");
 			})
@@ -960,18 +1008,26 @@ function xAvgSeats(){
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
 
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = id.split('-')[0]+"-";
-		if(seledgroup[kid]){
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
 		}
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
 	}
 
 	lefts = lefts.sort(function(a,b){return a - b;});
@@ -1006,18 +1062,27 @@ function yAvgSeats(){
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
+		var w = $(seled[i]).width();
 
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = "-"+id.split('-')[1];
-		if(seledgroup[kid]){
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
 		}
+
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
 	}
 
 	lefts = lefts.sort(function(a,b){return a - b;});
@@ -1051,18 +1116,20 @@ function leftSeats(){
 	var seledgroup = {};
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
-		// var st = $(seled[i]).position().top;
+		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
 
 		lefts.push(+sl);
 		// tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = id.split('-')[0]+"-";
-		if(seledgroup[kid]){
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
 		}
 	}
 
@@ -1098,17 +1165,19 @@ function rightSeats(){
 	for(var i = 0,len = seled.length; i < len; i++){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
 
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = id.split('-')[0]+"-";
-		if(seledgroup[kid]){
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
 		}
 	}
 
@@ -1144,16 +1213,19 @@ function topSeats(){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
 
+		var w = $(seled[i]).width();
+
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = "-"+id.split('-')[1];
-		if(seledgroup[kid]){
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
 		}
 	}
 
@@ -1185,16 +1257,19 @@ function bottomSeats(){
 		var sl = $(seled[i]).position().left;
 		var st = $(seled[i]).position().top;
 
+		var w = $(seled[i]).width();
+
 		lefts.push(+sl);
 		tops.push(+st);
 
 		var id = seled[i].id;
-		var kid = "-"+id.split('-')[1];
-		if(seledgroup[kid]){
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
 			seledgroup[kid].push(id);
 		}else{
-			seledgroup[kid] = [];
-			seledgroup[kid].push(id);
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
 		}
 	}
 
@@ -1215,6 +1290,68 @@ function bottomSeats(){
 	}
 
 }
+
+function autoCode(){
+	var seled = $("#seatcontainerId ."+seatNodeClass);
+	// seled.removeClass(seledClass);
+	
+	// var lefts = [];
+	// var tops = [];
+	var seledgroup = {};
+	var seledrowv = [];
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		var h = $(seled[i]).height();
+
+		// lefts.push(+sl);
+		// tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+			seledrowv.push(st);
+		}
+	}
+
+	seledrowv = seledrowv.sort(function(a,b){return a-b;});
+	seledrowv.forEach(function(ik,rowid){
+		var col = seledgroup[ik];
+		col.sort(function(a,b){
+			var la = $("#" + a).position().left;
+			var lb = $("#" + b).position().left;
+			return la - lb;
+		});
+		var oae = oddAndEven(col.length);
+		var seatsnum = oae.odd.concat(oae.even.reverse());
+		console.log(seatsnum)
+		// seatsnum = oae.odd.concat(oae.even.reverse());
+		col.forEach(function(oid,colid){
+			// var oid = col[ck];
+			$("#" + oid).html(seatsnum[colid]);
+			$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-"+new Date().getTime());
+		});
+	});
+
+	// var oae = oddAndEven(seatnum);
+	// var seatsnum = [];
+	// if(+seatrule == 1){
+	// 	seatsnum = oae.odd.concat(oae.even.reverse());
+	// }else if(+seatrule == 2){
+	// 	seatsnum = oae.even.concat(oae.odd.reverse());
+	// }else if(+seatrule == 3){
+	// 	seatsnum = oae.desc.reverse();
+	// }else if(+seatrule == 4){
+	// 	seatsnum = oae.desc;
+	// }
+}
+
 
 
 function dragMoveSeats(){
