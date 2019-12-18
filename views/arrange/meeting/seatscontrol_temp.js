@@ -51,15 +51,13 @@ $(function(){
 	$("#nav-align-down").bind("click",bottomSeats);
 	$("#nav-drag").bind("click",dragMoveSeats);
 
-	$("#createbtn2").bind("click",creatSeats2);
+	// $("#createbtn2").bind("click",creatSeats2);
 });
 
 
 
-function creatSeats2(){
-	var rownum = +$("#rownum2").val();
-	var colnum = +$("#colnum2").val();
-	countMaxWidth();
+function creatSeats2(rownum,colnum){
+	// countMaxWidth();
 	appendSeatsContainer(rownum,colnum);
 
 	getAllSeatsNode();
@@ -67,15 +65,15 @@ function creatSeats2(){
 function appendSeatsContainer(rownum,colnum){
 	var seathtml = [];
 	
-	var stop = 0;
-	var sleft = 0;
+	var stop = 150;
+	var sleft = maxWidth;
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-a">' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'">' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
-		sleft = 0;
+		sleft = maxWidth;
 		stop = stop + 50;
 	}
 
@@ -102,11 +100,11 @@ function creatSeats(rownum,colnum){
 	selectSeats();
 }
 
-
+var maxWidth;
 function countMaxWidth(rownum,colnum){
-
+	maxWidth = colnum*50 + 200;
 	$(".seatcontainer").width(colnum*50 + 200);
-	$(".seatcontainer").height(rownum*50 + 200);
+	$(".seatcontainer").height(rownum*50 + 300);
 
 	// var arearule = +$("#arearule").val();
 	// if(arearule == 1){
@@ -127,7 +125,7 @@ function countMaxWidth(rownum,colnum){
 	
 }
 
-var sTop = 100;
+var sTop = 150;
 var sLeft = 100;
 // var rowId = 0;
 var colId = 0;
@@ -741,6 +739,10 @@ function bindMenu(seatno){
 			id:"menu0",
 			seatno:seatno,
 			callback: function(seatno) {
+				var cid = $("[cid="+seatno+"]").attr("cid") || "";
+				if(cid){
+					seatno = $("[cid="+seatno+"]").attr("id");
+				}
 				currseatno = seatno;
 				var newno = window.prompt("请输入编号X-Y");
 				var reg = /^\d+\-\d+$/g;
@@ -749,7 +751,12 @@ function bindMenu(seatno){
 						if($("#"+newno).length == 0){
 							var id = newno.split("-");
 							$("#"+seatno).attr("id",newno);
+							if(!cid){
+								$("#"+newno).attr("cid",seatno);
+							}
 							$("#"+newno).text(id[1]);
+
+							console.log($("[cid=1-1]").length)
 						}else{
 							alert("编号已存在");
 						}
@@ -764,6 +771,10 @@ function bindMenu(seatno){
 			id:"menu4",
 			seatno:seatno,
 			callback: function(seatno) {
+				var cid = $("[cid="+seatno+"]").attr("cid") || "";
+				if(cid){
+					seatno = $("[cid="+seatno+"]").attr("id");
+				}
 				currseatno = seatno;
 				var newno = window.prompt("请输入排号");
 				if(newno){
@@ -833,15 +844,17 @@ function deleteSeats(){
 	seled.removeClass(seledClass);
 	delSeatsData.push(seled);
 
-	seled.css("display","none");
+	seled.remove();
+	// seled.css("display","none");
 }
 
 function resetSeats(){
 	var pop = delSeatsData.pop();
 	if(pop && pop.length > 0){
-		pop.each(function(){
-			$(this).css("display","block");
-		});
+		$("#seatcontainerId").append(pop);
+		// pop.each(function(){
+		// 	$(this).css("display","block");
+		// });
 	}
 
 	// var seled =  $("#seatcontainerId ."+seledClass);
@@ -1291,8 +1304,8 @@ function bottomSeats(){
 
 }
 
-function autoCode(){
-	var seled = $("#seatcontainerId ."+seatNodeClass);
+function autoCode(ruleid){
+	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)");
 	// seled.removeClass(seledClass);
 	
 	// var lefts = [];
@@ -1329,9 +1342,12 @@ function autoCode(){
 			return la - lb;
 		});
 		var oae = oddAndEven(col.length);
-		var seatsnum = oae.odd.concat(oae.even.reverse());
-		console.log(seatsnum)
-		// seatsnum = oae.odd.concat(oae.even.reverse());
+		var seatsnum = [];
+		if(ruleid == 1){
+			seatsnum = oae.odd.concat(oae.even.reverse());
+		}else if(ruleid == 2){
+			seatsnum = oae.even.concat(oae.odd.reverse());
+		}
 		col.forEach(function(oid,colid){
 			// var oid = col[ck];
 			$("#" + oid).html(seatsnum[colid]);
@@ -1443,7 +1459,7 @@ function leftMoveSeats(){
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left+10+"px");
+		$(this).css("left",left-10+"px");
 	});
 }
 function rightMoveSeats(){
@@ -1451,7 +1467,7 @@ function rightMoveSeats(){
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left-10+"px");
+		$(this).css("left",left+10+"px");
 	});
 }
 function topMoveSeats(){
@@ -1487,7 +1503,13 @@ function restoreLocalSeats(){
 function completeSeats(){
 	saveLocalSeats();
 
-	var seats = $("#seatcontainerId .seatdiv").not("[id$=-c]");
+	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	seats.each(function(){
+		var id = this.id;
+		var arr = id.split("-");
+		var nid = arr[0] + "-" + arr[1];
+		$(this).attr("id",nid);
+	})
 	var rownum = $("#seatcontainerId .rownumseats");
 	// console.log(seats,seats.html(),rownum,rownum.html())
 	$("#seatcontainerId").html('');
@@ -1496,13 +1518,14 @@ function completeSeats(){
 	
 	saveCompleteSeats();
 
-
-	var topLayui = parent === self ? layui : top.layui;
-	if(topLayui){
-		topLayui.index.openTabsPage("arrange/meeting/meeting_room.html", "会场列表");
-	}else{
-		alert("数据已保存");
-	}
+	
+	
+	// var topLayui = parent === self ? layui : top.layui;
+	// if(topLayui){
+	// 	topLayui.index.openTabsPage("arrange/meeting/meeting_room.html", "会场列表");
+	// }else{
+	// 	alert("数据已保存");
+	// }
 
 	// location.href = "meeting_room.html";
 	// var html = '<div id="seatcontainerId">' + seats.html() + rownum.html() + '</div>';
@@ -1511,10 +1534,34 @@ function completeSeats(){
 
 function saveCompleteSeats(){
 	var seathtml = $("#seatcontainer").html().trim();
+
+	var flag = copyText(seathtml); //传递文本
+	alert(flag ? "复制成功！" : "复制失败！");
+
 	sessionStorage.setItem("_seatscomplete",seathtml);
 }
 function clearCompleteSeats(){
 	sessionStorage.setItem("_seatscomplete","");
+}
+
+function copyText(text) {
+	var textarea = document.createElement("input");//创建input对象
+	var currentFocus = document.activeElement;//当前获得焦点的元素
+	document.body.appendChild(textarea);//添加元素
+	textarea.value = text;
+	textarea.focus();
+	if(textarea.setSelectionRange)
+		textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
+	else
+		textarea.select();
+	try {
+		var flag = document.execCommand("copy");//执行复制
+	} catch(eo) {
+		var flag = false;
+	}
+	document.body.removeChild(textarea);//删除元素
+	currentFocus.focus();
+	return flag;
 }
 
 

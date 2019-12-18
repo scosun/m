@@ -12,17 +12,20 @@
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
 	<div class="layui-form-item">
-		<label class="layui-form-label">行数</label>
-		<div class="layui-input-block">
-			<input id="rownum" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
-		</div>
+		<label class="layui-form-label">编号规则</label>
+        <div class="layui-input-block">
+            <select class="dialogRuleSelect" id="select_ruleid">
+                <option value="1">左单右双</option>
+				<option value="2">左双右单</option>
+            </select>
+        </div>
 	</div>
-	<div class="layui-form-item">
+	<!-- <div class="layui-form-item">
 		<label class="layui-form-label">列数</label>
 		<div class="layui-input-block">
 			<input id="colnum" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
 		</div>
-	</div>
+	</div> -->
 </div>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <!-- <script src="../../../layuiadmin/layui/arrange/meet/meetcreatfrom.js"></script> -->
@@ -40,21 +43,20 @@ layui.config({
 		layer = layui.layer,
 		router = layui.router();
 		
-		$('#colnum').on('keydown', function (event) {
-			if (event.keyCode == 13) {
-				var layer = layui.layer;
-				var rownum = +$("#rownum").val() || 0;
-				var colnum = +$("#colnum").val() || 0;
-				if(rownum > 0 && colnum > 0){
-					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
-					window.parent.creatSeats(rownum,colnum);
-				}else{
-					layer.msg('行，列数字输入错误');
-				}
-				return false
-			}
-		});
+		// $('#colnum').on('keydown', function (event) {
+		// 	if (event.keyCode == 13) {
+		// 		var layer = layui.layer;
+		// 		var ruleid = +$("#ruleselect").val() || 0;
+		// 		if(rownum > 0 && colnum > 0){
+		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        //        		parent.layer.close(index);		//关闭窗口
+		// 			window.parent.autoCode(ruleid);
+		// 		}else{
+		// 			layer.msg('行，列数字输入错误');
+		// 		}
+		// 		return false
+		// 	}
+		// });
 })
 </script>
 </body>

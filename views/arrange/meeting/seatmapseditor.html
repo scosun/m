@@ -97,11 +97,11 @@
 
 		.seatcontainer{
 			position: relative;
-			/* user-select: none; */
+			user-select: none;
 			width: 100%;
 			height: 600px;
 
-			background: aliceblue;
+			/* background: aliceblue; */
 		}
 		
 		.dragbg{
@@ -132,6 +132,7 @@
 			<i id="completebtn" data="完成"><img src="../../../images/completebtn.png"></i>
 			<i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
 			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i>
+			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/savelocalbtn.png"></i>
 			<i id="dleftmovebtn" data="左移"><img src="../../../images/dleftmovebtn.png"></i>
 			<i id="drightmovebtn" data="右移"><img src="../../../images/drightmovebtn.png"></i>
 			<i id="dtopmovebtn" data="上移"><img src="../../../images/dtopmovebtn.png"></i>
@@ -139,14 +140,17 @@
 			<i id="rightbtn" data="右键"><img src="../../../images/rightbtn.png"></i>
 			<i id="cancelrightbtn" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
 
-			<i id="nav-rollback" data="回退"><img src="../../../images/rollback.png"></i>
-			<i id="nav-forward" data="恢复"><img src="../../../images/forward.png"></i>
 			<i id="nav-pladd" data="批量新建"><img src="../../../images/pladd.png"></i>
 			<i id="nav-down" data="设置行列" style="margin-left:-12px;"><img src="../../../images/angle-down.png" style="width: 14px;margin-top: 4px;"></i>
 			<i id="nav-add" data="新建"><img src="../../../images/add.png"></i>
 			
+
 			<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
+			<i id="nav-rollback" data="恢复删除"><img src="../../../images/rollback.png"></i>
+			
 			<i id="nav-mark" data="标注"><img src="../../../images/mark.png"></i>
+			<i id="nav-forward" data="恢复座区"><img src="../../../images/forward.png"></i>
+			
 			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
 			<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
 			<i id="nav-align-up" data="上对齐"><img src="../../../images/align-up.png"></i>
@@ -162,7 +166,7 @@
 		<!-- 右侧菜单 end-->
 	</header>
 
-	<div id="seatcontainer" class="seatcontainer" ><div id="seatcontainerId"></div><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div></div>
+	<div id="seatcontainer" class="seatcontainer" ><div id="meetingname" class="meetingname" style="text-align: center;padding-top:100px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" class="meetingaddress" style="text-align: left;position:absolute;left:100px;bottom:100px;">地点：[#会议地点#]</div><div id="meetingtime" class="meetingaddress" style="text-align: left;position:absolute;right:100px;bottom:100px;">时间：[#会议时间#]</div><div id="meetingremark" class="meetingaddress" style="text-align: left;position:absolute;left:100px;bottom:80px;">备注：[#会议备注#]</div></div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script src="seatscontrol_temp.js"></script>
@@ -180,7 +184,7 @@ layui.config({
 		router = layui.router();
 		
 		/*右侧菜单 设置行列弹框*/
-		$('#nav-down img,#nav-add img').on('click', function(){
+		$('#nav-down img').on('click', function(){
 			layer.open({
 				type: 2,
 				title: '设置行列',
@@ -201,14 +205,54 @@ layui.config({
 				}
 			});
 		});
+		$('#nav-add img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '添加行列',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['340px', '230px'],
+				content: 'seatmapseditor_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					if(rownum > 0 && colnum > 0){
+						creatSeats2(rownum,colnum);
+						layer.close(index);
+					}else{
+						layer.msg('行，列数字输入错误');
+					}
+				}
+			});
+		});
+		$('#autocodebtn img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '自动编排',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['340px', '260px'],
+				content: 'seatmapseditor_code.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
+					autoCode(ruleid);
+					layer.close(index);
+				}
+			});
+		});
 		/*右侧菜单HOVER显示提示文字*/
+		var subtips;
 		$('.layui-right-nav i').each(function(){
 			var _id = $(this).attr('id');
 			var _data = $(this).attr('data');
 			$("#" + _id).hover(function() {
 				openMsg();
 			}, function() {
-				layer.close(subtips);
+				if(subtips){
+					layer.close(subtips);
+				}
 			});
 			function openMsg() {
 				subtips = layer.tips(_data, '#'+_id,{tips:[3,'#666'],time: 30000});
