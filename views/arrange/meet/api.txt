@@ -1,0 +1,9 @@
+
+1.导入座区数据
+POST https://m.longjuli.com/v1/meetings/sort
+
+content-type: application/json
+
+{
+    "meeting_id": 65
+}
