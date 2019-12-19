@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
-		<script src="/m/js/scosun.js"></script>
+		<script src="../../../js/scosun.js"></script>
 		<style type="text/css">
 			header {
 				box-shadow: 0px 0px 5px gray;
@@ -91,213 +91,233 @@
 			//全局变量编排规则id
 		
 			//全局变量会议室规则id
-			var url = window.location.search;
-                var str = url.substr(1);
+            var url = "https://f.longjuli.com"
+			var uri = window.location.search;
+                var str = uri.substr(1);
               window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
                window.roomid=str.substring(str.lastIndexOf("=")+1)
+               
+               console.log(ruleid);
+                console.log(roomid);
 			
 			//规则列表表格调用方法
 			$.ajax({
-				async: false,
-				type: "post",
-				url: "https://www.longjuli.com/ajax",
-				dataType: "json",
-				//成功的回调函数
-				data: {
-					"a": "s1",
-					"t": "rulesetup",
-					"id": ruleid,
-					"roomid": roomid
-				},
-				success: function(msg) {
-
-					var data = msg.data;
-
-
-					tablezonetable = table.render({
-						elem: '#zonetable',
-						data: data,
-						height: 240,
-						cols: [
-							[
-								// 表头
-
-								{
-									field: 'bgcolorid',
-									title: '规则对应底色',
-									align: 'left',
-									width: '11%',
-									event: 'seeDetail',
-									style: 'cursor: pointer;',
-									templet: function(data) {
-										return "<div style='height:22px;width:60px;background-color: " + data.bgcolor + "'></div>"
-									}
-								}, {
-									field: 'seatnum',
-									title: '座位数量',
-									width: '15%',
-									align: "center"
-
-								}, {
-									field: 'rulename',
-									title: '座次规则',
-									width: '15%',
-									align: "center"
-
-								},
-								{
-									field: 'ordernum',
-									title: '规则排序',
-									width: '18%',
-									align: "center",
-									sort: true,
-
-
-								},
-								{
-									field: 'isincrementname',
-									title: '递增补规则',
-
-									width: '18%',
-									align: "center"
-
-
-								}, {
-									field: 'modifytime',
-									title: '更新时间',
-									width: '12%',
-									sort: true,
-									align: "center"
-
-								}, {
-									width: '15%',
-									align: 'center',
-									flxed: 'right',
-									title: '操作',
-									toolbar: '#test-table-operate-barDemo'
-								}
-							]
-						],
-						skin: 'line', //表格风格
-						page: false, //是否显示分页
-						limits: [5, 10, 15], //显示
-						limit: 15 //每页默认显示的数量
-					});
-				},
-				//失败的回调函数
-				error: function() {
-					console.log("error")
-				}
+			    async: false,
+			    type: "get",
+			    url: url + "/rulesetup/findbyRulesetup",
+			    dataType: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+			    //成功的回调函数
+			    data: {
+			        "ruletemplateid": ruleid,
+			        "roomtemplateid": roomid
+			    },
+			    success: function(msg) {
+			
+			        var data = msg.data;
+			
+			        var i = 0;
+			        tablezonetable = table.render({
+			            elem: '#zonetable',
+			            data: data,
+			            height: 240,
+			            cols: [
+			                [
+			                    // 表头
+			
+			                    {
+			                        field: 'bgcolor',
+			                        title: '规则对应底色',
+			                        align: 'left',
+			                        width: '11%',
+			                        event: 'seeDetail',
+			                        style: 'cursor: pointer;',
+			                        templet: function(data) {
+			                            return "<div style='height:22px;width:60px;background-color: " +
+			                                data.bgcolor + "'></div>"
+			                        }
+			                    }, {
+			                        field: 'seatsnum',
+			                        title: '座位数量',
+			                        width: '15%',
+			                        align: "center"
+			
+			                    }, {
+			                        field: 'rulename',
+			                        title: '座次规则',
+			                        width: '15%',
+			                        align: "center"
+			
+			                    },
+			                    {
+			                        field: 'ordernum',
+			                        title: '规则排序',
+			                        width: '18%',
+			                        align: "center",
+			                        sort: true,
+			                        templet: function(data) {
+			                            i++;
+			                            return i;
+			                        },
+			
+			
+			                    },
+			                    {
+			                        field: 'isincrement',
+			                        title: '递增补规则',
+			
+			                        width: '18%',
+			                        align: "center"
+			
+			
+			                    }, {
+			                        field: 'modifytime',
+			                        title: '更新时间',
+			                        width: '12%',
+			                        sort: true,
+			                        align: "center"
+			
+			                    }, {
+			                        width: '15%',
+			                        align: 'center',
+			                        flxed: 'right',
+			                        title: '操作',
+			                        toolbar: '#test-table-operate-barDemo'
+			                    }
+			                ]
+			            ],
+			            skin: 'line', //表格风格
+			            page: false, //是否显示分页
+			            limits: [5, 10, 15], //显示
+			            limit: 15 //每页默认显示的数量
+			        });
+			
+			    },
+			    //失败的回调函数
+			    error: function() {
+			        console.log("error")
+			    }
 			})
 			//绘制座区图方法
 			$.ajax({
-				url: "https://www.longjuli.com/ajax",
-				type: "POST",
-				async: true,
-				data: {
-					"a": "s",
-					"t": "seatzone",
-					"c": roomid
-				},
-				success: function(data) {
-					var datas = data.data
-					$("body").append(datas.code);
-				}
+			    url: url+"/roomtemplate/findByroomtemplate",
+			    type: "get",
+			    async: false,
+			    xhrFields: {
+			        withCredentials: true
+			    },
+			    data: {
+			        "id": roomid,
+			       
+			    },
+			    success: function(data) {
+			        var datas = data.data
+			        console.log()
+			        $("body").append(data.data[0].templatecode);
+			    }
 			})
 			//规则列表方法方法
 			function ajax_reload() {
 				$.ajax({
-					async: false,
-					type: "post",
-					url: "https://www.longjuli.com/ajax",
-					dataType: "json",
-					//成功的回调函数
-					data: {
-						"a": "s1",
-						"t": "rulesetup",
-						"id": ruleid,
-						"roomid": roomid
-					},
-					success: function(msg) {
-
-						var data = msg.data;
-
-
-						tablezonetable = table.render({
-							elem: '#zonetable',
-							data: data,
-							height: 240,
-							cols: [
-								[
-									// 表头
-
-									{
-										field: 'bgcolorid',
-										title: '规则对应底色',
-										align: 'left',
-										width: '11%',
-										event: 'seeDetail',
-										style: 'cursor: pointer;',
-										templet: function(data) {
-											return "<div style='height:22px;width:60px;background-color: " + data.bgcolor + "'></div>"
-										}
-									}, {
-										field: 'seatnum',
-										title: '座位数量',
-										width: '15%',
-										align: "center"
-
-									}, {
-										field: 'rulename',
-										title: '座次规则',
-										width: '15%',
-										align: "center"
-
-									},
-									{
-										field: 'ordernum',
-										title: '规则排序',
-										width: '18%',
-										align: "center",
-										sort: true,
-
-
-									},
-									{
-										field: 'isincrementname',
-										title: '递增补规则',
-
-										width: '18%',
-										align: "center"
-
-
-									}, {
-										field: 'modifytime',
-										title: '更新时间',
-										width: '12%',
-										sort: true,
-										align: "center"
-
-									}, {
-										width: '15%',
-										align: 'center',
-										flxed: 'right',
-										title: '操作',
-										toolbar: '#test-table-operate-barDemo'
-									}
-								]
-							],
-							skin: 'line', //表格风格
-							page: false, //是否显示分页
-							limits: [5, 10, 15], //显示
-							limit: 15 //每页默认显示的数量
-						});
-
-					},
-					//失败的回调函数
-					error: function() {
-						console.log("error")
-					}
+				    async: false,
+				    type: "get",
+				    url: uri + "/rulesetup/findbyRulesetup",
+				    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+				    //成功的回调函数
+				    data: {
+				        "ruletemplateid": ruleid,
+				        "roomtemplateid": roomid
+				    },
+				    success: function(msg) {
+				
+				        var data = msg.data;
+				
+				        var i = 0;
+				        tablezonetable = table.render({
+				            elem: '#zonetable',
+				            data: data,
+				            height: 240,
+				            cols: [
+				                [
+				                    // 表头
+				
+				                    {
+				                        field: 'bgcolor',
+				                        title: '规则对应底色',
+				                        align: 'left',
+				                        width: '11%',
+				                        event: 'seeDetail',
+				                        style: 'cursor: pointer;',
+				                        templet: function(data) {
+				                            return "<div style='height:22px;width:60px;background-color: " +
+				                                data.bgcolor + "'></div>"
+				                        }
+				                    }, {
+				                        field: 'seatsnum',
+				                        title: '座位数量',
+				                        width: '15%',
+				                        align: "center"
+				
+				                    }, {
+				                        field: 'rulename',
+				                        title: '座次规则',
+				                        width: '15%',
+				                        align: "center"
+				
+				                    },
+				                    {
+				                        field: 'ordernum',
+				                        title: '规则排序',
+				                        width: '18%',
+				                        align: "center",
+				                        sort: true,
+				                        templet: function(data) {
+				                            i++;
+				                            return i;
+				                        },
+				
+				
+				                    },
+				                    {
+				                        field: 'isincrement',
+				                        title: '递增补规则',
+				
+				                        width: '18%',
+				                        align: "center"
+				
+				
+				                    }, {
+				                        field: 'modifytime',
+				                        title: '更新时间',
+				                        width: '12%',
+				                        sort: true,
+				                        align: "center"
+				
+				                    }, {
+				                        width: '15%',
+				                        align: 'center',
+				                        flxed: 'right',
+				                        title: '操作',
+				                        toolbar: '#test-table-operate-barDemo'
+				                    }
+				                ]
+				            ],
+				            skin: 'line', //表格风格
+				            page: false, //是否显示分页
+				            limits: [5, 10, 15], //显示
+				            limit: 15 //每页默认显示的数量
+				        });
+				
+				    },
+				    //失败的回调函数
+				    error: function() {
+				        console.log("error")
+				    }
 				})
 			}
 			table.on('tool(zonetable)', function(obj) {
@@ -309,40 +329,42 @@
 				} else if (obj.event === 'del') {
 					console.log(obj)
 					layer.confirm('确定删除规则吗?', function(index) {
-						obj.del();
-
-						$.ajax({
-							async: false,
-							type: "post",
-							url: "https://www.longjuli.com/ajax",
-							dataType: "json",
-							//成功的回调函数
-							data: {
-								"a": "d",
-								"t": "rulesetup",
-								"id": obj.data.id
-							},
-							success: function(msg) {
-
-								if (msg.state == 1) {
-
-
-									delSeatRule(obj.data.rulezone)
-									layer.msg("删除成功");
-									// location.reload();
-								} else {
-									layer.msg("删除失败");
-									// location.reload();
-
-								}
-
-							},
-							//失败的回调函数
-							error: function() {
-								console.log("error")
-							}
-						})
-
+					    obj.del();
+					
+					    $.ajax({
+					        async: false,
+					        type: "get",
+					        url: uri + "/rulesetup/deleteRulesetup",
+					        dataType: "json",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+					        //成功的回调函数
+					        data: {
+					            "id": obj.data.id
+					        },
+					        success: function(msg) {
+					
+					            if (msg.code == '0') {
+					
+					
+					                delSeatRule(obj.data.rulezone)
+					                layer.msg("删除成功");
+					                ajax_reload();
+					                // location.reload();
+					            } else {
+					                layer.msg("删除失败");
+					                // location.reload();
+					
+					            }
+					
+					        },
+					        //失败的回调函数
+					        error: function() {
+					            console.log("error")
+					        }
+					    })
+					
 					});
 				} else if (obj.event === 'edit') {
 					console.log(obj.data.id)
@@ -396,6 +418,10 @@
 							var body = layer.getChildFrame('body', index);
 							var ruleselect = body.find('#ruleselect').val()
 							var isincrement = body.find('#isincrement').val()
+							if(ruleselect==''||ruleselect==null)
+                            {return layer.msg("请选择规则")}
+                            if(isincrement==''||isincrement==null)
+                            {return layer.msg("请选择规则")}
 							setSeatRule(ruleselect, isincrement);
 							layer.close(index);
 
@@ -426,7 +452,7 @@
 					parent.layer.close(index); //再执行关闭 
 					
 					
-					parent.location.reload();
+					parent.reloads()
 
 				}
 			}
@@ -704,45 +730,45 @@
 
 			function saveSeatRule(rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
 				// var rule = [];
-				// rule.push({"seatid":"1-1","ruleid":"1"});
-
-				var data = {};
-				data.action = "add";
-				data.rule = rule;
-				data.ruleid = ruleid;
-				data.temp_ruletemplateid = temp_ruletemplateid;
-				data.roomtemplateid = roomtemplateid;
-				data.isincrement = isincrement;
-
-				$.ajax({
-					type: "POST",
-					url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
-					data: data,
-					dataType: 'json',
-					success: function(data) {
-						// console.log(data)
-						// $("#myDiv").html('<h2>'+data+'</h2>');
-						if (data.state) {
-							for (var i = 0, len = ckids_now.length; i < len; i++) {
-								// console.log($("#" + ckids_now[i]).attr("class"))
-								$("#" + ckids_now[i]).removeClass('seled');
-								$("#" + ckids_now[i]).addClass(ruleid);
-								// console.log($("#" + ckids_now[i]).attr("class"))
-							}
-							ajax_reload();
-
-							// window.frames["mainid"].contentWindow.location.reload();
-
-						} else {
-							alert("设置失败");
-						}
-					}
-				});
+				      // rule.push({"seatid":"1-1","ruleid":"1"});
+				console.log(rule.length);
+				      var data = {};
+				      data.rulezone = JSON.stringify(rule);
+				      data.ruleid = ruleid;
+				      data.ruletemplateid = temp_ruletemplateid;
+				      data.roomtemplateid = roomtemplateid;
+				      data.isincrement = isincrement;
+				      data.seatsnum=rule.length;
+                      console.log(data);
+				      $.ajax({
+				          type: "POST",
+				          url: url + "/rulesetup/addRulesetup",
+				          data: data,
+                          xhrFields: {
+                              withCredentials: true
+                          },
+				          success: function(data) {
+				              // console.log(data)
+				              // $("#myDiv").html('<h2>'+data+'</h2>');
+				              if (data.code==0) {
+				                  for (var i = 0, len = ckids_now.length; i < len; i++) {
+				                      // console.log($("#" + ckids_now[i]).attr("class"))
+				                      $("#" + ckids_now[i]).removeClass('seled');
+				                      $("#" + ckids_now[i]).addClass(ruleid);
+				                      // console.log($("#" + ckids_now[i]).attr("class"))
+				                  }
+				                  ajax_reload();
+				
+				                  // window.frames["mainid"].contentWindow.location.reload();
+				
+				              } else {
+				                  alert("设置失败");
+				              }
+				          }
+				      });
 			}
 
 			function updateSeatRule(rule, ruleid, rulerecordid, isincrement, oldruleid) {
-				// var rule = [];
-				// rule.push({"seatid":"1-1","ruleid":"1"});
 				var rulez = JSON.parse(rule);
 				var data = {};
 				data.rule = rulez; //JSON.stringify(rule);
@@ -751,58 +777,100 @@
 				data.rulerecordid = rulerecordid;
 				data.isincrement = isincrement;
 				$.ajax({
-					type: "POST",
-					url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
-					data: data,
-					dataType: 'json',
-					success: function(data) {
-						// console.log(data)
-						// $("#myDiv").html('<h2>'+data+'</h2>');
-						if (data.state) {
-							for (var i = 0, len = rulez.length; i < len; i++) {
-								// console.log($("#" + ckids_now[i]).attr("class"))
-								$("#" + rulez[i].seatid).removeClass(oldruleid);
-								$("#" + rulez[i].seatid).addClass(ruleid);
-								console.log("dats")
-								// console.log($("#" + ckids_now[i]).attr("class"))
-							}
-							ajax_reload();
-
-							//window.frames["mainid"].contentWindow.location.reload();
-							// $('#example23').DataTable().ajax.reload();
-						} else {
-							alert("设置失败");
-						}
-					}
+				    type: "POST",
+				    url: uri + "/rulesetup/updateRulesetup",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+				    // "https://www.longjuli.com/ruletemplate_add_next_do.php",
+				    data: {
+				        "id": rulerecordid,
+				        "rulezone": rule,
+				        "isincrement": isincrement,
+				        "ruleid": ruleid
+				    },
+				    dataType: 'json',
+				    success: function(data) {
+				        // console.log(data)
+				        // $("#myDiv").html('<h2>'+data+'</h2>');
+				        if (data.code == '0') {
+				            for (var i = 0, len = rulez.length; i < len; i++) {
+				                // console.log($("#" + ckids_now[i]).attr("class"))
+				                $("#" + rulez[i].seatid).removeClass(oldruleid);
+				                $("#" + rulez[i].seatid).addClass(ruleid);
+				                // console.log("dats")
+				                // console.log($("#" + ckids_now[i]).attr("class"))
+				            }
+				            ajax_reload();
+				
+				            //window.frames["mainid"].contentWindow.location.reload();
+				            // $('#example23').DataTable().ajax.reload();
+				        } else {
+				            alert("设置失败");
+				        }
+				    }
 				});
 			}
 
+            function queryAllSeatStatus(roomid, ruleid) {
+            	var data = {};
+            	data.action = "s";
+            	//  var temp_ruletemplateid = 0;
+            	// var roomtemplateid = 0;
+            	data. ruletemplateid= ruleid;
+            	data.roomtemplateid = roomid;
+                   
+            	// data.rule_id = temp_ruletemplateid;
+            	// data.room_id = roomtemplateid;
+            	// rule_id=180&room_id=67
+            	$.ajax({
+            		type: "get",
+            		url: url+"/rulesetup/show",
+            		data: data,
+                       xhrFields: {
+                           withCredentials: true
+                       },
+            		dataType: 'json',
+            		success: function(data) {
+                        var datas= data.data;
+                        console.log(data.data)
+            			if (datas && datas instanceof Array) {
+            				console.log(data.data)
+            				setSeatStatus(datas);
+            			}
+            			// $("#myDiv").html('<h2>'+data+'</h2>');
+            		}
+            	});
+            }
+			// function queryAllSeatStatus(roomid, ruleid) {
+			// 	var data = {};
+			// 	data.action = "s";
+			// 	//  var temp_ruletemplateid = 0;
+			// 	// var roomtemplateid = 0;
+			// 	data.rule_id = ruleid;
+			// 	data.room_id = roomid;
 
-			function queryAllSeatStatus(roomid, ruleid) {
-				var data = {};
-				data.action = "s";
-				//  var temp_ruletemplateid = 0;
-				// var roomtemplateid = 0;
-				data.rule_id = ruleid;
-				data.room_id = roomid;
-
-				// data.rule_id = temp_ruletemplateid;
-				// data.room_id = roomtemplateid;
-				// rule_id=180&room_id=67
-				$.ajax({
-					type: "POST",
-					url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
-					data: data,
-					dataType: 'json',
-					success: function(data) {
-						if (data && data instanceof Array) {
-							console.log(data)
-							setSeatStatus(data);
-						}
-						// $("#myDiv").html('<h2>'+data+'</h2>');
-					}
-				});
-			}
+			// 	// data.rule_id = temp_ruletemplateid;
+			// 	// data.room_id = roomtemplateid;
+			// 	// rule_id=180&room_id=67
+			// 	$.ajax({
+			// 		type: "POST",
+			// 		url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
+			// 		data: data,
+   //                  xhrFields: {
+   //                      withCredentials: true
+   //                  },
+			// 		dataType: 'json',
+			// 		success: function(data) {
+			// 			if (data && data instanceof Array) {
+			// 				console.log(data)
+			// 				setSeatStatus(data);
+			// 			}
+			// 			// $("#myDiv").html('<h2>'+data+'</h2>');
+			// 		}
+			// 	});
+			// }
+            
 
 			function queryAllSeatStatusById(id) {
 				var data = {};
@@ -813,6 +881,9 @@
 					url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
 					data: data,
 					dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
 					success: function(data) {
 						console.log("queryAllSeatStatusById---", data)
 						if (data && data instanceof Array) {
@@ -1097,5 +1168,5 @@
 			}
 		}
 	</script>
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </html>
