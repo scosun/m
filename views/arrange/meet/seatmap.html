@@ -49,6 +49,14 @@
 			width: 100%;
 			display: block;
 		}
+		.btnbar-select{
+			display: inline-block;
+			width: 112px;
+			float: right;
+			margin-right: 465px;
+			margin-top: 9px;
+		}
+
 
 		/* 隐藏浏览器滚动条
 		::-webkit-scrollbar {
@@ -149,6 +157,12 @@
 				</cite></a>
 		</span>
 		<!-- 右侧菜单 -->
+		<div class="layui-form btnbar-select">
+            <select class="dialogRuleSelect" id="ruleselect">
+                <option value="R1">按规则标色</option>
+                <option value="R2">按属性标色</option>
+            </select>
+		</div>
 		<span class="layui-right-nav">
 			<i id="nav-parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
 			<i id="nav-lock" data="锁定"><img src="../../../images/lock.png"></i>
@@ -270,7 +284,7 @@
 		var url = 'https://f.longjuli.com';
 		var uri = window.location.search;
 		console.log(uri)
-                var str = uri.substr(1);
+				var str = uri.substr(1);
               window.ruleid = +GetQueryString("ruleid");
                window.roomid = +GetQueryString("roomid");
                window.meetingid = +GetQueryString("meetingid");
