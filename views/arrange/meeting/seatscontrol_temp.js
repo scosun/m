@@ -1534,8 +1534,8 @@ function completeSeats(){
 
 function saveCompleteSeats(){
 	var seathtml = $("#seatcontainer").html().trim();
-
-	var flag = copyText('<div id="seatcontainer" class="seatcontainer" >'+seathtml+'</div>'); //传递文本
+	var copyhtml = $("#seatcontainer").prop("outerHTML").trim();
+	var flag = copyText(copyhtml); //传递文本
 	alert(flag ? "复制成功！" : "复制失败！");
 
 	sessionStorage.setItem("_seatscomplete",seathtml);
