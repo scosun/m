@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 	<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
 	<script src="../../../web.contextmenu/web.contextmenu.js"></script>
+	<link rel="stylesheet" href="../../../css/seat.css" media="all">
 	<script src="../../../js/jquery-3.1.1.min.js"></script>
 	<link rel="stylesheet" href="rule_zq.css" />
 	<style type="text/css">
@@ -49,14 +50,6 @@
 			width: 100%;
 			display: block;
 		}
-		.btnbar-select{
-			display: inline-block;
-			width: 112px;
-			float: right;
-			margin-right: 465px;
-			margin-top: 9px;
-		}
-
 
 		/* 隐藏浏览器滚动条
 		::-webkit-scrollbar {
@@ -157,12 +150,6 @@
 				</cite></a>
 		</span>
 		<!-- 右侧菜单 -->
-		<div class="layui-form btnbar-select">
-            <select class="dialogRuleSelect" id="ruleselect">
-                <option value="R1">按规则标色</option>
-                <option value="R2">按属性标色</option>
-            </select>
-		</div>
 		<span class="layui-right-nav">
 			<i id="nav-parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
 			<i id="nav-lock" data="锁定"><img src="../../../images/lock.png"></i>
@@ -284,10 +271,12 @@
 		var url = 'https://f.longjuli.com';
 		var uri = window.location.search;
 		console.log(uri)
-				var str = uri.substr(1);
-              window.ruleid = +GetQueryString("ruleid");
-               window.roomid = +GetQueryString("roomid");
-               window.meetingid = +GetQueryString("meetingid");
+                var str = uri.substr(1);
+              window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
+			   window.meetingid=str.substring(str.lastIndexOf("=")+1)
+			   window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
+			   window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
+			   
 		/*右侧菜单HOVER显示提示文字 end*/
 		$.ajax({
 			    url: url+"/roomtemplate/findByroomtemplate",
@@ -297,7 +286,7 @@
 			        withCredentials: true
 			    },
 			    data: {
-			        "id": roomid,
+			        "id": newroomid,
 			       
 			    },
 			    success: function(data) {
@@ -326,11 +315,7 @@
        	});
 	});
 
-	function GetQueryString(name){
-		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
-		if(r!=null)return  unescape(r[2]); return null;
-	}
+
 	function importSeatsData(condi){
 		$.ajax({
 			async: true,
@@ -341,32 +326,17 @@
 			dataType: "json",
 			success: function(obj) {
 				console.log("--importSeatsData---",condi);
-				if(obj && obj.attendees instanceof Array){
-					var data = obj.attendees || [];
-					for(var i = 0,len = data.length; i < len; i++){
-						// {"seatid":"1-1","attender":"028","id":"39"}
-						var item = data[i] || {};
-						$("#" + item.seatid).text(item.attender);
-						// if(setseatcolor == 1){
-							$("#" + item.seatid).css("background-color",item.bgcolor);
-						// }else{
-						// 	var groupid = item.groupid+"";
-						// 	var specialid = item.specialid+"";
-						// 	var gsid = groupid;// + specialid;
-						// 	if(gs[gsid]){
-						// 		$("#" + item.seatid).css("background-color",gs[gsid]);
-						// 	}else{
-						// 		gs[gsid] = seatcolors[cli];
-						// 		$("#" + item.seatid).css("background-color",seatcolors[cli]);
-						// 		cli++;
-						// 		if(cli==5){
-						// 			cli=0;
-						// 		}
-						// 	}
-						// }
-						// background-color: #D2B48C !important;
-					}
-				}
+				// if(obj && obj.id){
+				// 	if(condi.attendee2rule.id){
+				// 		layer.msg("修改成功");
+				// 	}else{
+				// 		layer.msg("添加成功");
+				// 	}
+
+				// 	layer.close(index);
+
+				// 	getListData();
+				// }
 			},
 			//失败的回调函数
 			error: function() {
@@ -440,6 +410,10 @@
 		var type = $(this).data('type');
 		active[type] ? active[type].call(this) : '';
 	});
+
+	function asd() {
+            location.reload();
+        }
 </script>
 
 </html>

@@ -331,13 +331,13 @@
                 area: ['100%', '106%'],
                 closeBtn: 1,
                 offset: '-43px',
-                content: 'territory_rules.html',
+                content: 'territory_rules.html?ruleid=' + data.id + '&roomid=' + data.roomid,
                 success: function(layero, index) {
-                    var body = layui.layer.getChildFrame('body', index);
-                    var roomid;
-                    // 取到弹出层里的元素，并把编辑的内容放进去
-                    body.find("#ruleid").val(data.id);
-                    body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                    // var body = layui.layer.getChildFrame('body', index);
+                    // var roomid;
+                    // // 取到弹出层里的元素，并把编辑的内容放进去
+                    // body.find("#ruleid").val(data.id);
+                    // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
         }
