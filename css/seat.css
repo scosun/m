@@ -7,8 +7,7 @@
 }
 
 
-.seatdiv{
-	/* float:left; */
+/* .seatdiv{
 	width:40px;
 	height:40px;
 	text-align:center;
@@ -16,10 +15,18 @@
 	font-size:12px;
 	border:1px solid #ccc;
 	position: absolute;
-	/* margin-right:7px;
-	margin-bottom:10px; */
+} */
+.seatdiv{    
+    display: flex;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
 }
-
 .seled{border:1px solid red  !important;background-color:#D6DFF7;}
 .aisleseats{
 	border:1px dashed #ccc;

@@ -65,7 +65,7 @@ function creatSeats2(rownum,colnum){
 function appendSeatsContainer(rownum,colnum){
 	var seathtml = [];
 	
-	var stop = 150;
+	var stop = 100;
 	var sleft = maxWidth;
 
 	for(var j = 1; j <= +rownum; j++){
@@ -102,9 +102,9 @@ function creatSeats(rownum,colnum){
 
 var maxWidth;
 function countMaxWidth(rownum,colnum){
-	maxWidth = colnum*50 + 200;
-	$(".seatcontainer").width(colnum*50 + 200);
-	$(".seatcontainer").height(rownum*50 + 300);
+	maxWidth = colnum*50 + 100;
+	$(".seatcontainer").width(colnum*50 + 100);
+	$(".seatcontainer").height(rownum*50 + 200);
 
 	// var arearule = +$("#arearule").val();
 	// if(arearule == 1){
@@ -125,8 +125,8 @@ function countMaxWidth(rownum,colnum){
 	
 }
 
-var sTop = 150;
-var sLeft = 100;
+var sTop = 100;
+var sLeft = 50;
 // var rowId = 0;
 var colId = 0;
 
@@ -159,7 +159,7 @@ function bulidSeatsContainer(rownum,colnum){
 			// stop = stop + 50;
 			sleft = sleft + 50;
 		}
-		sleft = 100;
+		sleft = 50;
 		stop = stop + 50;
 	}
 	// rowId = +rownum;
