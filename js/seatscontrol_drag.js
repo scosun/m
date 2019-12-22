@@ -395,19 +395,33 @@ function dragContainerMove(e){
 		}
 
 		var sbl = false;
+		var did = "";
 		for(var j = 0, jlen = seledPos.length; j < jlen; j++){
 			var xy = seledPos[j];
-			if(seledIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
-				sbl = true;
-				break;
+			if(serverSeatIds && serverSeatIds.length > 0){
+				if(serverSeatIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
+					sbl = true;
+					did = seledIds[j];
+					break;
+				}else{
+					sbl = false;
+				}
 			}else{
-				sbl = false;
+				if(seledIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
+					sbl = true;
+					did = seledIds[j];
+					break;
+				}else{
+					sbl = false;
+				}
 			}
 		}
 		if(sbl){
 			sel.addClass("dragbg");
+			sel.attr("did",did);
 		}else{
 			sel.removeClass("dragbg");
+			sel.removeAttr("did");
 		}
 	}
 }
@@ -416,10 +430,26 @@ function dblclickDragSeats(){
 	var dragmatch = $(".dragbg");
 	var ids = [];
 	for(var i = 0,len = dragmatch.length; i < len; i++){
-		ids.push(dragmatch[i].id);
+		ids.push({"nid":dragmatch[i].id,"did":$(dragmatch[i]).attr("did")});
 	}
 
-	alert("匹配上" + ids.join(','));
+	// alert("匹配上" + ids.join(','));
+	console.log(ids)
+
+	ids.forEach(function(item){
+		$("#" + item.nid).html($("#" + item.did).html());
+		$("#" + item.did).html(item.did.split('-')[1]);
+
+		if(serverSeatIds && serverSeatIds.length > 0){
+			serverSeatIds.splice(serverSeatIds.indexOf(item.did),1);
+		}
+		serverSeatIds.push(item.nid);
+	});
+
+	
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+
 	cancelDragSeats();
 	
 }
@@ -686,6 +716,8 @@ function containerMouseUp(evt){
 
 
 function bindContextMenu(){
+	removeContainerEvent();
+
 	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
 	for(var i = 0, len = filediv.length; i < len; i++){
 		var item = filediv[i];
@@ -694,6 +726,8 @@ function bindContextMenu(){
 }
 
 function removeContextMenu(){
+	selectSeats();
+
 	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
 	for(var i = 0, len = filediv.length; i < len; i++){
 		var item = filediv[i];
@@ -703,90 +737,53 @@ function removeContextMenu(){
 var currseatno;
 function bindMenu(seatno){
 	var menuJson = [
-		{
-			name:"编号",
-			id:"menu0",
-			seatno:seatno,
-			callback: function(seatno) {
-				var cid = $("[cid="+seatno+"]").attr("cid") || "";
-				if(cid){
-					seatno = $("[cid="+seatno+"]").attr("id");
-				}
-				currseatno = seatno;
-				var newno = window.prompt("请输入编号X-Y");
-				var reg = /^\d+\-\d+$/g;
-				if(newno){
-					if(reg.test(newno)){
-						if($("#"+newno).length == 0){
-							var id = newno.split("-");
-							$("#"+seatno).attr("id",newno);
-							if(!cid){
-								$("#"+newno).attr("cid",seatno);
-							}
-							$("#"+newno).text(id[1]);
-
-							console.log($("[cid=1-1]").length)
-						}else{
-							alert("编号已存在");
-						}
-					}else{
-						alert("编号输入不合法");
-					}
-				}
-			}
-		},
-		{
-			name:"编排",
-			id:"menu4",
-			seatno:seatno,
-			callback: function(seatno) {
-				var cid = $("[cid="+seatno+"]").attr("cid") || "";
-				if(cid){
-					seatno = $("[cid="+seatno+"]").attr("id");
-				}
-				currseatno = seatno;
-				var newno = window.prompt("请输入排号");
-				if(newno){
-					$("#"+seatno).text(newno);
-					$("#"+seatno).addClass("rownumseats");
-				}
-			}
-		},
 		// {
-		// 	name:"改名",
-		// 	id:"menu1",
+		// 	name:"修改姓名",
+		// 	id:"menu0",
 		// 	seatno:seatno,
 		// 	callback: function(seatno) {
-		// 		console.log(this,seatno);
+		// 		var cid = $("[cid="+seatno+"]").attr("cid") || "";
+		// 		if(cid){
+		// 			seatno = $("[cid="+seatno+"]").attr("id");
+		// 		}
 		// 		currseatno = seatno;
-		// 		var name = $("#"+seatno).text();
-		// 		var regnum = /^\d*$/;
-		// 		// && !regnum.test(name)
-		// 		if(name != "空座" ){
-		// 			// $("#username").val(name);
-		// 			var newname = window.prompt("请输入名字",name);
-		// 			$("#"+seatno).text(newname);
-		// 		}else{
-		// 			// $("#username").val('');
+		// 		var newno = window.prompt("请输入编号X-Y");
+		// 		var reg = /^\d+\-\d+$/g;
+		// 		if(newno){
+		// 			if(reg.test(newno)){
+		// 				if($("#"+newno).length == 0){
+		// 					var id = newno.split("-");
+		// 					$("#"+seatno).attr("id",newno);
+		// 					if(!cid){
+		// 						$("#"+newno).attr("cid",seatno);
+		// 					}
+		// 					$("#"+newno).text(id[1]);
+
+		// 					console.log($("[cid=1-1]").length)
+		// 				}else{
+		// 					alert("编号已存在");
+		// 				}
+		// 			}else{
+		// 				alert("编号输入不合法");
+		// 			}
 		// 		}
 		// 	}
 		// },
 		// {
 		// 	name:"空座",
-		// 	id:"menu2",
+		// 	id:"menu4",
 		// 	seatno:seatno,
 		// 	callback: function(seatno) {
-		// 		$("#"+seatno).html('空座');
-		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
-		// 	}
-		// },
-		// {
-		// 	name:"发送短信",
-		// 	id:"menu3",
-		// 	seatno:seatno,
-		// 	callback: function(seatno) {
-		// 		$("#"+seatno).html('空座');
-		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 		var cid = $("[cid="+seatno+"]").attr("cid") || "";
+		// 		if(cid){
+		// 			seatno = $("[cid="+seatno+"]").attr("id");
+		// 		}
+		// 		currseatno = seatno;
+		// 		var newno = window.prompt("请输入排号");
+		// 		if(newno){
+		// 			$("#"+seatno).text(newno);
+		// 			$("#"+seatno).addClass("rownumseats");
+		// 		}
 		// 	}
 		// }
 		// ,{
@@ -796,6 +793,47 @@ function bindMenu(seatno){
 		// 		alert("刷新");
 		// 	}
 		// }
+
+		{
+			name:"改名",
+			id:"menu1",
+			seatno:seatno,
+			callback: function(seatno) {
+				console.log(this,seatno);
+				currseatno = seatno;
+				var name = $("#"+seatno).text();
+				var regnum = /^\d*$/;
+				// && !regnum.test(name)
+				if(name != "空座" ){
+					// $("#username").val(name);
+					var newname = window.prompt("请输入名字",name);
+					if(newname){
+						$("#"+seatno).text(newname);
+					}
+				}else{
+					// $("#username").val('');
+				}
+			}
+		},
+		{
+			name:"空座",
+			id:"menu2",
+			seatno:seatno,
+			callback: function(seatno) {
+				$("#"+seatno).html('空座');
+				// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+			}
+		}
+		// {
+		// 	name:"发送短信",
+		// 	id:"menu3",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		$("#"+seatno).html('空座');
+		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 	}
+		// }
+		
 	];
 	
 	if($("#"+seatno).length > 0){

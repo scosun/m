@@ -63,6 +63,19 @@
 .c_green{color:#00a30c;}
 .treeHeightOf{height: 190px;overflow: scroll}
 .pl40{padding-left: 40px;}
+.sort_table{
+	margin-top:10px;
+}
+.sort_table th{
+	text-align: left;
+	padding-top:5px;
+	padding-bottom:5px
+}
+.sort_table td{
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px
+}
 </style>
 </head>
 <body>
@@ -138,19 +151,15 @@
 				<p class="mb10">名称：座区规则<span id="ruletype">R1</span> <span id="rulebgcolor" class="rulecolor"></span></p>
 				<p class="mb10">类型：<span id="rulename">正向左右左牌排序</span></p>
 				<p class="mb10">座位数：<span id="seatnum">32</span>个</p>
-				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button>
-				<div class="layui-form-item left-select">
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button><br />
+				<button class="layui-btn " id="sortbtn" style="margin-top: 5px;width: 120px;">自定义排序</button>
+				<!-- <div class="layui-form-item left-select">
 					<div class="layui-input-block">
 						<select id="select_sortitems" name="sortitems" lay-skin="select" lay-filter="sortitems-form-select">
-							<!-- <option >请选择排序依据</option> -->
-							<!-- <option value="2">R2-正向左右左排序</option>
-							<option value="3">R3-正向左右左排序</option>
-							<option value="4">R4-正向左右左排序</option>
-							<option value="5">R5-正向左右左排序</option>
-							<option value="6">R6-正向左右左排序</option> -->
+							
 						</select>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="layui-col-xs7">
@@ -174,6 +183,48 @@
 		<div id="add_attributes" class="layui-input-block" style="margin-left:30px">
 		</div>
 	</div>
+</div>
+
+<div id="sortScreen"  class="layui-form" lay-filter="component-form-group" style="padding: 20px 20px 0 0;display: none;">
+	<p style="padding:20px 0 0 20px">添加按以下方式排序的级别：</p>
+	<div style="margin:0 10px 0 20px;">
+		<table class="sort_table">
+			<thead>
+				<tr>
+					<th width="18%">级别序号</th>
+					<th width="">排序项</th>
+					<th width="20%">顺序</th>
+					<th width="40">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<input type="text" name="name" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input hyname">
+					</td>
+					<td>
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">组别</option>
+							<option value="2">姓式笔画</option>
+							<option value="3">正序</option>
+							<option value="4">倒序</option>
+						</select>
+					</td>
+					<td>
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">升序</option>
+							<option value="2">降序</option>
+						</select>
+					</td>
+					<td>
+						<a class="btn_del" href="javascript:void(0)"><i class="layui-icon layui-icon-close" style="font-size:20px"></i></a>
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+	<p style="padding:10px 0 0 20px"><button class="layui-btn" data-type="reload">添加</button></p>
 </div>
 
 <!-- 编辑绑定 弹框B 

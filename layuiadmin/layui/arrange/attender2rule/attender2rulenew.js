@@ -377,6 +377,34 @@ layui.config({
 		});
 	});
 
+	$('#sortbtn').on('click', function(){
+		setAddAttr();
+
+		layer.open({
+			type: 1,
+			title: '自定义排序',
+			shadeClose: true, //弹出框之外的地方是否可以点击
+			offset: '20%',
+			area: ['60%', '60%'],
+			content: $('#sortScreen'),
+			moveOut: true,
+			btn: ['保存', '取消'],
+			yes:function(index, layero){
+				// var cbox = $("input[type='checkbox'][name='add_attributes']:checked");
+				// cbox.each(function(){
+				// 	ruleSetupData[open].ckPerAttr.push({id:this.id,title:this.title});
+				// 	ruleSetupData[open].ckPerAttrId.push(+this.id);
+				// });
+				// setTreeData();
+
+				layer.close(index);
+			},
+			cancel: function(index, layero){
+				layer.close(index);
+			}
+		});
+	});
+
 	function setRuleHtml(){
 		var rdata = ruleSetupData[open];
 		setRuleAttr(rdata);

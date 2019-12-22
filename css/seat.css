@@ -58,10 +58,10 @@
 }
 
 .dragbg{
-	background-color: #efe92a4a;
+	background-color: #efe92a4a !important;
 }
 .locked{
-	border: 1px solid #e80a0a;
+	border: 1px solid #0000ff;
 }
 
 .colDiv {

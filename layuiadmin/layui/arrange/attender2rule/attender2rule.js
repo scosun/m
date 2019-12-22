@@ -284,6 +284,11 @@ layui.config({
 			reload:function() {
 				var key = $("#search-key").val();
 				getListData(key);
+			},
+			close:function(){
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+	
+				parent.layer.close(index); //再执行关闭 
 			}
 		};
 	$('.test-table-operate-btn .layui-btn,.test-table-reload-btn .layui-btn').on('click', function() {

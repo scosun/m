@@ -51,94 +51,13 @@
 			display: block;
 		}
 
-		/* 隐藏浏览器滚动条
-		::-webkit-scrollbar {
-			display: none;
-			width: 0px;
+		.btnbar-select{
+			display: inline-block;
+			width: 112px;
+			float: right;
+			margin-right: 400px;
+			margin-top: 9px;
 		}
-
-		.reseled {
-			border: 1px solid #21c2f2 !important;
-		}
-
-
-		.seatdiv {
-			/* float:left; */
-			/* width: 40px;
-			height: 40px;
-			text-align: center;
-			line-height: 40px;
-			font-size: 12px;
-			border: 1px solid #ccc;
-			position: absolute;
-			/* margin-right:7px;
-			margin-bottom:10px; */
-		/*} */
-
-		/* .seled {
-			background-color: #D6DFF7;
-		}
-
-		.aisleseats {
-			border: 1px dashed #ccc;
-		}
-
-		.rownumseats {
-			border: 1px dashed #ccc;
-			color: #ff0000;
-		}
-
-		.deleteseats {
-			border: 1px dashed #ccc;
-			opacity: 0.5;
-		}
-
-		.clear {
-			clear: both
-		} */
-
-		/* .dragcontainer {
-			position: absolute;
-			width: 0px;
-			height: 0px;
-			margin: 0px;
-			padding: 0px;
-			left: 0px;
-			top: 0px;
-			cursor: all-scroll;
-			border: 1px dashed #0099FF;
-			/* background-color:#C3D5ED; */
-		/* 	z-index: 1;
-			opacity: 0.6;
-			display: none;
-		} */
-
-		/* .seatcontainer {
-			position: relative;
-			/* user-select: none; */
-			/* width: 100%;
-			height: 600px;
-
-			background: aliceblue;
-		/*}*/ 
-
-		/* .dragbg {
-			background-color: #efe92a4a;
-		}
-
-		.locked {
-			border: 1px solid #e80a0a;
-		} */
-
-		/* .colDiv {
-			position: absolute;
-			width: 40px;
-			height: 40px;
-			text-align: center;
-			line-height: 40px;
-			font-size: 12px;
-			color: red;
-		} */ */
 	</style>
 </head>
 
@@ -150,99 +69,36 @@
 				</cite></a>
 		</span>
 		<!-- 右侧菜单 -->
+		<div class="layui-form btnbar-select">
+            <select class="dialogRuleSelect" id="ruleselect">
+                <option value="1">按规则标色</option>
+                <option value="2">按属性标色</option>
+            </select>
+		</div>
 		<span class="layui-right-nav">
-			<i id="nav-parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
-			<i id="nav-lock" data="锁定"><img src="../../../images/lock.png"></i>
-			<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
-			<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
-			<i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i>
-			<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
+			<i id="nav-parallelism" data-type="parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
+			<i id="nav-lock" data-type="bindLockSeats" data="锁定"><img src="../../../images/lock.png"></i>
+			<i id="nav-radio" data-type="bindOneSeats" data="单选"><img src="../../../images/radio.png"></i>
+			<i id="nav-selection" data-type="selectSeats" data="框选"><img src="../../../images/selection.png"></i>
+			<i id="nav-drag" data-type="dragSeats" data="拖动"><img src="../../../images/drag.png"></i>
+			<i id="rightbtn" data-type="bindContextMenu" data="右键"><img src="../../../images/rightbtn.png"></i>
+			<i id="cancelrightbtn" data-type="removeContextMenu" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
+			<!-- <i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i> -->
+			<!-- <i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i> -->
 			<i id="nav-save" data="保存"><img src="../../../images/save.png"></i>
-			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
+			<!-- <i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i> -->
 			<i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i>
-			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
-			<i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i>
-			<i id="nav-print" data="设定打印区域"><img src="../../../images/print.png"></i>
+			
+			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
+			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
 			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
 		</span>
 		<!-- 右侧菜单 end-->
 	</header>
 
-	<!-- <div id="seatcontainer" class="seatcontainer">
-		<div id="seatcontainerId">
-			<div class="seatdiv" style="top:100px; left:100px;" id="1-1">1</div>
-			<div class="seatdiv" style="top:100px; left:150px;" id="1-2">2</div>
-			<div class="seatdiv" style="top:100px; left:200px;" id="1-3">3</div>
-
-			<div class="seatdiv" style="top:100px; left:300px;" id="1-4">4</div>
-			<div class="seatdiv" style="top:100px; left:350px;" id="1-5">5</div>
-			<div class="seatdiv" style="top:100px; left:400px;" id="1-6">6</div>
-			<div class="seatdiv" style="top:100px; left:500px;" id="1-7">7</div>
-
-			<div class="seatdiv" style="top:150px; left:100px;" id="2-1">1</div>
-			<div class="seatdiv" style="top:150px; left:150px;" id="2-2">2</div>
-			<div class="seatdiv" style="top:150px; left:200px;" id="2-3">3</div>
-			<div class="seatdiv" style="top:150px; left:250px;" id="2-4">4</div>
-			<div class="seatdiv" style="top:150px; left:300px;" id="2-5">5</div>
-			<div class="seatdiv" style="top:150px; left:400px;" id="2-6">6</div>
-			<div class="seatdiv" style="top:150px; left:450px;" id="2-7">7</div>
-			<div class="seatdiv" style="top:150px; left:550px;" id="2-8">8</div>
-			<div class="seatdiv" style="top:150px; left:600px;" id="2-9">9</div>
-			<div class="seatdiv" style="top:150px; left:700px;" id="2-10">10</div>
-
-			<div class="seatdiv" style="top:200px; left:400px;" id="3-1">1</div>
-			<div class="seatdiv" style="top:200px; left:450px;" id="3-2">2</div>
-			<div class="seatdiv" style="top:200px; left:550px;" id="3-3">3</div>
-			<div class="seatdiv" style="top:200px; left:600px;" id="3-4">4</div>
-			<div class="seatdiv" style="top:200px; left:700px;" id="3-5">5</div>
-			<div class="seatdiv" style="top:250px; left:200px;" id="4-1">1</div>
-			<div class="seatdiv" style="top:250px; left:250px;" id="4-2">2</div>
-			<div class="seatdiv" style="top:250px; left:350px;" id="4-3">3</div>
-			<div class="seatdiv" style="top:250px; left:400px;" id="4-4">4</div>
-			<div class="seatdiv" style="top:250px; left:450px;" id="4-5">5</div>
-			<div class="seatdiv" style="top:250px; left:500px;" id="4-6">6</div>
-			<div class="seatdiv" style="top:250px; left:550px;" id="4-7">7</div>
-
-			<div class="seatdiv" style="top:300px; left:500px;" id="5-1">1</div>
-			<div class="seatdiv" style="top:300px; left:550px;" id="5-2">2</div>
-			<div class="seatdiv" style="top:300px; left:600px;" id="5-3">3</div>
-			<div class="seatdiv" style="top:300px; left:650px;" id="5-4">4</div>
-			<div class="seatdiv" style="top:300px; left:700px;" id="5-5">5</div>
-
-
-			<div class="seatdiv" style="top:350px; left:580px;" id="6-1">1</div>
-			<div class="seatdiv" style="top:350px; left:630px;" id="6-2">2</div>
-			<div class="seatdiv" style="top:350px; left:680px;" id="6-3">3</div>
-			<div class="seatdiv" style="top:350px; left:730px;" id="6-4">4</div>
-			<div class="seatdiv" style="top:350px; left:780px;" id="6-5">5</div>
-
-
-			<div class="seatdiv" style="top:400px; left:500px;" id="7-1">1</div>
-			<div class="seatdiv" style="top:400px; left:550px;" id="7-2">2</div>
-			<div class="seatdiv" style="top:400px; left:600px;" id="7-3">3</div>
-			<div class="seatdiv" style="top:400px; left:650px;" id="7-4">4</div>
-			<div class="seatdiv" style="top:400px; left:700px;" id="7-5">5</div>
-
-			<div class="seatdiv" style="top:450px; left:500px;" id="8-1">1</div>
-			<div class="seatdiv" style="top:450px; left:550px;" id="8-2">2</div>
-			<div class="seatdiv" style="top:450px; left:600px;" id="8-3">3</div>
-			<div class="seatdiv" style="top:450px; left:650px;" id="8-4">4</div>
-			<div class="seatdiv" style="top:450px; left:700px;" id="8-5">5</div>
-
-
-			<div class="seatdiv" style="top:550px; left:500px;" id="9-1">1</div>
-			<div class="seatdiv" style="top:550px; left:550px;" id="9-2">2</div>
-			<div class="seatdiv" style="top:550px; left:600px;" id="9-3">3</div>
-			<div class="seatdiv" style="top:550px; left:650px;" id="9-4">4</div>
-			<div class="seatdiv" style="top:550px; left:700px;" id="9-5">5</div>
-		</div>
-		<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;">
-		</div>
-	</div> -->
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
-<!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
-<script src="seatscontrol_drag.js"></script>
+<script src="../../../js/seatscontrol_drag.js"></script>
 <script type="text/javascript">
 	layui.config({
 		base: '../../../layuiadmin/' //静态资源所在路径
@@ -267,15 +123,15 @@
 			function openMsg() {
 				subtips = layer.tips(_data, '#' + _id, { tips: [3, '#666'], time: 30000 });
 			}
-		})
+		});
 		var url = 'https://f.longjuli.com';
 		var uri = window.location.search;
 		console.log(uri)
-                var str = uri.substr(1);
-              window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
-			   window.meetingid=str.substring(str.lastIndexOf("=")+1)
-			   window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
-			   window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
+        var str = uri.substr(1);
+        window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
+		window.meetingid=str.substring(str.lastIndexOf("=")+1)
+		window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
+		window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
 			   
 		/*右侧菜单HOVER显示提示文字 end*/
 		$.ajax({
@@ -292,23 +148,19 @@
 			    success: function(data) {
 			        var datas = data.data
 			        console.log()
-			        $("body").append(data.data[0].templatecode);
+					$("body").append(data.data[0].templatecode);
+					
+					selectSeats();
+
+					var condi = {
+						"meeting_id": +meetingid
+					};
+					importSeatsData(condi);
+					// queryAllSeatStatus(roomid, ruleid);
 			    }
 			})
-			var active = {
-       		
-       		close: function() {
-       
-       			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-       
-       			parent.layer.close(index); //再执行关闭 
-       			
-       			
-       			// parent.reloads()
-       
-       		}
-       	}
-       
+
+
        	$('.layui-ds').on('click', function() {
        		var type = $(this).data('type');
        		active[type] && active[type].call(this);
@@ -326,17 +178,9 @@
 			dataType: "json",
 			success: function(obj) {
 				console.log("--importSeatsData---",condi);
-				// if(obj && obj.id){
-				// 	if(condi.attendee2rule.id){
-				// 		layer.msg("修改成功");
-				// 	}else{
-				// 		layer.msg("添加成功");
-				// 	}
-
-				// 	layer.close(index);
-
-				// 	getListData();
-				// }
+				if(obj && obj.attendees){
+					changeSeatColor(obj.attendees);
+				}
 			},
 			//失败的回调函数
 			error: function() {
@@ -345,75 +189,185 @@
 		});
 	}
 
-	var $ = layui.$,
-		active = {
-			importData: function() {
-				var condi = {
-					"meeting_id": meetingid
-				};
-				importSeatsData(condi);
-			},
-			// getCheckLength: function() { //获取选中数目
-			// 	var checkStatus = table.checkStatus('test-table-operate'),
-			// 		data = checkStatus.data;
-			// 	layer.msg('选中了：' + data.length + ' 个');
-			// },
-			// isAll: function() { //验证是否全选
-			// 	var checkStatus = table.checkStatus('test-table-operate');
-			// 	layer.msg(checkStatus.isAll ? '全选' : '未全选')
-			// },
-			// add: function() {
-			// 	layer.open({
-			// 		type: 2,
-			// 		title: '增加对应关系方案',
-			// 		shadeClose: false, //弹出框之外的地方是否可以点击
-			// 		offset: '10%',
-			// 		area: ['60%', '80%'],
-			// 		content: 'attender2rule_new.html',
-			// 		btn: ['保存', '取消'],
-			// 		yes: function(index, layero) {
-			// 			var body = layer.getChildFrame('body', index);
-			// 			var programmename = body.find('#programmename').val();
-			// 			var select_meet = body.find('#select_meet').val();
-			// 			var data = sessionStorage.getItem("attender2rule_data") || "";
 
-			// 			var condi = {};
-			// 			condi.attendee2rule = {
-			// 				"name": programmename,
-			// 				"meeting_id": +select_meet,
-			// 				"rule_bindings": []
-			// 			};
-			// 			if(data){
-			// 				var obj = JSON.parse(data);
-			// 				// console.log("-----obj------",obj)
-			// 				var rule_bindings = condi.attendee2rule.rule_bindings;
-			// 				obj.forEach(function(item,index){
-			// 					rule_bindings[index] = {};
-			// 					rule_bindings[index].rulesetup_id = +item.id;
-			// 					rule_bindings[index].sort_item = +item.sort_item;
-			// 					rule_bindings[index].attribute_ids = item.treeCheckedIds;
-								
-			// 				});
-			// 			}
-			// 			console.log(condi);
-						
-			// 			saveAttendee2rules(condi,index);
-			// 		}
-			// 	});
-			// },
-			// reload:function() {
-			// 	var key = $("#search-key").val();
-			// 	getListData(key);
-			// }
-		};
+	
+	var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+	var cli = 0;
+	var gs = {};
+	window.serverSeatIds = [];
+	function changeSeatColor(attendees){
+		if(attendees.length > 0){
+			var ruleselect = $("#ruleselect").val() - 0;
+			serverSeatIds = [];
+			for(var i = 0,len = attendees.length; i < len; i++){
+				// {"seatid":"1-1","attender":"028","id":"39"}
+				var item = attendees[i] || {};
+				if(ruleselect == 1){
+					$("#" + item.seatid).css("background-color",item.bgcolor);
+					$("#" + item.seatid).html(item.attender);
+
+					serverSeatIds.push(item.seatid);
+				}else{
+					// var groupid = item.groupid+"";
+					// var specialid = item.specialid+"";
+					// var gsid = groupid;// + specialid;
+					// if(gs[gsid]){
+					// 	$("#" + item.seatid).css("background-color",gs[gsid]);
+					// }else{
+					// 	gs[gsid] = seatcolors[cli];
+					// 	$("#" + item.seatid).css("background-color",seatcolors[cli]);
+					// 	cli++;
+					// 	if(cli==5){
+					// 		cli=0;
+					// 	}
+					// }
+				}
+			}
+		}
+	}
+
+	/**
+	 * 打印局部div
+	 * @param printpage 局部div的ID
+	 */
+	function printdiv(printpage) {
+		var headhtml = "<html><head><title></title></head><body>";
+		var foothtml = "</body>";
+		// 获取div中的html内容
+		var newhtml = document.all.item(printpage).innerHTML;
+		// 获取div中的html内容，jquery写法如下
+		// var newhtml= $("#" + printpage).html();
+
+		// 获取原来的窗口界面body的html内容，并保存起来
+		var oldhtml = document.body.innerHTML;
+
+		// 给窗口界面重新赋值，赋自己拼接起来的html内容
+		document.body.innerHTML = headhtml + newhtml + foothtml;
+		// 调用window.print方法打印新窗口
+		window.print();
+
+		// 将原来窗口body的html值回填展示
+		document.body.innerHTML = oldhtml;
+		return false;
+	}
+	
+	var $ = layui.$,
+	active = {
+		parallelism:function(){
+			layer.open({
+                type: 2,
+                //title: '收藏管理 (考生姓名：张无忌)',
+                title: '  ',
+                shadeClose: false, //弹出框之外的地方是否可以点击
+                area: ['100%', '106%'],
+                closeBtn: 1,
+                offset: '-43px',
+                content: '../attender2rule/attender2rule.html',
+                success: function(layero, index) {
+                    // var body = layui.layer.getChildFrame('body', index);
+                    // var roomid;
+                    // // 取到弹出层里的元素，并把编辑的内容放进去
+                    // body.find("#ruleid").val(data.id);
+                    // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
+            });
+		},
+		importData: function() {
+			var condi = {
+				"meeting_id": meetingid
+			};
+			importSeatsData(condi);
+		},
+		bindLockSeats:function(){
+			bindLockSeats();
+		},
+		selectSeats:function(){
+			selectSeats();
+		},
+		dragSeats:function(){
+			dragSeats();
+		},
+		bindOneSeats:function(){
+			bindOneSeats();
+		},
+		bindContextMenu:function(){
+			bindContextMenu();
+		},
+		removeContextMenu:function(){
+			removeContextMenu();
+		},
+		print:function(){
+			console.log(11111)
+			// printdiv("seatcontainer");
+		},
+		close: function() {
+			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+	
+			parent.layer.close(index); //再执行关闭 
+			// parent.reloads()
+		}
+		// getCheckLength: function() { //获取选中数目
+		// 	var checkStatus = table.checkStatus('test-table-operate'),
+		// 		data = checkStatus.data;
+		// 	layer.msg('选中了：' + data.length + ' 个');
+		// },
+		// isAll: function() { //验证是否全选
+		// 	var checkStatus = table.checkStatus('test-table-operate');
+		// 	layer.msg(checkStatus.isAll ? '全选' : '未全选')
+		// },
+		// add: function() {
+		// 	layer.open({
+		// 		type: 2,
+		// 		title: '增加对应关系方案',
+		// 		shadeClose: false, //弹出框之外的地方是否可以点击
+		// 		offset: '10%',
+		// 		area: ['60%', '80%'],
+		// 		content: 'attender2rule_new.html',
+		// 		btn: ['保存', '取消'],
+		// 		yes: function(index, layero) {
+		// 			var body = layer.getChildFrame('body', index);
+		// 			var programmename = body.find('#programmename').val();
+		// 			var select_meet = body.find('#select_meet').val();
+		// 			var data = sessionStorage.getItem("attender2rule_data") || "";
+
+		// 			var condi = {};
+		// 			condi.attendee2rule = {
+		// 				"name": programmename,
+		// 				"meeting_id": +select_meet,
+		// 				"rule_bindings": []
+		// 			};
+		// 			if(data){
+		// 				var obj = JSON.parse(data);
+		// 				// console.log("-----obj------",obj)
+		// 				var rule_bindings = condi.attendee2rule.rule_bindings;
+		// 				obj.forEach(function(item,index){
+		// 					rule_bindings[index] = {};
+		// 					rule_bindings[index].rulesetup_id = +item.id;
+		// 					rule_bindings[index].sort_item = +item.sort_item;
+		// 					rule_bindings[index].attribute_ids = item.treeCheckedIds;
+							
+		// 				});
+		// 			}
+		// 			console.log(condi);
+					
+		// 			saveAttendee2rules(condi,index);
+		// 		}
+		// 	});
+		// },
+		// reload:function() {
+		// 	var key = $("#search-key").val();
+		// 	getListData(key);
+		// }
+	};
+
 	$('.layui-right-nav i').on('click', function() {
 		var type = $(this).data('type');
 		active[type] ? active[type].call(this) : '';
 	});
 
 	function asd() {
-            location.reload();
-        }
+        location.reload();
+    }
 </script>
 
 </html>
