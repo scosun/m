@@ -22,6 +22,8 @@ $(function(){
 
 
 	
+	$("#refreshbtn").bind("click",refreshContainer);
+
 	$("#rightbtn").bind("click",bindContextMenu);
 	$("#cancelrightbtn").bind("click",removeContextMenu);
 	$("#dleftmovebtn").bind("click",leftMoveSeats);
@@ -54,7 +56,9 @@ $(function(){
 	// $("#createbtn2").bind("click",creatSeats2);
 });
 
-
+function refreshContainer(){
+	$("#seatcontainerId").html('');
+}
 
 function creatSeats2(rownum,colnum){
 	// countMaxWidth();
@@ -717,6 +721,8 @@ function containerMouseUp(evt){
 
 
 function bindContextMenu(){
+	removeContainerEvent();
+
 	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
 	for(var i = 0, len = filediv.length; i < len; i++){
 		var item = filediv[i];
@@ -725,6 +731,8 @@ function bindContextMenu(){
 }
 
 function removeContextMenu(){
+	selectSeats();
+
 	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
 	for(var i = 0, len = filediv.length; i < len; i++){
 		var item = filediv[i];
