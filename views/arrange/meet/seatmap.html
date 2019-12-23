@@ -9,6 +9,7 @@
 	<script src="../../../web.contextmenu/web.contextmenu.js"></script>
 	<link rel="stylesheet" href="../../../css/seat.css" media="all">
 	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<script src="../../../js/jquery.jqprint-0.3.js"></script>
 	<link rel="stylesheet" href="rule_zq.css" />
 	<style type="text/css">
 		header {
@@ -330,6 +331,12 @@
 			console.log(11111);
 			// printJS('seatcontainer', 'html');
 			// printdiv("seatcontainer");
+			$("#seatcontainer").jqprint({
+				debug: false, 
+				importCSS: true, 
+				printContainer: true, 
+				operaSupport: false
+			});
 		},
 		close: function() {
 			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
