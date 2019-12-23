@@ -67,7 +67,7 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/roomtemplate/findAllBylayui",//数据接口
+        url: url + "/roomtemplate/findRoomTemplatePartBylayui",//数据接口
         method: 'get',
         xhrFields: {
             withCredentials: true
@@ -155,7 +155,7 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/roomtemplate/findAllBylayui",//数据接口
+            url: url + "/roomtemplate/findRoomTemplatePartBylayui",//数据接口
             method: 'get',
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
@@ -367,7 +367,7 @@ layui.config({
 			layer.open({
 				type: 2,
 				title: '座区图',
-				content: 'meeting_room_zq.html'
+				content: 'meeting_room_zq.html?roomid='+age.id
 					// ,maxmin: true
 					,
 				area: ['100%', '100%'],
@@ -376,7 +376,7 @@ layui.config({
 				},
 				success: function(layero, index) {
 					var body = layer.getChildFrame('body', index);
-					body.find('#roomid').val(age.id)
+					
 				}
 			});
 		}

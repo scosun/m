@@ -76,6 +76,7 @@
             </span>
             <!-- 右侧菜单 -->
             <span class="layui-right-nav">
+				<i id="nav-hidden" data="规则列表开关"><img src="../../../images/hiddenRule.png"></i>
                 <i id="nav-parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
                 <i id="nav-lock" data="锁定"><img src="../../../images/lock.png"></i>
                 <i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
@@ -267,6 +268,22 @@
        	        $("body").append(data.data[0].templatecode);
        	    }
        	})
+		
+		//规则列表的显示和隐藏
+		var index = true;
+		$("#nav-hidden").click(function(){
+			if (inde == false) {
+				$("#nav-hidden").children("img").attr('src',"../../../images/hiddenRule.png");
+				$('footer').show();
+				inde = true;
+			} else if (inde) {
+				$("#nav-hidden").children("img").attr('src',"../../../images/showRule.png");
+				$('footer').hide();
+				inde = false;
+			}
+		})
+		
+		
        	//规则列表方法方法
        	function ajax_reload() {
        		$.ajax({
