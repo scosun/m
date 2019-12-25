@@ -71,9 +71,8 @@
 		</span>
 		<!-- 右侧菜单 -->
 		<div class="layui-form btnbar-select">
-            <select class="dialogRuleSelect" id="ruleselect">
+            <select class="dialogRuleSelect" lay-filter="component-ruleselect" id="ruleselect">
                 <option value="1">按规则标色</option>
-                <option value="2">按属性标色</option>
             </select>
 		</div>
 		<span class="layui-right-nav">
@@ -86,7 +85,7 @@
 			<i id="cancelrightbtn" data-type="removeContextMenu" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
 			<!-- <i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i> -->
 			<!-- <i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i> -->
-			<i id="nav-save" data="保存"><img src="../../../images/save.png"></i>
+			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
 			<!-- <i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i> -->
 			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
 			
@@ -176,20 +175,40 @@
 			        var datas = data.data
 			       
 					$("#meetingname").text(datas[0].name);
-					$("#meetingaddress").text(datas[0].address);
-					$("#meetingremark").text(datas[0].memo);
-					$("#meetingtime").text(datas[0].meetingtime);
+					$("#meetingaddress").text("地点:"+datas[0].address);
+					$("#meetingremark").text("备注:"+datas[0].memo);
+					$("#meetingtime").text("时间:"+datas[0].meetingtime);
 					
-					selectSeats();
+					// selectSeats();
 
-					var condi = {
-						"meeting_id": +meetingid
-					};
-					importSeatsData(condi);
+					// var condi = {
+					// 	"meeting_id": +meetingid
+					// };
+					// importSeatsData(condi);
 					// queryAllSeatStatus(roomid, ruleid);
 			    }
-			})
-			
+			});
+			$.ajax({
+				type: "get",
+				url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
+				dataType: "json",
+			    success: function(obj) {
+					var data = obj.data || [];
+					if(data && data.length > 0){
+						$.each(data, function (index, item) {
+							$('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+						});
+						layui.form.render("select");
+					}
+			    }
+			});
+		
+		form.on('select(component-ruleselect)', function(data){
+			var id = +data.value;
+			// meetingId = id;
+			// getRuleSetups(id);
+			changeSeatColor(seatsdata);
+		});
 
 
        	$('.layui-ds').on('click', function() {
@@ -210,6 +229,7 @@
 			success: function(obj) {
 				console.log("--importSeatsData---",condi);
 				if(obj && obj.attendees){
+					seatsdata = obj.attendees;
 					changeSeatColor(obj.attendees);
 				}
 			},
@@ -220,41 +240,99 @@
 		});
 	}
 
+	function setSeatData(data){
+		$.ajax({
+			async: false,
+			type: "post",
+			data: JSON.stringify(data),
+			contentType: 'application/json', 
+			url: "https://m.longjuli.com/v1/meetings/store",
+			dataType: "json",
+			success: function(obj) {
+				console.log("--setSeatData---",obj);
+				
+			},
+			//失败的回调函数
+			error: function() {
+				console.log("error")
+			}
+		});
+	}
 
 	
+	
 	var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
-	var cli = 0;
-	var gs = {};
+	var seatsdata = [];
+	
 	window.serverSeatIds = [];
 	function changeSeatColor(attendees){
 		if(attendees.length > 0){
 			var ruleselect = $("#ruleselect").val() - 0;
 			serverSeatIds = [];
-			for(var i = 0,len = attendees.length; i < len; i++){
-				// {"seatid":"1-1","attender":"028","id":"39"}
-				var item = attendees[i] || {};
-				if(ruleselect == 1){
+			if(ruleselect == 1){
+				for(var i = 0,len = attendees.length; i < len; i++){
+					// {"seatid":"1-1","attender":"028","id":"39"}
+					var item = attendees[i] || {};
+					
 					$("#" + item.seatid).css("background-color",item.bgcolor);
 					$("#" + item.seatid).html(item.attender);
 
 					serverSeatIds.push(item.seatid);
-				}else{
-					// var groupid = item.groupid+"";
-					// var specialid = item.specialid+"";
-					// var gsid = groupid;// + specialid;
-					// if(gs[gsid]){
-					// 	$("#" + item.seatid).css("background-color",gs[gsid]);
-					// }else{
-					// 	gs[gsid] = seatcolors[cli];
-					// 	$("#" + item.seatid).css("background-color",seatcolors[cli]);
-					// 	cli++;
-					// 	if(cli==5){
-					// 		cli=0;
-					// 	}
-					// }
 				}
+			}else{
+				var colorsids = [];
+				attendees.forEach(function(item){
+					var colors = item.colors;
+					var cid = colors[ruleselect];
+					if(colorsids.indexOf(cid) == -1){
+						colorsids.push(cid);
+					}
+				});
+				var colorsobj = {};
+				var cli = 0;
+				colorsids.forEach(function(item){
+					colorsobj[item] = seatcolors[cli];
+					cli++;
+					if(cli==5){
+						cli=0;
+					}
+				});
+
+				attendees.forEach(function(item){
+					var colors = item.colors;
+					var cid = colors[ruleselect];
+					var cc = colorsobj[cid];
+					$("#" + item.seatid).css("background-color",cc);
+				});
 			}
 		}
+	}
+
+	function saveSeats(){
+		var seats = $("#seatcontainerId .seatdiv");
+		var seatsobj = {
+			meeting_id: meetingid,
+    		attendees:[]
+		}
+		var ids = {};
+		seatsdata.forEach(function(item){
+			ids[item.seatid] = item.id;
+		});
+
+		seats.each(function(){
+			var name = $(this).text() || "";
+			var reg = /^\d+/g;
+			var id = this.id;
+			if(name != "" && !reg.test(name)){
+				if(ids[id]){
+					seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
+				}else{
+					seatsobj.attendees.push({attender:name,seatid:id})
+				}
+			}
+		});
+
+		setSeatData(seatsobj);
 	}
 
 	/**
@@ -328,7 +406,6 @@
 			removeContextMenu();
 		},
 		print:function(){
-			console.log(11111);
 			// printJS('seatcontainer', 'html');
 			// printdiv("seatcontainer");
 			$("#seatcontainer").jqprint({
@@ -337,6 +414,9 @@
 				printContainer: true, 
 				operaSupport: false
 			});
+		},
+		saveseats:function(){
+			saveSeats();
 		},
 		close: function() {
 			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引

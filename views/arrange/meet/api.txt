@@ -7,3 +7,30 @@ content-type: application/json
 {
     "meeting_id": 65
 }
+
+2.标色下拉
+https://m.longjuli.com/v1/attributes/color?meeting_id=250
+
+POST https://m.longjuli.com/v1/meetings/store
+
+content-type: application/json
+
+{
+   
+    "meeting_id": 250,
+   
+    "attendees":
+   [
+       
+    {
+           
+      "id": 18944,
+    id可以不传       
+      "attender": "辛99",
+           
+     "seatid": "1-1"
+    }
+        
+   ]
+
+}
