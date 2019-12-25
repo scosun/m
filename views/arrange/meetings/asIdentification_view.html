@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+	<script src="../../../web.contextmenu/web.contextmenu.js"></script>
+	<link rel="stylesheet" href="../../../css/seat.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<link rel="stylesheet" href="rule_zq.css" />
+	<style type="text/css">
+		header {
+			box-shadow: 0px 0px 5px gray;
+			height: 3.5rem;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			z-index: 9999;
+			background-color: white;
+		}
+
+		body {
+			background-color: white;
+		}
+
+		/*右侧菜单*/
+		.layui-right-nav {
+			position: absolute;
+			right: 20px;
+			top: 0;
+			height: 3.5rem;
+			line-height: 3.5rem;
+			background-color: #fff;
+		}
+
+		.layui-right-nav i {
+			display: block;
+			height: 20px;
+			width: 20px;
+			float: left;
+			margin-top: 18px;
+			padding-left: 7px;
+			padding-right: 7px;
+		}
+
+		.layui-right-nav i img {
+			width: 100%;
+			display: block;
+		}
+
+	</style>
+</head>
+
+<body>
+	<header>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a><cite> &nbsp; &nbsp; &nbsp; 人像识别-查看</cite></a>
+		</span>
+		<!-- 右侧菜单 -->
+		<span class="layui-right-nav">
+			<i id="nav-zoomIn" data="放大"><img src="../../../images/zoomIn.png"></i>
+			<i id="nav-zoomOut" data="缩小"><img src="../../../images/zoomOut.png"></i>
+			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		</span>
+		<!-- 右侧菜单 end-->
+	</header>
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+	layui.config({
+		base: '../../../layuiadmin/' //静态资源所在路径
+	}).extend({
+		index: 'lib/index' //主入口模块
+	}).use(['index', 'user', 'table'], function () {
+		var $ = layui.$,
+			form = layui.form,
+			element = layui.element,
+			table = layui.table,
+			layer = layui.layer,
+			router = layui.router();
+		/*右侧菜单HOVER显示提示文字*/
+		$('.layui-right-nav i').each(function () {
+			var _id = $(this).attr('id');
+			var _data = $(this).attr('data');
+			$("#" + _id).hover(function () {
+				openMsg();
+			}, function () {
+				layer.close(subtips);
+			});
+			function openMsg() {
+				subtips = layer.tips(_data, '#' + _id, { tips: [3, '#666'], time: 30000 });
+			}
+		})
+
+
+
+
+		var url = 'https://f.longjuli.com';
+		var uri = window.location.search;
+		console.log(uri)
+                var str = uri.substr(1);
+              window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
+			   window.meetingid=str.substring(str.lastIndexOf("=")+1)
+			   window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
+			   window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
+			   
+		/*右侧菜单HOVER显示提示文字 end*/
+		$.ajax({
+			    url: url+"/roomtemplate/findByroomtemplate",
+			    type: "get",
+			    async: false,
+			    xhrFields: {
+			        withCredentials: true
+			    },
+			    data: {
+			        "id": newroomid,
+			       
+			    },
+			    success: function(data) {
+			        var datas = data.data
+			        console.log()
+			        $("body").append(data.data[0].templatecode);
+			    }
+			})
+			var active = {
+       		
+       		close: function() {
+       
+       			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+       
+       			parent.layer.close(index); //再执行关闭 
+       			
+       			
+       			// parent.reloads()
+       
+       		}
+       	}
+       
+       	$('.layui-ds').on('click', function() {
+       		var type = $(this).data('type');
+       		active[type] && active[type].call(this);
+       		});
+	});
+
+</script>
+</html>

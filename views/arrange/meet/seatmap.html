@@ -86,7 +86,7 @@
 			<!-- <i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i> -->
 			<!-- <i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i> -->
 			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
-			<!-- <i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i> -->
+			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
 			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
 			
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
@@ -156,8 +156,9 @@
 					var condi = {
 						"meeting_id": +meetingid
 					};
-					importSeatsData(condi);
-					// queryAllSeatStatus(roomid, ruleid);
+
+					// importSeatsData(condi);
+					queryAllSeatStatus();
 			    }
 			})
 			$.ajax({
@@ -217,6 +218,26 @@
        	});
 	});
 
+
+	function queryAllSeatStatus(){
+		$.ajax({
+			async: false,
+			type: "get",
+			url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+			dataType: "json",
+			success: function(obj) {
+				console.log("--queryAllSeatStatus---");
+				if(obj && obj.attendees){
+					seatsdata = obj.attendees;
+					changeSeatColor(obj.attendees);
+				}
+			},
+			//失败的回调函数
+			error: function() {
+				console.log("error")
+			}
+		});
+	}
 
 	function importSeatsData(condi){
 		$.ajax({
@@ -311,7 +332,7 @@
 	function saveSeats(){
 		var seats = $("#seatcontainerId .seatdiv");
 		var seatsobj = {
-			meeting_id: meetingid,
+			meeting_id: +meetingid,
     		attendees:[]
 		}
 		var ids = {};
@@ -383,7 +404,7 @@
 		},
 		importData: function() {
 			var condi = {
-				"meeting_id": meetingid
+				"meeting_id": +meetingid
 			};
 			importSeatsData(condi);
 		},

@@ -1,3 +1,12 @@
+进入座区图查看的页面，不调用/meetings/sort
+接口来显示座区图，
+调用
+GET https://m.longjuli.com/v1/meetings/show?meeting_id=250
+
+接口来显示座区图，如果没有排序并保存过座区图，会给你返回空数组，
+就没有名字可以安放到座位上；
+存储结果后要显示名字也还是调用这个/meetings/show接口
+
 
 1.导入座区数据
 POST https://m.longjuli.com/v1/meetings/sort
