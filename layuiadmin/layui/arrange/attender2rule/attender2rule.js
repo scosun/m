@@ -33,7 +33,7 @@ layui.config({
 				table.render({
 					elem: '#test-table-operate',
 					data: data,
-					height: 515,
+					// height: 515,
 					cols: [
 						[
 							// 表头
