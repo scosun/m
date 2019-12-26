@@ -126,6 +126,7 @@ layui.config({
 						item.treeNoCheckedIds = [];
 						item.sort_item = 0;
 						item.attendees = {};
+						item.sortSelectItemData = [];
 					});
 
 					$.each(data, function (index, item) {
@@ -225,52 +226,7 @@ layui.config({
 	// var a=5;//这个值是传进来的，动态的
 	// var id,btn_,btnFun,btn2Fun
 	function handleOpen () {
-		// id = arr[open-1]
-		// if (a < 2) {
-		// 	btn_ = btnText.a1
-		// } else {
-		// 	if (open < a && open ==1) {
-		// 		btn_ = btnText.first;
-		// 	} else if (open == a) {
-		// 		btn_ = btnText.last
-		// 	} else {
-		// 		btn_ = btnText.middle
-		// 	}
-		// }
-
 		var rlen = ruleSetupData.length - 1;
-		// if(rlen == 0){
-		// 	//只有一条
-		// 	btn_ = btnText.a1;
-		// }else{
-		// 	if(open == 0){
-		// 		btn_ = btnText.first;
-		// 	}else if(open == rlen){
-		// 		btn_ = btnText.last;
-		// 	}else{
-		// 		btn_ = btnText.middle;
-		// 	}
-		// }
-
-		// btnFun = function () {
-		// 	// if (open == a) {
-		// 	// 	alert('提交');
-		// 	// 	return;
-		// 	// }
-		// 	open ++
-		// 	handleOpen()
-		// 	console.log('btnFun')
-		// }
-		// btn2Fun = function () {
-		// 	if (open > 1) {
-		// 		open --
-		// 		handleOpen()
-		// 	}
-
-		// 	console.log('btn2Fun')
-		// }
-		// console.log('> open', open)
-		// console.log(id,btn_);
 
 		layer.open({
 			type: 1,
@@ -305,9 +261,38 @@ layui.config({
 				return false;
 			},
 			btn3:function(index, layero){
+
+				console.log(ruleSetupData)
+
+				for(var i = 0,len = ruleSetupData.length; i < len; i++){
+					let rule = ruleSetupData[i];
+					if(rule.treeCheckedIds.length == 0){
+						layer.msg(rule.ruletype+"规则没有绑定属性");
+						return false;
+					}
+					if(rule.sortSelectItemData.length == 0){
+						layer.msg(rule.ruletype+"规则没有绑定排序");
+						return false;
+					}else{
+						var b = false;
+						for(var j = 0,len2 = rule.sortSelectItemData.length; j < len2; j++){
+							if(rule.sortSelectItemData[j].id != 0){
+								b = true;
+								break;
+							}
+						}
+						if(!b){
+							layer.msg(rule.ruletype+"规则没有绑定排序");
+							return false;
+						}
+					}
+				}
+
 				setEditRuleHtml();
 
 				layer.close(index);
+
+				return false;
 			},
 			cancel: function(index, layero){
 				layer.close(index);
@@ -390,12 +375,7 @@ layui.config({
 			moveOut: true,
 			btn: ['保存', '取消'],
 			yes:function(index, layero){
-				// var cbox = $("input[type='checkbox'][name='add_attributes']:checked");
-				// cbox.each(function(){
-				// 	ruleSetupData[open].ckPerAttr.push({id:this.id,title:this.title});
-				// 	ruleSetupData[open].ckPerAttrId.push(+this.id);
-				// });
-				// setTreeData();
+				console.log("ruleSetupData[open].sortSelectItemData---",ruleSetupData[open].sortSelectItemData)
 
 				layer.close(index);
 			},
@@ -403,39 +383,65 @@ layui.config({
 				layer.close(index);
 			},
 			success:function(){
+				if(ruleSetupData[open].sortSelectItemData.length == 0){
+					ruleSetupData[open].sortSelectItemData.push({"id":0,"order":"ASC"});
+				}
 				setSortItemHtml();
 			}
 		});
 	});
 
-
-	var sortItemData = [
-		[1,1]
-	];
+	
 	$("#addsortbtn").on('click',function(){
-		sortItemData.push([1,1]);
+		ruleSetupData[open].sortSelectItemData.push({"id":0,"order":"ASC"});
 		setSortItemHtml();
 	});
 	
 	function setSortItemHtml(){
 		var html = [];
-		for(var i = 0,len = sortItemData.length; i < len; i++){
+		for(var i = 0,len = ruleSetupData[open].sortSelectItemData.length; i < len; i++){
 			html.push('<tr>');
 			html.push('<td>');
 			html.push('<input type="text" name="name" value="' + (i+1) + '" lay-verify="required" autocomplete="off" class="layui-input hyname" />');
 			html.push('</td>');
 			html.push('<td>');
-			html.push('<select name="interest" lay-skin="select" lay-filter="component-form-select">');
-			html.push('<option value="1">组别</option>');
-			html.push('<option value="2">姓式笔画</option>');
-			html.push('<option value="3">正序</option>');
-			html.push('<option value="4">倒序</option>');
+			html.push('<select id="sortname_'+ i + '" name="interest" lay-skin="select" lay-filter="sortname-form-select">');
+			html.push('<option >请选择</option>');
+			for(var j = 0,len2 = sortItemsData.length; j < len2; j++){
+				var si = sortItemsData[j] || {};
+				if(ruleSetupData[open].sortSelectItemData[i].id == si.id){
+					html.push('<option selected value="' + si.id + '">'+ si.name + '</option>');
+				}else{
+					var b = true;
+					for(var n = 0,len3 = ruleSetupData[open].sortSelectItemData.length; n < len3; n++){
+						if(ruleSetupData[open].sortSelectItemData[n].id == si.id){
+							b = false;
+							break;
+						}
+					}
+					if(!b){
+						html.push('<option disabled value="' + si.id + '">'+ si.name + '</option>');
+					}else{
+						html.push('<option value="' + si.id + '">'+ si.name + '</option>');
+					}
+					
+				}
+				
+			}
+			// html.push('<option value="2">姓式笔画</option>');
+			// html.push('<option value="3">正序</option>');
+			// html.push('<option value="4">倒序</option>');
 			html.push('</select>');
 			html.push('</td>');
 			html.push('<td>');
-			html.push('<select name="interest" lay-skin="select" lay-filter="component-form-select">');
-			html.push('<option value="1">升序</option>');
-			html.push('<option value="2">降序</option>');
+			html.push('<select id="sortattr_'+ i + '" name="interest" lay-skin="select" lay-filter="sortattr-form-select">');
+			if(ruleSetupData[open].sortSelectItemData[i].order == "ASC"){
+				html.push('<option selected value="ASC">升序</option>');
+				html.push('<option value="DESC">降序</option>');
+			}else{
+				html.push('<option value="ASC">升序</option>');
+				html.push('<option selected value="DESC">降序</option>');
+			}
 			html.push('</select>');
 			html.push('</td>');
 			html.push('<td>');
@@ -449,8 +455,35 @@ layui.config({
 		$(".btn_del").unbind('click');
 		$(".btn_del").on('click',function(){
 			var i = +this.id.split("_")[1];
-			sortItemData.splice(i,1);
+			ruleSetupData[open].sortSelectItemData.splice(i,1);
 			setSortItemHtml();
+		});
+
+		// $("select[id^='sortattr_']").on("change",function(){
+		// 	console.log(this.id)
+		// });
+
+
+		form.on('select(sortname-form-select)', function(data){
+			var id = +data.value;
+			var b = true;
+			for(var i = 0,len = ruleSetupData[open].sortSelectItemData.length; i < len; i++){
+				if(ruleSetupData[open].sortSelectItemData[i].id == id){
+					layer.msg("该属性已选");
+					b = false;
+					break;
+				}
+			}
+			if(b){
+				var eleid = +data.elem.id.split("_")[1];
+				ruleSetupData[open].sortSelectItemData[eleid].id = id;
+			}
+		});
+		form.on('select(sortattr-form-select)', function(data){
+			var id = data.value;
+			var eleid = +data.elem.id.split("_")[1];
+
+			ruleSetupData[open].sortSelectItemData[eleid].order = id;
 		});
 	}
 

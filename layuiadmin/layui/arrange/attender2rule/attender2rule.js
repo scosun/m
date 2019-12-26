@@ -270,7 +270,8 @@ layui.config({
 							obj.forEach(function(item,index){
 								rule_bindings[index] = {};
 								rule_bindings[index].rulesetup_id = +item.id;
-								rule_bindings[index].sort_item = +item.sort_item;
+								// rule_bindings[index].sort_item = +item.sort_item;
+								rule_bindings[index].sort_items = item.sortSelectItemData;
 								rule_bindings[index].attribute_ids = item.treeCheckedIds;
 								
 							});
