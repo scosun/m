@@ -438,6 +438,7 @@ function dblclickDragSeats(){
 
 	ids.forEach(function(item){
 		$("#" + item.nid).html($("#" + item.did).html());
+		$("#" + item.nid).attr("sid",item.did);
 		$("#" + item.did).html(item.did.split('-')[1]);
 
 		if(serverSeatIds && serverSeatIds.length > 0){
@@ -799,16 +800,31 @@ function bindMenu(seatno){
 			id:"menu1",
 			seatno:seatno,
 			callback: function(seatno) {
-				console.log(this,seatno);
+				// console.log(this,seatno);
 				currseatno = seatno;
 				var name = $("#"+seatno).text();
 				var regnum = /^\d*$/;
 				// && !regnum.test(name)
-				if(name != "空座" ){
+				if(name != "空座" && !regnum.test(name)){
 					// $("#username").val(name);
 					var newname = window.prompt("请输入名字",name);
-					if(newname){
-						$("#"+seatno).text(newname);
+					if(newname && !regnum.test(newname)){
+
+						var seats = $("#seatcontainerId .seatdiv");
+						var ish = true;
+						seats.each(function(){
+							var oname = $(this).text();
+							if(oname == newname){
+								alert(newname+"已存在"+seatno);
+								ish = false;
+								return false;
+							}
+						});
+						if(ish){
+							$("#"+seatno).text(newname);
+						}
+					}else{
+						alert("名字输入错误");
 					}
 				}else{
 					// $("#username").val('');

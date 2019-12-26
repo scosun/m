@@ -197,34 +197,13 @@
 					<th width="40">操作</th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<input type="text" name="name" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input hyname">
-					</td>
-					<td>
-						<select name="interest" lay-skin="select" lay-filter="component-form-select">
-							<option value="1">组别</option>
-							<option value="2">姓式笔画</option>
-							<option value="3">正序</option>
-							<option value="4">倒序</option>
-						</select>
-					</td>
-					<td>
-						<select name="interest" lay-skin="select" lay-filter="component-form-select">
-							<option value="1">升序</option>
-							<option value="2">降序</option>
-						</select>
-					</td>
-					<td>
-						<a class="btn_del" href="javascript:void(0)"><i class="layui-icon layui-icon-close" style="font-size:20px"></i></a>
-					</td>
-				</tr>
+			<tbody id="sorttable">
+				
 				
 			</tbody>
 		</table>
 	</div>
-	<p style="padding:10px 0 0 20px"><button class="layui-btn" data-type="reload">添加</button></p>
+	<p style="padding:10px 0 0 20px"><button id="addsortbtn" class="layui-btn" data-type="reload">添加</button></p>
 </div>
 
 <!-- 编辑绑定 弹框B 

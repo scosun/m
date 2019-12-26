@@ -271,7 +271,11 @@
 			dataType: "json",
 			success: function(obj) {
 				console.log("--setSeatData---",obj);
-				
+				if(obj && obj.attendees){
+					layer.msg("保存成功");
+				}else{
+					layer.msg("保存错误");
+				}
 			},
 			//失败的回调函数
 			error: function() {
@@ -336,8 +340,10 @@
     		attendees:[]
 		}
 		var ids = {};
+		var names = {};
 		seatsdata.forEach(function(item){
 			ids[item.seatid] = item.id;
+			names[item.seatid] = item.attender;
 		});
 
 		seats.each(function(){
@@ -346,9 +352,20 @@
 			var id = this.id;
 			if(name != "" && !reg.test(name)){
 				if(ids[id]){
-					seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
+					if(names[id] == name){
+						seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
+					}else{
+						seatsobj.attendees.push({attender:name,seatid:id});
+					}
 				}else{
-					seatsobj.attendees.push({attender:name,seatid:id})
+					// 新加名字  或者 挪动
+					var sid = $(this).attr("sid");
+					if(ids[sid]){
+						// 挪动名字需要把原来的id带回去
+						seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id});
+					}else{
+						seatsobj.attendees.push({attender:name,seatid:id});
+					}
 				}
 			}
 		});

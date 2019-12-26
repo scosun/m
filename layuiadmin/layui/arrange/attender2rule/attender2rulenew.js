@@ -401,9 +401,58 @@ layui.config({
 			},
 			cancel: function(index, layero){
 				layer.close(index);
+			},
+			success:function(){
+				setSortItemHtml();
 			}
 		});
 	});
+
+
+	var sortItemData = [
+		[1,1]
+	];
+	$("#addsortbtn").on('click',function(){
+		sortItemData.push([1,1]);
+		setSortItemHtml();
+	});
+	
+	function setSortItemHtml(){
+		var html = [];
+		for(var i = 0,len = sortItemData.length; i < len; i++){
+			html.push('<tr>');
+			html.push('<td>');
+			html.push('<input type="text" name="name" value="' + (i+1) + '" lay-verify="required" autocomplete="off" class="layui-input hyname" />');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<select name="interest" lay-skin="select" lay-filter="component-form-select">');
+			html.push('<option value="1">组别</option>');
+			html.push('<option value="2">姓式笔画</option>');
+			html.push('<option value="3">正序</option>');
+			html.push('<option value="4">倒序</option>');
+			html.push('</select>');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<select name="interest" lay-skin="select" lay-filter="component-form-select">');
+			html.push('<option value="1">升序</option>');
+			html.push('<option value="2">降序</option>');
+			html.push('</select>');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<a class="btn_del" id="del_' + i + '" href="javascript:void(0)"><i class="layui-icon layui-icon-close" style="font-size:20px"></i></a>');
+			html.push('</td>');
+			html.push('</tr>');
+		}
+		$("#sorttable").html(html.join(''));
+		layui.form.render();
+
+		$(".btn_del").unbind('click');
+		$(".btn_del").on('click',function(){
+			var i = +this.id.split("_")[1];
+			sortItemData.splice(i,1);
+			setSortItemHtml();
+		});
+	}
 
 	function setRuleHtml(){
 		var rdata = ruleSetupData[open];
