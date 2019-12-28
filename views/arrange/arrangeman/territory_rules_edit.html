@@ -50,8 +50,8 @@
 							<button type="button" class="layui-btn layui-ds" data-type="add">规则设置</button>
 							<button type="button" class="layui-btn layui-ds" data-type="reseled">重选座区</button>
 							<button type="button" class="layui-btn layui-ds" data-type="hidden" id="hidden">关闭规则列表</button>
-							<button type="button" class="layui-btn layui-ds" data-type="close">保存并关闭</button>
-							<button type="button" class="layui-btn layui-ds" data-type="close">取消</button>
+							<button type="button" class="layui-btn layui-ds" data-type="close">关闭</button>
+							<!-- <button type="button" class="layui-btn layui-ds" data-type="close">取消</button> -->
 						</div>
 					</cite>
 				</a>
@@ -206,26 +206,22 @@
 			})
 			//绘制座区图方法
 			$.ajax({
-					url: url+"/roomtemplate/findByroomtemplate",
-					type: "get",
-					async: false,
-					xhrFields: {
-						withCredentials: true
-					},
-					data: {
-						"id": roomid,
-					
-					},
-					success: function(data) {
-						var datas = data.data
-						console.log()
-						$("body").append(data.data[0].templatecode);
-						
-						selectSeats();
-
-						queryAllSeatStatus(roomid, ruleid);
-					}
-				})
+				url: url+"/roomtemplate/findByroomtemplate",
+				type: "get",
+				async: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"id": roomid
+				},
+				success: function(data) {
+					var datas = data.data;
+					$("body").append(data.data[0].templatecode);
+					selectSeats();
+					queryAllSeatStatus(roomid, ruleid);
+				}
+			});
 			//规则列表方法方法
 			function ajax_reload() {
 				$.ajax({
@@ -330,10 +326,8 @@
 			}
 			table.on('tool(zonetable)', function(obj) {
 				var data = obj.data;
-
 				if (obj.event === 'show') {
-
-					querySeatById(data.rulezone)
+					querySeatById(data.rulezone);
 				} else if (obj.event === 'del') {
 					console.log(obj)
 					layer.confirm('确定删除规则吗?', function(index) {
@@ -352,36 +346,26 @@
 					            "id": obj.data.id
 					        },
 					        success: function(msg) {
-					
 					            if (msg.code == '0') {
-					
-					
-					                delSeatRule(obj.data.rulezone)
+					                delSeatRule(obj.data.rulezone);
 					                layer.msg("删除成功");
 					                ajax_reload();
-					                // location.reload();
 					            } else {
 					                layer.msg("删除失败");
-					                // location.reload();
-					
 					            }
-					
 					        },
 					        //失败的回调函数
 					        error: function() {
 					            console.log("error")
 					        }
 					    })
-					
 					});
 				} else if (obj.event === 'edit') {
 					console.log(obj.data.id)
 					layer.open({
 						type: 2,
-						title: '<p style="">规则设置</p>',
-						content: 'rule_form.html'
-							// ,maxmin: true
-							,
+						title: '<p style="">修改规则</p>',
+						content: 'rule_form.html',
 						area: ['50%', '55%'],
 						btn: ['确定', '取消'],
 						// shadeClose: true,
@@ -391,18 +375,17 @@
 							var isincrement = body.find('#isincrement').val()
 							console.log(ruleselect)
 							console.log(isincrement)
-							var oldruleid = obj.data.ruleid
+							var oldruleid = obj.data.ruleid;
 							updateSeatRule(obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
 							layer.close(index);
-
-
-							// location.reload();
-
 						},
 						success: function(layero, index) {
 							var body = layer.getChildFrame('body', index);
-							var ruleselect = body.find('#ruleselect').val(obj.data.ruleid)
-							var isincrement = body.find('#isincrement').val(obj.data.isincrement)
+							body.find('#ruleselect').val(obj.data.ruleid);
+							body.find('#isincrement').val(obj.data.isincrement);
+
+							var iframeWin = layero.find('iframe')[0].contentWindow;
+							iframeWin.layui.form.render('select');
 						}
 					})
 
@@ -418,7 +401,7 @@
 				reseled:function(){
 					layer.open({
 						type: 2,
-						title: '<p style="">规则设置</p>',
+						title: '<p style="">重选座区</p>',
 						content: 'rule_form.html',
 						area: ['50%', '55%'],
 						btn: ['确定', '取消'],
@@ -433,14 +416,14 @@
                             {return layer.msg("请选择规则")}
 							setSeatRule(ruleselect, isincrement,false,editObj,editObj.data.ruleid);
 							layer.close(index);
-							// var oldruleid = obj.data.ruleid
-							// updateSeatRule(obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
-							// layer.close(index);
 						},
 						success: function(layero, index) {
 							var body = layer.getChildFrame('body', index);
-							var ruleselect = body.find('#ruleselect').val(editObj.data.ruleid)
-							var isincrement = body.find('#isincrement').val(editObj.data.isincrement)
+							var ruleselect = body.find('#ruleselect').val(editObj.data.ruleid);
+							var isincrement = body.find('#isincrement').val(editObj.data.isincrement);
+
+							var iframeWin = layero.find('iframe')[0].contentWindow;
+							iframeWin.layui.form.render('select');
 						}
 					})
 				},
@@ -448,52 +431,38 @@
 					layer.open({
 						type: 2,
 						title: '<p style="">规则设置</p>',
-						content: 'rule_form.html'
-							// ,maxmin: true
-							,
+						content: 'rule_form.html',
 						area: ['50%', '55%'],
 						btn: ['确定', '取消'],
-						// shadeClose: true,
 						yes: function(index, layero) {
 							var body = layer.getChildFrame('body', index);
-							var ruleselect = body.find('#ruleselect').val()
-							var isincrement = body.find('#isincrement').val()
+							var ruleselect = body.find('#ruleselect').val();
+							var isincrement = body.find('#isincrement').val();
 							if(ruleselect==''||ruleselect==null)
-                            {return layer.msg("请选择规则")}
+                            {return layer.msg("请选择规则");}
                             if(isincrement==''||isincrement==null)
-                            {return layer.msg("请选择规则")}
+                            {return layer.msg("请选择规则");}
 							setSeatRule(ruleselect, isincrement,true);
 							layer.close(index);
-
 						}
-					})
-
+					});
 				},
 				hidden: function() {
-
 					if (inde == false) {
 						$('#hidden').text("关闭规则列表")
 						$('footer').show();
-
 
 						inde = true;
 					} else if (inde) {
 						$('#hidden').text("开启规则列表")
 						$('footer').hide();
 						inde = false;
-
-
 					}
 				},
 				close: function() {
-
 					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-
 					parent.layer.close(index); //再执行关闭 
-					
-					
-					parent.reloads()
-
+					parent.reloads();
 				}
 			}
 
@@ -504,149 +473,19 @@
 
 			
 
-			$(function() {
-				// temp_ruletemplateid = getCookie("temp_ruletemplateid") - 0 || 0;
-				// roomtemplateid = GetQueryString("roomtemplateid") - 0;
+			var changeRuleZone = [];
+			var rulerecordid = 0;
+			var oldruleid = 0;
+			var oldisincrement = 0;
 
-				
-				
-
-			});
-
-
+			var temp_ruletemplateid = 0;
+			var roomtemplateid = 0;
+			
 			var seatObj = {};
 			var ckids_now = [];
 			var changeSeatIds = [];
-
+			var colors = ["#FFC0CB", "#6495ED", "#7FFFAA", "#F4A460", "#F0E68C", "#D2B48C", "#FA8072", "#00FFFF", "#8A2BE2","#FF4500"];
 			window.showRuleIds = [];
-
-			function showSelDiv(arr) {
-				var count = 0;
-				var selInfo = "";
-
-				ckids_now = [];
-
-				for (var i = 0; i < arr.length; i++) {
-					if (arr[i].className.indexOf("seled") != -1) {
-						count++;
-						var id = arr[i].id;
-						selInfo += arr[i].id + "/";
-
-
-
-						if (seatObj[id]) {
-							// 已绑定规则
-						} else {
-							ckids_now.push(id);
-						}
-					}
-				}
-				// console.log("共选择 " + ckids_now.length + " 个文件，分别是：" + ckids_now);
-			}
-
-
-
-			var colors = ["#FFC0CB", "#6495ED", "#7FFFAA", "#F4A460", "#F0E68C", "#D2B48C", "#FA8072", "#00FFFF", "#8A2BE2",
-				"#FF4500"
-			];
-
-			function setSeatRule(ruleselect, isincrement,isaddrule,editObj,oldruleid) {
-				var rule_id = ruleselect;
-				var isincrement = isincrement - 0;
-
-				if (isaddrule) {
-					var count = 0;
-					// ckids_now = [];
-					var ckids_now = $("#seatcontainerId .seled");
-					if (ckids_now && ckids_now.length > 0) {
-						var rule = [];
-						for (var i = 0, len = ckids_now.length; i < len; i++) {
-							rule.push({
-								"seatid": ckids_now[i].id,
-								"attender": "",
-								"ruleid":rule_id
-							});
-						}
-
-
-						saveSeatRule(rule, rule_id, ruleid, roomid, isincrement);
-					}else{
-						layer.msg("没有选中座区");
-					}
-				} else {
-
-					// if (changeSeatIds && changeSeatIds.length > 0) {
-						// console.log(changeSeatIds, ckids_now)
-						var ckids_now = $("#seatcontainerId .seled");
-						if (ckids_now && ckids_now.length > 0) {
-							var rule = [];
-							for (var i = 0, len = ckids_now.length; i < len; i++) {
-								rule.push({
-									"seatid": ckids_now[i].id,
-									"attender": "",
-									"ruleid":rule_id
-									// "seatid": ckids_now[i],
-									// "ruleid": ruleid,
-									// "attender": "",
-									// "temp_ruletemplateid": temp_ruletemplateid,
-									// "roomtemplateid": roomtemplateid
-								});
-							}
-							console.log(rule, ruleid)
-							// this.updateSeatRule(rule, ruleid, isincrement);
-							updateSeatRule(JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
-							this.resetChangeSeartIds();
-						} else {
-						}
-					// } else {
-					// 	if (changeRuleZone && changeRuleZone.length > 0) {
-					// 		this.updateSeatRule(changeRuleZone, ruleid, isincrement);
-					// 	}
-					// }
-
-				}
-			}
-
-
-			function saveSeatRule(rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
-				// var rule = [];
-				      // rule.push({"seatid":"1-1","ruleid":"1"});
-				console.log(rule.length);
-				      var data = {};
-				      data.rulezone = JSON.stringify(rule);
-				      data.ruleid = ruleid;
-				      data.ruletemplateid = temp_ruletemplateid;
-				      data.roomtemplateid = roomtemplateid;
-				      data.isincrement = isincrement;
-				      data.seatsnum=rule.length;
-                      console.log(data);
-				      $.ajax({
-				          type: "POST",
-				          url: url + "/rulesetup/addRulesetup",
-				          data: data,
-                          xhrFields: {
-                              withCredentials: true
-                          },
-				          success: function(data) {
-				              // console.log(data)
-				              // $("#myDiv").html('<h2>'+data+'</h2>');
-				              if (data.code==0) {
-				                  for (var i = 0, len = rule.length; i < len; i++) {
-				                      // console.log($("#" + ckids_now[i]).attr("class"))
-				                      $("#" + rule[i].seatid).removeClass('seled');
-				                      $("#" + rule[i].seatid).addClass(ruleid);
-				                      // console.log($("#" + ckids_now[i]).attr("class"))
-				                  }
-				                  ajax_reload();
-				
-				                  // window.frames["mainid"].contentWindow.location.reload();
-				
-				              } else {
-				                  alert("设置失败");
-				              }
-				          }
-				      });
-			}
 
 			function queryAllSeatStatus(roomid, ruleid) {
             	var data = {};
@@ -669,16 +508,12 @@
             		dataType: 'json',
             		success: function(data) {
                         var datas= data.data;
-                        console.log(data.data)
             			if (datas && datas instanceof Array) {
-            				console.log(data.data)
             				setSeatStatus(datas);
             			}
-            			// $("#myDiv").html('<h2>'+data+'</h2>');
             		}
             	});
             }
-
 			function setSeatStatus(data) {
 				console.log("001----显示颜色");
 				// console.log(data);
@@ -693,39 +528,73 @@
 						}
 					}
 				}
-
 			}
+			function setSeatRule(ruleselect, isincrement,isaddrule,editObj,oldruleid) {
+				var rule_id = ruleselect;
+				var isincrement = isincrement - 0;
 
-			function querySeatById(rulezone) {
-				resetChangeSeartIds();
-
-				console.log("点击选区成功");
-				if (rulezone && rulezone.length > 0) {
-					showRuleIds = [];
-					var rulezonejson = JSON.parse(rulezone);
-
-					$.each(rulezonejson, function(index, item) {
-						$("#" + item.seatid).addClass('seled');
-						if (!$("#" + item.seatid).hasClass(item.ruleid)) {
-							$("#" + item.seatid).addClass(item.ruleid);
+				if (isaddrule) {
+					var count = 0;
+					var ckids_now = $("#seatcontainerId .seled");
+					if (ckids_now && ckids_now.length > 0) {
+						var rule = [];
+						for (var i = 0, len = ckids_now.length; i < len; i++) {
+							rule.push({
+								"seatid": ckids_now[i].id,
+								"attender": "",
+								"ruleid":rule_id
+							});
 						}
-
-						//这个变量是为了，重新框选的时候，清空已有的选择记录
-						showRuleIds.push(item);
-					})
+						saveSeatRule(rule, rule_id, ruleid, roomid, isincrement);
+					}else{
+						layer.msg("没有选中座区");
+					}
+				} else {
+					var ckids_now = $("#seatcontainerId .seled");
+					if (ckids_now && ckids_now.length > 0) {
+						var rule = [];
+						for (var i = 0, len = ckids_now.length; i < len; i++) {
+							rule.push({
+								"seatid": ckids_now[i].id,
+								"attender": "",
+								"ruleid":rule_id
+							});
+						}
+						console.log(rule, ruleid)
+						// this.updateSeatRule(rule, ruleid, isincrement);
+						updateSeatRule(JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
+						this.resetChangeSeartIds();
+					}
 				}
 			}
-			
-			function resetChangeSeartIds() {
-				$("#seatcontainer .seled").removeClass("seled");
 
-				//以下代码还不知道是干嘛的
-				if (changeSeatIds.length > 0) {
-					changeSeatIds.forEach(function(item) {
-						$("#" + item).removeClass('reseled');
-					});
-				}
-				changeSeatIds = [];
+			function saveSeatRule(rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
+				var data = {};
+				data.rulezone = JSON.stringify(rule);
+				data.ruleid = ruleid;
+				data.ruletemplateid = temp_ruletemplateid;
+				data.roomtemplateid = roomtemplateid;
+				data.isincrement = isincrement;
+				data.seatsnum = rule.length;
+				$.ajax({
+					type: "POST",
+					url: url + "/rulesetup/addRulesetup",
+					data: data,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						if (data.code==0) {
+							for (var i = 0, len = rule.length; i < len; i++) {
+								$("#" + rule[i].seatid).removeClass('seled');
+								$("#" + rule[i].seatid).addClass(ruleid);
+							}
+							ajax_reload();
+						} else {
+							alert("设置失败");
+						}
+					}
+				});
 			}
 
 			function updateSeatRule(rule, ruleid, rulerecordid, isincrement, oldruleid) {
@@ -742,7 +611,6 @@
                     xhrFields: {
                         withCredentials: true
                     },
-				    // "https://www.longjuli.com/ruletemplate_add_next_do.php",
 				    data: {
 				        "id": rulerecordid,
 				        "rulezone": rule,
@@ -751,20 +619,12 @@
 				    },
 				    dataType: 'json',
 				    success: function(data) {
-				        // console.log(data)
-				        // $("#myDiv").html('<h2>'+data+'</h2>');
 				        if (data.code == '0') {
 				            for (var i = 0, len = rulez.length; i < len; i++) {
-				                // console.log($("#" + ckids_now[i]).attr("class"))
 				                $("#" + rulez[i].seatid).removeClass(oldruleid);
 				                $("#" + rulez[i].seatid).addClass(ruleid);
-				                // console.log("dats")
-				                // console.log($("#" + ckids_now[i]).attr("class"))
 				            }
 				            ajax_reload();
-				
-				            //window.frames["mainid"].contentWindow.location.reload();
-				            // $('#example23').DataTable().ajax.reload();
 				        } else {
 				            alert("设置失败");
 				        }
@@ -772,20 +632,41 @@
 				});
 			}
 
-			function changeSeatRuleArea(id, rulezone, ruleid, isincrement) {
-				//console.log("changeSeatRuleArea----", id, rulezone, ruleid);
+			function resetChangeSeartIds() {
+				$("#seatcontainer .seled").removeClass("seled");
 
+				//以下代码还不知道是干嘛的
+				if (changeSeatIds.length > 0) {
+					changeSeatIds.forEach(function(item) {
+						$("#" + item).removeClass('reseled');
+					});
+				}
+				changeSeatIds = [];
+			}
+			function querySeatById(rulezone) {
+				resetChangeSeartIds();
+				console.log("点击选区成功");
+				if (rulezone && rulezone.length > 0) {
+					showRuleIds = [];
+					var rulezonejson = JSON.parse(rulezone);
+					$.each(rulezonejson, function(index, item) {
+						$("#" + item.seatid).addClass('seled');
+						if (!$("#" + item.seatid).hasClass(item.ruleid)) {
+							$("#" + item.seatid).addClass(item.ruleid);
+						}
+						//这个变量是为了，重新框选的时候，清空已有的选择记录
+						showRuleIds.push(item);
+					})
+				}
+			}
+			function changeSeatRuleArea(id, rulezone, ruleid, isincrement) {
 				resetChangeSeartIds();
 				rulerecordid = id;
 				oldruleid = ruleid;
 				oldisincrement = isincrement;
-				// $("#ruleselect").val(ruleid);
-				// $("#isincrement").val(isincrement);
 				if (rulezone && rulezone.length > 0) {
 					rulezonejson = JSON.parse(rulezone)
 					$.each(rulezonejson, function(index, item) {
-						// $("#" + item.seatid).removeClass('seled');
-						// $("#" + item.seatid).addClass('reseled');
 						$("#" + item.seatid).addClass('seled');
 						if (!$("#" + item.seatid).hasClass(item.ruleid)) {
 							$("#" + item.seatid).addClass(item.ruleid);
@@ -795,198 +676,20 @@
 				}
 			}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
-			
-
-			
-			
-
-
-
-
-            
-
-			function queryAllSeatStatusById(id) {
-				var data = {};
-				data.action = "s";
-				data.ruleid = id;
-				$.ajax({
-					type: "POST",
-					url: "https://www.longjuli.com/ruletemplate_add_next_do.php",
-					data: data,
-					dataType: 'json',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-					success: function(data) {
-						console.log("queryAllSeatStatusById---", data)
-						if (data && data instanceof Array) {
-							// console.log(data)
-							// setSeatStatus(data);
-						}
-						// $("#myDiv").html('<h2>'+data+'</h2>');
-					}
-				});
-			}
-
-
 			function delSeatRule(rulezone) {
-				// olconsole.log('delSeatRule---', rulezone);
 				resetChangeSeartIds();
 				rulezone = JSON.parse(rulezone)
 
 				if (rulezone && rulezone.length > 0) {
 					rulezone.forEach(function(item) {
-						// $("#" + item.seatid).removeClass('seled');
-						// $("#" + item.seatid).removeClass(item.ruleid);
 						$("#" + item.seatid).removeClass();
-						$("#" + item.seatid).addClass('fileDiv');
+						$("#" + item.seatid).addClass('seatdiv');
 					});
 				}
 			}
 
 
-			var changeRuleZone = [];
-			var rulerecordid = 0;
-			var oldruleid = 0;
-			var oldisincrement = 0;
 
-			function changeSeatRuleById(id, rulezone, ruleid, isincrement) {
-				// console.log("changeSeatRuleById----", id, rulezone, ruleid);
-
-				resetChangeSeartIds();
-
-				$("#dialog").css('display', 'block');
-				$("#dialogbk").css('display', 'block');
-
-				// var $modal = $('#doc-modal-1');
-				// $modal.modal('toggle');
-
-				isaddrule = false;
-				changeRuleZone = rulezone || [];
-				rulerecordid = id;
-				oldruleid = ruleid;
-				oldisincrement = isincrement;
-				$("#ruleselect").val(ruleid);
-				$("#isincrement").val(isincrement);
-			}
-
-			
-
-			
-
-			function setRuleBtnclick(evt) {
-				if (changeSeatIds.length > 0) {
-					isaddrule = false;
-				} else {
-					isaddrule = true;
-				}
-			}
-
-			var isaddrule = true;
-			var temp_ruletemplateid = 0;
-			var roomtemplateid = 0;
-			
-
-			function WebSocketInit() {
-				//主机地址
-				var wsUrl = "ws://221.214.51.75:9000/video";
-				//视频流地址
-				var rtspUrl = "rtsp://192.168.10.45/user=admin&password=&channel=1&stream=0.sdp?";
-				//websocket连接
-				var ws = wsUrl + "?url=" + encodeURIComponent(rtspUrl);
-
-				console.info(ws);
-
-				var output;
-
-				//初始化操作
-				// testWebSocket();
-
-				function testWebSocket() {
-					websocket = new WebSocket(ws);
-					websocket.onopen = function(evt) {
-						onOpen(evt)
-					};
-					websocket.onclose = function(evt) {
-						onClose(evt)
-					};
-					websocket.onmessage = function(evt) {
-						onMessage(evt)
-					};
-					websocket.onerror = function(evt) {
-						onError(evt)
-					};
-				}
-
-				function onOpen(evt) {
-					writeToScreen("CONNECTED");
-					doSend("WebSocket rocks");
-				}
-
-				function onClose(evt) {
-					writeToScreen("DISCONNECTED");
-				}
-
-				//收到消息
-				function onMessage(evt) {
-					// var obj = eval('(' + evt.data + ')');
-					// image = obj['data']['face']['image'];
-					// if(obj['type']=='recognized' || obj['type']=='unrecognized'){
-					//  writeFace(obj['type']+'</br><img height="100" width="100" src="data:image/png;base64,' + image + '"/>');
-					// }
-					//关闭连接
-					//websocket.close();
-				}
-
-				function onError(evt) {
-					writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-				}
-
-				function doSend(message) {
-					writeToScreen("SENT: " + message);
-					websocket.send(message);
-				}
-
-				//输出识别结果到屏幕
-				function writeFace(message) {
-					// var result = document.getElementById("msg");
-					// var pre = document.createElement("div");
-					// //pre.style.wordWrap = "break-word";
-					// pre.style.display="inline-block";
-					// pre.style.margin="10px";
-					// pre.innerHTML = message;
-					// output.appendChild(pre);
-				}
-
-				function writeToScreen(message) {
-					console.log("-----", message)
-					// var result = document.getElementById("test");
-					// var pre = document.createElement("p");
-					// pre.style.wordWrap = "break-word";       
-					// pre.innerHTML = message;
-					// output.appendChild(pre);
-				}
-			}
 
 			function GetQueryString(name) {
 				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

@@ -1,0 +1,20 @@
+id ----会场座区设定
+id
+rulezone ---- 座区(也就是json串)
+
+bgcolor---- 背景颜色
+
+rulename ---- 座区名称（这里指左前区等）
+
+ruletemplateid ----编排规则id（默认传参为0）
+
+seatsnum ---- 座区数量
+
+ruleid  ---- z默认传参为
+
+roomtemplate ---- 会场id
+
+isincrement ---- 这个我也不知道（默认传参为0）
+
+linkurl  ---- 座区的
+webapp url地址

@@ -46,7 +46,19 @@ body£º
 	"rulesetup_id": 641,
    	"sort_item": 1,
 	"attribute_ids": [1, 2, 3]
-
+	"sort_items":[
+ 
+		{
+  "id": 1,
+  "order": "ASC"
+   }
+,
+		{
+  "id": 2,
+  "order": "DESC"
+   }
+,
+	]
 	},
   {
  
