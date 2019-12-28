@@ -282,6 +282,17 @@ layui.config({
         }
 
     });
+    function getMyDay(date){
+        var week;
+        if(date.getDay()==0) week="星期日";
+        if(date.getDay()==1) week="星期一";
+        if(date.getDay()==2) week="星期二";
+        if(date.getDay()==3) week="星期三";
+        if(date.getDay()==4) week="星期四";
+        if(date.getDay()==5) week="星期五";
+        if(date.getDay()==6) week="星期六";
+        return week;
+    }
 
     //监听工具条
     table.on('tool(test-table-operate)', function(obj) {
@@ -340,8 +351,10 @@ layui.config({
                     } else {
                         datime = "上午" + time;
                     }
-
-                    var datatime = date + " " + datime;
+                    var newdate =date.replace('年','-').replace('月','-').slice(0,date.length-1);
+                    var newdates=" ("+getMyDay(new Date(newdate))+") "
+                    // console.log(newdates)
+                    var datatime = date + newdates + datime;
 
                     $.ajax({
                         async: false,
@@ -358,7 +371,7 @@ layui.config({
                             "name": body.find(".hyname").val(),
                             "meetingtime": datatime,
                             "roomid": body.find("#meeting").val(),
-                            "address": body.find("#meeting").text(),
+                            "address": body.find("#meeting option:selected").text(),
                             "ruleid": body.find("#rule").val(),
                             "memo": body.find("#memo").val()
                         },
