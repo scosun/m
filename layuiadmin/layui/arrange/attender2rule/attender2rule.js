@@ -8,6 +8,8 @@ layui.config({
 	$ = layui.jquery;
 	// #test-table-operate
 	
+	var arrangeList = [];
+
 	getListData();
 
 	function getListData(key){
@@ -29,7 +31,9 @@ layui.config({
 				var data = msg.data;
 				data.reverse();
 				// console.log(data)
-	
+				
+				arrangeList = [];
+
 				table.render({
 					elem: '#test-table-operate',
 					data: data,
@@ -137,8 +141,37 @@ layui.config({
 	}
 	//监听表格复选框选择
 	table.on('checkbox(test-table-operate)', function(obj) {
-		console.log(obj)
-	});
+        // console.log(obj.checked); //当前是否选中状态
+        // // console.log(obj.data); //选中行的相关数据
+        // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+        // // console.log(table.checkStatus('test-table-operate').data); // 获取表格中选中行的数据
+        if (obj.checked && obj.type == 'one') {
+            var devi = {};
+            devi = obj.data.id;
+            arrangeList.push(devi)
+        }
+        if (!obj.checked && obj.type == 'one') {
+            var index = arrangeList.indexOf(obj.data.id);
+            if (index > -1) {
+                arrangeList.splice(index, 1);
+            }
+        }
+        if (!obj.checked && obj.type == 'all') {
+            arrangeList.length = 0;
+
+        }
+        if (obj.checked && obj.type == 'all') {
+            $.each(table.checkStatus('test-table-operate').data, function(idx, con) {
+                var devi = {};
+                devi = con.id;
+
+                arrangeList.push(devi)
+            });
+            arrangeList = Array.from(new Set(arrangeList))
+        }
+        // console.log("checkbox(test-table-operate)---",arrangeList)
+
+    });
 	//监听工具条
 	table.on('tool(test-table-operate)', function(obj) {
 		var data = obj.data;
@@ -180,7 +213,8 @@ layui.config({
 						obj.forEach(function(item,index){
 							rule_bindings[index] = {};
 							rule_bindings[index].rulesetup_id = +item.id;
-							rule_bindings[index].sort_item = +item.sort_item;
+							// rule_bindings[index].sort_item = +item.sort_item;
+							rule_bindings[index].sort_items = item.sortSelectItemData;
 							rule_bindings[index].attribute_ids = item.treeCheckedIds;
 							
 						});
@@ -192,7 +226,7 @@ layui.config({
 			});
 		} else if (obj.event === 'del') {//删除
 			var condi = {
-			 "attribute_ids": [data.id]
+				"attribute_ids": [data.id]
 			};
 			layer.confirm('真的删除吗？', function() {
 				$.ajax({
@@ -228,20 +262,64 @@ layui.config({
 
 	var $ = layui.$,
 		active = {
-			getCheckData: function() { //获取选中数据
-				var checkStatus = table.checkStatus('test-table-operate'),
-					data = checkStatus.data;
-				layer.alert(JSON.stringify(data));
-			},
-			getCheckLength: function() { //获取选中数目
-				var checkStatus = table.checkStatus('test-table-operate'),
-					data = checkStatus.data;
-				layer.msg('选中了：' + data.length + ' 个');
-			},
-			isAll: function() { //验证是否全选
-				var checkStatus = table.checkStatus('test-table-operate');
-				layer.msg(checkStatus.isAll ? '全选' : '未全选')
-			},
+            delall: function() {
+                layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function(index) {
+                    $.ajax({
+                        async: false,
+                        type: "get",
+                        url: url + "/ruletemplate/empty",
+                        dataType: "json",
+                        success: function(msg) {
+                            if (msg.code == 0) {
+                                layer.msg("清空成功");
+                                getListData();
+
+                            } else {
+                                layer.msg(msg.msg);
+                            }
+                        },
+                        //失败的回调函数
+                        error: function() {
+                            console.log("error")
+                        }
+                    })
+                    layer.close(index);
+                });
+            },
+			allcheck: function() { 
+                var cb = $(".layui-form-checkbox");
+                $(".layui-form-checkbox").each(function() {
+                    $(this).click();
+                });
+            },
+			dels: function() {
+				if(arrangeList.length == 0){
+					return;
+				}
+				var condi = {
+					"attribute_ids": arrangeList
+				};
+				layer.confirm('真的删除吗？', function() {
+					$.ajax({
+						url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
+						type: "POST",
+						data: JSON.stringify(condi),
+						contentType: 'application/json', 
+						success: function(msg) {
+							if (msg.code == 0) {
+								layer.msg("删除成功");
+								getListData();
+							} else {
+								layer.msg(msg.msg);
+							}
+						},
+						//失败的回调函数
+						error: function() {
+							console.log("error")
+						}
+					});
+				});
+            },
 			add: function() {
 				layer.open({
 					type: 2,

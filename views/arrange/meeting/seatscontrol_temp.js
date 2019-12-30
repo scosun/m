@@ -54,6 +54,9 @@ $(function(){
 	$("#nav-drag").bind("click",dragMoveSeats);
 
 	// $("#createbtn2").bind("click",creatSeats2);
+
+	//加载默认数据
+	loadSessionData();
 });
 
 function refreshContainer(){
@@ -620,8 +623,8 @@ function containerMouseMove(evt){
 		var _w = swidth + seatWidth/2, _h = sheight + seatWidth/2;
 		for (var i = 0,len = selList.length; i < len; i++) {
 			var sel = $(selList[i]);
-			var sl = sel.position().left;
-			var st = sel.position().top;
+			var sl = parseInt(sel.css("left"));
+			var st = parseInt(sel.css("top"));
 
 			// var sl = selList[i].offsetWidth + selList[i].offsetLeft;
 			// var st = selList[i].offsetHeight + selList[i].offsetTop;
@@ -1550,6 +1553,13 @@ function saveCompleteSeats(){
 }
 function clearCompleteSeats(){
 	sessionStorage.setItem("_seatscomplete","");
+}
+function loadSessionData(){
+	var html = sessionStorage.getItem("_seatscomplete") || "";
+	if(html){
+		$("#seatcontainer").prop("outerHTML",html);
+		clearCompleteSeats();	
+	}
 }
 
 function copyText(text) {

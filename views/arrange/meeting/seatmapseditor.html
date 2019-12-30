@@ -110,6 +110,11 @@ layui.config({
 		layer = layui.layer,
 		router = layui.router();
 		
+		//在这里我想得到页面 二次显示的事件
+		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
+			loadSessionData();
+        })
+
 		/*右侧菜单 设置行列弹框*/
 		$('#nav-down img').on('click', function(){
 			layer.open({

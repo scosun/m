@@ -171,6 +171,7 @@ layui.config({
 						item.treeNoCheckedIds = [];
 						item.sort_item = 0;
 						item.attendees = {};
+						item.sortSelectItemData = [];
 
 						if(attendee2rules && meeting_id == attendee2rules.meeting_id){
 							var rule_bindings = attendee2rules.rule_bindings;
@@ -181,7 +182,7 @@ layui.config({
 									attributes.forEach(function(attr){
 										item.treeCheckedIds.push(attr.id);
 									});
-									item.sort_item = rule.sort_items[0] || 0
+									item.sortSelectItemData = rule.sort_items || [];
 								}
 							})
 						}
@@ -343,9 +344,34 @@ layui.config({
 				return false;
 			},
 			btn3:function(index, layero){
+				for(var i = 0,len = ruleSetupData.length; i < len; i++){
+					let rule = ruleSetupData[i];
+					if(rule.treeCheckedIds.length == 0){
+						layer.msg(rule.ruletype+"规则没有绑定属性");
+						return false;
+					}
+					if(rule.sortSelectItemData.length == 0){
+						layer.msg(rule.ruletype+"规则没有绑定排序");
+						return false;
+					}else{
+						var b = false;
+						for(var j = 0,len2 = rule.sortSelectItemData.length; j < len2; j++){
+							if(rule.sortSelectItemData[j].id != 0){
+								b = true;
+								break;
+							}
+						}
+						if(!b){
+							layer.msg(rule.ruletype+"规则没有绑定排序");
+							return false;
+						}
+					}
+				}
 				setEditRuleHtml();
 
 				layer.close(index);
+
+				return false;
 			},
 			cancel: function(index, layero){
 				layer.close(index);
@@ -414,6 +440,131 @@ layui.config({
 			}
 		});
 	});
+
+	$('#sortbtn').on('click', function(){
+		setAddAttr();
+
+		layer.open({
+			type: 1,
+			title: '自定义排序',
+			shadeClose: true, //弹出框之外的地方是否可以点击
+			offset: '20%',
+			area: ['60%', '60%'],
+			content: $('#sortScreen'),
+			moveOut: true,
+			btn: ['保存', '取消'],
+			yes:function(index, layero){
+				console.log("ruleSetupData[open].sortSelectItemData---",ruleSetupData[open].sortSelectItemData)
+
+				layer.close(index);
+			},
+			cancel: function(index, layero){
+				layer.close(index);
+			},
+			success:function(){
+				if(ruleSetupData[open].sortSelectItemData.length == 0){
+					ruleSetupData[open].sortSelectItemData.push({"id":0,"order":"ASC"});
+				}
+				setSortItemHtml();
+			}
+		});
+	});
+
+	
+	$("#addsortbtn").on('click',function(){
+		ruleSetupData[open].sortSelectItemData.push({"id":0,"order":"ASC"});
+		setSortItemHtml();
+	});
+	
+	function setSortItemHtml(){
+		var html = [];
+		for(var i = 0,len = ruleSetupData[open].sortSelectItemData.length; i < len; i++){
+			html.push('<tr>');
+			html.push('<td>');
+			html.push('<input type="text" name="name" value="' + (i+1) + '" lay-verify="required" autocomplete="off" class="layui-input hyname" />');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<select id="sortname_'+ i + '" name="interest" lay-skin="select" lay-filter="sortname-form-select">');
+			html.push('<option >请选择</option>');
+			for(var j = 0,len2 = sortItemsData.length; j < len2; j++){
+				var si = sortItemsData[j] || {};
+				if(ruleSetupData[open].sortSelectItemData[i].id == si.id){
+					html.push('<option selected value="' + si.id + '">'+ si.name + '</option>');
+				}else{
+					var b = true;
+					for(var n = 0,len3 = ruleSetupData[open].sortSelectItemData.length; n < len3; n++){
+						if(ruleSetupData[open].sortSelectItemData[n].id == si.id){
+							b = false;
+							break;
+						}
+					}
+					if(!b){
+						html.push('<option disabled value="' + si.id + '">'+ si.name + '</option>');
+					}else{
+						html.push('<option value="' + si.id + '">'+ si.name + '</option>');
+					}
+					
+				}
+				
+			}
+			// html.push('<option value="2">姓式笔画</option>');
+			// html.push('<option value="3">正序</option>');
+			// html.push('<option value="4">倒序</option>');
+			html.push('</select>');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<select id="sortattr_'+ i + '" name="interest" lay-skin="select" lay-filter="sortattr-form-select">');
+			if(ruleSetupData[open].sortSelectItemData[i].order == "ASC"){
+				html.push('<option selected value="ASC">升序</option>');
+				html.push('<option value="DESC">降序</option>');
+			}else{
+				html.push('<option value="ASC">升序</option>');
+				html.push('<option selected value="DESC">降序</option>');
+			}
+			html.push('</select>');
+			html.push('</td>');
+			html.push('<td>');
+			html.push('<a class="btn_del" id="del_' + i + '" href="javascript:void(0)"><i class="layui-icon layui-icon-close" style="font-size:20px"></i></a>');
+			html.push('</td>');
+			html.push('</tr>');
+		}
+		$("#sorttable").html(html.join(''));
+		layui.form.render();
+
+		$(".btn_del").unbind('click');
+		$(".btn_del").on('click',function(){
+			var i = +this.id.split("_")[1];
+			ruleSetupData[open].sortSelectItemData.splice(i,1);
+			setSortItemHtml();
+		});
+
+		// $("select[id^='sortattr_']").on("change",function(){
+		// 	console.log(this.id)
+		// });
+
+
+		form.on('select(sortname-form-select)', function(data){
+			var id = +data.value;
+			var b = true;
+			for(var i = 0,len = ruleSetupData[open].sortSelectItemData.length; i < len; i++){
+				if(ruleSetupData[open].sortSelectItemData[i].id == id){
+					layer.msg("该属性已选");
+					b = false;
+					break;
+				}
+			}
+			if(b){
+				var eleid = +data.elem.id.split("_")[1];
+				ruleSetupData[open].sortSelectItemData[eleid].id = id;
+			}
+		});
+		form.on('select(sortattr-form-select)', function(data){
+			var id = data.value;
+			var eleid = +data.elem.id.split("_")[1];
+
+			ruleSetupData[open].sortSelectItemData[eleid].order = id;
+		});
+	}
 
 	function setRuleHtml(){
 		var rdata = ruleSetupData[open];

@@ -95,7 +95,7 @@
                                                 lay-href="arrange/rulezone/rulezone.html">会场座区设定</a></a></dd>
                                         <!-- <dd data-name="metingman"><a lay-href="arrange/model/model.html">所在地列表</a></a></dd>
 											<dd data-name="metingman"><a lay-href="arrange/model/model.html">贵宾室列表</a></a></dd> -->
-                                        <dd><a lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
+                                        <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
                                     </dl>
                                 </dd>
 
@@ -337,6 +337,8 @@
             index: 'lib/index' //主入口模块
         }).use('index', function () {
             var $ = layui.$;
+            window.element = layui.element;
+            
             $.ajax({
                 async: false,
                 type: "get",

@@ -317,8 +317,42 @@ layui.config({
 						}
 					})
 				},
+				btn2:function(index, layero){
+					$.ajax({
+						url: url+"/roomtemplate/findByIdTemplatecode",
+						type: "POST",
+						data: {
+							"id": age.id
+						},
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log("---findByIdTemplatecode----",data)
+							if (data.code == "0") {
+								var templatecode = data.data.templatecode;
+
+								sessionStorage.setItem("_seatscomplete",templatecode);
+								var topLayui = parent === self ? layui : top.layui;
+								topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
+							} else {
+								layer.msg(data.msg, {
+									icon: 5
+								});
+							}
+						},
+						error: function(error) {
+							
+						}
+					});
+					return false;
+				},
+				btn3:function(index, layero){
+					console.log("btn3----")
+				},
 				success: function(layero, index) {
 					var body = layer.getChildFrame('body', index);
+					console.log("age------",age)
 					if (age) {
 						body.find('#roomname').val(age.name);
 						body.find('#templatefilename').val(age.templatefilename);
@@ -329,7 +363,6 @@ layui.config({
 							body.find('#seatrule').val('1');
 						}
                         body.find('#templatecode').val(age.templatecode);
-						
 					}
 				}
 			});
