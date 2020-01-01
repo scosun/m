@@ -72,7 +72,7 @@ function creatSeats2(rownum,colnum){
 function appendSeatsContainer(rownum,colnum){
 	var seathtml = [];
 	
-	var stop = 100;
+	var stop = 110;
 	var sleft = maxWidth;
 
 	for(var j = 1; j <= +rownum; j++){
@@ -132,7 +132,7 @@ function countMaxWidth(rownum,colnum){
 	
 }
 
-var sTop = 100;
+var sTop = 110;
 var sLeft = 50;
 // var rowId = 0;
 var colId = 0;

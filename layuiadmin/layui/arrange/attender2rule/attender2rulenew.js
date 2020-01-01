@@ -311,25 +311,28 @@ layui.config({
 	$('#reload_pop').on('click', function(){
 		open = 0;
 
-		//获取人员属性类别选择
-		var cbox = $("input[type='checkbox'][name='attributes']:checked");
-		for(var i = 0,len = ruleSetupData.length; i < len; i++){
-			ruleSetupData[i].ckPerAttr = [];
-			ruleSetupData[i].ckPerAttrId = [];
-			cbox.each(function(){
-				ruleSetupData[i].ckPerAttr.push({id:this.id,title:this.title});
-				ruleSetupData[i].ckPerAttrId.push(+this.id);
-			});
+		if(ruleSetupData && ruleSetupData.length > 0){
+			//获取人员属性类别选择
+			var cbox = $("input[type='checkbox'][name='attributes']:checked");
+			for(var i = 0,len = ruleSetupData.length; i < len; i++){
+				ruleSetupData[i].ckPerAttr = [];
+				ruleSetupData[i].ckPerAttrId = [];
+				cbox.each(function(){
+					ruleSetupData[i].ckPerAttr.push({id:this.id,title:this.title});
+					ruleSetupData[i].ckPerAttrId.push(+this.id);
+				});
+			}
+
+			setTreeData();
+
+			//加载排序select数据
+			setSortItem();
+			
+			//弹出窗口
+			handleOpen();
+		}else{
+			layer.msg("没有获取到人员规则对应关系,请选择会议");
 		}
-
-		setTreeData();
-
-		//加载排序select数据
-		setSortItem();
-		
-		//弹出窗口
-		handleOpen();
-		
 	});
 	/* 编辑绑定上一步 下一步 end */
 

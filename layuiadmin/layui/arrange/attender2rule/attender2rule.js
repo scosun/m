@@ -195,9 +195,18 @@ layui.config({
 				btn: ['保存', '取消'],
 				yes: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
-					var programmename = body.find('#programmename').val();
-					var select_meet = body.find('#select_meet').val();
+					var programmename = body.find('#programmename').val() || "";
+					var select_meet = body.find('#select_meet').val() || "";
 					var data = sessionStorage.getItem("attender2rule_data") || "";
+
+					if(!programmename){
+						layer.msg("请对应关系方案名称");
+						return;
+					}
+					if(!select_meet){
+						layer.msg("请选择会议");
+						return;
+					}
 
 					var condi = {};
 					condi.attendee2rule = {
@@ -331,9 +340,18 @@ layui.config({
 					btn: ['保存', '取消'],
 					yes: function(index, layero) {
 						var body = layer.getChildFrame('body', index);
-						var programmename = body.find('#programmename').val();
-						var select_meet = body.find('#select_meet').val();
+						var programmename = body.find('#programmename').val() || "";
+						var select_meet = body.find('#select_meet').val() || "";
 						var data = sessionStorage.getItem("attender2rule_data") || "";
+
+						if(!programmename){
+							layer.msg("请对应关系方案名称");
+							return;
+						}
+						if(!select_meet){
+							layer.msg("请选择会议");
+							return;
+						}
 
 						var condi = {};
 						condi.attendee2rule = {
@@ -351,7 +369,6 @@ layui.config({
 								// rule_bindings[index].sort_item = +item.sort_item;
 								rule_bindings[index].sort_items = item.sortSelectItemData;
 								rule_bindings[index].attribute_ids = item.treeCheckedIds;
-								
 							});
 						}
 						console.log(condi);
