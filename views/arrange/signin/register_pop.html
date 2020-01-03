@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>手动提交</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<style type="text/css">
+.layui-form-label{width: 90px;}
+.layui-input-block {margin-left: 120px;}
+.layui-form-item {
+    margin-bottom:0;
+}
+.headimg{float:left; border:1px solid #d4d4d4;margin:10px 10px 0 20px;}
+.headimg div{vertical-align:middle; display:table-cell;width:140px;height:200px;text-align: center; }
+.layui-form-label span{color: #f00;font-size: 14px;margin-right: 5px;}
+.layui-input-block .layui-form-radio{margin: 0 10px 0 0;}
+</style>
+</head>
+<body>
+<!-- 新增弹框-->
+<div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 0 0 0;">
+	<div class="headimg" style="float:left;"><div><img width="100" src="../../../images/headimg.png"></div></div>
+	<div style="float:left;">
+		<div class="layui-form-item">
+			<label class="layui-form-label">姓名：</label>
+			<div class="layui-input-block" style="line-height: 38px;">xxxx</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">编号：</label>
+			<div class="layui-input-block" style="line-height: 38px;">001</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别：</label>
+			<div class="layui-input-block" style="line-height: 38px;">男</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">驻地房间：</label>
+			<div class="layui-input-block" style="line-height: 38px;">山东大厦2223</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">组别：</label>
+			<div class="layui-input-block" style="line-height: 38px;">1组（中共、特邀）</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">单位：</label>
+			<div class="layui-input-block" style="line-height: 38px;">市政协</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">职务：</label>
+			<div class="layui-input-block" style="line-height: 38px;">xxxx公司xxxx公司xxxx公<br/>司xxxx公司xx公司xxx公司xxx公司xxx公司xxxxx公司</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>报到状态：</label>
+			<div class="layui-input-block" style="line-height: 38px;">
+				<input type="radio" name="sex" value="未报到" title="未到未报到">
+				<input type="radio" name="sex" value="本人报到" title="本人报到">
+				<input type="radio" name="sex" value="代理报到" title="代理报到" checked>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">报到时间：</label>
+			<div class="layui-input-block" style="line-height: 38px;">2019-10-30 18：19：25</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>常用手机：</label>
+			<div class="layui-input-block" style="line-height: 38px;">12000022000</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">备用手机：</label>
+			<div class="layui-input-block" style="line-height: 38px;">12000022000</div>
+		</div>
+	</div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table','tree', 'util'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		tree = layui.tree,
+		util = layui.util,
+		router = layui.router();
+
+})
+</script>
+</body>
+</html>
