@@ -378,12 +378,15 @@
                         // shadeClose: true,
                         yes: function(index, layero) {
                             var body = layer.getChildFrame('body', index);
-							var ruleselect = body.find('#ruleselect').val()
-							var isincrement = body.find('#isincrement').val()
+							var ruleselect = body.find('#ruleselect').val();
+                            var isincrement = body.find('#isincrement').val();
+                            var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+							rulename = rulename[1] || "";
+							
 							console.log(ruleselect)
 							console.log(isincrement)
 							var oldruleid = obj.data.ruleid;
-							updateSeatRule(obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
+							updateSeatRule(rulename,obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
 							layer.close(index);
                         },
                         success: function(layero, index) {
@@ -416,13 +419,16 @@
 						// shadeClose: true,
 						yes: function(index, layero) {
 							var body = layer.getChildFrame('body', index);
-							var ruleselect = body.find('#ruleselect').val()
-							var isincrement = body.find('#isincrement').val()
+							var ruleselect = body.find('#ruleselect').val();
+                            var isincrement = body.find('#isincrement').val();
+                            var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+                            rulename = rulename[1] || "";
+
 							if(ruleselect==''||ruleselect==null)
                             {return layer.msg("请选择规则")}
                             if(isincrement==''||isincrement==null)
                             {return layer.msg("请选择规则")}
-							setSeatRule(ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+							setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
 							layer.close(index);
 						},
 						success: function(layero, index) {
@@ -445,12 +451,15 @@
 						yes: function(index, layero) {
 							var body = layer.getChildFrame('body', index);
 							var ruleselect = body.find('#ruleselect').val();
-							var isincrement = body.find('#isincrement').val();
+                            var isincrement = body.find('#isincrement').val();
+                            var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+                            rulename = rulename[1] || "";
+                            
 							if(ruleselect==''||ruleselect==null)
                             {return layer.msg("请选择规则");}
                             if(isincrement==''||isincrement==null)
                             {return layer.msg("请选择规则");}
-							setSeatRule(ruleselect, isincrement,true);
+							setSeatRule(rulename,ruleselect, isincrement,true);
 							layer.close(index);
 						}
 					});
@@ -536,7 +545,7 @@
 					}
 				}
 			}
-			function setSeatRule(ruleselect, isincrement,isaddrule,editObj,oldruleid) {
+			function setSeatRule(rulename,ruleselect, isincrement,isaddrule,editObj,oldruleid) {
 				var rule_id = ruleselect;
 				var isincrement = isincrement - 0;
 
@@ -552,7 +561,7 @@
 								"ruleid":rule_id
 							});
 						}
-						saveSeatRule(rule, rule_id, ruleid, roomid, isincrement);
+						saveSeatRule(rulename,rule, rule_id, ruleid, roomid, isincrement);
 					}else{
 						layer.msg("没有选中座区");
 					}
@@ -569,15 +578,16 @@
 						}
 						console.log(rule, ruleid)
 						// this.updateSeatRule(rule, ruleid, isincrement);
-						updateSeatRule(JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
+						updateSeatRule(rulename,JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
 						this.resetChangeSeartIds();
 					}
 				}
 			}
 
-			function saveSeatRule(rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
+			function saveSeatRule(rulename,rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
 				var data = {};
 				data.rulezone = JSON.stringify(rule);
+				data.rulename = rulename;
 				data.ruleid = ruleid;
 				data.ruletemplateid = temp_ruletemplateid;
 				data.roomtemplateid = roomtemplateid;
@@ -604,11 +614,12 @@
 				});
 			}
 
-			function updateSeatRule(rule, ruleid, rulerecordid, isincrement, oldruleid) {
+			function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid) {
 				var rulez = JSON.parse(rule);
 				var data = {};
 				data.rule = rulez; //JSON.stringify(rule);
 				data.action = "u";
+				data.rulename = rulename;
 				data.ruleid = ruleid;
 				data.rulerecordid = rulerecordid;
 				data.isincrement = isincrement;
@@ -621,6 +632,7 @@
 				    data: {
 				        "id": rulerecordid,
 				        "rulezone": rule,
+				        "rulename": rulename,
 				        "isincrement": isincrement,
 				        "ruleid": ruleid
 				    },
