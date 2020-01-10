@@ -496,11 +496,13 @@ function getAllSeatsNode(){
 
 function containerMouseDown(){
 
-	if(showRuleIds.length > 0){
-		showRuleIds.forEach(function(item){
-			$("#" + item.seatid).removeClass('seled');
-		})
-		showRuleIds.length = 0;
+	if(typeof showRuleIds != "undefined"){
+		if(showRuleIds.length > 0){
+			showRuleIds.forEach(function(item){
+				$("#" + item.seatid).removeClass('seled');
+			})
+			showRuleIds.length = 0;
+		}
 	}
 	
 	// var fileNodes = document.getElementsByTagName("div");
@@ -563,11 +565,13 @@ function containerMouseMove(evt){
 			selDiv.style.display = "";
 		}
 
-		if(showRuleIds && showRuleIds.length > 0){
-			showRuleIds.forEach(function(item){
-				$("#" + item.seatid).removeClass('seled');
-			})
-			showRuleIds.length = 0;
+		if(typeof showRuleIds != "undefined"){
+			if(showRuleIds.length > 0){
+				showRuleIds.forEach(function(item){
+					$("#" + item.seatid).removeClass('seled');
+				})
+				showRuleIds.length = 0;
+			}
 		}
 
 		//鼠标位置
