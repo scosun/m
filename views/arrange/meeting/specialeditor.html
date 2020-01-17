@@ -56,6 +56,8 @@
 		</span>
 		<!-- 右侧菜单 -->
 		<span class="layui-right-nav">
+			<a id="polygonbtn" ><cite style="cursor: pointer;">加载多边形</cite></a>
+
 			<i id="completebtn" data="完成"><img src="../../../images/completebtn.png"></i>
 			<i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
 			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i>
@@ -80,23 +82,23 @@
 			
 			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
 			<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
-			<i id="nav-align-up" data="上对齐"><img src="../../../images/align-up.png"></i>
+			<!-- <i id="nav-align-up" data="上对齐"><img src="../../../images/align-up.png"></i>
 			<i id="nav-align-down" data="下对齐"><img src="../../../images/align-down.png"></i>
 			<i id="nav-align-center-v" data="上下居中"><img src="../../../images/align-center-v.png"></i>
 			<i id="nav-align-left" data="左对齐"><img src="../../../images/align-left.png"></i>
 			<i id="nav-align-center" data="左右居中"><img src="../../../images/align-center.png"></i>
 			<i id="nav-align-right" data="右对齐"><img src="../../../images/align-right.png"></i>
 			<i id="nav-vertical-c" data="水平分布"><img src="../../../images/vertical-distribution-center.png"></i>
-			<i id="nav-horizontal-c" data="垂直分布"><img src="../../../images/horizontal-distribution-center.png"></i>
+			<i id="nav-horizontal-c" data="垂直分布"><img src="../../../images/horizontal-distribution-center.png"></i> -->
 			<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
 		</span>
 		<!-- 右侧菜单 end-->
 	</header>
 
-	<div id="seatcontainer" class="seatcontainer" ><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
+	<div id="seatcontainer" class="seatcontainer" ><div id="meetingname" style="font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';">备注：[#会议备注#]</div></div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
-<script src="seatscontrol_temp.js"></script>
+<script src="specialseats_temp.js"></script>
 <script type="text/javascript">
 layui.config({
 	base: '../../../layuiadmin/' //静态资源所在路径
@@ -115,42 +117,23 @@ layui.config({
 			loadSessionData();
         })
 
-
-		function openRectangleMeeting(){
+		/*右侧菜单 设置行列弹框*/
+		$('#nav-down img').on('click', function(){
 			layer.open({
 				type: 2,
 				title: '设置行列',
-				shadeClose: true,
-				offset: '10%',
-				area: ['340px', '230px'],
-				content: 'seatmapseditor_pop.html',
-				btn: ['提交', '取消'],
-				yes: function(index, layero) {
-					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
-					if(rownum > 0 && colnum > 0){
-						creatSeats(rownum,colnum);
-						layer.close(index);
-					}else{
-						layer.msg('行，列数字输入错误');
-					}
-				}
-			});
-		}
-		function openSpecialMeeting(){
-			layer.open({
-				type: 2,
-				title: '设置参数',
-				shadeClose: true,
+				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
 				area: ['620px', '380px'],
 				content: 'specialeditor_pop.html',
 				btn: ['提交', '取消'],
 				yes: function(index, layero) {
+					// var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					// var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
 					var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
 					var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
 					var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
-					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+					var ballNumber1 = +layero.find('iframe').contents().find("#ballNumber1").val() || 0;
 					var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
 
 					if(ccx <= 0 || ccy <= 0){
@@ -161,13 +144,13 @@ layui.config({
 						layer.msg('半径输入错误');
 						return false;
 					}
-					if(seatnum <= 0 ){
+					if(ballNumber1 <= 0 ){
 						layer.msg('座位数量输入错误');
 						return false;
 					}
 					
-					if(centernum == ""){
-						createCircleSeatMap(ccx,ccy,r1,seatnum);
+					if(centernum==""){
+						createCircleSeatMap(ccx,ccy,r1,ballNumber1);
 						layer.close(index);
 					}else{
 						if(centernum <= 0){
@@ -175,34 +158,9 @@ layui.config({
 							return false;
 						}
 						layer.close(index);		//关闭窗口
-						createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+						createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
 					}
-				}
-			});
-		}
-
-		/*右侧菜单 设置行列弹框*/
-		$('#nav-down img').on('click', function(){
-			layer.open({
-				type: 2,
-				title: '设置行列',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '10%',
-				area: ['340px', '230px'],
-				content: 'special_type.html',
-				btn: ['提交', '取消'],
-				yes: function(index, layero) {
-					var meet_typeid = +layero.find('iframe').contents().find("#meet_typeid").val() || 0;
-
-					if(meet_typeid == 1){
-						openRectangleMeeting();
-					}else{
-						openSpecialMeeting();
-					}
-					layer.close(index);
-
-					// var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-					// var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					
 					// if(rownum > 0 && colnum > 0){
 					// 	creatSeats(rownum,colnum);
 					// 	layer.close(index);
@@ -211,7 +169,6 @@ layui.config({
 					// }
 				}
 			});
-			
 		});
 		$('#nav-add img').on('click', function(){
 			layer.open({
@@ -245,11 +202,107 @@ layui.config({
 				btn: ['提交', '取消'],
 				yes: function(index, layero) {
 					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
-					autoCode(ruleid);
+					autoCircleCode(ruleid);
 					layer.close(index);
 				}
 			});
 		});
+
+		$('#polygonbtn').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '添加行列',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['620px', '380px'],
+				content: 'specialcustom_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var typeid = +layero.find('iframe').contents().find("#select_typeid").val() || 0;
+					var edges = +layero.find('iframe').contents().find("#edges").val() || "";
+					var seat_nums = layero.find('iframe').contents().find("#seat_nums").val() || "";
+					
+					if(edges == "" && typeid == 0){
+						layer.msg('请输入边数');
+						return false;
+					}
+					if(seat_nums == ""){
+						layer.msg('请输入座位数');
+						return false;
+					}
+					var condi = {};
+					condi.type = +typeid;
+					condi.edges = +edges;
+					condi.seat_nums = seat_nums.split(",");
+					condi.seat_nums = condi.seat_nums.map(function(n){
+						if(!+n){
+							layer.msg('座位数只能输入数字，且用,分割');
+							return false;
+						}
+						return +n;
+					});
+					getCustomSeats(condi);
+					layer.close(index);
+				}
+			});
+			
+		});
+		function getCustomSeats(condi){
+			// type为0时多边形，type为1是椭圆形；
+			// edges是边数，多边形的话edges>2，椭圆形的话edges=1
+			// center_x和center_y可以不传;
+			// seat_nums是从里到外嵌套排列，每一层的座位数
+			var condi = condi;
+			console.log(condi)
+			$.ajax({
+				async: true,
+				type: "post",
+				data: JSON.stringify(condi),
+				contentType: 'application/json', 
+				url: "https://m.longjuli.com/v1/editor",
+				dataType: "json",
+				success: function(obj) {
+					console.log(obj);
+					if(obj && obj.seats){
+						bulidSeverPolygonContainer(obj);
+					}
+				},
+				//失败的回调函数
+				error: function() {
+					console.log("error")
+				}
+			});
+		}
+		$('#ovalbtn').on('click', function(){
+			// type为0时多边形，type为1是椭圆形；
+			// edges是边数，多边形的话edges>2，椭圆形的话edges=1
+			// center_x和center_y可以不传;
+			// seat_nums是从里到外嵌套排列，每一层的座位数
+			var condi = {
+				"type": 1,
+				"seat_nums": [16,20]
+			}
+			$.ajax({
+				async: true,
+				type: "post",
+				data: JSON.stringify(condi),
+				contentType: 'application/json', 
+				url: "https://m.longjuli.com/v1/editor",
+				dataType: "json",
+				success: function(obj) {
+					console.log(obj);
+					if(obj && obj.seats){
+						bulidSeverPolygonContainer(obj);
+					}
+				},
+				//失败的回调函数
+				error: function() {
+					console.log("error")
+				}
+			});
+		});
+
+
 		/*右侧菜单HOVER显示提示文字*/
 		var subtips;
 		$('.layui-right-nav i').each(function(){

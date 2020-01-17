@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>表单组合</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">圆心(x,y)</label>
+		<div class="layui-input-block" style="float: left;margin-left: 0px;">
+			<input id="ccx" type="text" name="name" lay-verify="required" placeholder="600" autocomplete="off" class="layui-input hyname">
+		</div>
+		<div class="layui-input-block" style="float: left;margin-left: 0px;">
+			<input id="ccy" type="text" name="name" lay-verify="required" placeholder="300" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">半径</label>
+		<div class="layui-input-block">
+			<input id="r1" type="text" name="name" lay-verify="required" placeholder="200" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">环形座位数</label>
+		<div class="layui-input-block">
+			<input id="seatnum" type="text" name="name" lay-verify="required" placeholder="20" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">中间座位数</label>
+		<div class="layui-input-block">
+			<input id="centernum" type="text" name="name" lay-verify="required" placeholder="当输入值就是创建跑道会场" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<!-- <script src="../../../layuiadmin/layui/arrange/meet/meetcreatfrom.js"></script> -->
+<script>
+
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		router = layui.router();
+		
+		$('#ballNumber1,#centernum').on('keydown', function (event) {
+			if (event.keyCode == 13) {
+				var layer = layui.layer;
+				var ccx = +$("#ccx").val() || 0;
+				var ccy = +$("#ccy").val() || 0;
+				var r1 = +$("#r1").val() || 0;
+				var ballNumber1 = +$("#ballNumber1").val() || 0;
+				var centernum = $("#centernum").val() || "";
+
+				if(ccx <= 0 || ccy <= 0){
+					layer.msg('圆心坐标输入错误');
+					return false;
+				}
+				if(r1 <= 0 ){
+					layer.msg('半径输入错误');
+					return false;
+				}
+				if(ballNumber1 <= 0 ){
+					layer.msg('座位数量输入错误');
+					return false;
+				}
+				
+				if(centernum == ""){
+					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               		parent.layer.close(index);		//关闭窗口
+					window.parent.createCircleSeatMap(ccx,ccy,r1,ballNumber1);
+				}else{
+					if(centernum <= 0){
+						layer.msg('中间座位数输入错误');
+						return false;
+					}
+					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               		parent.layer.close(index);		//关闭窗口
+					window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
+				}
+
+				// if(ccx > 0 && ccy > 0 && ){
+				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               	// 	parent.layer.close(index);		//关闭窗口
+				// 	window.parent.creatSeats(rownum,colnum);
+				// }else{
+				// 	layer.msg('行，列数字输入错误');
+				// }
+				return false
+			}
+		});
+})
+</script>
+</body>
+</html>

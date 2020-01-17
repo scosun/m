@@ -60,7 +60,18 @@ $(function(){
 });
 
 function refreshContainer(){
+	__sTop = 110;
+	__sLeft = 50;
+	hideMeetTitle();
+
 	$("#seatcontainerId").html('');
+}
+
+function hideMeetTitle(){
+	$("#meetingname").hide();
+	$("#meetingaddress").hide();
+	$("#meetingtime").hide();
+	$("#meetingremark").hide();
 }
 
 function creatSeats2(rownum,colnum){
@@ -93,15 +104,11 @@ var meetingid  = 0;
 
 var areas = [];
 
-// var maxSeatNum = 0;
 function creatSeats(rownum,colnum){
-	// if(colnum > maxSeatNum){
-	// 	maxSeatNum = colnum;
-	// }
-	countMaxWidth(+rownum,+colnum);
+	// countMaxWidth(+rownum,+colnum);
 	bulidSeatsContainer(rownum,colnum);
 
-	// getAllSeatsNode();
+	countMaxWidth();
 
 	clearCompleteSeats();
 	selectSeats();
@@ -109,73 +116,251 @@ function creatSeats(rownum,colnum){
 
 var maxWidth;
 function countMaxWidth(rownum,colnum){
-	maxWidth = colnum*50 + 100;
-	$(".seatcontainer").width(colnum*50 + 100);
-	$(".seatcontainer").height(rownum*50 + 200);
+	// maxWidth = colnum*50 + 100;
+	// $(".seatcontainer").width(colnum*50 + 100);
+	// $(".seatcontainer").height(rownum*50 + 200);
 
-	// var arearule = +$("#arearule").val();
-	// if(arearule == 1){
-	// 	if(addwidth){
-	// 		var w = $(".seatcontainer").width();
-	// 		$(".seatcontainer").width(w + addwidth);
-	// 	}else{
-	// 		$(".seatcontainer").width(maxSeatNum*50 + 200);
-	// 	}
-	// }else{
-	// 	if(addwidth){
-	// 		var h = $(".seatcontainer").height();
-	// 		$(".seatcontainer").height(h + addwidth);
-	// 	}else{
-	// 		$(".seatcontainer").height(maxSeatNum*50 + 200);
-	// 	}
-	// }
+	hideMeetTitle();
 	
+	var seats = $("#seatcontainerId .seatdiv");
+	var tops = [];
+	var lefts = [];
+	seats.each(function(item){
+		let left = parseFloat($(this).css("left"));
+		let top = parseFloat($(this).css("top"));
+		tops.push(top);
+		lefts.push(left);
+	});
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	var width = lefts[lefts.length - 1] - lefts[0];
+	var height = tops[tops.length - 1] - tops[0];
+
+	maxWidth = width + 150;
+	$("#seatcontainer").width(width + 150);
+	$("#seatcontainer").height(height + 250);
 }
 
-var sTop = 110;
-var sLeft = 50;
-// var rowId = 0;
+var __sTop = 110;
+var __sLeft = 50;
 var colId = 0;
 
 // $("div[id$=-1]")
 // 获取 id -1结尾的div
 function bulidSeatsContainer(rownum,colnum){
-
-	// if($("#"+aid).length == 0){
-	// 	$("#seatcontainerId").append("<div id='" + aid + "' ></div>");
-	// }
-	// var oae = oddAndEven(seatnum);
-	// var seatsnum = [];
-	// if(+seatrule == 1){
-	// 	seatsnum = oae.odd.concat(oae.even.reverse());
-	// }else if(+seatrule == 2){
-	// 	seatsnum = oae.even.concat(oae.odd.reverse());
-	// }else if(+seatrule == 3){
-	// 	seatsnum = oae.desc.reverse();
-	// }else if(+seatrule == 4){
-	// 	seatsnum = oae.desc;
-	// }
 	var seathtml = [];
 	
-	var stop = sTop;
-	var sleft = sLeft;
+	var stop = __sTop;
+	var sleft = __sLeft;
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
 			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
-			// stop = stop + 50;
 			sleft = sleft + 50;
 		}
 		sleft = 50;
 		stop = stop + 50;
 	}
-	// rowId = +rownum;
+	__sTop = stop;
+	console.log(sleft,stop)
 
-	// sTop = stop;
-	
-
-	$("#seatcontainerId").html(seathtml.join(''));
+	$("#seatcontainerId").append(seathtml.join(''));
 }
+
+
+
+var __runRow = 0;
+function createRunSeatMap(ccx,ccy,r1,seatnum,centernum){
+
+	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum);
+	
+	countMaxWidth();
+
+	clearCompleteSeats();
+	selectSeats();
+}
+
+function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum){
+	//长半径,//高半径, 两个半径一样就是圆形
+	// var r1 = +$("#r1").val() || 400;
+
+	//每个座位的宽高,用来计算位置偏移
+	var seatw = 40;
+	var seath = 40;
+
+	__runRow++;
+	var seathtml = [];
+	
+	//先画跑道上下座位
+
+	var sleft = ccx - 20;
+	var stop = ccy - r1 - 20;
+
+	for(var aa = 1; aa <= 2; aa++){
+		var ang = 270 + ((aa-1)*180);
+		for(var bb = 0; bb < +centernum; bb++){
+			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
+			// stop = stop + 50;
+			sleft = sleft + 50;
+		}
+		sleft = ccx - 20;
+		stop = stop + r1*2;
+	}
+
+
+	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+
+	var rightseats = seatnum/2 + 1;
+	var rightccx = ccx + (centernum - 1)*50;
+	//每个座位所占的角度,按平均算
+	var angleSpace = 180/rightseats;
+	//开始角度,3点方向,为0度,270就是12点
+	var startage = 270;
+	for (var i = 1; i <rightseats; i++) {
+		var sang = i * angleSpace + startage;
+		var x = rightccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = i * angleSpace - 270;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '辛海涛' + '</div>');
+		
+	}
+	var leftseats = seatnum/2 + 1;
+	var leftccx = ccx;
+	//每个座位所占的角度,按平均算
+	var angleSpace = 180/leftseats;
+	//开始角度,3点方向,为0度, 450就是6点钟
+	var startage = 450;
+	for (var n = 1; n <leftseats; n++) {
+		var sang = n * angleSpace + startage;
+		var x = leftccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = n * angleSpace - 450;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '辛海涛' + '</div>');
+		
+	}
+	// for (var j = 0; j <seatnum; j++) {
+	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
+	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
+	// 	// x = dleft + x;
+	// 	// y = dtop + y;
+
+	// 	var ang = j * angleSpace;
+	// 	if(ang == 0 || ang >= 180){
+	// 		ang = ang + 90;
+	// 	}else{
+	// 		ang = ang - 90;
+	// 	}
+	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
+	
+	// }
+	$("#seatcontainerId").append(seathtml.join(''));
+}
+
+
+
+var __circleRow = 0;
+function createCircleSeatMap(ccx,ccy,r1,seatnum){
+	// countCircleMaxWidth(ccx,ccy,r1,seatnum);
+
+	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum);
+	
+	countMaxWidth();
+
+	clearCompleteSeats();
+	selectSeats();
+}
+
+function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum){
+	//长半径,//高半径, 两个半径一样就是圆形
+	// var r1 = +$("#r1").val() || 400;
+
+	//每个座位的宽高,用来计算位置偏移
+	var seatw = 40;
+	var seath = 40;
+
+	//开始角度,默认3点方向,为0度
+	var startage = 270;
+
+	var angleSpace = 360/seatnum;
+
+	__circleRow++;
+	var seathtml = [];
+	
+	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+
+	for (var i = 0; i < seatnum; i++) {
+		var sang = i * angleSpace + startage;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = i * angleSpace - 270;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
+		
+	}
+	// for (var j = 0; j <seatnum; j++) {
+	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
+	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
+	// 	// x = dleft + x;
+	// 	// y = dtop + y;
+
+	// 	var ang = j * angleSpace;
+	// 	if(ang == 0 || ang >= 180){
+	// 		ang = ang + 90;
+	// 	}else{
+	// 		ang = ang - 90;
+	// 	}
+	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
+	
+	// }
+	$("#seatcontainerId").append(seathtml.join(''));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function oddAndEven(n){
@@ -1470,7 +1655,7 @@ function leftMoveSeats(){
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left-10+"px");
+		$(this).css("left",left-1+"px");
 	});
 }
 function rightMoveSeats(){
@@ -1478,7 +1663,7 @@ function rightMoveSeats(){
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left+10+"px");
+		$(this).css("left",left+1+"px");
 	});
 }
 function topMoveSeats(){
@@ -1486,7 +1671,7 @@ function topMoveSeats(){
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top-10+"px");
+		$(this).css("top",top-1+"px");
 	});
 }
 function bottomMoveSeats(){
@@ -1494,7 +1679,7 @@ function bottomMoveSeats(){
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top+10+"px");
+		$(this).css("top",top+1+"px");
 	});
 }
 
@@ -1513,6 +1698,11 @@ function restoreLocalSeats(){
 
 function completeSeats(){
 	saveLocalSeats();
+
+	$("#meetingname").show();
+	$("#meetingaddress").show();
+	$("#meetingtime").show();
+	$("#meetingremark").show();
 
 	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	seats.each(function(){
@@ -1581,6 +1771,36 @@ function copyText(text) {
 	currentFocus.focus();
 	return flag;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
