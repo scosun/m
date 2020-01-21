@@ -70,7 +70,7 @@ layui.config({
 								align: "center"
 	
 							},{
-								field: 'stauts',
+								field: 'attendee_num',
 								title: '对应人数',
 								width: '8%',
 								align: "center"
