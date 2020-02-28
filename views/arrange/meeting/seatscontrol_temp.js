@@ -51,13 +51,80 @@ $(function(){
 	$("#nav-align-right").bind("click",rightSeats);
 	$("#nav-align-up").bind("click",topSeats);
 	$("#nav-align-down").bind("click",bottomSeats);
+
 	$("#nav-drag").bind("click",dragMoveSeats);
+	$("#canceldragbtn").bind("click",unDragMoveSeats);
+
+	$("#selectrow").bind("click",selectSeatRow);
+	$("#selectcol").bind("click",selectSeatCol);
+	$("#selectall").bind("click",selectSeatAll);
+	$("#unselectall").bind("click",unSelectSeatAll);
+
+	$("#reduceradiusbtn").bind("click",reduceSeatsRadius);
+	$("#addradiusbtn").bind("click",addSeatsRadius);
 
 	// $("#createbtn2").bind("click",creatSeats2);
 
 	//加载默认数据
 	loadSessionData();
 });
+
+function boxCreateSeats(){
+	__boxCreate = true;
+	selectSeats();
+}
+
+function mouseCreateSeatMap(mt,seatnum,centernum){
+	
+	removeContainerEvent();
+	$("#circlemousexyId").show();
+
+	var hasCircle = false;
+	$("#seatcontainer").bind({
+		dblclick:function(e){
+			removeContainerEvent();
+			$("#seatcontainerId").append($("#mousecontainerId").html());
+			$("#mousecontainerId").html('');
+
+			countMaxWidth();
+			clearCompleteSeats();
+			selectSeats();
+		},
+		click:function(e){
+			if(!hasCircle){
+				hasCircle = true;
+			}
+		},
+		mousemove:function(e){
+			var sl = $("#seatcontainer").position().left;
+			var st = $("#seatcontainer").position().top;
+			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+			var x = event.x - sl + scrollX - 3;
+			var y = event.y - st + scrollY - 3;
+			if(!hasCircle){
+				$("#circlemousexyId").css({"top":y+"px","left":x+"px"});
+			}else{
+				var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
+				var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
+				$("#circlemouseline").attr({"x1":x1,"y1":y1,"x2":x,"y2":y});
+
+				// var angle = Math.atan2((y1-y), (x1-x)) //弧度  0.6435011087932844
+				// var theta = Math.abs(angle*(180/Math.PI));
+
+				var r1 = Math.sqrt(Math.pow(x-x1,2) + Math.pow(y-y1,2));
+
+				// $("#seatcontainerId").html('');
+				if(mt == 1){
+					createCircleSeatMap(x1,y1,r1,seatnum,1);
+				}else{
+					createRunSeatMap(x1,y1,r1,seatnum,centernum,1);
+				}
+				
+			}
+		}
+	});
+}
 
 function refreshContainer(){
 	__sTop = 110;
@@ -74,28 +141,29 @@ function hideMeetTitle(){
 	$("#meetingremark").hide();
 }
 
-function creatSeats2(rownum,colnum){
+function creatSeats2(rownum,colnum,mleft,mtop){
 	// countMaxWidth();
-	appendSeatsContainer(rownum,colnum);
+	appendSeatsContainer(rownum,colnum,mleft,mtop);
 
 	getAllSeatsNode();
 }
-function appendSeatsContainer(rownum,colnum){
+function appendSeatsContainer(rownum,colnum,mleft,mtop){
 	var seathtml = [];
 	
-	var stop = 110;
-	var sleft = maxWidth;
+	var stop = mtop;
+	var sleft = mleft;
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
 			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'">' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
-		sleft = maxWidth;
+		sleft = mleft;
 		stop = stop + 50;
 	}
 
-	$("#seatcontainerId").append(seathtml.join(''));
+	$("#mousecontainerId").html(seathtml.join(''));
+	// $("#seatcontainerId").append(seathtml.join(''));
 }
 
 var isDrop = false;
@@ -104,18 +172,19 @@ var meetingid  = 0;
 
 var areas = [];
 
-function creatSeats(rownum,colnum){
+function creatSeats(rownum,colnum,mleft,mtop,ism){
 	// countMaxWidth(+rownum,+colnum);
-	bulidSeatsContainer(rownum,colnum);
+	bulidSeatsContainer(rownum,colnum,mleft,mtop,ism);
 
-	countMaxWidth();
-
-	clearCompleteSeats();
-	selectSeats();
+	if(!ism){
+		countMaxWidth();
+		clearCompleteSeats();
+		selectSeats();
+	}
 }
 
 var maxWidth;
-function countMaxWidth(rownum,colnum){
+function countMaxWidth(issave){
 	// maxWidth = colnum*50 + 100;
 	// $(".seatcontainer").width(colnum*50 + 100);
 	// $(".seatcontainer").height(rownum*50 + 200);
@@ -133,11 +202,16 @@ function countMaxWidth(rownum,colnum){
 	});
 	lefts = lefts.sort(function(a,b){return a - b;});
 	tops = tops.sort(function(a,b){return a - b;});
-	var width = lefts[lefts.length - 1] - lefts[0];
-	var height = tops[tops.length - 1] - tops[0];
+
+	// var width = lefts[lefts.length - 1] - lefts[0];
+	// var height = tops[tops.length - 1] - tops[0];
+	var width = lefts[lefts.length - 1];
+	var height = tops[tops.length - 1];
 
 	maxWidth = width + 150;
-	$("#seatcontainer").width(width + 150);
+	if(issave){
+		$("#seatcontainer").width(width + 150);
+	}
 	$("#seatcontainer").height(height + 250);
 }
 
@@ -147,18 +221,29 @@ var colId = 0;
 
 // $("div[id$=-1]")
 // 获取 id -1结尾的div
-function bulidSeatsContainer(rownum,colnum){
+function bulidSeatsContainer(rownum,colnum,mleft,mtop,ism){
 	var seathtml = [];
 	
+	mleft = mleft || 0;
+	mtop = mtop || 0;
+
 	var stop = __sTop;
 	var sleft = __sLeft;
+
+	if(ism){
+		stop = mtop;
+		sleft = mleft;
+	}
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
 			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
-		sleft = 50;
+		sleft = sLeft;
+		if(ism){
+			sleft = mleft;
+		}
 		stop = stop + 50;
 	}
 	__sTop = stop;
@@ -170,19 +255,23 @@ function bulidSeatsContainer(rownum,colnum){
 
 
 var __runRow = 0;
-function createRunSeatMap(ccx,ccy,r1,seatnum,centernum){
+function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ism){
 
-	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum);
+	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism);
 	
-	countMaxWidth();
-
-	clearCompleteSeats();
-	selectSeats();
+	if(!ism){
+		countMaxWidth();
+		clearCompleteSeats();
+		selectSeats();
+	}
 }
 
-function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum){
+function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
+	if(ism){
+		ccx = ccx - ((centernum-1)*50+20)/2;
+	}
 
 	//每个座位的宽高,用来计算位置偏移
 	var seatw = 40;
@@ -265,26 +354,34 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum){
 	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
 	
 	// }
-	$("#seatcontainerId").append(seathtml.join(''));
+	if(!ism){
+		$("#seatcontainerId").append(seathtml.join(''));
+	}else{
+		$("#mousecontainerId").html(seathtml.join(''));
+	}
 }
 
 
 
 var __circleRow = 0;
-function createCircleSeatMap(ccx,ccy,r1,seatnum){
+function createCircleSeatMap(ccx,ccy,r1,seatnum,ism){
 	// countCircleMaxWidth(ccx,ccy,r1,seatnum);
 
-	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum);
+	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism);
 	
-	countMaxWidth();
-
-	clearCompleteSeats();
-	selectSeats();
+	if(!ism){
+		countMaxWidth();
+		clearCompleteSeats();
+		selectSeats();
+	}
 }
 
-function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum){
+function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
+	if(ism){
+		r1 = r1 + 30;
+	}
 
 	//每个座位的宽高,用来计算位置偏移
 	var seatw = 40;
@@ -329,10 +426,118 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum){
 	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
 	
 	// }
-	$("#seatcontainerId").append(seathtml.join(''));
+	
+
+	if(!ism){
+		$("#seatcontainerId").append(seathtml.join(''));
+	}else{
+		$("#mousecontainerId").html(seathtml.join(''));
+	}
 }
 
 
+function reduceSeatsRadius(){
+	var seled = $("#seatcontainerId .seled");
+	for(var i = 0,len = seled.length; i < len; i++){
+		var r = parseInt($(seled[i]).attr("r"));
+		var sang = parseInt($(seled[i]).attr("ang"));
+		var circle = $(seled[i]).attr("circle").split("-");
+		
+		var ccx = +circle[0];
+		var ccy = +circle[1];
+		var r1 = r - 1;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
+
+		$(seled[i]).css({"top": y +"px","left": x + "px"});
+		$(seled[i]).attr({r:r1});
+	}
+}
+function addSeatsRadius(){
+	var seled = $("#seatcontainerId .seled");
+	for(var i = 0,len = seled.length; i < len; i++){
+		var r = parseInt($(seled[i]).attr("r"));
+		var sang = parseInt($(seled[i]).attr("ang"));
+		var circle = $(seled[i]).attr("circle").split("-");
+		
+		var ccx = +circle[0];
+		var ccy = +circle[1];
+		var r1 = r + 1;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
+
+		$(seled[i]).css({"top": y +"px","left": x + "px"});
+		$(seled[i]).attr({r:r1});
+	}
+}
+
+function selectSeatRow(){
+	var seled = $("#seatcontainerId .seled");
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		// var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		var w = $(seled[i]).width();
+		var id = seled[i].id;
+		var kid = isRow(seledgroup,(st - w/2),(st + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+		}
+	}
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	for(var gk in seledgroup){
+		allseats.each(function(){
+			var st2 = parseInt($(this).css("top"));
+			var st2w = $(this).width();
+			var std = st2 - st2w/2;
+			var sth = st2 + st2w/2;
+			if(+gk >= std && +gk <= sth){
+				$(this).addClass("seled");
+			}
+		});
+	}
+}
+function selectSeatCol(){
+	var seled = $("#seatcontainerId .seled");
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+
+		var w = $(seled[i]).width();
+		var id = seled[i].id;
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
+		}
+	}
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	for(var gk in seledgroup){
+		allseats.each(function(){
+			var st2 = parseInt($(this).css("left"));
+			var st2w = $(this).width();
+			var std = st2 - st2w/2;
+			var sth = st2 + st2w/2;
+			if(+gk >= std && +gk <= sth){
+				$(this).addClass("seled");
+			}
+		});
+	}
+}
+function selectSeatAll(){
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	allseats.addClass("seled");
+}
+function unSelectSeatAll(){
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	allseats.removeClass("seled");
+}
 
 
 
@@ -515,21 +720,45 @@ function unbindOneSeats(){
 
 function bindContainerEvent(){
 	unbindOneSeats();
+	removeContainerEvent();
 
-	var $events = $("." + seatContainerClass).data("events");
-	if($events && $events["mousedown"]){
+	$("#seatcontainer").bind("mousedown",containerMouseDown);
+	$("#seatcontainer").bind("mousemove",containerMouseMove);
+	$("#seatcontainer").bind("mouseup",function(){
+		containerMouseUp();
+		if(__boxCreate){
+			$("#seatcontainerId").append($("#mousecontainerId").html());
+			$("#mousecontainerId").html('');
+
+			countMaxWidth();
+			clearCompleteSeats();
+			selectSeats();
+		}
+		__boxCreate = false;
+	});
+
+	// var $events = $("." + seatContainerClass).data("events");
+	// if($events && $events["mousedown"]){
 		
-	}else{
-		$("." + seatContainerClass).bind("mousedown",containerMouseDown);
-		$("." + seatContainerClass).bind("mousemove",containerMouseMove);
-		$("." + seatContainerClass).bind("mouseup",containerMouseUp);
-	}
+	// }else{
+	// 	$("." + seatContainerClass).bind("mousedown",containerMouseDown);
+	// 	$("." + seatContainerClass).bind("mousemove",containerMouseMove);
+	// 	$("." + seatContainerClass).bind("mouseup",containerMouseUp);
+	// }
 }
 
 function removeContainerEvent(){
-	$("." + seatContainerClass).unbind("mousedown");
-	$("." + seatContainerClass).unbind("mousemove");
-	$("." + seatContainerClass).unbind("mouseup");
+	$("#circlemousexyId").hide();
+	$("#circlemouseline").attr({"x1":0,"y1":0,"x2":0,"y2":0});
+	$("#seatcontainer").unbind("mousedown");
+	$("#seatcontainer").unbind("mousemove");
+	$("#seatcontainer").unbind("mouseup");
+	$("#seatcontainer").unbind("dblclick");
+	$("#seatcontainer").unbind("click");
+
+	// $("." + seatContainerClass).unbind("mousedown");
+	// $("." + seatContainerClass).unbind("mousemove");
+	// $("." + seatContainerClass).unbind("mouseup");
 }
 
 function cancelDragSeats(){
@@ -759,6 +988,7 @@ function containerMouseDown(){
 }
 
 var isSelect = false;
+var __boxCreate = false;
 function containerMouseMove(evt){
 	evt = window.event || arguments[0];
 	var _x = null;
@@ -795,6 +1025,13 @@ function containerMouseMove(evt){
 
 		selDiv.style.width = swidth + "px";
 		selDiv.style.height = sheight + "px";
+
+		if(__boxCreate){
+			var colnum = Math.floor(swidth/50);
+			var rownum = Math.floor(sheight/50);
+			creatSeats2(rownum,colnum,sleft,stop);
+			return;
+		}
 
 		//框选宽度小于10px 矩形 就直接返回
 		if(Math.abs(_x - startX) < 10 && Math.abs(_y - startY) < 10){
@@ -1564,7 +1801,11 @@ function autoCode(ruleid){
 	// }
 }
 
-
+function unDragMoveSeats(){
+	$("#movecontainerId").hide();
+	$("#movecontainerId").html('');
+	selectSeats();
+}
 
 function dragMoveSeats(){
 	var seled = $("#seatcontainerId ."+seledClass);
@@ -1697,12 +1938,18 @@ function restoreLocalSeats(){
 }
 
 function completeSeats(){
+	countMaxWidth(1);
+
 	saveLocalSeats();
 
 	$("#meetingname").show();
 	$("#meetingaddress").show();
 	$("#meetingtime").show();
 	$("#meetingremark").show();
+
+	// $("#mousecontainerId").remove();
+	// $("#circlemousexyId").remove();
+	// $("#circlemousesvg").remove();
 
 	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	seats.each(function(){

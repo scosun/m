@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+	<link rel="stylesheet" href="../../../css/seat.css" media="all">
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<style type="text/css">
+		header {
+			box-shadow: 0px 0px 5px gray;
+			height: 3.5rem;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			z-index: 9999;
+			background-color: white;
+		}
+		body {
+			background-color: #f1f1f1;
+		}
+		/*右侧菜单*/
+		.layui-right-nav{
+			position: absolute;
+			right:10px;
+			top:0;
+			height: 3.5rem;
+			line-height: 3.5rem;
+			background-color: #fff;
+		}
+		.layui-right-nav i{
+			display: block;
+			height: 20px;
+			width: 20px;
+			float: left;
+			margin-top:18px;
+			padding-left:10px;
+			padding-right:5px;
+		}
+		.layui-right-nav i img{
+			width: 100%;
+			display: block;
+			margin-right: 10px;
+		}
+		.layui-nav .layui-nav-item a {
+			color: #000;
+		}
+		.layui-nav { padding: 0;}
+		.layui-nav .layui-nav-item {
+			line-height: 3.5rem;
+		}
+
+		.layui-bg-cyan {
+		background-color: #fff!important;
+		}
+		.layui-nav .layui-nav-item a img{
+			width: 20px;
+			height: 20px;
+			margin-right: 5px;
+		}
+		.layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
+			color: #000;
+		}
+		.layui-nav .layui-nav-more {
+			border-color: #999 transparent transparent;
+			border-top-color:#999;
+		}
+		.layui-nav .layui-nav-mored, .layui-nav-itemed>a .layui-nav-more {
+			margin-top: -9px;
+			border-style: dashed dashed solid;
+			border-color: transparent transparent #999;
+		}
+		.layui-nav-child {
+			top: 55px;
+			}
+		.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+			background-color: #20222a;height: 2px;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a><cite> &nbsp; &nbsp; &nbsp; 座区图编辑器</cite></a>|
+			<a><cite id="refreshbtn" style="cursor: pointer;">刷新</cite></a>
+		</span>
+		<!-- 右侧菜单 -->
+		<span class="layui-right-nav">
+			<ul class="layui-nav layui-bg-cyan">
+				<li class="layui-nav-item">
+					<a href="javascript:;">对齐</a>
+					<dl class="layui-nav-child">
+						<dd><a href=""><img src="../../../images/align-up.png">上对齐</a></dd>
+						<dd><a href=""><img src="../../../images/align-down.png">下对齐</a></dd>
+						<dd><a href=""><img src="../../../images/align-center-v.png">上下居中</a></dd>
+						<dd><a href=""><img src="../../../images/align-left.png">左对齐</a></dd>
+						<dd><a href=""><img src="../../../images/align-center.png">左右居中</a></dd>
+						<dd><a href=""><img src="../../../images/align-right.png">右对齐</a></dd>
+						<dd><a href=""><img src="../../../images/horizontal-distribution-center.png">水平分布</a></dd>
+						<dd><a href=""><img src="../../../images/vertical-distribution-center.png">垂直分布</a></dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;">移动</a>
+					<dl class="layui-nav-child">
+						<dd><a href="">左移</a></dd>
+						<dd><a href="">右移</a></dd>
+						<dd><a href="">上移</a></dd>
+						<dd><a href="">下移</a></dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;">解决方案</a>
+					<dl class="layui-nav-child">
+						<dd><a href="">移动模块</a></dd>
+						<dd><a href="">后台模版</a></dd>
+						<dd><a href="">电商平台</a></dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;">解决方案</a>
+					<dl class="layui-nav-child">
+						<dd><a href="">移动模块</a></dd>
+						<dd><a href="">后台模版</a></dd>
+						<dd><a href="">电商平台</a></dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item"><a href="">社区</a></li>
+			</ul>
+		</span>
+		<!-- <span class="layui-right-nav" style="display: none;">
+			<i id="completebtn" data="完成"><img src="../../../images/completebtn.png"></i>
+			<i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
+			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i>
+			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/savelocalbtn.png"></i>
+			<i id="dleftmovebtn" data="左移"><img src="../../../images/dleftmovebtn.png"></i>
+			<i id="drightmovebtn" data="右移"><img src="../../../images/drightmovebtn.png"></i>
+			<i id="dtopmovebtn" data="上移"><img src="../../../images/dtopmovebtn.png"></i>
+			<i id="dbottommovebtn" data="下移"><img src="../../../images/dbottommovebtn.png"></i>
+			<i id="rightbtn" data="右键"><img src="../../../images/rightbtn.png"></i>
+			<i id="cancelrightbtn" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
+
+			<i id="nav-pladd" data="批量新建"><img src="../../../images/pladd.png"></i>
+			<i id="nav-down" data="设置行列" style="margin-left:-12px;"><img src="../../../images/angle-down.png" style="width: 14px;margin-top: 4px;"></i>
+			<i id="nav-add" data="新建"><img src="../../../images/add.png"></i>
+			
+
+			<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
+			<i id="nav-rollback" data="恢复删除"><img src="../../../images/rollback.png"></i>
+			
+			<i id="nav-mark" data="标注"><img src="../../../images/mark.png"></i>
+			<i id="nav-forward" data="恢复座区"><img src="../../../images/forward.png"></i>
+			
+			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
+			<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
+			<i id="nav-align-up" data="上对齐"><img src="../../../images/align-up.png"></i>
+			<i id="nav-align-down" data="下对齐"><img src="../../../images/align-down.png"></i>
+			<i id="nav-align-center-v" data="上下居中"><img src="../../../images/align-center-v.png"></i>
+			<i id="nav-align-left" data="左对齐"><img src="../../../images/align-left.png"></i>
+			<i id="nav-align-center" data="左右居中"><img src="../../../images/align-center.png"></i>
+			<i id="nav-align-right" data="右对齐"><img src="../../../images/align-right.png"></i>
+			<i id="nav-vertical-c" data="水平分布"><img src="../../../images/vertical-distribution-center.png"></i>
+			<i id="nav-horizontal-c" data="垂直分布"><img src="../../../images/horizontal-distribution-center.png"></i>
+			<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
+		</span> -->
+		<!-- 右侧菜单 end-->
+	</header>
+
+	<div id="seatcontainer" class="seatcontainer" ><div id="meetingname" style="font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;;font-size: 2vw;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';font-size:20px;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';font-size:20px;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:30px;font-family:'黑体';font-size:20px;">备注：[#会议备注#]</div></div>
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="seatscontrol_temp.js"></script>
+<script type="text/javascript">
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		router = layui.router();
+		
+		//在这里我想得到页面 二次显示的事件
+		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
+			loadSessionData();
+        })
+
+		/*右侧菜单 设置行列弹框*/
+		$('#nav-down img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '设置行列',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['340px', '230px'],
+				content: 'seatmapseditor_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					if(rownum > 0 && colnum > 0){
+						creatSeats(rownum,colnum);
+						layer.close(index);
+					}else{
+						layer.msg('行，列数字输入错误');
+					}
+				}
+			});
+		});
+		$('#nav-add img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '添加行列',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['340px', '230px'],
+				content: 'seatmapseditor_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					if(rownum > 0 && colnum > 0){
+						creatSeats2(rownum,colnum);
+						layer.close(index);
+					}else{
+						layer.msg('行，列数字输入错误');
+					}
+				}
+			});
+		});
+		$('#autocodebtn img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '自动编排',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['340px', '260px'],
+				content: 'seatmapseditor_code.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
+					autoCode(ruleid);
+					layer.close(index);
+				}
+			});
+		});
+		/*右侧菜单HOVER显示提示文字*/
+		var subtips;
+		$('.layui-right-nav i').each(function(){
+			var _id = $(this).attr('id');
+			var _data = $(this).attr('data');
+			$("#" + _id).hover(function() {
+				openMsg();
+			}, function() {
+				if(subtips){
+					layer.close(subtips);
+				}
+			});
+			function openMsg() {
+				subtips = layer.tips(_data, '#'+_id,{tips:[3,'#666'],time: 30000});
+			}
+		})
+		/*右侧菜单HOVER显示提示文字 end*/
+})
+</script>
+</html>
