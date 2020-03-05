@@ -42,7 +42,7 @@ layui.config({
     laydate.render({
         elem: '#time',
         type: 'time',
-        format: 'HH:mm:ss',
+        format: 'HH:mm',
         btns: ['clear','now', 'confirm'],
         theme: 'molv'
     });
@@ -191,47 +191,47 @@ layui.config({
         var datatime = data.field.date +newdates+ datime;
         
         console.log(data.field);
-        $.ajax({
-            async: false,
-            type: "post",
-            xhrFields: {
-                withCredentials: true
-            },
-            url: url + "/meeting/updateByMeeting",
-            dataType: "json",
+        // $.ajax({
+        //     async: false,
+        //     type: "post",
+        //     xhrFields: {
+        //         withCredentials: true
+        //     },
+        //     url: url + "/meeting/updateByMeeting",
+        //     dataType: "json",
 
-            //成功的回调函数
-            data: {
-                "id": data.field.meetingid,
-                "name": data.field.name,
-                "time": datatime,
-                "roomid": data.field.room,
-                "roomname": data.field.rlue,
-                "ruleid": data.field.ruleid,
-                "memo": data.field.memo
-            },
-            success: function(msg) {
-                if (msg.state == 1) {
-                    layer.msg("增加成功");
-                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
-                    parent.location.reload(); // 父页面刷新
+        //     //成功的回调函数
+        //     data: {
+        //         "id": data.field.meetingid,
+        //         "name": data.field.name,
+        //         "time": datatime,
+        //         "roomid": data.field.room,
+        //         "roomname": data.field.rlue,
+        //         "ruleid": data.field.ruleid,
+        //         "memo": data.field.memo
+        //     },
+        //     success: function(msg) {
+        //         if (msg.state == 1) {
+        //             layer.msg("增加成功");
+        //             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        //             parent.layer.close(index);
+        //             parent.location.reload(); // 父页面刷新
 
-                } else {
-                    layer.msg("增加失败");
-                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
-                    parent.location.reload(); // 父页面刷新
+        //         } else {
+        //             layer.msg("增加失败");
+        //             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        //             parent.layer.close(index);
+        //             parent.location.reload(); // 父页面刷新
 
 
-                }
+        //         }
 
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
+        //     },
+        //     //失败的回调函数
+        //     error: function() {
+        //         console.log("error")
+        //     }
+        // })
         return true;
     });
 });

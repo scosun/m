@@ -1,116 +1,253 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title></title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-<style type="text/css">
-.layui-form-label{
-	width: 100px;
-}
-.layui-input-block {
-	margin-left: 130px;
-}
-.layui-form-label span{color: #f00;font-size: 14px;margin-right: 5px;}
-.layui-input-block span,p span{color: #f00;font-size: 14px;margin:0 5px;}
-</style>
-</head>
-<body>
-<div class="layui-card-body" style="padding: 20px 20px 0 0;">
-	<form class="layui-form" action="" lay-filter="component-form-group">
-		<div class="layui-form-item">
-			<label class="layui-form-label"><span>*</span>选择接收人:</label>
-			<div class="layui-input-block">
-				<div class="layui-upload">
-					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="testList">选择多文件</button> 
-					<div class="layui-upload-list">
-						<table class="layui-table">
-						<thead>
-						<tr><th>文件名</th>
-						<th>大小</th>
-						<th>状态</th>
-						<th>操作</th>
-						</tr></thead>
-						<tbody id="demoList"></tbody>
-						</table>
-					</div>
-					<button type="button" class="layui-btn layui-btn-sm" id="testListAction">开始上传</button>
-				</div> 
-			</div>
-			<div style="margin-left:130px;margin-top:5px">
-				<button type="button" class="layui-btn layui-btn-sm">查看</button>
-				<p style="display: inline-flex;">已添加<span>0</span>人</p>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label"><span>*</span>通知标题:</label>
-			<div class="layui-input-block">
-			<input type="text" name="username" lay-verify="required" placeholder="模版名称" autocomplete="off" id="username"
-				class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label"><span>*</span>短信模版标题:</label>
-			<div class="layui-input-block">
-				<input type="text" name="username" lay-verify="required" placeholder="短信模版标题" autocomplete="off" id="username"
-				class="layui-input">
-			</div>
-			<div style="margin-left:130px;margin-top:5px">
-				<!-- <button class="layui-btn layui-btn-sm" data-type="reload">选择</button>
-				<button class="layui-btn layui-btn-sm" data-type="reload">保存</button>
-				<button class="layui-btn layui-btn-sm" data-type="reload">清空</button> -->
-				<button type="button" class="layui-btn layui-btn-sm">选择</button>
-				<button type="button" class="layui-btn layui-btn-sm">保存</button>
-				<button type="button" class="layui-btn layui-btn-sm">清空</button>
-			</div>
-		</div>
-		<div class="layui-form-item" style="margin-top: 15px">
-			<label class="layui-form-label">短信模版内容:</label>
-			<div class="layui-input-block">
-				<textarea placeholder="注意：短信模版在发送前可任意修改，确认后请先保存模版，再点击发送按扭。" class="layui-textarea"></textarea>
-				<p>已输入<span>255</span>个字符，共<span>1</span>条短信长度。点击插入模版标签：<span>[#接收人#]</span><span>[#报名链接#]</span></p>
-			</div>
-		</div>
-	</form>
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script>
-layui.config({
-	base: '../../../layuiadmin/' //静态资源所在路径
-}).extend({
-	index: 'lib/index' //主入口模块
-}).use(['index', 'form', 'laydate', 'element'], function() {
-	var $ = layui.$,
-		admin = layui.admin,
-		element = layui.element,
-		layer = layui.layer,
-		laydate = layui.laydate,
-		form = layui.form;
-	var url="https://f.longjuli.com"
-	$.ajax({
-		url: url+"/role/findAll",
-		type: "get",
-		async: true,
-		xhrFields: {
-			withCredentials: true
-		},
-		success: function(data) {
-			console.log(data);
-			$.each(data.data, function(idx, con) {
-				$("#select_special").after("<option value=" + con.roleId + ">" + con.name + "</option>");
-			})
-			$('#group').val($('#use').val());
-			form.render()
-		},
-		error: function(error) {
-			console.log(error)
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<style type="text/css">
+		.layui-form-label {
+			width: 100px;
 		}
 
-	})
-});
-</script>
+		.layui-input-block {
+			margin-left: 130px;
+		}
+
+		.layui-form-label span {
+			color: #f00;
+			font-size: 14px;
+			margin-right: 5px;
+		}
+
+		.layui-input-block span,
+		p span {
+			color: #f00;
+			font-size: 14px;
+			margin: 0 5px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+		<form class="layui-form" action="" lay-filter="component-form-group">
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>通知标题</label>
+				<div class="layui-input-block">
+					<input type="text" name="title" lay-verify="required" placeholder="模版名称" autocomplete="off"
+						id="username" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>会议</label>
+				<div class="layui-input-block">
+					<select name="meetingid" lay-skin="select" lay-filter="component-form-select" id="smslist">
+						<option value="-1">选择会议</option>
+						<option value="" id="sms"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>通知模版</label>
+				<div class="layui-input-block">
+					<select name="noticeid" lay-skin="select" lay-filter="component-form-select" id="smslist">
+						<option value="-1">请选择通知模版</option>
+						<option value="" id="smss"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>报名模版</label>
+				<div class="layui-input-block">
+					<select name="applyid" lay-skin="select" lay-filter="component-form-select" id="smslist">
+						<option value="-1">请选择报名模版</option>
+						<option value="" id="bao"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择会议时间</label>
+				<div class="layui-input-inline">
+					<input type="text" name="date" class="layui-input" id="dates" placeholder="yyyy-MM-dd">
+				</div>
+
+
+				<div class="layui-input-inline">
+					<input type="text" name="time" class="layui-input" id="times" placeholder="HH:mm:ss">
+				</div>
+
+			</div>
+			<div class="layui-form-item layui-layout-admin layui-hide">
+				<div class="layui-input-block">
+					<div style="position: absolute;right: 0px;bottom: 0px;">
+						<button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script>
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+			var $ = layui.$,
+				admin = layui.admin,
+				element = layui.element,
+				layer = layui.layer,
+				upload = layui.upload,
+				laydate = layui.laydate,
+				form = layui.form;
+			// var url = "https://f.longjuli.com"
+			var url = "http://127.0.0.1:8083"
+			var uploadfile = null;
+			$.ajax({
+				async: false,
+				type: "get",
+				url: url + "/meeting/findAll",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true
+				},
+				//成功的回调函数
+				success: function (msg) {
+					var data = msg;
+					$.each(data.data, function (idx, con) {
+						$("#sms").after("<option value=" + con.id + ">" + con.name +
+							"</option>");
+					})
+					form.render();
+				},
+				//失败的回调函数
+				error: function () {
+					console.log("error")
+				}
+			})
+			$.ajax({
+				async: false,
+				type: "get",
+				url: url + "/smstemplate/findByselective?smsTemplateType=0",
+				where: {
+					smsTemplateType: 0
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+
+				//成功的回调函数
+				success: function (msg) {
+					var data = msg;
+					$.each(data.data, function (idx, con) {
+						$("#smss").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
+							"</option>");
+					})
+					form.render();
+				},
+				//失败的回调函数
+				error: function () {
+					console.log("error")
+				}
+			})
+			$.ajax({
+				async: false,
+				type: "get",
+				url: url + "/smstemplate/findByselective?smsTemplateType=1",
+				xhrFields: {
+					withCredentials: true
+				},
+				where: {
+					smsTemplateType: 1
+				},
+				//成功的回调函数
+				success: function (msg) {
+					var data = msg;
+					$.each(data.data, function (idx, con) {
+						$("#bao").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
+							"</option>");
+					})
+					form.render();
+				},
+				//失败的回调函数
+				error: function () {
+					console.log("error")
+				}
+			})
+			var day2 = new Date();
+			day2.setTime(day2.getTime());
+			var s2 = day2.getFullYear() + "-" + (day2.getMonth() + 1) + "-" + day2.getDate();
+			var ins22 = laydate.render({
+				elem: '#dates',
+				min: s2,
+				max: '2080-10-14',
+				format: 'yyyy年MM月dd日' //可任意组合
+				,
+				theme: 'molv'
+			});
+
+			laydate.render({
+				elem: '#times',
+				type: 'time',
+				format: 'HH:mm:ss',
+				btns: ['clear', 'now', 'confirm'],
+				theme: 'molv'
+			})
+			form.on('submit(addsms)', function (data) {
+				console.log(data)
+				var data = data.field;
+				console.log(data)
+				if (data.meetingid == -1) {
+					return parent.layer.msg("请选择会议")
+				}
+				if(data.time == ''|data.date == ''){
+                    return parent.layer.msg("请选择日期时间")
+                }
+                
+               var date =  data.date;
+               var resultdate = date.replace("年","-").replace("月","-").substring(0,date.length-1)
+			   var resutdatetime = resultdate +" "+data.time;
+			   console.log($('#smslist').val())
+				$.ajax({
+					url: url + "/smsstatistics/add",
+					type: "post",
+					dataType: "json",
+					data: {
+						meetingid: data.meetingid,
+						title: data.title,
+						noticeid: data.noticeid,
+                        applyid: data.applyid,
+                        time: resutdatetime,
+					},
+					async: false,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function (data) {
+						if (data.code == 0) {
+							parent.layer.msg("添加成功")
+							var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+							parent.layer.close(index);
+							parent.reloads();	
+						}else{
+							parent.layer.msg(data.msg)
+						}
+					},
+					error: function (error) {
+						console.log(error)
+					}
+
+				})
+				return false;
+			})
+		});
+	</script>
 </body>
+
 </html>

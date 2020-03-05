@@ -15,7 +15,7 @@ layui.define("form", function(e) {
 		elemPhone: "#LAY-user-login-cellphone",
 		elemVercode: "#LAY-user-login-vercode",
 		ajax: {
-			url: "http://140.143.237.247:8083/code/getsmscode",
+			url: "https://f.longjuli.com/code/getsmscode",
 			type:'post',
 			xhrFields: {
 				withCredentials: true

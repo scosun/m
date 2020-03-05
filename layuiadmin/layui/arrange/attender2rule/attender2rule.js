@@ -56,40 +56,41 @@ layui.config({
 							}, {
 								field: 'name',
 								title: '对应关系名称',
-								align: "center"
+								//align: "center"
 							}, {
 								field: 'meeting_name',
 								title: '会议名称',
-								width: '15%',
-								align: "center"
+								//width: '15%',
+								//align: "center"
 	
 							}, {
 								field: 'rule_num',
 								title: '规则数量',
-								width: '8%',
-								align: "center"
+								//width: '8%',
+								//align: "center"
 	
 							},{
 								field: 'attendee_num',
 								title: '对应人数',
-								width: '8%',
-								align: "center"
+								//width: '8%',
+								//align: "center"
 							}, {
 								field: 'modifytime',
 								title: '更新时间',
-								width: '10%',
+								//width: '10%',
 								sort: true,
-								align: "center"
+								//align: "center"
 							}, {
-								width: 230,
-								align: 'center',
-								flxed: 'right',
+								width: 100,
+								//align: 'center',
+								//flxed: 'right',
 								title: '操作',
 								toolbar: '#test-table-operate-barDemo'
 							}
 						]
 					],
 					skin: 'line', //表格风格
+					even: true,
 					page: true, //是否显示分页
 					limits: [5, 10, 15], //显示
 					limit: 10 //每页默认显示的数量

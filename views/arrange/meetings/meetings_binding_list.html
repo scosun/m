@@ -78,9 +78,10 @@ layui.config({
 			table.render({
 				elem: '#test-table-operate',
 				data: data.data,
-				height: 515,
-				page: true,
+				//height: 515,
+				
 				skin: 'line',
+				even: true,
 				page: false, //开启分页
 				//limits: [5, 10, 15] //显示
 				//limit: 10 //每页默认显示的数量
@@ -94,13 +95,13 @@ layui.config({
 					}, {
 						field: 'roomname',
 						title: '座位号',
-						align: "center"
+						//align: "center"
 					}, {
 						field: 'templatefilename',
 						title: '设备串码',
 					}, {
-						width: '20%',
-						align: 'center',
+						width: 100,
+						//align: 'center',
 						title: '操作',
 						toolbar: '#table-content-list'
 					}]

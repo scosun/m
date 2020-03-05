@@ -7,6 +7,7 @@ layui.config({
         admin = layui.admin,
         $ = layui.jquery;
     var url = "https://f.longjuli.com";
+    // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
     // #test-table-operate
@@ -54,7 +55,7 @@ layui.config({
             console.log(error)
         },
     })
-
+    
     function isEmptyObject(obj) {
 
         var jlength = 0;
@@ -70,31 +71,13 @@ layui.config({
         // height: 'full-200',
         //url: url + "/meeting/findAllBylayui", //数据接口
         method: 'get',
+        url:url+'/smstemplate/findAllPage',
         where:{
             status:0
         },
         xhrFields: {
             withCredentials: true
         },
-        data: [{
-            "id": "300"
-            ,"templatename": "14届八次党委会议通知"
-            ,"templatecont": "[#接收人#](报名链接：[#报名链接#])"
-            ,"templatetype": "已发送模版"
-            ,"modifyTime": "2016-10-14 12:01:17"
-          }, {
-            "id": "133"
-            ,"templatename": "14届八次党委会议通知2019年12月30日20:11:23"
-            ,"templatecont": "[#接收人#]异步测试通知。(报名链接：[#报名链接#])"
-            ,"templatetype": "已发送模版"
-            ,"modifyTime": "2016-10-14 12:01:17"
-          }, {
-            "id": "400"
-            ,"templatename": "14届八次党委会议通知"
-            ,"templatecont": "[#接收人#]委员：政协第十四届济南市委员第三次会议定于2019年12月30日上午在山东会堂召开，会期四天半，25号下午1:00到4:00在住地报到(报到地点见会议通知https://www.jnzx.gow.cn.pdf),(报名链接：[#报名链接#])(大会秘书处)"
-            ,"templatetype": "已发送模版"
-            ,"modifyTime": "2016-10-14 12:01:17"
-          }],
         page: {
             layout: ['prev', 'page', 'next', 'count', 'skip']
         },
@@ -106,32 +89,40 @@ layui.config({
                     fixed: 'left'
                 },
                 {
-                    field: 'id',
+                    field: 'smsTemplateId',
                     title: 'ID',
                     width:60,
-                    align: 'center',
+                    //align: 'center',
                     unresize: 'false',
                 },
                 {
-                    field: 'templatename',
+                    field: 'smsTemplateName',
                     title: '模版名称',
                     align: 'left',
+                    width: 150,
                 }, {
-                    field: 'templatecont',
+                    field: 'smsTemplateContent',
                     title: '模版内容',
                     align: 'left',
                 },
                 {
-                    field: 'templatetype',
+                    field: 'smsTemplateType',
                     title: '模版类型',
-                    align: 'left',
+                    templet: function(data) {
+                        if (data.smsTemplateType == 0) {
+                            return '通知模板'
+                        }
+                        if (data.smsTemplateType == 1) {
+                            return '报名模版'
+                        }
+                        if (data.smsTemplateType == undefined) {
+                            return ''
+                        }
+                    },
+                    width:100,
                 },
                 {
-                    field: 'modifyTime',
-                    title: '最后修改时间',
-                    align: 'left',
-                },
-                {
+                    width: 100,
                     title: '操作',
                     align: 'left',
                     toolbar: '#test-table-operate-barDemo'
@@ -142,7 +133,8 @@ layui.config({
         event: true,
         page: true,
         limit: 15,
-        skin: 'nob',
+        skin: 'line',
+        even: true,
         limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
@@ -160,31 +152,13 @@ layui.config({
             // height: 'full-200',
             //url: url + "/meeting/findAllBylayui", //数据接口
             method: 'get',
+            url:url+'/smstemplate/findAllPage',
             where:{
                 status:0
             },
             xhrFields: {
                 withCredentials: true
             },
-            data: [{
-                "id": "300"
-                ,"templatename": "14届八次党委会议通知"
-                ,"templatecont": "[#接收人#](报名链接：[#报名链接#])"
-                ,"templatetype": "已发送模版"
-                ,"modifyTime": "2016-10-14 12:01:17"
-              }, {
-                "id": "133"
-                ,"templatename": "14届八次党委会议通知2019年12月30日20:11:23"
-                ,"templatecont": "[#接收人#]异步测试通知。(报名链接：[#报名链接#])"
-                ,"templatetype": "已发送模版"
-                ,"modifyTime": "2016-10-14 12:01:17"
-              }, {
-                "id": "400"
-                ,"templatename": "14届八次党委会议通知"
-                ,"templatecont": "[#接收人#]委员：政协第十四届济南市委员第三次会议定于2019年12月30日上午在山东会堂召开，会期四天半，25号下午1:00到4:00在住地报到(报到地点见会议通知https://www.jnzx.gow.cn.pdf),(报名链接：[#报名链接#])(大会秘书处)"
-                ,"templatetype": "已发送模版"
-                ,"modifyTime": "2016-10-14 12:01:17"
-              }],
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
@@ -196,30 +170,35 @@ layui.config({
                         fixed: 'left'
                     },
                     {
-                        field: 'id',
+                        field: 'smsTemplateId',
                         title: 'ID',
                         width:60,
                         align: 'center',
                         unresize: 'false',
                     },
                     {
-                        field: 'templatename',
+                        field: 'smsTemplateName',
                         title: '模版名称',
                         align: 'left',
                     }, {
-                        field: 'templatecont',
+                        field: 'smsTemplateContent',
                         title: '模版内容',
                         align: 'left',
                     },
                     {
-                        field: 'templatetype',
+                        field: 'smsTemplateType',
                         title: '模版类型',
-                        align: 'left',
-                    },
-                    {
-                        field: 'modifyTime',
-                        title: '最后修改时间',
-                        align: 'left',
+                        templet: function(data) {
+                            if (data.smsTemplateType == 0) {
+                                return '通知模板'
+                            }
+                            if (data.smsTemplateType == 1) {
+                                return '报名模版'
+                            }
+                            if (data.smsTemplateType == undefined) {
+                                return ''
+                            }
+                        },
                     },
                     {
                         title: '操作',
@@ -236,9 +215,11 @@ layui.config({
             limits: [5, 10, 15],
             done: function(res, curr, count) {
                 table_data = res.data;
-
+    
                 layer.closeAll('loading');
                 deviceList.length = 0;
+                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                // layer.close(index);    //返回数据关闭loading
             },
         });
 
@@ -289,17 +270,17 @@ layui.config({
     table.on('tool(test-table-operate)', function(obj) {
         var data = obj.data;
          if (obj.event === 'del') {
-            layer.confirm('真的删除行么', function(index) {
+            layer.confirm('确认删除这条短信模板', function(index) {
                 obj.del();
 
                 $.ajax({
                     async: false,
-                    type: "get",
-                    url: url + "/meeting/deleteMeeting",
+                    type: "post",
+                    url: url + "/smstemplate/delete",
                     dataType: "json",
                     //成功的回调函数
                     data: {
-                        "id": obj.data.id
+                        "id": obj.data.smsTemplateId
                     },
                     xhrFields: {
                         withCredentials: true
@@ -326,15 +307,19 @@ layui.config({
                 //title: '收藏管理 (考生姓名：张无忌)',
                 title: '新建通知模版',
                 shadeClose: false, //弹出框之外的地方是否可以点击
+                maxmin: true,
                 btn: ['保存', '返回'],
                 area: ['60%', '60%'],
-                content: 'smstemplate_add.html',
+                content: 'smstemplate_update.html?id='+data.smsTemplateId,
                 success: function(layero, index) {
-                    // var body = layui.layer.getChildFrame('body', index);
-                    // var roomid;
-                    // // 取到弹出层里的元素，并把编辑的内容放进去
-                    // body.find("#ruleid").val(data.id);
-                    // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                    var body = layui.layer.getChildFrame('body', index);
+                    // 取到弹出层里的元素，并把编辑的内容放进去
+                    body.find("#name").val(data.smsTemplateName);
+                    body.find("#content").val(data.smsTemplateContent); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                },
+                yes: function(index,layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
                 }
             });
         }
@@ -377,6 +362,7 @@ layui.config({
                     $.ajax({
                         async: false,
                         type: "post",
+                        maxmin: true,
                         url: url + "/meeting/batchRemove",
                         dataType: "json",
                         xhrFields: {
@@ -449,10 +435,11 @@ layui.config({
                     type: 2,
                     title: '新建通知模版',
                     area: ['60%', '60%'],
+                    maxmin: true,
                     btn: ['保存', '返回'],
                     content: 'smstemplate_add.html',
                     yes: function(index, layero) {
-                        var submit = layero.find('iframe').contents().find("#ruleclick");
+                        var submit = layero.find('iframe').contents().find("#click");
                         submit.click();
                     }
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'

@@ -70,7 +70,7 @@ layui.config({
     laydate.render({
         elem: '#times',
         type: 'time',
-        format: 'HH:mm:ss',
+        format: 'HH:mm',
         btns: ['clear','now', 'confirm'],
         theme: 'molv'
     });

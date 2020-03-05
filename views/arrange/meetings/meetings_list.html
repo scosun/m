@@ -14,6 +14,9 @@
 .layui-btn-danger {background-color: #FF5722;}
 .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
 html{background-color: #fff;}
+.layui-btn+.layui-btn {
+    margin-left: 0
+}
 </style>
 </head>
 <body>
@@ -25,7 +28,7 @@ html{background-color: #fff;}
 					<div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding: 8px 15px 4px;">
 						<span class="layui-breadcrumb">
 							<a><cite>控制管理列表</cite></a>
-							<a onclick="asd()"><cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新 </cite></a>
+							<a onclick="asd()" href="javascript:;"><cite>刷新</cite></a>
 						</span>
 					</div>
 				</div>
@@ -90,11 +93,10 @@ layui.config({
 			table.render({
 				elem: '#test-table-operate',
 				data: data.data,
-				height: 515,
+				//height: 515,
 				page: true,
 				skin: 'line',
-				page: true //开启分页
-					,
+				even: true,
 				limits: [5, 10, 15] //显示
 					,
 				limit: 10 //每页默认显示的数量
@@ -108,7 +110,7 @@ layui.config({
 					}, {
 						field: 'roomname',
 						title: '会议室名称',
-						align: "center"
+						//align: "center"
 					}, {
 						field: 'templatefilename',
 						width: '10%',
@@ -123,12 +125,12 @@ layui.config({
 						title: '绑定数量'
 					}, {
 						width: '8%',
-						align: 'center',
+						//align: 'center',
 						title: '查看',
 						toolbar: '#table-zone-list'
 					},{
-						width: 160,
-						align: 'center',
+						width: 140,
+						//align: 'center',
 						title: '操作',
 						toolbar: '#table-content-list'
 					}

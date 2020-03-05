@@ -108,49 +108,43 @@
 		            cols: [
 		                [ //表头
 		                
-		                    {
-		                        field: 'id',
-		                        title: 'ID',
-		                        align: 'left',
-		                        unresize: 'false',
-		                        width:'7%'
-		                    },
-                           
-		                    {
-		                        field: 'name',
-		                        title: '会议室名称',
-		                        align: 'left',
-                                width:'20%'
-		                    }
-                           
-		                    ,{
-		                        field: 'rulename',
-		                        title: '座区名称',
-		                        align: 'left',
-		                       
-		        
-		                    }, 
-                            {
-                                field: 'rulenum',
-                                title: '座区数量',
-                                align: 'center',
-                                width:'10%'
-                                
-                            },
-		                   
-		                    {
-		                        width: '10%',
-		                        align: 'center',
-		                        title: '操作',
-		                        toolbar: '#table-content-list',
-		                    }
+					{
+						field: 'id',
+						title: 'ID',
+						align: 'left',
+						unresize: 'false',
+						width:60
+					},
+					{
+						field: 'name',
+						title: '会议室名称',
+						align: 'left',
+						width:'20%'
+					}
+					,{
+						field: 'rulename',
+						title: '座区名称',
+						align: 'left',
+					}, 
+					{
+						field: 'rulenum',
+						title: '座区数量',
+						//align: 'center',
+						width: 100,
+					},
+					{
+						width: 100,
+						//align: 'center',
+						title: '操作',
+						toolbar: '#table-content-list',
+					}
 		                ]
 		            ],
-		        
 		            event: true,
 		            page: true,
 		            limit: 15,
-		            skin: 'nob',
+			    skin: 'line',
+			    even: true,
 		            limits: [5, 10, 15],
 		            done: function(res, curr, count) {
 		                table_data = res.data;
@@ -178,51 +172,45 @@
 		                    withCredentials: true
 		                },
 		                cols: [
-						[ //表头
-		                
-		                    {
-		                        field: 'id',
-		                        title: 'ID',
-		                        align: 'left',
-		                        unresize: 'false',
-		                        width:'7%'
-		                    },
-                           
-		                    {
-		                        field: 'name',
-		                        title: '会议室名称',
-		                        align: 'left',
-                                width:'20%'
-		                    }
-                           
-		                    ,{
-		                        field: 'rulename',
-		                        title: '座区名称',
-		                        align: 'left',
-		                       
-		        
-		                    }, 
-                            {
-                                field: 'rulenum',
-                                title: '座区数量',
-                                align: 'center',
-                                width:'10%'
-                                
-                            },
-		                   
-		                    {
-		                        width: '10%',
-		                        align: 'center',
-		                        title: '操作',
-		                        toolbar: '#table-content-list',
-		                    }
-		                ]
-		                ],
-		            
-		                event: true,
-		                page: true,
-		                limit: 15,
-		                skin: 'nob',
+					[ //表头
+					
+						{
+							field: 'id',
+							title: 'ID',
+							align: 'left',
+							unresize: 'false',
+							width:60
+						},
+						{
+							field: 'name',
+							title: '会议室名称',
+							align: 'left',
+							width:'20%'
+						}
+						,{
+							field: 'rulename',
+							title: '座区名称',
+							align: 'left',
+						}, 
+						{
+							field: 'rulenum',
+							title: '座区数量',
+							//align: 'center',
+							width: 100,
+						},
+						{
+							width: 100,
+							//align: 'center',
+							title: '操作',
+							toolbar: '#table-content-list',
+						}
+					]
+				],
+				event: true,
+				page: true,
+				limit: 15,
+				skin: 'line',
+				even: true,
 		                limits: [5, 10, 15],
 		                done: function(res, curr, count) {
 		                    table_data = res.data;
@@ -404,51 +392,46 @@
 		    		         layout: ['prev', 'page', 'next', 'count', 'skip']
 		    		     },
 		    		     cols: [
-						 [ //表头
-		                
-		                    {
-		                        field: 'id',
-		                        title: 'ID',
-		                        align: 'left',
-		                        unresize: 'false',
-		                        width:'7%'
-		                    },
-                           
-		                    {
-		                        field: 'name',
-		                        title: '会议室名称',
-		                        align: 'left',
-                                width:'20%'
-		                    }
-                           
-		                    ,{
-		                        field: 'rulename',
-		                        title: '座区名称',
-		                        align: 'left',
-		                       
-		        
-		                    }, 
-                            {
-                                field: 'rulenum',
-                                title: '座区数量',
-                                align: 'center',
-                                width:'10%'
-                                
-                            },
-		                   
-		                    {
-		                        width: '10%',
-		                        align: 'center',
-		                        title: '操作',
-		                        toolbar: '#table-content-list',
-		                    }
-		                ]
-		    		     ],
+						[ //表头
+						
+							{
+								field: 'id',
+								title: 'ID',
+								align: 'left',
+								unresize: 'false',
+								width:60
+							},
+							{
+								field: 'name',
+								title: '会议室名称',
+								align: 'left',
+								width:'20%'
+							}
+							,{
+								field: 'rulename',
+								title: '座区名称',
+								align: 'left',
+							}, 
+							{
+								field: 'rulenum',
+								title: '座区数量',
+								//align: 'center',
+								width: 100,
+							},
+							{
+								width: 100,
+								//align: 'center',
+								title: '操作',
+								toolbar: '#table-content-list',
+							}
+						]
+					],
 		    		 
 		    		     event: true,
 		    		     page: true,
 		    		     limit: 15,
-		    		     skin: 'nob',
+					skin: 'line',
+					even: true,
 		    		     limits: [5, 10, 15],
 		    		     done: function(res, curr, count) {
 		    		         table_data = res.data;

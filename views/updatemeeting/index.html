@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<script type="text/javascript" >
+(function (doc, win) {
+	var docEl = doc.documentElement,
+		resizeEvt = 'onorientationchange' in window ? 'onorientationchange' : 'resize',
+		recalc = function () {
+			var clientWidth = docEl.clientWidth;
+			if (!clientWidth) return;
+			if(clientWidth >= 768){
+				docEl.style.maxWidth = '768px';
+				docEl.style.fontSize = '60px';//100px
+				docEl.style.margin = "0 auto";				
+			}else if(clientWidth <= 320){
+				docEl.style.fontSize = '45px';
+			}else{
+				docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+			}
+		};
+	if (!doc.addEventListener) return;
+	win.addEventListener(resizeEvt, recalc, false);
+	doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);
+</script>
+<style>
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video, input, select { margin: 0; padding: 0; border: 0; box-sizing: border-box; font-family:arial }
+html { font-size:.28rem;}/*14rem*/
+body { font-family: "Microsoft Yahei", "Hiragino Sans GB", arial; font-size:.28rem;-webkit-text-size-adjust: none; color:#333; background-color:#fafafa }
+:focus { outline: 0 }
+select { -webkit-appearance: none; border: none; }
+select { appearance: none; -moz-appearance: none; -webkit-appearance: none; -webkit-appearance: none; -webkit-border-radius: 0; -webkit-user-select: text; }
+a { text-decoration: none; color:#333 }
+.m20 { margin:0.6rem 0.4rem; }
+.m40 { margin:0.4rem; }
+.btn_a{pointer-events: none;color: #fff;border-radius: 0.15rem;font-size: .32rem;width: 100%;height: .86rem;line-height: .86rem;display: block;text-align: center;font-family: "Microsoft Yahei", "Hiragino Sans GB";}
+.btn_a{background:#d81e06;}
+.btn_a[disabled] {color:#999;background: #eaeaea!important;}
+select{width: 100%;color: #666;background-color: #eaeaea;border-radius: 0.15rem;font-size: .32rem;height: .86rem;line-height: .86rem;display: block;text-align: center;font-family: "Microsoft Yahei", "Hiragino Sans GB";padding-left:0.2rem}
+.searchbtn{
+  height:40px;
+  border-radius:5px;
+  font-size:18px;
+  width:100%;
+  color: #fff;
+  background-color: #dd514c;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  background-image: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: 0;
+  -webkit-appearance: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.searchbtn:active{
+  background: #de6964;
+}
+</style>
+</head>
+<body>
+<div class="m20">
+    <select id="meetingselect">
+    </select>
+</div>
+<div class="m40">
+    <button id="setbtn" onclick="saveMeetingId();" class="searchbtn">提交</button>
+</div>
+
+<script type="text/javascript">
+function Ajax(obj){
+	//请求方式GET/POST,默认GET
+	this.method = obj.method || "GET";
+	this.method = this.method.toUpperCase() || "GET";
+	//请求类型,如果不是同步就默认异步
+	this.async = obj.async == false ? false : true;
+	//请求参数
+	this.data = obj.data || null;
+	//成功返回函数
+	this.success = obj.success || function(){};
+	//失败返回函数
+	this.error = obj.error || function(){};
+	//返回函数
+	this.callback = obj.callback || "";
+	//请求地址
+	this.url = obj.url || null;
+	//数据类型
+	this.dataType = obj.dataType || "json";
+	this.init.apply(this,arguments);
+}
+
+Ajax.prototype = {
+	init:function(){
+		if(this.dataType === "jsonp"){
+			//跨域请求
+			return this.jsonp();
+		}
+
+		//正常请求
+		var httpRequest = this.http();
+		if(this.method == "GET"){
+			var url = this.url;
+			// url = url.indexOf('?') == -1 ? url + "?" : url;
+			// for(var key in this.data) {
+			// 	url += '&' + key + '=' + this.data[key];
+			// }
+			this.data = null;
+		}
+		httpRequest.open(this.method,url,this.async);
+		if (this.method == 'POST') {
+			httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+		}
+
+		var t = this;
+		httpRequest.onreadystatechange = function(){
+			t._onStateChange(httpRequest);
+		};
+		//get请求情况下data为null
+		httpRequest.send(this.data || null);
+		return httpRequest;
+	},
+
+	jsonp:function(){
+		var jsonp_str = 'jsonp_' + new Date().getTime();
+		//动态生成全局函数
+		if(typeof(this.callback) === "function"){
+			eval(jsonp_str + ' = ' + this.callback + ';');
+		}
+		else{
+			eval(jsonp_str + ' = ' + this.success + ';');
+		}
+		this.url += '?callback=' + jsonp_str;
+		for(var key in this.data) {
+			this.url += '&' + key + '=' + this.data[key];
+		}
+
+		var head = document.getElementsByTagName("head")[0];
+		var js = document.createElement("script");
+		js.src = this.url;
+		js.onload = js.onreadystatechange = function(){
+			if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete"){
+				//清除JS
+				head.removeChild(js);
+			}
+		}
+		head.appendChild(js);
+	},
+
+	http:function(){
+		//判断是否支持xmlHttp
+		if(window.XMLHttpRequest){
+			return new XMLHttpRequest();
+		}
+		else{
+			try{
+				return new ActiveXObject('Msxml2.XMLHTTP')
+			}
+			catch(e){
+				try {
+					return new ActiveXObject('Microsoft.XMLHTTP');
+				} catch (e) {
+					return false;
+				}
+			}
+		}
+	},
+
+	//http请求回调函数
+	_onStateChange:function(http){
+		/*
+		XMLHTTP 的 readyState 值含义:
+		0－未初始化，即尚未调用 open.
+		1－初始化，即尚未调用 send.
+		2－发送数据，即已经调用 send.
+		3－数据传送中.
+		4－完成.
+		*/
+		if(http.readyState == 4){
+			//重置事件为空
+			http.onreadystatechange = function(){};
+			var s = http.status - 0;
+			if (s >= 200 && s < 300) {
+				if(typeof(this.success) != 'function'){
+					return;
+				}
+				var data = "";
+				if(typeof(this.dataType) == 'string'){
+					//判断请求数据格式
+					switch(this.dataType){
+						case 'text':
+							data = http.responseText;
+						break;
+						case 'json':
+							try{
+								data = JSON.parse(http.responseText);
+							}
+							catch (e) {
+								if (window.console && console.error){
+									console.error(e);
+								}
+							}
+						break;
+						case 'xml':
+							data = http.responseXML;
+						break;
+					}
+				}
+				//成功回调
+				this.success(data);
+			}
+			else {
+				//请求出问题后处理
+				if (window.closed) {
+					return;
+				}
+				if (typeof (this.error) == 'function') {
+					var error = {
+						status: s,
+						statusText: http.statusText
+					}
+					//判断是否是网络断线或者根本就请求不到服务器
+					if (http.readyState == 4 && (s == 0 || s == 12030)) {
+						//是
+						error.status = -1;
+					}
+					this.error(error);
+				}
+			}
+		}
+	}
+};
+</script>
+<script type="text/javascript">
+var ajax = new Ajax({
+    url:"https://f.longjuli.com/meeting/findAll",
+    method:"GET",
+    success: function(data){
+        if(data.code == 0 && data.data){
+            var list  = data.data || [];
+            var select = document.getElementById("meetingselect");  
+            
+            //通过option对象动态添加,注意第一个参数是用来显示的文本,第二个参数是value
+            for(var i = 0,len = list.length; i < len; i++){
+                var item = new Option(list[i].name,list[i].id);
+                select.options.add(item); 
+            }
+             
+        }
+    }
+});
+// https://f.longjuli.com/meetingcanhui/updateMetingid?id=266
+function saveMeetingId(){
+    var id = +document.getElementById("meetingselect").value;
+    var ajax = new Ajax({
+        url:"https://f.longjuli.com/meetingcanhui/updateMetingid?id="+id,
+        method:"GET",
+        success: function(data){
+            alert("设置成功");
+        },
+        error:function(){
+            alert("设置失败");
+        }
+    });
+}
+</script>
+</body>
+</html>

@@ -99,6 +99,7 @@ layui.config({
                     align: 'left',
                     
                 },{
+			width: 100,
                     field: 'seatrule',
                     title: '座区规则',
                     align: 'left',
@@ -116,7 +117,8 @@ layui.config({
     
                 }, 
                 {
-                	// field: '1',
+			// field: '1',\
+			width: 60,
                 	align: 'left',
                 	title: '查看',
                     toolbar: '#table-zone-list'
@@ -127,7 +129,7 @@ layui.config({
     
                 }, 
                 {
-                    width: '10%',
+                    width: 100,
                     align: 'left',
                     title: '操作',
                     toolbar: '#table-content-list',
@@ -138,7 +140,8 @@ layui.config({
         event: true,
         page: true,
         limit: 15,
-        skin: 'nob',
+	skin: 'line',
+	even: true,
         limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
@@ -164,69 +167,72 @@ layui.config({
                 withCredentials: true
             },
             cols: [
-                [ //表头
-                {
-                	type: 'checkbox',
-                	fixed: 'left'
-                },
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        align: 'left',
-                        unresize: 'false',
-                        width:'7%'
-                    },
-                    {
-                        field: 'name',
-                        title: '会议室名称',
-                        align: 'left',
-                    },
-                    {
-                        field: 'templatefilename',
-                        title: '模板名',
-                        align: 'left',
-                        
-                    },{
-                        field: 'seatrule',
-                        title: '座区规则',
-                        align: 'left',
-                        templet: function(data) {
-                        	if (data.seatrule == 0) {
-                        		return '左双右单'
-                        	}
-                        	if (data.seatrule == 1) {
-                        		return '左单右双'
-                        	}
-                        	if (data.seatrule == undefined) {
-                        		return ''
-                        	}
-                        },
-        
-                    }, 
-                    {
-                    	// field: '1',
-                    	align: 'left',
-                    	title: '查看',
-                        toolbar: '#table-zone-list'
-                    },{
-                        field: 'modifytime',
-                        title: '更新时间',
-                        align: 'left',
-        
-                    }, 
-                    {
-                        width: '10%',
-                        align: 'left',
-                        title: '操作',
-                        toolbar: '#table-content-list',
-                    }
-                ]
-            ],
-        
-            event: true,
-            page: true,
-            limit: 15,
-            skin: 'nob',
+		[ //表头
+		{
+			type: 'checkbox',
+			fixed: 'left'
+		},
+		    {
+			field: 'id',
+			title: 'ID',
+			align: 'left',
+			unresize: 'false',
+			width:'7%'
+		    },
+		    {
+			field: 'name',
+			title: '会议室名称',
+			align: 'left',
+		    },
+		    {
+			field: 'templatefilename',
+			title: '模板名',
+			align: 'left',
+			
+		    },{
+			    width: 100,
+			field: 'seatrule',
+			title: '座区规则',
+			align: 'left',
+			templet: function(data) {
+				if (data.seatrule == 0) {
+					return '左双右单'
+				}
+				if (data.seatrule == 1) {
+					return '左单右双'
+				}
+				if (data.seatrule == undefined) {
+					return ''
+				}
+			},
+	
+		    }, 
+		    {
+			    // field: '1',\
+			    width: 60,
+			    align: 'left',
+			    title: '查看',
+			toolbar: '#table-zone-list'
+		    },{
+			field: 'modifytime',
+			title: '更新时间',
+			align: 'left',
+	
+		    }, 
+		    {
+			width: 100,
+			align: 'left',
+			title: '操作',
+			toolbar: '#table-content-list',
+		    }
+		]
+	    ],
+	
+	    event: true,
+	    page: true,
+	    limit: 15,
+	    skin: 'line',
+	    even: true,
             limits: [5, 10, 15],
             done: function(res, curr, count) {
                 table_data = res.data;
@@ -486,69 +492,72 @@ window.onkeyup = function(ev) {
 		         layout: ['prev', 'page', 'next', 'count', 'skip']
 		     },
 		     cols: [
-		       [ //表头
-		       {
-		       	type: 'checkbox',
-		       	fixed: 'left'
-		       },
-		           {
-		               field: 'id',
-		               title: 'ID',
-		               align: 'left',
-		               unresize: 'false',
-		               width:'7%'
-		           },
-		           {
-		               field: 'name',
-		               title: '会议室名称',
-		               align: 'left',
-		           },
-		           {
-		               field: 'templatefilename',
-		               title: '模板名',
-		               align: 'left',
-		               
-		           },{
-		               field: 'seatrule',
-		               title: '座区规则',
-		               align: 'left',
-		               templet: function(data) {
-		               	if (data.seatrule == 0) {
-		               		return '左双右单'
-		               	}
-		               	if (data.seatrule == 1) {
-		               		return '左单右双'
-		               	}
-		               	if (data.seatrule == undefined) {
-		               		return ''
-		               	}
-		               },
-		               
-		           }, 
-		           {
-		           	// field: '1',
-		           	align: 'left',
-		           	title: '查看',
-		               toolbar: '#table-zone-list'
-		           },{
-		               field: 'modifytime',
-		               title: '更新时间',
-		               align: 'left',
-		               
-		           }, 
-		           {
-		               width: '10%',
-		               align: 'left',
-		               title: '操作',
-		               toolbar: '#table-content-list',
-		           }
-		       ]
-		     ],
-		 
-		     event: true,
-		     page: true,
-		     limit: 15,
-		     skin: 'nob',
+			[ //表头
+			{
+				type: 'checkbox',
+				fixed: 'left'
+			},
+			    {
+				field: 'id',
+				title: 'ID',
+				align: 'left',
+				unresize: 'false',
+				width:'7%'
+			    },
+			    {
+				field: 'name',
+				title: '会议室名称',
+				align: 'left',
+			    },
+			    {
+				field: 'templatefilename',
+				title: '模板名',
+				align: 'left',
+				
+			    },{
+				    width: 100,
+				field: 'seatrule',
+				title: '座区规则',
+				align: 'left',
+				templet: function(data) {
+					if (data.seatrule == 0) {
+						return '左双右单'
+					}
+					if (data.seatrule == 1) {
+						return '左单右双'
+					}
+					if (data.seatrule == undefined) {
+						return ''
+					}
+				},
+		
+			    }, 
+			    {
+				    // field: '1',\
+				    width: 60,
+				    align: 'left',
+				    title: '查看',
+				toolbar: '#table-zone-list'
+			    },{
+				field: 'modifytime',
+				title: '更新时间',
+				align: 'left',
+		
+			    }, 
+			    {
+				width: 100,
+				align: 'left',
+				title: '操作',
+				toolbar: '#table-content-list',
+			    }
+			]
+		    ],
+		
+		    event: true,
+		    page: true,
+		    limit: 15,
+		    skin: 'line',
+		    even: true,
 		     limits: [5, 10, 15],
 		     done: function(res, curr, count) {
 		         table_data = res.data;

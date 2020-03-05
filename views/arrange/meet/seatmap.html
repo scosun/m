@@ -30,7 +30,7 @@
 		/*右侧菜单*/
 		.layui-right-nav {
 			position: absolute;
-			right: 20px;
+			right: 5px;
 			top: 0;
 			height: 3.5rem;
 			line-height: 3.5rem;
@@ -56,9 +56,10 @@
 			display: inline-block;
 			width: 112px;
 			float: right;
-			margin-right: 400px;
+			margin-right: 450px;
 			margin-top: 9px;
 		}
+		
 	</style>
 </head>
 
@@ -66,8 +67,7 @@
 	<header>
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
-			<a onclick="asd()"><cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新
-				</cite></a>
+			<a onclick="asd()" href="javascript:;"><cite>刷新</cite></a>
 		</span>
 		<!-- 右侧菜单 -->
 		<div class="layui-form btnbar-select">
@@ -91,6 +91,9 @@
 			
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
 			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
+			<i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
+			<input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/>
+			<i id="nav-word" data-type="word" data="word模板下载"><img src="../../../images/word.png"></i>
 			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
 		</span>
 		<!-- 右侧菜单 end-->
@@ -398,6 +401,42 @@
 		// return false;
 	}
 	
+	//上传模板文件的类型判断
+	function uploadFile(){
+		var fileName = $("#upload-file").val();
+		var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+		console.log(fileType);
+		if(fileType!=".docx" && fileType!=".doc"){
+			/* alert("上传模板类型错误！") */
+			console.log("上传模板类型错误！");
+			return false;
+		}else {
+			var file = document.getElementById("upload-file").files[0];
+			upload(meetingid,newroomid,file);
+		}
+	}
+	
+	function upload(meetingid,newroomid,file){
+		var formData = new FormData();
+		console.log(meetingid+","+newroomid+","+file);
+		formData.append("meetingid",meetingid);
+		formData.append("roomtemplateid",newroomid);
+		formData.append("file",file);
+		$.ajax({
+			url:"https://f.longjuli.com/wordtemplate/uploadWordTemplate",
+			type:"post",
+			data:formData,
+			contentType: false,
+			processData: false,
+			success:function(data){
+				if(data.code == 200){
+					layer.msg("word模板上传成功！")
+					console.log(data);
+				}
+			}
+		})
+	}
+	
 	var $ = layui.$,
 	active = {
 		parallelism:function(){
@@ -418,6 +457,36 @@
                     // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
+		},
+		word:function(){
+			/* window.location="https://f.longjuli.com" + "/word/download/"+meetingid; */
+			layer.open({
+				type: 2,
+				title: "下载模板列表",
+				shadeClose: false,
+				area: ['50%', '55%'],
+				btn: ['确定', '取消'],
+				closeBtn: 1,
+				content: 'template_download.html',
+				success: function(layero, index){
+					// 获取子页面的iframe
+					var iframe = window['layui-layer-iframe' + index];
+					// 向子页面的全局函数child传参
+					console.log(meetingid);
+					iframe.init(meetingid,newroomid);
+				},
+				yes: function(index, layero) {
+					/* var url = "http://127.0.0.1:8083"; */
+					var url = "https://f.longjuli.com";
+					var body = layer.getChildFrame('body', index);
+					var wordid = body.find('#wordDown').val();
+					var wordname = body.find('#wordDown option:selected').text().split('-') || [];
+					wordname = wordname[0] || "";
+				    if(wordid==''||wordid==null)
+				    {return layer.msg("请选择word模板");}
+					window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid
+				}
+			})
 		},
 		importData: function() {
 			var condi = {
@@ -456,9 +525,11 @@
 		saveseats:function(){
 			saveSeats();
 		},
+		upload:function() {
+			$("#upload-file").trigger("click");
+		},
 		close: function() {
 			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-	
 			parent.layer.close(index); //再执行关闭 
 			// parent.reloads()
 		}

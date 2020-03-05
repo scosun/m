@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>树组件</title>
+    <link rel="stylesheet" href="../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layuiadmin/style/admin.css" media="all">
+    <script src="/js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+    <div style="width: calc(100%-50px);">666</div>
+    <div id="test1"></divdiv>
+    <script src="../layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.use('tree', function () {
+            var tree = layui.tree;
+            let data;
+            let attributes = [];
+            $.ajax({
+                async: false,
+                type: "get",
+                url: "http://127.0.0.1:8083/attribute/findtree",
+                datatype: 'json',
+
+                xhrFields: {
+                    withCredentials: true
+                },
+                //成功的回调函数
+                success: function (msg) {
+                    data = msg.data
+
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+            })
+            //渲染
+            var inst1 = tree.render({
+                elem: '#test1'  //绑定元素
+                , data: [{
+        title: '江西' //一级菜单
+        ,children: [{
+          title: '南昌',
+          id:5,
+          
+          checked:true//二级菜单
+          ,children: [{
+            title: '高新区',
+            id:6 //三级菜单
+            //…… //以此类推，可无限层级
+            
+          }]
+        },{
+            title:'上海',
+            id:5
+        }]
+    }],
+                showCheckbox: true,
+                oncheck: function (obj) {
+                    // attributes.
+                    console.log(obj.data); //得到当前点击的节点数据
+                    console.log(obj.checked); //得到当前节点的展开状态：open、close、normal
+                    console.log(obj.elem); //得到当前节点元素
+                    // if(obj.checked == true){
+                    //     if(obj.data.children.length !=0){
+                    //         $.each(obj.data.children,(idx,con)=>{
+                    //             attributes.push(con.id);
+                    //         })    
+                    //     }else{
+                            attributes.push(obj.data.id);
+                        // }
+                        console.log(attributes)  
+                    // }else{
+                    //     if(obj.data.children.length !=0){
+                    //         $.each(obj.data.children,(idx,con)=>{
+                    //             attributes.splice($.inArray(con.id,attributes),1)
+                    //         })    
+                    //     }else{
+                    //         var i = $.inArray(obj.data.id,attributes)
+                    //         console.log(i)
+                    //     if( i != -1){
+                    //         attributes.splice(i,1)
+                    //     } 
+                    //     }
+                        
+                        console.log(attributes)
+                       
+                    // }
+                    
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

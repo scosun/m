@@ -97,6 +97,7 @@
 											<dd data-name="metingman"><a lay-href="arrange/model/model.html">贵宾室列表</a></a></dd> -->
                                         <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
                                         <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd>
+                                        
                                     </dl>
                                 </dd>
 
@@ -142,8 +143,41 @@
                             </a>
                             <dl class="layui-nav-child">
                                 <dd data-name="grid">
+                                    <a lay-href="">签到</a>
+                                </dd>
+                            </dl>
+                        </li>
+                        <li data-name="component" class="layui-nav-item">
+                            <a lay-href="arrange/signin/signinlist.html" lay-tips="组件" lay-direction="4">
+                                <i class="layui-icon layui-icon-date"></i>
+                                <cite>参会签到</cite>
+                            </a>
+                            <!-- <dl class="layui-nav-child">
+                                <dd data-name="grid">
                                     <a lay-href="arrange/signin/signinlist.html">签到</a>
                                 </dd>
+                            </dl> -->
+                        </li>
+                        <li data-name="component" class="layui-nav-item">
+                            <a href="javascript:;" lay-tips="组件" lay-direction="2">
+                                <i class="layui-icon layui-icon-rate"></i>
+                                <cite>通知列表</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd data-name="grid">
+                                    <a lay-href="arrange/smsnotice/smstemplatelist.html">短信模板</a>
+                                </dd>
+                                <dd data-name="grid">
+                                    <a lay-href="arrange/smsnotice/smstemplateparameter.html">短信模版参数</a>
+                                </dd>
+                                <dd data-name="grid">
+                                    <a lay-href="arrange/flocknotice/flocknoticelist.html">群发通知</a>
+                                </dd>
+                                <dd data-name="grid">
+                                    <a lay-href="arrange/smsnotice/smsnoticelist.html">短信通知</a>
+                                </dd>
+                                
+                             
                             </dl>
                         </li>
                         <li data-name="component" class="layui-nav-item" id="avirGroup">

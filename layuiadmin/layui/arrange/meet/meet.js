@@ -11,6 +11,7 @@ layui.config({
     var deviceList = [];
     // #test-table-operate
     //渲染表格
+    
     $('#group').append(
         '<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
     )
@@ -109,17 +110,11 @@ layui.config({
                 },
                 {
                    
-                    align: 'center',
+                    //align: 'center',
+                    width: 80,
                     flxed: '2',
                     title: '座区图',
                     toolbar: '#rulezone',
-                },
-                {
-                   
-                    align: 'center',
-                    flxed: '1',
-                    title: '编排',
-                    toolbar: '#type-list',
                 }
                 , {
                     field: 'meetingtime',
@@ -128,9 +123,9 @@ layui.config({
 
                 },
                 {
-                    width: '10%',
-                    align: 'right',
-                    flxed: 'right',
+                    width: 100,
+                    //align: 'right',
+                    //flxed: 'right',
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -140,7 +135,8 @@ layui.config({
         event: true,
         page: true,
         limit: 15,
-        skin: 'nob',
+        skin: 'line',
+        even: true,
         limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
@@ -195,17 +191,11 @@ layui.config({
                     },
                     {
                        
-                        align: 'center',
+                        //align: 'center',
+                        width: 80,
                         flxed: '2',
                         title: '座区图',
                         toolbar: '#rulezone',
-                    },
-                    {
-                       
-                        align: 'center',
-                        flxed: '1',
-                        title: '编排',
-                        toolbar: '#type-list',
                     }
                     , {
                         field: 'meetingtime',
@@ -214,9 +204,9 @@ layui.config({
     
                     },
                     {
-                        width: '10%',
-                        align: 'right',
-                        flxed: 'right',
+                        width: 100,
+                        //align: 'right',
+                        //flxed: 'right',
                         title: '操作',
                         toolbar: '#test-table-operate-barDemo',
                     }
@@ -226,7 +216,8 @@ layui.config({
             event: true,
             page: true,
             limit: 15,
-            skin: 'nob',
+            skin: 'line',
+            even: true,
             limits: [5, 10, 15],
             done: function(res, curr, count) {
                 table_data = res.data;
@@ -338,7 +329,7 @@ layui.config({
                 title: '编辑信息',
                 // shadeClose: true, //弹出框之外的地方是否可以点击
                 // offset: '10%',
-                area: ['100%', '100%'],
+                area: ['75%', '85%'],
                 btn: ['确定', '取消'],
                 content: 'form.html',
                 yes: function(index, layero) {
@@ -393,7 +384,6 @@ layui.config({
                             console.log("error")
                         }
                     })
-                    layer.full(addmeet)
                 },
                 success: function(layero, index) {
                     var body = layui.layer.getChildFrame('body', index);
@@ -541,17 +531,16 @@ layui.config({
                 var addmeet = layer.open({
                     type: 2,
                     title: '添加会议',
-                    area: ['70%', '75%'],
+                    area: ['75%', '85%'],
                     btn: ['确定', '取消'],
                     content: 'meet_create.html',
                     yes: function(index, layero) {
                         var iframeWindow = window['layui-layer-iframe' + index]
-                        iframeWindow.onappent();
+                        //iframeWindow.onappent();
 
                     }
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
                 });
-                layer.full(addmeet)
 
             },
             search: function() {
@@ -592,42 +581,36 @@ layui.config({
                                 field: 'address',
                                 title: '会议地址',
                                 align: 'left',
-            
+
                             },
                             {
-                               
-                                align: 'center',
+                            
+                                //align: 'center',
+                                width: 80,
                                 flxed: '2',
                                 title: '座区图',
                                 toolbar: '#rulezone',
-                            },
-                            {
-                               
-                                align: 'center',
-                                flxed: '1',
-                                title: '编排',
-                                toolbar: '#type-list',
                             }
                             , {
                                 field: 'meetingtime',
                                 title: '时间',
                                 align: 'left',
-            
+
                             },
                             {
-                                width: '10%',
-                                align: 'right',
-                                flxed: 'right',
+                                width: 100,
+                                //align: 'right',
+                                //flxed: 'right',
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }
                         ]
                     ],
-
                     event: true,
                     page: true,
                     limit: 15,
-                    skin: 'nob',
+                    skin: 'line',
+                    even: true,
                     limits: [5, 10, 15],
                     done: function(res, curr, count) {
                         table_data = res.data;

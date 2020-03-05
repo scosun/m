@@ -22,6 +22,9 @@
             .layui-laypage .layui-laypage-curr .layui-laypage-em {
                 background-color: #666;
             }
+            .layui-btn+.layui-btn {
+                margin-left: 0;
+            }
         </style>
         <link rel="stylesheet" type="text/css" href="../../../css/scosun.css" />
         <script src="../../../js/scosun.js"></script>
@@ -164,7 +167,7 @@
 						            align: "left"
 						        }, {
 						            field: 'sex',
-						
+                                    width: 60,
 						            title: '性别',
 						            templet: function(data) {
 						                if (data.sex == 1) {
@@ -187,7 +190,7 @@
 						            align: "left",
 						            sort: true
 						        }, {
-						            width: '10%',
+						            width: 140,
 						            align: 'left',
 						            title: '操作',
 						            toolbar: '#table-content-list'
@@ -198,7 +201,8 @@
 						event: true,
 						page: true,
 						limit: 10,
-						skin: 'line',
+                        skin: 'line',
+                        even: true,
 						limits: [5, 10, 15],
 						done: function (res, curr, count) {
 							console.log(res.data);
@@ -336,6 +340,7 @@
                                     data: {
                                         "userRoleId": obj.data.userRoleId,
                                         "roleId": body.find('#group').val(),
+                                        "userId":obj.data.userId
 
 
                                     },

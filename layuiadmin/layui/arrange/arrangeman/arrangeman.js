@@ -1,4 +1,4 @@
-  layui.config({
+layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
@@ -83,8 +83,9 @@
                 {
                     field: 'id',
                     title: 'ID',
-                    align: 'center',
+                    //align: 'center',
                     unresize: 'false',
+                    width:80,
                 },
                 {
                     field: 'name',
@@ -99,6 +100,7 @@
                     field: 'stauts',
                     title: '会议规则',
                     align: 'left',
+                    width:80,
                     templet: function(data) {
                         if (data.stauts == 0) {
                             return '标准规则'
@@ -119,9 +121,9 @@
 
                 },
                 {
-                    width: '10%',
-                    align: 'right',
-                    flxed: 'right',
+                    width: 100,
+                    //align: 'right',
+                    //flxed: 'right',
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -131,7 +133,8 @@
         event: true,
         page: true,
         limit: 15,
-        skin: 'nob',
+        skin: 'line',
+        even: true,
         limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
@@ -169,7 +172,7 @@
                     {
                         field: 'id',
                         title: 'ID',
-                        align: 'center',
+                        //align: 'center',
                         unresize: 'false',
                         width: '7%'
                     },
@@ -207,9 +210,9 @@
 
                     },
                     {
-                        width: '10%',
-                        align: 'right',
-                        flxed: 'right',
+                        width: 100,
+                        //align: 'right',
+                        //flxed: 'right',
                         title: '操作',
                         toolbar: '#test-table-operate-barDemo',
                     }
@@ -219,7 +222,8 @@
             event: true,
             page: true,
             limit: 15,
-            skin: 'nob',
+            skin: 'line',
+            even: true,
             limits: [5, 10, 15],
             done: function(res, curr, count) {
                 table_data = res.data;
@@ -289,7 +293,7 @@
             /**
              * @param {Object} index
              * 编排规则的借口提供之后需要接入删除
-             */
+             */   
             layer.confirm('真的删除行么', function(index) {
                 $.ajax({
                     async: false,
@@ -471,24 +475,24 @@
                             {
                                 field: 'id',
                                 title: 'ID',
-                                align: 'center',
+                                //align: 'center',
                                 unresize: 'false',
                                 width: '7%'
                             },
                             {
                                 field: 'name',
                                 title: '编排规则名称',
-                                align: 'center',
+                                //align: 'center',
                             }, {
                                 field: 'roomname',
                                 title: '会议室名称',
-                                align: 'center',
+                                //align: 'center',
                             },
                             {
                                 field: 'stauts',
                                 title: '会议规则',
                                 width: '15%',
-                                align: "center",
+                                //align: "center",
                                 templet: function(data) {
                                     if (data.stauts == 0) {
                                         return '标准规则'
@@ -505,13 +509,13 @@
                             {
                                 field: 'modifytime',
                                 title: '更新时间',
-                                align: 'center',
+                                //align: 'center',
 
                             },
                             {
-                                width: '10%',
-                                align: 'right',
-                                flxed: 'right',
+                                width: 100,
+                                // align: 'right',
+                                // flxed: 'right',
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }
@@ -521,7 +525,8 @@
                     event: true,
                     page: true,
                     limit: 15,
-                    skin: 'nob',
+                    skin: 'line',
+                    even: true,
                     limits: [5, 10, 15],
                     done: function(res, curr, count) {
                         table_data = res.data;

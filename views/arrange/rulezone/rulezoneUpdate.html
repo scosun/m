@@ -30,7 +30,7 @@
             /*右侧菜单*/
             .layui-right-nav {
                 position: absolute;
-                right: 20px;
+                right: 5px;
                 top: 0;
                 height: 3.5rem;
                 line-height: 3.5rem;
@@ -72,14 +72,11 @@
 		</style>
     </head>
     <body>
-        <header>
-            <span class="layui-breadcrumb" style="line-height: 3.5rem;">
-                <a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
-				<a onclick="asd()">
-					<cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新</cite>
-				</a>
-
-				<a>
+	<header>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+				<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
+				<a onclick="asd()" href="javascript:;"><cite>&nbsp;刷新</cite></a>
+				<!-- <a>
 					<cite>
 						<div class="layui-btn-group">
 							<button type="button" class="layui-btn layui-ds" data-type="add">座区设置</button>
@@ -88,16 +85,19 @@
 							<button type="button" class="layui-btn layui-ds" data-type="close">关闭</button>
 						</div>
 					</cite>
-				</a>
-            </span>
-            
-        </header>
-
-
+				</a> -->
+		</span>
+		<span class="layui-right-nav">
+			<i id="nav-Setupthe" data-type="add" class="layui-ds" data="座区设置"><img src="../../../images/Setupthe.png"></i>
+			<i id="nav-election" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.png"></i>
+			<i id="nav-Closedlist" data-type="hidden" class="layui-ds" id="hidden" data="关闭座区列表"><img src="../../../images/Closedlist.png"></i>
+			<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		</span>
+		<!-- 右侧菜单 end-->
+	</header>
         <footer>
             <table id="zonetable" lay-filter="zonetable" style="margin-top: -0.6125rem;"></table>
             <!-- <input type="text" name="roomid" id="roomid" style="display: none;">
-
             <input type="text" name="ruleid" id="ruleid" style="display: none;"> -->
         </footer>
         <script type="text/html" id="test-table-operate-barDemo">
@@ -215,20 +215,20 @@
        	                        field: 'seatsnum',
        	                        title: '座位数量',
        	                        
-       	                        align: "center"
+       	                        //align: "center"
        	
        	                    }, {
        	                        field: 'rulename',
        	                        title: '座区名称',
        	                        
-       	                        align: "center"
+       	                       // align: "center"
        	
        	                    },
        	                    {
        	                        field: 'ordernum',
        	                        title: '序号',
        	                       
-       	                        align: "center",
+       	                        //align: "center",
        	                        sort: true,
        	                        templet: function(data) {
        	                            i++;
@@ -243,9 +243,9 @@
        	                        align: "center"
        	
        	                    }, {
-       	                        width: '15%',
-       	                        align: 'center',
-       	                        flxed: 'right',
+       	                        width: 120,
+       	                        //align: 'center',
+       	                        //flxed: 'right',
        	                        title: '操作',
        	                        toolbar: '#test-table-operate-barDemo'
        	                    }
@@ -439,7 +439,7 @@
        				type: 2,
        				title: '<p style="">座区设置</p>',
        				content: 'rule_form.html',
-       				area: ['50%', '55%'],
+       				area: ['50%', '40%'],
        				btn: ['确定', '取消'],
        				yes: function(index, layero) {
                         var body = layer.getChildFrame('body', index);
@@ -486,7 +486,7 @@
 					type: 2,
 					title: '<p style="">重选座区</p>',
 					content: 'rule_form.html',
-					area: ['50%', '55%'],
+					area: ['50%', '40%'],
 					btn: ['确定', '取消'],
 					// shadeClose: true,
 					yes: function(index, layero) {
@@ -511,7 +511,7 @@
        				content: 'rule_form.html'
        					// ,maxmin: true
        					,
-       				area: ['50%', '55%'],
+       				area: ['50%', '40%'],
        				btn: ['确定', '取消'],
        				// shadeClose: true,
        				yes: function(index, layero) {

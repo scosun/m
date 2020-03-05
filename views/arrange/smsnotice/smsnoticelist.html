@@ -40,7 +40,9 @@
 	.layui-btn-group .layui-btn:only-child {
     		border-radius:2px;
 	}
-
+	.layui-btn+.layui-btn {
+		margin-left: 0;
+	}
 </style>
 </head>
 <body>
@@ -76,7 +78,13 @@
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
 					<script type="text/html" id="test-table-operate-barDemo">
-						<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a><a class="layui-btn layui-btn-xs" style="background-color: #FF5722;" lay-event="del">删除</a>
+						<a class="layui-btn layui-btn-xs" lay-event="personedit">人员编辑</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="sendmail">发送短信</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="record">短信记录</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="particulars">人员详情</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="nosend">错误发送</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="edit">修改</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="del">删除</a>
 					</script>
 				</div>
 			</div>

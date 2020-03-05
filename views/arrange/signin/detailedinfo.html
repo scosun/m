@@ -24,13 +24,16 @@
         .detailedinfo p.c{
             color:#ff0000
         }
+        .detailedinfo p.d{
+            color:#0f0f0f
+        }
 
 
     </style>
 </head>
 <body>
 <div style="padding:10px 20px">
-    <div class="detailedinfo">
+    <div class="detailedinfo" id="detailedinfo">
         <p>共<span  id="total"></span>条记录</p>
         <p>委员总数：<span id="totals"></span></p>
         <p>已报到：<span id="report"></span></p>
@@ -40,5 +43,63 @@
         <p>报到率：<span id="rate"></span></p>
     </div>
 </div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'user', 'table', 'tree', 'util', 'laydate'], function () {
+				var $ = layui.$,
+					form = layui.form,
+					element = layui.element,
+					table = layui.table,
+					layer = layui.layer,
+					tree = layui.tree,
+					laydate = layui.laydate,
+					util = layui.util,
+					router = layui.router();
+				
+				// var url = "http://127.0.0.1:8083"
+                var url = "https://f.longjuli.com"
+                var uri = window.location.search;
+			var str = uri.substr(4);
+			
+                $.ajax({
+                            async: false,
+                            type: "get",
+                            url: url + "/meetingcanhui/statistical",
+                            dataType: "json",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            data: {
+                                meetingId:str,
+                               
+
+                            },
+                            //成功的回调函数
+                            success: function (msg) {
+                              
+                               $('#total').text(msg.total)
+                                $('#totals').text(msg.total)
+                                $('#report').text(msg.report)
+                                $('#ben').text(msg.ben)
+                               $('#dai').text(msg.dai)
+                                $('#wei').text(msg.wei)
+                                $('#rate').text(msg.rate+"%")
+                                $.each(msg.address,function(key,val){
+                                    $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;'   +  val.address  +    '<span >&nbsp;&nbsp;&nbsp;应到: '   +val.headcount+'  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;'+val.fullycount+'</span></p>')
+                                   
+                                })
+                            },
+                            //失败的回调函数
+                            error: function () {
+                                console.log("error")
+                            }
+                        })
+				
+		})
+		</script>
 </body>
 </html>

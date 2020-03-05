@@ -49,8 +49,7 @@
 
 /*.layui-table td, .layui-table th {font-size: 14px;}*/
 .layui-table-cell {
-    line-height: 30px;
-    padding: 0 10px 0 15px;
+    padding: 0 10px;
 }
 
 /*meeting_room.html*/

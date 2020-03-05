@@ -132,7 +132,7 @@ layui.config({
                         title: 'ID',
                         align: 'left',
                         unresize: 'false',
-                        width: '7%'
+                        width: 80
                     },
                     {
                         field: 'name',
@@ -150,6 +150,7 @@ layui.config({
                         title: '联系电话'
                     },
                     {
+                        width: 80,
                         field: 'isleave',
                         align: 'left',
                         title: '是否请假',
@@ -173,9 +174,9 @@ layui.config({
 
                     },
                     {
-                        width: '10%',
-                        align: 'right',
-                        flxed: 'right',
+                        width: 140,
+                        //align: 'right',
+                        //flxed: 'right',
                         title: '操作',
                         toolbar: '#table-content-list',
                     }
@@ -185,7 +186,8 @@ layui.config({
             event: true,
             page: true,
             limit: 15,
-            skin: 'nob',
+            skin: 'line',
+            even: true,
             limits: [5, 10, 15],
             done: function (res, curr, count) {
                 table_data = res.data;
@@ -275,9 +277,9 @@ layui.config({
                     body.find('#isconvenor').val(age.isconvenor)
                     body.find('#specialid').val(age.specialid)
                     body.find('#contacts').val(age.contacts)
-                    body.find('#contactsphone').val(age.contactsphone)
+                    body.find('#contactsphone').val(age.contactsPhone)
                     body.find('#contacts').val(age.contacts)
-                    body.find('#cardid').val(age.cardid)
+                    body.find('#cardid').val(age.cardId)
                     body.find('#convenornum').val(age.convenornum)
                     body.find('#isconvenor_list').val(age.isconvenor)
                     body.find('#specialid').val(age.specialid)
@@ -333,7 +335,7 @@ layui.config({
                 type: 2,
                 title: '人员请假',
                 content: 'attender_leave.html',
-                area: ['45%', '35%'],
+                area: ['45%', '40%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
                     var body = layer.getChildFrame('body', index);
@@ -498,7 +500,6 @@ layui.config({
                     layout: ['prev', 'page', 'next', 'count', 'skip']
                 },
                 cols: [
-
                     [ //表头
                         {
                             type: 'checkbox',
@@ -509,12 +510,12 @@ layui.config({
                             title: 'ID',
                             align: 'left',
                             unresize: 'false',
-                            width: '7%'
+                            width: 80
                         },
                         {
                             field: 'name',
                             title: '姓名',
-                            align: 'left',
+                            align: 'leftleft',
                         },
                         {
                             field: 'duties',
@@ -526,6 +527,23 @@ layui.config({
                             align: 'left',
                             title: '联系电话'
                         },
+                        {
+                            width: 80,
+                            field: 'isleave',
+                            align: 'left',
+                            title: '是否请假',
+                            templet: function(data) {
+                                if (data.isleave == 0) {
+                                    return '参会'
+                                }
+                                if (data.isleave == 1) {
+                                    return '请假'
+                                }
+                                if (data.isleave == undefined) {
+                                    return ''
+                                }
+                            },
+                        },
 
                         {
                             field: 'modifytime',
@@ -534,19 +552,21 @@ layui.config({
 
                         },
                         {
-                            width: '10%',
-                            align: 'right',
-                            flxed: 'right',
+                            width: 140,
+                            //align: 'right',
+                            //flxed: 'right',
                             title: '操作',
                             toolbar: '#table-content-list',
                         }
                     ]
                 ],
 
+
                 event: true,
                 page: true,
                 limit: 15,
-                skin: 'nob',
+                skin: 'line',
+                even: true,
                 limits: [5, 10, 15],
                 done: function (res, curr, count) {
                     table_data = res.data;

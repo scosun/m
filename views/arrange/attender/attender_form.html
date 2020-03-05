@@ -20,7 +20,7 @@
 	<div style="padding: 20px 20px 0 0;">  
 		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
 			<div class="layui-form-item">
-				<label class="layui-form-label">会议室名称:</label>
+				<label class="layui-form-label">会议室名称</label>
 				<div class="layui-input-block">
 					<select name="meeting_list" lay-filter="component-form-select" id="meeting_list" class="meeting_list" style="width: 400px">
 						<option value="">请选择会议</option>
@@ -29,13 +29,13 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">姓名:</label>
+				<label class="layui-form-label">姓名</label>
 				<div class="layui-input-block">
 					<input type="text" name="author" lay-verify="required" placeholder="请输入姓名(必填)" autocomplete="off" id="name" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">性别:</label>
+				<label class="layui-form-label">性别</label>
 				<div class="layui-input-block">
 					<select name="sexid" id="sexid">
 						<option value="" selected="selected">请选择性别</option>
@@ -45,69 +45,84 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">单位:</label>
+				<label class="layui-form-label">单位</label>
 				<div class="layui-input-block">
 					<input type="text" name="company" lay-verify="required" placeholder="请输入单位(必填)" autocomplete="off" id="company"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">职务:</label>
+				<label class="layui-form-label">职务</label>
 				<div class="layui-input-block">
 					<input type="text" name="duties" lay-verify="required" placeholder="请输入职务(必填)" autocomplete="off" id="duties"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">常用手机号:</label>
+				<label class="layui-form-label">常用手机号</label>
 				<div class="layui-input-block">
 					<input type="text" name="phone1" lay-verify="required" placeholder="请输入常用手机号(必填)(接收回复各类信息)" autocomplete="off" id="phone1"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">备用手机号:</label>
+				<label class="layui-form-label">备用手机号</label>
 				<div class="layui-input-block">
-					<input type="text" name="phone2" lay-verify="required" placeholder="请输入备用手机" autocomplete="off" id="phone2" class="layui-input">
+					<input type="text" name="phone2"  placeholder="请输入备用手机" autocomplete="off" id="phone2" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">紧急联系人:</label>
+				<label class="layui-form-label">紧急联系人</label>
 				<div class="layui-input-block">
-					<input type="text" name="contacts" lay-verify="required" placeholder="请输入紧急联系人(办公秘书或者其他固定联系人)" autocomplete="off" id="contacts"
+					<input type="text" name="contacts"  placeholder="请输入紧急联系人(办公秘书或者其他固定联系人)" autocomplete="off" id="contacts"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">紧急联系人手机:</label>
+				<label class="layui-form-label">紧急联系人手机</label>
 				<div class="layui-input-block">
-					<input type="text" name="contactsphone" lay-verify="required" placeholder="请输入紧急联系人手机号" autocomplete="off" id="contactsphone"
+					<input type="text" name="contactsphone" placeholder="请输入紧急联系人手机号" autocomplete="off" id="contactsphone"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">人员证件编号:</label>
+				<label class="layui-form-label">人员证件编号</label>
 				<div class="layui-input-block">
 					<input type="text" name="cardid" lay-verify="required" placeholder="请输入人员证件编号(大会证件编号)" autocomplete="off" id="cardid"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">属性列表:</label>
+				<label class="layui-form-label">属性列表</label>
 				<div class="layui-input-block">
 					<div id="tree"></div>
 				</div>
 				
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">证件照片:</label>
+			<!-- <div class="layui-form-item">
+				<label class="layui-form-label">证件照片</label>
 				<div class="layui-card-body">
 					<div class="layui-upload-drag" id="test-upload-drag">
 						<i class="layui-icon"></i>
 						<p>点击上传，或将证件照片拖拽到此处</p>
 					</div>
 				</div>
+			</div> -->
+
+			<div class="layui-form-item" style="position: relative;">
+				<label class="layui-form-label">证件照片</label>
+				<div class="layui-card-body" style="position: absolute;left: 135px;">
+					<!-- <div id="test-upload-image" style="float: left;"><img src="https://f.longjuli.com/upload/269/f50ad4b6b31a46afaa5324ca29d10de8.png" style="width: 130px; height: 150px;"></div> -->
+					<div id = "test-upload-image" style="float: left;"></div>
+					<div class="layui-upload-drag" id="test-upload-drag" style="float: left;">
+						<i class="layui-icon"></i>
+						<p>点击上传，或将证件照片拖拽到此处</p>
+					</div>
+				</div>
 			</div>
+
+
+
 				<!-- <div class="layui-form-item">
 					<div class="layui-col-md12">
 						<div class="layui-card">
