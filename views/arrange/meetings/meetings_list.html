@@ -1,203 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<title>控制管理</title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
-<style type="text/css">
-.layui-btn {background-color: #666;}
-.layui-btn-danger {background-color: #FF5722;}
-.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
-html{background-color: #fff;}
-.layui-btn+.layui-btn {
-    margin-left: 0
-}
-</style>
-</head>
-<body>
-<div class="layui-fluid" style="padding:0">
-	<div class="layui-col-md12">
-		<div class="layui-row grid-demo grid-demo-bg1">
+	<head>
+		<meta charset="utf-8">
+		<title>会议室</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+		<style type="text/css">
+			.layui-btn {background-color: #666;}
+			.layui-btn-danger {background-color: #FF5722;}
+			.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid">
 			<div class="layui-col-md12">
-				<div class="layui-card">
-					<div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding: 8px 15px 4px;">
-						<span class="layui-breadcrumb">
-							<a><cite>控制管理列表</cite></a>
-							<a onclick="asd()" href="javascript:;"><cite>刷新</cite></a>
-						</span>
+				<div class="layui-row grid-demo grid-demo-bg1">
+					<div class="layui-col-md12">
+
 					</div>
-				</div>
-			</div>
-			<div class="layui-col-md12">
-				<div class="layui-card">
-					<div class="layui-card-body">
-						<div style="height:38px;margin-bottom: 10px;">
-							<!-- 右侧筛选条件 -->
-							<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
-								<div class="layui-inline">
-									<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="test-table-demoReload" autocomplete="off">
+					<div class="layui-col-md12">
+						<div class="layui-card">
+							<div class="layui-card">
+								<div class="layui-card-header">多会场管理</div>
+								<div class="layui-card-body">
+									<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+										<button class="layui-btn layui-ds" data-type="add">增加</button>
+
+										<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+										<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+										<button class="layui-btn" data-type="isAll">验证是否全选</button>
+
+									</div>
+									<div>
+										<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+									</div>
+									<script type="text/html" id="table-zone-list">
+										<a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size: 1.5625rem;">&#xe62d;</a>
+									</script>
+									<script type="text/html" id="table-content-list">
+										<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>
+										<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+									</script>
 								</div>
-								<button class="layui-btn" data-type="reload">搜索</button>
 							</div>
-							<!-- 右侧筛选条件 end-->
 						</div>
-						<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
-						<script type="text/html" id="table-zone-list">
-							<a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>
-						</script>
-						<script type="text/html" id="table-content-list">
-							<a class="layui-btn layui-btn-xs layui-dd" lay-event="setUp" data-type="setUp">设置</a>
-							<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="bindingList" data-type="bindingList">绑定列表</a>
-						</script>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+		</div>
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script type="text/javascript">
+			var tablezonetable;
+			layui.config({
+					base: '../../../layuiadmin/' //静态资源所在路径
+				}).extend({
+					index: 'lib/index' //主入口模块
+				}).use(['index', 'user', 'table'], function() {
+						var $ = layui.$,
+						setter = layui.setter,
+						admin = layui.admin,
+						form = layui.form,
+						element = layui.element,
+						table = layui.table,
+						layer = layui.layer,
+						datas = null,
+						router = layui.router();
+					
+					$.ajax({
+						url: "https://www.longjuli.com/ajax",
+						type: "POST",
+						data: {
+							"a": "s1",
+							"t": "roomlist"
+						},
+						async: false,
+						success: function(data) {
+							console.log(data.data)
 
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script type="text/javascript">
-var tablezonetable;
-layui.config({
-	base: '../../../layuiadmin/' //静态资源所在路径
-}).extend({
-	index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'table'], function() {
-		var $ = layui.$,
-		setter = layui.setter,
-		admin = layui.admin,
-		form = layui.form,
-		element = layui.element,
-		table = layui.table,
-		layer = layui.layer,
-		datas = null,
-		router = layui.router();
-	
-	$.ajax({
-		url: "https://www.longjuli.com/ajax",
-		type: "POST",
-		data: {
-			"a": "s1",
-			"t": "roomlist"
-		},
-		async: false,
-		success: function(data) {
-			console.log(data.data)
+														table.render({
+															elem: '#test-table-operate',
+															data: data.data,
+															height: 515,
+															page: true,
+															skin: 'line',
+															page: true //开启分页
+																,
+															limits: [5, 10, 15] //显示
+																,
+															limit: 10 //每页默认显示的数量
+																,
+															cols: [
+																[{
+																		type: 'checkbox',
+																		fixed: 'left'
+																	},
+																	{
+																		field: 'roomid',
+																		width: '7%',
+																		title: '会议室ID',
+																		sort: true
+																	}, {
+																		field: 'roomname',
+																		width: '18%',
+																		title: '会议室名称',
+																		align: "center"
+																	}, {
+																		field: 'templatefilename',
+																		width: '12%',
+																		title: '模板名称',
+																		sort: true
+																	}, {
+																		field: 'seatrule',
+																		width: '12%',
+																		title: '编排规则'
+																	}, {
+																		width: '12%',
+																		align: 'center',
+																		title: '座区图',
+																		toolbar: '#table-zone-list'
+																	}, {
+																		field: 'experience',
+																		width: '25%',
+																		title: '更新时间',
+																		align: "center",
+																		sort: true
+																	}, {
+																		width: '11.3%',
+																		align: 'center',
+																		title: '操作',
+																		toolbar: '#table-content-list'
+																	}
+							
+																]
+															]
+														})
 
-			table.render({
-				elem: '#test-table-operate',
-				data: data.data,
-				//height: 515,
-				page: true,
-				skin: 'line',
-				even: true,
-				limits: [5, 10, 15] //显示
-					,
-				limit: 10 //每页默认显示的数量
-					,
-				cols: [
-					[{
-						field: 'roomid',
-						width: '15%',
-						title: 'ID',
-						sort: true
-					}, {
-						field: 'roomname',
-						title: '会议室名称',
-						//align: "center"
-					}, {
-						field: 'templatefilename',
-						width: '10%',
-						title: '座位数量',
-					}, {
-						field: 'templatefilename',
-						width: '20%',
-						title: '席签型号',
-					}, {
-						field: 'seatrule',
-						width: '10%',
-						title: '绑定数量'
-					}, {
-						width: '8%',
-						//align: 'center',
-						title: '查看',
-						toolbar: '#table-zone-list'
-					},{
-						width: 140,
-						//align: 'center',
-						title: '操作',
-						toolbar: '#table-content-list'
-					}
-					]
-				]
-			})
+						},
+						error: function(error) {
 
-		},
-		error: function(error) {
-			console.log(error)
-		}
-	})
+							console.log(error)
+						}
 
-	table.on('tool(test-table-operate)', function(obj) {
-		var age = obj.data;
-		if (obj.event === 'setUp') {
-			layer.open({
-				type: 2,
-				title: '电子席签设备连接设置',
-				content: 'meetings_setUp_pop.html',
-				//maxmin: true,
-				area: ['500px', '340px'],
-				btn: ['提交', '取消'],
-				yes: function(index, layero) {
-				},
-				success: function(layero, index) {
-				}
-			});
-		} else if (obj.event === 'bindingList') {
-			layer.open({
-				type: 2,
-				title: '绑定列表',
-				content: 'meetings_binding_list.html'
-					// ,maxmin: true
-					,
-				area: ['100%', '100%'],
-				scrollbar: false,
-				yes: function(index, layero) {
-				},
-				success: function(layero, index) {
-					var body = layer.getChildFrame('body', index);
-					body.find('#roomid').val(age.roomid)
-				}
-			});
-		} else if (obj.event === 'zonelist') {
-			layer.open({
-				type: 2,
-				title: '会议室座区图',
-				content: 'meetings_room_zq.html'
-					// ,maxmin: true
-					,
-				area: ['100%', '100%'],
-				scrollbar: false,
-				yes: function(index, layero) {
-				},
-				success: function(layero, index) {
-					var body = layer.getChildFrame('body', index);
-					body.find('#roomid').val(age.roomid)
-				}
-			});
-		}
-	})
-	
-})
-function asd() {
-	location.reload();
-}
-</script>
-</body>
-</html>
+					})
+
+				})
+				</script>
+				</body>
+				 </html >

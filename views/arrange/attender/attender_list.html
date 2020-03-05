@@ -1,148 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>编排规则</title>
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-        <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-        <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
-        <script src="../../../js/scosun.js"></script>
-        <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-        <style type="text/css">
-			.btnadd {
-            background: #666 url(../../../images/btnadd.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btndel {
-            background: #666 url(../../../images/btndel.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btncheckall {
-            background: #666 url(../../../images/btncheckall.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btndow {
-            background: #666 url(../../../images/btndow.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btnempty {
-            background: #666 url(../../../images/btnempty.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btnsearch {
-            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btnupload {
-            background: #666 url(../../../images/btnupload.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btnuploadimg {
-            background: #666 url(../../../images/btnuploadimg.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .btnsearch {
-            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
-            background-size: 1.2rem 1.2rem;
-            text-indent: -9999px;
-            }
-            .layui-btn+.layui-btn {
-            margin-left: 0;
-            }
-            .layui-card-body{
-                padding-top:12px
-            }
-    </style>
-</head>
-<body>
-    <div class="layui-col-md12">
-        <div class="layui-row grid-demo grid-demo-bg1">
-            <div class="layui-col-md12">
-                <div class="layui-card">
-                    <div class="layui-card">
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>人员</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+		<script src="/m/js/scosun.js"></script>	
+		</head>
+			<body>
+				<div class="layui-fluid">
+					<div class="layui-col-md12">
+						<div class="layui-row grid-demo grid-demo-bg1">
+							<div class="layui-col-md12">
 
-                        <div class="layui-card-body">
-                            <div>
-                                <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;"
-                                    id="group">
-                                    <!-- <button class="layui-btn" data-type="add">增加</button>
-                                    <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-                                    <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-                                    <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
-                                    <div class="dropdown-menu dropdown-hover">
-                                        <button class="layui-btn icon-btn">
-                                            &nbsp;带小三角 <i class="layui-icon layui-icon-drop"></i>
-                                        </button>
-                                        <ul class="dropdown-menu-nav">
-                                            <div class="dropdown-anchor"></div>
-                                            <li><a>1st menu item</a></li>
-                                            <li><a>2nd menu item</a></li>
-                                            <li><a>3rd menu item</a></li>
-                                        </ul>
-                                    </div>
+							</div>
+							<div class="layui-col-md12">
+								<div class="layui-card">
+									<div class="layui-card">
+										<div class="layui-card-header">人员列表</div>
+										<div class="layui-card-body">
+											<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+												<button class="layui-btn layui-ds" data-type="add">增加</button>
+												<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+												<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+												<button class="layui-btn" data-type="isAll">验证是否全选</button>
+											</div>
+											<div class="layui-input-inline" style="margin-bottom:10px;margin-left:20px;width: 400px">
+												<form class="layui-form" action="">
+													<select name="interest" lay-skin="select" lay-filter="component-form-select" style="width: 400px">
+														<option value="">选择会议</option>
+														<option value="" id="select_meets"></option>
+													</select>
+												</form>
+											</div>
+											<div>
+												<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+											</div>
 
-                                </div>
-                                
-                                <div class="layui-input-inline"
-                                    style="margin-bottom:10px;margin-left:10px;width: 25%">
-                                    <form class="layui-form" action="">
-                                        <select name="interest" lay-skin="select" lay-filter="component-form-select"
-                                                id="select-room">
-                                            <option value="-1">选择会议</option>
-                                            <option value="" id="select_meets"></option>
-                                        </select>
-                                    </form>
-                                </div>
-
-                                <!-- <div class="layui-btn-group test-table-operate-btn1" style="margin-left: 20px;margin-bottom: 10px;"
-                                    id="group">
-                                    <!-- <!-- <!-- <button class="layui-btn" data-type="add">增加</button>
-                                    <button class="layui-btn" data-type="getCheckData">获取选中行数据</button> -->
-                                <!-- <button class="layui-btn layui-ds" data-type="upload">批量导入</button>
-                                    <button class="layui-btn layui-ds" data-type="download">下载模板</button> -->
-                                <!-- </div> -->
-                                <!-- 右侧筛选条件 -->
-                                <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
-                                    <div class="layui-inline">
-                                        <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
-                                            autocomplete="off">
-                                    </div>
-                                    <button class="layui-btn layui-ds btnsearch" data-type="search" id="btnsearch"
-                                        data="搜索">搜索</button>
-                                </div>
-                                <!-- 右侧筛选条件 end-->
-                            </div>
-                            <div>
-                                <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate">
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script type="text/html" id="table-content-list">
-        {{#  if($.inArray("delperson", a) != -1){ }}<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="jia" data-type="delete">请假</a>{{#  } }}
-        {{#  if($.inArray("upperson", a) != -1){ }}<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>{{#  } }}
-        {{#  if($.inArray("delperson", a) != -1){ }}<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>{{#  } }}
-    </script>
-    <script src="../../../layuiadmin/layui/layui.js"></script>
-    <script src="../../../layuiadmin/layui/arrange/attender/attenderlist.js" type="text/javascript"
-        charset="utf-8"></script>
-</body>
-</html>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				<script type="text/html" id="table-content-list">
+					<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+                </script>
+				<script src="../../../layuiadmin/layui/layui.js"></script>
+				<script src="../../../layuiadmin/layui/arrange/attender/attenderlist.js" type="text/javascript" charset="utf-8"></script>
+			</body>
+		</html>

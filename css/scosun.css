@@ -1,108 +1,21 @@
 /*2019-11-17 scosun*/
 
 /*index.html*/
-.layadmin-side-shrink .layui-layout-admin .layui-logo {
-    background-image: url(../layuiadmin/style/res/logo.svg);
-}
-
-.layui-nav-tree .layui-nav-bar {
-    background-color: #ffce00;
-}
-
-.layui-nav-tree .layui-nav-child dd.layui-this a {
-    color: #000;
-}
-
-.layui-side-menu .layui-nav .layui-nav-item>a {
-    padding-top: 0px;
-    padding-bottom: 0px;
-}
-
-.layui-side-menu .layui-nav .layui-nav-itemed>.layui-nav-child {
-    padding: 0;
-}
-
-.layui-side-menu .layui-nav .layui-nav-child .layui-nav-child .no2 a {
-    padding-left: 80px;
-}
-
-.layui-nav-tree .layui-this,
-.layui-nav-tree .layui-this>a,
-.layui-nav-tree .layui-nav-child .no2 dd.layui-this,
-.layui-nav-tree .layui-nav-child .no2 dd.layui-this .no2 a {
+.layadmin-side-shrink .layui-layout-admin .layui-logo {background-image: url(../layuiadmin/style/res/logo.svg);}
+.layui-nav-tree .layui-nav-bar {background-color: #ffce00;}
+.layui-nav-tree .layui-nav-child dd.layui-this a {color:#000;}
+.layui-side-menu .layui-nav .layui-nav-item>a {padding-top: 0px; padding-bottom: 0px;}
+.layui-side-menu .layui-nav .layui-nav-itemed>.layui-nav-child {padding: 0;}
+.layui-side-menu .layui-nav .layui-nav-child .layui-nav-child .no2 a{padding-left:80px;}
+.layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-nav-child .no2 dd.layui-this, .layui-nav-tree .layui-nav-child .no2 dd.layui-this .no2 a {
     background-color: #ffce00 !important;
 }
-
 /*meeting.html*/
-.layui-btn {
-    background-color: #666;
-}
-
-.layui-btn-danger {
-    background-color: #FF5722;
-    margin-left: 0px !important;
-}
-
-.layui-laypage .layui-laypage-curr .layui-laypage-em {
-    background-color: #666;
-}
-
+.layui-btn {background-color: #666;}
+.layui-btn-danger {background-color: #FF5722;margin-left:0px!important;}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
 /*.layui-table td, .layui-table th {font-size: 14px;}*/
-.layui-table-cell {
-    padding: 0 10px;
-}
-
+.layui-table-cell {line-height: 30px;padding: 0 10px 0 15px;}
 /*meeting_room.html*/
-html {
-    background-color: #fff !important;
-}
-/*arrange/attender/attender_list.html*/
-.btnadd {
-    background: #666 url(../images/btnadd.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btndel{
-    background: #666 url(../images/btndel.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btncheckall{
-    background: #666 url(../images/btncheckall.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btndow{
-    background: #666 url(../images/btndow.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btnempty{
-    background: #666 url(../images/btnempty.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btnsearch{
-    background: #666 url(../images/btnsearch.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btnupload{
-    background: #666 url(../images/btnupload.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btnuploadimg{
-    background: #666 url(../images/btnuploadimg.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-    .btnsearch{
-    background: #666 url(../images/btnsearch.png) no-repeat center center;
-    background-size: 1.2rem 1.2rem;
-    text-indent: -9999px;
-    }
-
-
-
+html {background-color: #fff!important;}
 

@@ -8,49 +8,62 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-		<style>
-			html{
-				background-color: white;
-			}
-		</style>
 	</head>
 	<body>
 
-		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
-            <form class="layui-form" action="" lay-filter="component-form-group">
-				<div class="layui-form-item">
-				<label class="layui-form-label">规则模板</label>
-				<div class="layui-input-block">
-					<select class="dialogRuleSelect" id="ruleselect">
-						<option value="">请选择</option>
-						<option value="R1">R1-正向左右左排序</option>
-						<option value="R2">R2-反向左右左排序</option>
-						<option value="R3">R3-从左到右排序</option>
-						<option value="R4">R4-从右到左排序</option>
-						<option value="R5">R5-从上到下排序</option>
-						<option value="R6">R6-从下到上排序</option>
-						<option value="R7">R7-正向横向S型排序</option>
-						<option value="R8">R8-反向横向S型排序</option>
-						<option value="R9">R9-正向纵向S型排序</option>
-						<option value="R10">R10-反向纵向S型排序</option>
-					</select>
-				</div>
-			</div>
+		<div class="layui-fluid">
+			<div class="layui-card">
 
-			<div class="layui-form-item">
-				<label class="layui-form-label">规则模板</label>
-				<div class="layui-input-block">
-					<select class="dialogRuleSelect2" id="isincrement" name="isincrement">
-						<option value="">请选择</option>
-						<option value="0">上增下补</option>
-						<option value="1">上增下不补</option>
-						<option value="2">上不增下补</option>
-						<option value="3">上不增下不补</option>
-					</select>
+				<div class="layui-card-body" style="padding: 10px;">
+					<form class="layui-form" action="" lay-filter="component-form-group">
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">规则模板</label>
+							<div class="layui-input-block">
+								<select class="dialogRuleSelect" id="ruleselect">
+									<option value="-1">请选择</option>
+									<option value="R1">R1-正向左右左排序</option>
+									<option value="R2">R2-反向左右左排序</option>
+									<option value="R3">R3-从左到右排序</option>
+									<option value="R4">R4-从右到左排序</option>
+									<option value="R5">R5-从上到下排序</option>
+									<option value="R6">R6-从下到上排序</option>
+									<option value="R7">R7-正向横向S型排序</option>
+									<option value="R8">R8-反向横向S型排序</option>
+									<option value="R9">R9-正向纵向S型排序</option>
+									<option value="R10">R10-反向纵向S型排序</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">规则模板</label>
+							<div class="layui-input-block">
+								<select class="dialogRuleSelect2" id="isincrement" name="isincrement">
+									<option value="-1">请选择</option>
+									<option value="0">不自动增补</option>
+									<option value="1">自动增补</option>
+									<option value="2">下补不上补</option>
+								</select>
+							</div>
+						</div>
+
+
+
+
+
+						<div class="layui-form-item layui-layout-admin">
+							<!-- <div class="layui-input-block">
+								<div class="layui-footer" style="left: 0;">
+									<button class="layui-btn" lay-submit="" lay-filter="component-form-demo1" id="enterbtn">增加</button>
+									<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								</div>
+							</div> -->
+						</div>
+					</form>
 				</div>
 			</div>
-            </form>
-        </div>
+		</div>
 
 		<script src="../../../layuiadmin/layui/layui.js"></script>
 		<script type="text/javascript">

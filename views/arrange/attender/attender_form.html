@@ -7,20 +7,12 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-		<style type="text/css">
-			.layui-form-label{
-				width: 120px;
-			}
-			.layui-input-block {
-				margin-left: 150px;
-			}
-		</style>
 	</head>
 	<body>
-	<div style="padding: 20px 20px 0 0;">  
+           
 		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
 			<div class="layui-form-item">
-				<label class="layui-form-label">会议室名称</label>
+				<label class="layui-form-label">会议室名称:</label>
 				<div class="layui-input-block">
 					<select name="meeting_list" lay-filter="component-form-select" id="meeting_list" class="meeting_list" style="width: 400px">
 						<option value="">请选择会议</option>
@@ -29,13 +21,13 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">姓名</label>
+				<label class="layui-form-label">姓名:</label>
 				<div class="layui-input-block">
 					<input type="text" name="author" lay-verify="required" placeholder="请输入姓名(必填)" autocomplete="off" id="name" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">性别</label>
+				<label class="layui-form-label">性别:</label>
 				<div class="layui-input-block">
 					<select name="sexid" id="sexid">
 						<option value="" selected="selected">请选择性别</option>
@@ -45,90 +37,114 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">单位</label>
+				<label class="layui-form-label">单位:</label>
 				<div class="layui-input-block">
-					<input type="text" name="company" lay-verify="required" placeholder="请输入单位(必填)" autocomplete="off" id="company"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入单位(必填)" autocomplete="off" id="company"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">职务</label>
+				<label class="layui-form-label">职务:</label>
 				<div class="layui-input-block">
-					<input type="text" name="duties" lay-verify="required" placeholder="请输入职务(必填)" autocomplete="off" id="duties"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入职务(必填)" autocomplete="off" id="duties"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">常用手机号</label>
+				<label class="layui-form-label">常用手机号:</label>
 				<div class="layui-input-block">
-					<input type="text" name="phone1" lay-verify="required" placeholder="请输入常用手机号(必填)(接收回复各类信息)" autocomplete="off" id="phone1"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入常用手机号(必填)(接收回复各类信息)" autocomplete="off" id="phone1"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">备用手机号</label>
+				<label class="layui-form-label">备用手机号:</label>
 				<div class="layui-input-block">
-					<input type="text" name="phone2"  placeholder="请输入备用手机" autocomplete="off" id="phone2" class="layui-input">
+					<input type="text" name="author" lay-verify="required" placeholder="请输入备用手机" autocomplete="off" id="phone2" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">紧急联系人</label>
+				<label class="layui-form-label">紧急联系人:</label>
 				<div class="layui-input-block">
-					<input type="text" name="contacts"  placeholder="请输入紧急联系人(办公秘书或者其他固定联系人)" autocomplete="off" id="contacts"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入紧急联系人(办公秘书或者其他固定联系人)" autocomplete="off" id="contacts"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">紧急联系人手机</label>
+				<label class="layui-form-label">紧急联系人手机:</label>
 				<div class="layui-input-block">
-					<input type="text" name="contactsphone" placeholder="请输入紧急联系人手机号" autocomplete="off" id="contactsphone"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入紧急联系人手机号" autocomplete="off" id="contactsphone"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">人员证件编号</label>
+				<label class="layui-form-label">人员证件编号:</label>
 				<div class="layui-input-block">
-					<input type="text" name="cardid" lay-verify="required" placeholder="请输入人员证件编号(大会证件编号)" autocomplete="off" id="cardid"
+					<input type="text" name="author" lay-verify="required" placeholder="请输入人员证件编号(大会证件编号)" autocomplete="off" id="cardid"
 					 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">属性列表</label>
+				<label class="layui-form-label">分组:</label>
 				<div class="layui-input-block">
-					<div id="tree"></div>
+					<select name="group" lay-skin="select" lay-filter="component-form-group" id="group_list" style="width: 400px">
+						<option value="" selected="selected">请选择分组</option>
+						<option value="" id="select_group"></option>
+					</select>
 				</div>
-				
 			</div>
-			<!-- <div class="layui-form-item">
-				<label class="layui-form-label">证件照片</label>
-				<div class="layui-card-body">
-					<div class="layui-upload-drag" id="test-upload-drag">
-						<i class="layui-icon"></i>
-						<p>点击上传，或将证件照片拖拽到此处</p>
+			<div class="layui-form-item">
+				<label class="layui-form-label">党派:</label>
+				<div class="layui-input-block">
+					<select name="group" lay-skin="select" lay-filter="component-form-different" id="partyid_list" style="width: 400px">
+						<option value="" selected="selected">请选择党派</option>
+						<option value="" id="select_party"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">界别:</label>
+				<div class="layui-input-block">
+					<select name="group" lay-skin="select" lay-filter="component-form-different" id="different_list" style="width: 400px">
+						<option value="" selected="selected">请选择界面</option>
+						<option value="" id="select_different"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否召集人:</label>
+				<div class="layui-input-block">
+					<select name="group" lay-skin="select" lay-filter="component-form-isconvenor" id="isconvenor_list" style="width: 400px">
+						<option value="" selected="selected">请选择</option>
+						<option value="1">是</option>
+						<option value="2">不是</option>
+
+					</select>
+
+				</div>
+
+				<div class="layui-form-item" style="display: none;margin-top: 15px" id="convenornum_list">
+					<label class="layui-form-label">第几召集人:</label>
+					<div class="layui-input-block">
+						<input type="text" name="author" lay-verify="required" placeholder="请输入第几召集人" autocomplete="off" id="convenornum"
+						 class="layui-input">
 					</div>
 				</div>
-			</div> -->
-
-			<div class="layui-form-item" style="position: relative;">
-				<label class="layui-form-label">证件照片</label>
-				<div class="layui-card-body" style="position: absolute;left: 135px;">
-					<!-- <div id="test-upload-image" style="float: left;"><img src="https://f.longjuli.com/upload/269/f50ad4b6b31a46afaa5324ca29d10de8.png" style="width: 130px; height: 150px;"></div> -->
-					<div id = "test-upload-image" style="float: left;"></div>
-					<div class="layui-upload-drag" id="test-upload-drag" style="float: left;">
-						<i class="layui-icon"></i>
-						<p>点击上传，或将证件照片拖拽到此处</p>
+				<div class="layui-form-item" style="margin-top: 15px">
+					<label class="layui-form-label">特殊身份:</label>
+					<div class="layui-input-block">
+						<select name="group" lay-skin="select" lay-filter="component-form-different" id="special_list" style="width: 400px">
+							<option value="" selected="selected">请选择身份</option>
+							<option value="" id="select_special"></option>
+						</select>
 					</div>
 				</div>
-			</div>
-
-
-
-				<!-- <div class="layui-form-item">
+				<div class="layui-form-item">
 					<div class="layui-col-md12">
 						<div class="layui-card">
 							<div class="layui-card-header">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证件照片:</div>
 							<div class="layui-card-body">
-								<div class="layui-upload-drag" id="test-upload-drag" style="margin-left: 150px">
+								<div class="layui-upload-drag" id="test-upload-drag" style="margin-left: 100px">
 									<i class="layui-icon"></i>
 									<p>点击上传，或将证件照片拖拽到此处</p>
 								</div>
@@ -136,26 +152,56 @@
 						</div>
 					</div>
 
-				</div> -->
+				</div>
 
-				
 				<div class="layui-form-item" style="display: none;">
 					<div class="layui-input-block">
-						<input type="text" name="" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						 id="groupid" style="display: none;">
+					</div>
+				</div>
+				<div class="layui-form-item" style="display: none;">
+					<div class="layui-input-block">
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
 						 id="meetingid" style="display: none;">
 					</div>
 				</div>
-				<div class="layui-form-item layui-layout-admin layui-hide">
-                    <div class="layui-input-block">
-                        <div style="position: absolute;right: 0px;bottom: 0px;">
-                            <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                        </div>
-                    </div>
-                </div>
+				<div class="layui-form-item" style="display: none;">
+					<div class="layui-input-block">
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						 id="partyid" style="display: none;">
+					</div>
+				</div>
+				<div class="layui-form-item" style="display: none;">
+					<div class="layui-input-block">
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						 id="differentid" style="display: none;">
+					</div>
+				</div>
+				<div class="layui-form-item" style="display: none;">
+					<div class="layui-input-block">
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						 id="isconvenor" style="display: none;">
+					</div>
+
+				</div>
+				<div class="layui-form-item" style="display: none;">
+					<div class="layui-input-block">
+						<input type="text" name="meetingid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+						 id="specialid" style="display: none;">
+					</div>
+
+				</div>
+
+
+
+				<div class="layui-form-item layui-hide">
+					<input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
+					<input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
+				</div>
 			</div>
 		</div>
-	</div>
+
 		<script src="../../../layuiadmin/layui/layui.js"></script>
 		<script src="../../../layuiadmin/layui/arrange/attender/attenderform.js" type="text/javascript" charset="utf-8"></script>
 	</body>

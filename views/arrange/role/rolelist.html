@@ -1,305 +1,199 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<title>人员表单</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	</head>
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-card-body" style="padding: 10px;">
+					<form class="layui-form" action="" lay-filter="component-form-group">
+						<div class="layui-form-item">
+							<label class="layui-form-label">管理组:</label>
+							<div class="layui-input-block">
+								<input type="text" name="rolename" lay-verify="required" placeholder="请输入管理组名(必填,唯一)" autocomplete="off" id="rolename"
+								 class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">管理组描述:</label>
+							<div class="layui-input-block">
+								<input type="text" name="description" placeholder="请输入管理组描述" autocomplete="off" id="description" class="layui-input">
+							</div>
+						</div>
 
-<head>
-    <meta charset="utf-8">
-    <title>人员表单</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-</head>
+						<div class="layui-form-item">
 
-<body>
-    <div class="layui-fluid">
-        <div class="layui-card">
-            <div class="layui-card-body" style="padding: 10px;">
-                <form class="layui-form" action="" lay-filter="component-form-group">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">管理组</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="rolename" lay-verify="required" placeholder="请输入管理组名(必填,唯一)"
-                                autocomplete="off" id="rolename" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">管理组描述</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="description" placeholder="请输入管理组描述" autocomplete="off"
-                                id="description" class="layui-input">
-                        </div>
-                    </div>
+							<div class="layui-collapse">
 
+								<div class="layui-colla-item">
 
-                    <div class="layui-form-item">
+									<h2 class="layui-colla-title">用户权限</h2>
+									<div class="layui-colla-content layui-show">
+										<div class="layui-input-block" id="permission" style="margin-left: -7px;">
 
-                        <div class="layui-collapse">
+										</div>
+									</div>
+								</div>
+								<div class="layui-colla-item">
+									<h2 class="layui-colla-title">管理组权限</h2>
+									<div class="layui-colla-content layui-show">
+										<div class="layui-input-block" id="Guanpermission" style="margin-left: -7px;">
 
-                            <div class="layui-colla-item">
+										</div>
+									</div>
+								</div>
+								<div class="layui-colla-item">
+									<h2 class="layui-colla-title">权限查询权限</h2>
+									<div class="layui-colla-content layui-show">
+										<div class="layui-input-block" id="Quanpermission" style="margin-left: -7px;">
 
-                                <h2 class="layui-colla-title">用户权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="permission" style="margin-left: -7px;">
+										</div>
+									</div>
+								</div>
+								<div class="layui-colla-item">
+									<h2 class="layui-colla-title">管理员权限</h2>
+									<div class="layui-colla-content layui-show">
+										<div class="layui-input-block" id="personpermission" style="margin-left: -7px;">
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">管理组权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="Guanpermission" style="margin-left: -7px;">
+										</div>
+									</div>
+								</div>
+							</div>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">权限查询权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="Quanpermission" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">管理员权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="personpermission" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">视图显示权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="show" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">会议列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="meet" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">会议室列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="room" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">规则列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="rule" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">座区列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="setup" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">属性列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="attribute" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-colla-item">
-                                <h2 class="layui-colla-title">出席人员列表权限</h2>
-                                <div class="layui-colla-content layui-show">
-                                    <div class="layui-input-block" id="person" style="margin-left: -7px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <center>
-                            <div class="layui-form-item layui-layout-admin">
-                                <div class="layui-input-block">
-                                    <div class="layui-footer" style="left: 0;">
-                                        <button class="layui-btn" lay-submit="submit" lay-filter="component-form-demo1"
-                                            id="sub">提交</button>
-                                        <button type="button" class="layui-btn layui-btn-primary"
-                                            onclick="reloadwin()">重置</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </center>
+						</div>
+						<center>
+							<div class="layui-form-item layui-layout-admin">
+								<div class="layui-input-block">
+									<div class="layui-footer" style="left: 0;">
+										<button class="layui-btn" lay-submit="submit" lay-filter="component-form-demo1" id="sub">提交</button>
+										<button type="button" class="layui-btn layui-btn-primary" onclick="reloadwin()">重置</button>
+									</div>
+								</div>
+							</div>
+						</center>
 
 
-                </form>
-            </div>
-        </div>
-    </div>
+					</form>
+				</div>
+			</div>
+		</div>
 
-    </div>
-    <script src="../../../layuiadmin/layui/layui.js"></script>
-    <script>
-        layui.config({
-            base: '../../../layuiadmin/' //静态资源所在路径
-        }).extend({
-            index: 'lib/index' //主入口模块
-        }).use(['index', 'form', 'laydate', 'element'], function () {
-            var $ = layui.$,
-                admin = layui.admin,
-                element = layui.element,
-                layer = layui.layer,
-                laydate = layui.laydate,
-                form = layui.form;
-            var url = "https://f.longjuli.com"
-			/* var url = "http://127.0.0.1:8083"; */
-            $.ajax({
-                url: url + "/permission/findAll",
-                type: "get",
-                async: false,
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function (data) {
-                    console.log(data);
+		</div>
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'form', 'laydate', 'element'], function() {
+				var $ = layui.$,
+					admin = layui.admin,
+					element = layui.element,
+					layer = layui.layer,
+					laydate = layui.laydate,
+					form = layui.form;
 
-                    $.each(data.data, function (index, item) {
+				$.ajax({
+					url: "http://140.143.237.247:8083/permission/findAll",
+					type: "get",
+					async: false,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						console.log(data);
 
-                        if (item.type == 0) {
-                            $("#permission").append("<input type='checkbox' name='" +
-                                item.permissionId + "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 1) {
-                            $("#Guanpermission").append("<input type='checkbox' name='" +
-                                item.permissionId + "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 2) {
-                            $("#Quanpermission").append("<input type='checkbox' name='" +
-                                item.permissionId + "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 3) {
-                            $("#personpermission").append(
-                                "<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 4) {
-                            $("#show").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 5) {
-                            $("#meet").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 6) {
-                            $("#room").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 7) {
-                            $("#rule").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 8) {
-                            $("#setup").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 9) {
-                            $("#attribute").append("<input type='checkbox' name='" +
-                                item.permissionId + "' title='" + item.name +
-                                "'>")
-                        }
-                        if (item.type == 10) {
-                            $("#person").append("<input type='checkbox' name='" + item.permissionId +
-                                "' title='" + item.name +
-                                "'>")
-                        }
-                        console.log(item);
+						$.each(data.data, function(index, item) {
 
-                    })
-                    form.render()
+							if (item.type == 0) {
+								$("#permission").append("<input type='checkbox' name='" + item.permissionId + "' title='" + item.name +
+									"'>")
+							}
+							if (item.type == 1) {
+								$("#Guanpermission").append("<input type='checkbox' name='" + item.permissionId + "' title='" + item.name +
+									"'>")
+							}
+							if (item.type == 2) {
+								$("#Quanpermission").append("<input type='checkbox' name='" + item.permissionId + "' title='" + item.name +
+									"'>")
+							}
+							if (item.type == 3) {
+								$("#personpermission").append("<input type='checkbox' name='" + item.permissionId + "' title='" + item.name +
+									"'>")
+							}
+							console.log(item);
 
-                },
-                error: function (error) {
+						})
+						form.render()
 
-                    console.log(error)
-                }
+					},
+					error: function(error) {
 
-            })
-            form.on('submit(component-form-demo1)', function (data) {
-                data = data.field;
-                var a = [];
-                var name = data.rolename;
-                var description = data.description;
-                for (let key in data) {
-                    if (!isNaN(key)) {
-                        a.push(key)
-                    }
-                }
-                var b = a.join(",")
-                console.log(b)
-                $.ajax({
-                    url: url + "/role/addRole",
-                    type: "post",
-                    dataType: "json",
-                    contentType: 'application/json',
+						console.log(error)
+					}
 
-                    data: JSON.stringify({
-                        "description": description,
-                        "permissionId": b,
-                        "name": name,
-
-                    }),
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (data) {
-                        if (data.code === 0) {
-                            parent.layer.msg('添加成功');
-                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                            parent.reloads();
-							parent.layer.close(index);
-                        } else {
-                            layer.msg(data.msg, {
-                                icon: 5
-                            });
-                            // layer.close(index);
-                        }
-
-                    },
-                    error: function (error) {
-
-                        layer.msg(error.msg, {
-                            icon: 5
-                        });
-                        layer.close(index);
-                    }
-
-                })
+				})
+				form.on('submit(component-form-demo1)', function(data) {
+					data = data.field;
+					 var a=[];
+					var name=data.rolename;
+					var description=data.description;
+					for (let key in data) {
+						if(!isNaN(key)){
+								a.push(key)
+						}
+					}
+					 var b=a.join(",")
+					 console.log()
+					$.ajax({
+						url: "http://140.143.237.247:8083/role/addRole",
+						type: "post",
+						dataType: "json",
+						contentType:'application/json',
+						
+						data:JSON.stringify({
+							"description":description,
+							"permissionId":b,
+							"name":name,
+											
+						}),
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							if (data.code === 0) {
+								layer.msg('添加成功');
+								layer.close(index);
+							} else {
+								layer.msg(data.msg, {
+									icon: 5
+								});
+								// layer.close(index);
+							}
+											
+						},
+						error: function(error) {
+											
+							layer.msg(error.msg, {
+								icon: 5
+							});
+							layer.close(index);
+						}
+											
+					})
 
 
-                return false;
-            });
+					return false;
+				});
 
 
-        });
-    </script>
-</body>
-
+			});
+		</script>
+	</body>
 </html>

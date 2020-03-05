@@ -13,8 +13,6 @@
 			.layui-btn-danger {background-color: #FF5722;}
 			.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
 		</style>
-        <link rel="stylesheet" type="text/css" href="../../../../css/scosun.css"/>
-        <script src="../../../../js/scosun.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 
@@ -33,23 +31,14 @@
 					<div class="layui-card">
 						<div class="layui-card-header">界别</div>
 						<div class="layui-card-body">
-                            <div class="layui-row">
-                                <div class="layui-col-md10">
-                                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                                    	<button class="layui-btn layui-ds" data-type="add">增加</button>
-                                    	<button class="layui-btn layui-ds" data-type="getCheckData">全选</button>
-                                    	<button class="layui-btn layui-ds" data-type="getCheckLength">批量删除</button>
-                                    	<button class="layui-btn layui-ds" data-type="isAll">清空</button>
-                                    </div>
-                                </div>
-                                <div class="layui-col-md2">
-                                    <div class="layui-inline">
-                                        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
-                                    </div>
-                                    <button class="layui-btn layui-ds" data-type="search" lay-submit="" lay-filter="component-form-search" id="click">搜索</button>
-                                </div>
-                            </div>
-							
+							<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+								<button class="layui-btn" data-type="add">增加</button>
+
+								<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+								<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+								<button class="layui-btn" data-type="isAll">验证是否全选</button>
+
+							</div>
 
 							<table id="test-table-operate" lay-filter="test-table-operate"></table>
 
