@@ -9,7 +9,9 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/login.css" media="all">
-		<script src="/m/js/scosun1.js"></script>
+		<link rel="icon" type="image/png" sizes="16x16" href="../../images/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="../../css/scosun1.css" />
+		<script src="../../js/scosun1.js" type="text/javascript" charset="utf-8"></script>
 		<!-- <style type="text/css">
 			html {background-color: #20222A;}
 			.layui-btn {background-color: #ffce00;color: #000;font-size:16px;}
@@ -89,6 +91,7 @@
 					router = layui.router();
 
 				form.render();
+                var url="https://f.longjuli.com"
 
 				//提交
 				form.on('submit(LAY-user-reg-submit)', function(obj) {
@@ -103,13 +106,14 @@
 						$.ajax({
 								async: true,
 								type: "post",
-								url: "http://140.143.237.247:8083/user/register",
+								url: url+"/register",
 								dataType: "json",
 								data: {
 									"username": obj.field.cellphone,
 									"password": obj.field.password,
 									"vercode": obj.field.vercode,
-									"anotherName": obj.field.nickname
+									"anotherName": obj.field.nickname,
+                                    "salt": obj.field.cellphone
 								},
 								xhrFields: {
 									withCredentials: true

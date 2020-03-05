@@ -1,0 +1,16 @@
+<button οnclick="feedBackPrint();">测试打印</button>
+<iframe id="print" src="" frameborder="no"  style="width: 100%; height: 100%; display: none;"></iframe>
+<script>
+// 测试打印
+function feedBackPrint(){
+    $("#mainDiv").hide();
+    $("#print").show();
+    $("#print").attr("src","/printPage.html");
+}
+ 
+function printCallBack(){
+    $("#mainDiv").show();
+    $("#print").hide();
+    $("#print").attr("src","");
+}
+</script>

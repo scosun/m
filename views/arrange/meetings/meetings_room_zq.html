@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<link rel="stylesheet" href="meeting_room_zq.css" />
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+<link rel="stylesheet" href="../../../css/seat.css" media="all">
+<script src="../../../js/jquery-3.1.1.min.js"></script>
+<script src="/m/js/scosun.js"></script>
+</head>
+<body>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+				id="roomid" style="display: none;">
+		</div>
+	</div>
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+<script type="text/javascript">
+	layui.config({
+		base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+		index: 'lib/index' //主入口模块
+		}).use(['index', 'user', 'table'], function() {
+			var $ = layui.$,
+			form = layui.form,
+			element = layui.element,
+			table = layui.table,
+			layer = layui.layer,
+			router = layui.router();
+			var roomid = $("#roomid").val();
+			$.ajax({
+				url: "https://www.longjuli.com/ajax",
+				type: "POST",
+				async: true,
+				data: {
+					"a": "s",
+					"t": "seatzone",
+					"c": roomid
+				},
+				success: function(data) {
+					var datas = data.data
+					$("body").html(datas.code);
+				}
+			})
+		})
+</script>
+<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+<script src="meeting_room_zq.js" type="text/javascript" charset="utf-8"></script>
+</html>

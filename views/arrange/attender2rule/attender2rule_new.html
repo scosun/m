@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>表单组合</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<style type="text/css">
+.layui-form-label{
+	width: 150px;
+}
+.layui-input-block {
+	margin-left: 180px;
+}
+.left-select .layui-input-block{
+	margin-left: 0;
+	margin-right:0;
+	margin-top:10px;
+	width:150px;
+}
+.layui-btn {background-color: #666;}
+.layui-col-xs7 .layui-form-label{
+	width: 50px;
+	padding: 9px 10px;
+}
+.layui-col-xs7 .layui-input-block {
+	margin-left: 70px;
+	margin-right: 22px;
+}
+.layui-form-item{
+	position: relative;
+}
+.layui-form-item-close{
+	position: absolute;
+	right: 0;
+	top: 10px;
+	height: 18px;
+	width: 18px;
+}
+.layui-form-item-close .layui-icon {
+    font-size: 18px;}
+.mb10{
+	margin-bottom:10px;
+}
+.mb15{
+	margin-bottom:15px;
+}
+#c_red,#c_blue,#c_blue,#c_green,#c_purple,#c_yellow,#c_pink,.rulecolor{
+	display:inline-block;
+	width:16px;
+	height:16px;
+	vertical-align: middle;
+	margin-left:8px;
+}
+#c_red{background-color:red;}
+#c_blue{background-color:blue;}
+#c_green{background-color:#00a30c;}
+#c_purple{background-color:purple;}
+#c_yellow{background-color:yellow;}
+#c_pink{background-color:#ff89c9;}
+.c_green{color:#00a30c;}
+.treeHeightOf{height: 190px;overflow: scroll}
+.pl40{padding-left: 40px;}
+.sort_table{
+	margin-top:10px;
+}
+.sort_table th{
+	text-align: left;
+	padding-top:5px;
+	padding-bottom:5px
+}
+.sort_table td{
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px
+}
+</style>
+</head>
+<body>
+<!-- 新增弹框-->
+<div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">对应关系方案名称</label>
+		<div class="layui-input-block">
+			<input type="text" id="programmename" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">会议名称</label>
+		<div class="layui-input-block">
+			<select name="interest" id="select_meet" lay-skin="select" lay-filter="component-form-select">
+				<option value="" ></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">人员属性类别选择</label>
+		<div class="layui-input-block" id="select_attributes" >
+			<!--
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			 
+			<input type="checkbox" name="" title="发呆" lay-skin="primary"> 
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary">
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary"> 
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary">
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary"> 
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary">
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary"> 
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary">
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary"> 
+			<input type="checkbox" name="" title="写作" lay-skin="primary">
+			<input type="checkbox" name="" title="发呆" lay-skin="primary">
+			-->
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">人员规则对应关系列表</label>
+		<div class="layui-input-block">
+			<button class="layui-btn" data-type="reload" id="reload_pop">编辑绑定</button>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label"></label>
+		<div id="rulesetups" class="layui-input-block">
+			<!-- <p class="mb10">R1 正向左右左排序<span id="c_green"></span></p>
+			<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</p>
+			<p class="mb10">R2 正向左右左排序<span id="c_pink"></span></p>
+			<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）、属性4（j/k/l）、属性4（j/k/l）、属性4（j/k/l）</p>
+			<p class="mb10">R3 正向左右左排序<span id="c_pink"></span></p>
+			<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</p> -->
+		</div>
+	</div>
+</div>
+
+
+<!-- 编辑绑定 弹框A -->
+<div class="layui-form" id="editBindA" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0; display: none">
+	<div class="layui-row">
+		<div class="layui-col-xs5">
+			<div style="padding-left: 40px;padding-top:10px">
+				<p class="mb10">名称：座区规则<span id="ruletype">R1</span> <span id="rulebgcolor" class="rulecolor"></span></p>
+				<p class="mb10">类型：<span id="rulename">正向左右左牌排序</span></p>
+				<p class="mb10">座位数：<span id="seatnum">32</span>个</p>
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button><br />
+				<button class="layui-btn " id="sortbtn" style="margin-top: 5px;width: 120px;">自定义排序</button>
+				<!-- <div class="layui-form-item left-select">
+					<div class="layui-input-block">
+						<select id="select_sortitems" name="sortitems" lay-skin="select" lay-filter="sortitems-form-select">
+							
+						</select>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<div class="layui-col-xs7">
+			<div id="test1" class="demo-tree-more treeHeightOf"></div>
+		</div>
+	</div>
+	<div id="attendees_count" class="pl40">
+		<!-- <p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p> -->
+	</div>
+</div>
+
+
+<!-- 新增筛选属性 弹框-->
+<div id="addScreen" class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0;display: none;">
+	<div class="layui-form-item">
+		<div id="add_attributes" class="layui-input-block" style="margin-left:30px">
+		</div>
+	</div>
+</div>
+
+<div id="sortScreen"  class="layui-form" lay-filter="component-form-group" style="padding: 20px 20px 0 0;display: none;">
+	<p style="padding:20px 0 0 20px">添加按以下方式排序的级别：</p>
+	<div style="margin:0 10px 0 20px;">
+		<table class="sort_table">
+			<thead>
+				<tr>
+					<th width="18%">级别序号</th>
+					<th width="">排序项</th>
+					<th width="20%">顺序</th>
+					<th width="40">操作</th>
+				</tr>
+			</thead>
+			<tbody id="sorttable">
+				
+				
+			</tbody>
+		</table>
+	</div>
+	<p style="padding:10px 0 0 20px"><button id="addsortbtn" class="layui-btn" data-type="reload">添加</button></p>
+</div>
+
+<!-- 编辑绑定 弹框B 
+<div class="layui-form" id="editBindB" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0; display: none">
+	<div class="layui-row">
+		<div class="layui-col-xs5">
+			<div style="padding-left: 40px;padding-top:10px">
+				<p class="mb10">名称：座区规则R1 <span id="c_pink"></span></p>
+				<p class="mb10">类型：正向左右左牌排序</p>
+				<p class="mb10">座位数：32个</p>
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button>
+				<div class="layui-form-item left-select">
+					<div class="layui-input-block">
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">请选择排序依据</option>
+							<option value="2">R2-正向左右左排序</option>
+							<option value="3">R3-正向左右左排序</option>
+							<option value="4">R4-正向左右左排序</option>
+							<option value="5">R5-正向左右左排序</option>
+							<option value="6">R6-正向左右左排序</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-xs7">
+			<div id="test2" class="demo-tree-more treeHeightOf"></div>
+		</div>
+	</div>
+	<div class="pl40">
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+	</div>
+</div>-->
+<!-- 编辑绑定 弹框C 
+<div class="layui-form" id="editBindC" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0; display: none">
+	<div class="layui-row">
+		<div class="layui-col-xs5">
+			<div style="padding-left: 40px;padding-top:10px">
+				<p class="mb10">名称：座区规则R1 <span id="c_pink"></span></p>
+				<p class="mb10">类型：正向左右左牌排序</p>
+				<p class="mb10">座位数：32个</p>
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button>
+				<div class="layui-form-item left-select">
+					<div class="layui-input-block">
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">请选择排序依据</option>
+							<option value="2">R2-正向左右左排序</option>
+							<option value="3">R3-正向左右左排序</option>
+							<option value="4">R4-正向左右左排序</option>
+							<option value="5">R5-正向左右左排序</option>
+							<option value="6">R6-正向左右左排序</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-xs7">
+			<div id="test3" class="demo-tree-more treeHeightOf"></div>
+		</div>
+	</div>
+	<div class="pl40">
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+	</div>
+</div>-->
+<!-- 编辑绑定 弹框D 
+<div class="layui-form" id="editBindD" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0; display: none">
+	<div class="layui-row">
+		<div class="layui-col-xs5">
+			<div style="padding-left: 40px;padding-top:10px">
+				<p class="mb10">名称：座区规则R1 <span id="c_pink"></span></p>
+				<p class="mb10">类型：正向左右左牌排序</p>
+				<p class="mb10">座位数：32个</p>
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button>
+				<div class="layui-form-item left-select">
+					<div class="layui-input-block">
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">请选择排序依据</option>
+							<option value="2">R2-正向左右左排序</option>
+							<option value="3">R3-正向左右左排序</option>
+							<option value="4">R4-正向左右左排序</option>
+							<option value="5">R5-正向左右左排序</option>
+							<option value="6">R6-正向左右左排序</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-xs7">
+			<div id="test4" class="demo-tree-more treeHeightOf"></div>
+		</div>
+	</div>
+	<div class="pl40">
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+	</div>
+</div>-->
+<!-- 编辑绑定 弹框E 
+<div class="layui-form" id="editBindE" action="" lay-filter="component-form-group" style="padding: 20px 20px 0 0; display: none">
+	<div class="layui-row">
+		<div class="layui-col-xs5">
+			<div style="padding-left: 40px;padding-top:10px">
+				<p class="mb10">名称：座区规则R1 <span id="c_pink"></span></p>
+				<p class="mb10">类型：正向左右左牌排序</p>
+				<p class="mb10">座位数：32个</p>
+				<button class="layui-btn newSX" data-type="reload">新增筛选属性</button>
+				<div class="layui-form-item left-select">
+					<div class="layui-input-block">
+						<select name="interest" lay-skin="select" lay-filter="component-form-select">
+							<option value="1">请选择排序依据</option>
+							<option value="2">R2-正向左右左排序</option>
+							<option value="3">R3-正向左右左排序</option>
+							<option value="4">R4-正向左右左排序</option>
+							<option value="5">R5-正向左右左排序</option>
+							<option value="6">R6-正向左右左排序</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-xs7">
+			<div id="test5" class="demo-tree-more treeHeightOf"></div>
+		</div>
+	</div>
+	<div class="pl40">
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+		<p class="mb10">筛选结果：20人</p>
+		<p class="mb15">详情：<span class="c_green">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</span></p>
+	</div>
+</div>-->
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="../../../layuiadmin/layui/arrange/attender2rule/attender2rulenew.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

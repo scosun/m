@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>表单组合</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">行数</label>
+		<div class="layui-input-block">
+			<input id="rownum" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">列数</label>
+		<div class="layui-input-block">
+			<input id="colnum" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<!-- <script src="../../../layuiadmin/layui/arrange/meet/meetcreatfrom.js"></script> -->
+<script>
+
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		router = layui.router();
+		
+		$('#colnum').on('keydown', function (event) {
+			if (event.keyCode == 13) {
+				var layer = layui.layer;
+				var rownum = +$("#rownum").val() || 0;
+				var colnum = +$("#colnum").val() || 0;
+				if(rownum > 0 && colnum > 0){
+					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               		parent.layer.close(index);		//关闭窗口
+					window.parent.creatSeats(rownum,colnum);
+				}else{
+					layer.msg('行，列数字输入错误');
+				}
+				return false
+			}
+		});
+})
+</script>
+</body>
+</html>

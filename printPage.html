@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>打印反馈单</title>
+    <script src="jquery.js"></script>
+    <style>
+        @page {
+            size: A4;
+            margin: 0mm;
+            @top-left {
+                display: none;
+            }
+            @bottom-center {
+                display: none;
+            }
+        }
+        .nextPage {
+            page-break-after: always;
+        }
+ 
+    </style>
+    <script type="text/javascript">
+           $(function () {
+            //可以从父窗口获取参数key，然后通过Ajax获取数据来显示在这个页面
+            var key=window.parent.printKey;
+            var callBack = window.parent.printCallBack;
+            $("title").text(title);
+            document.execCommand("print",false,null);
+            if($.isFunction(callBack)){
+                callBack(window.parent);
+            }
+        });
+    </script>
+</head>
+<body>
+<div>要打印的内容</div>
+</body>
+</html>
