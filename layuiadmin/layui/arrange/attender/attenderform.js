@@ -2,11 +2,15 @@
         base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','upload'], function(){
+    }).use(['index', 'form','upload','tree'], function(){
         var $ = layui.$
             ,upload = layui.upload
-            ,form = layui.form;
-
+            ,form = layui.form,
+            tree = layui.tree
+        var url="https://f.longjuli.com"
+        // var url = "http://127.0.0.1:8083"
+         var uploadfile =null;
+        var attributes = [];
         //监听提交
         var uploadInst = upload.render({
             elem: '#test-upload-normal'
@@ -36,18 +40,19 @@
         //渲染会议下拉框的ajax
         $.ajax({
             async: false,
-            type: "post",
-            url: "https://www.longjuli.com/ajax",
+            type: "get",
+            url: url+"/meeting/findAll",
             dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
             //成功的回调函数
             data: {
-                "a": "s",
-                "t": "meetinglist",
-                "f":"sel"
+               
             },
             success: function(msg) {
 
-                var data = msg.reverse();
+                var data = msg.data.reverse();
 
                 $.each(data, function(idx, con) {
 					$("#select_meet").after("<option value=" + con.id + ">" + con.name + "</option>");
@@ -63,133 +68,96 @@
                 console.log("error")
             }
         })
-        //渲染分组的下拉框
+        var data;
         $.ajax({
             async: false,
-            type: "post",
-            url: "https://www.longjuli.com/ajax",
-            dataType: "json",
+            type: "get",
+            url: url+"/attribute/findtree",
+            datatype: 'json',
+
+            xhrFields: {
+                withCredentials: true
+            },
             //成功的回调函数
-            data: {
-                "a": "s1",
-                "t": "attendergrouplist",
-            },
-            success: function(msg) {
-
-                var data = msg.data.reverse();
-
-                $.each(data, function(idx, con) {
-
-                    $("#select_group").after("<option value=" + con.groupid + ">" + con.groupname + "</option>");
-                })
-				
-				
-				$("#group_list").val($("#groupid").val());
-
-
+            success: function (msg) {
+                data = msg.data
 
             },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
+            error: function (error) {
+                console.log(error)
+            },
         })
-        //渲染党派的下拉框
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "https://www.longjuli.com/ajax",
-            dataType: "json",
-            //成功的回调函数
-            data: {
-                "a": "s1",
-                "t": "attenderpartylist",
-            },
-            success: function(msg) {
-
-                var data = msg.data.reverse();
-
-                $.each(data, function(idx, con) {
-
-                    $("#select_party").after("<option value=" + con.partyid + ">" + con.partyname + "</option>");
-                })
-	            $("#partyid_list").val($("#partyid").val());
-
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
+        //渲染
+        var inst1 = tree.render({
+            elem: '#tree'  //绑定元素
+            , data: data,
+            showCheckbox: true,
+            oncheck: function (obj) {
+                // console.log(obj.data); //得到当前点击的节点数据
+                // console.log(obj.checked.id); //得到当前节点的展开状态：open、close、normal
+                // console.log(obj.elem); //得到当前节点元素
+                if(obj.checked == true){
+                    if(obj.data.children.length !=0){
+                        $.each(obj.data.children,(idx,con)=>{
+                            attributes.push(con.id);
+                        })    
+                    }else{
+                        attributes.push(obj.data.id);
+                    }
+                    // console.log(attributes)  
+                }else{
+                    if(obj.data.children.length !=0){
+                        $.each(obj.data.children,(idx,con)=>{
+                            attributes.splice($.inArray(con.id,attributes),1)
+                        })    
+                    }else{
+                        var i = $.inArray(obj.data.id,attributes)
+                        // console.log(i)
+                    if( i != -1){
+                        attributes.splice(i,1)
+                    } 
+                    }
+                    
+                    // console.log(attributes)
+                   
+                }
             }
-        })
-        //渲染界面下拉框
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "https://www.longjuli.com/ajax",
-            dataType: "json",
-            //成功的回调函数
-            data: {
-                "a": "s1",
-                "t": "attenderdifferentlist",
-            },
-            success: function(msg) {
 
-                var data = msg.data.reverse();
-
-                $.each(data, function(idx, con) {
-
-                    $("#select_different").after("<option value=" + con.differentid + ">" + con.differentname + "</option>");
-                })
-				$("#different_list").val($("#differentid").val());
-
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
+        });
+        
         upload.render({
             elem: '#test-upload-drag'
-            ,url: '/upload/'
+            ,url: '/upload/',
+            auto: false,    
+            bindAction:'#btn99'
+            ,choose: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                obj.preview(function(index, file, result){
+                    // console.log(index); //得到文件索引
+                    // console.log(file);
+                    uploadfile = file //得到文件对象
+                    // console.log(uploadfile)
+                    // console.log(result); //得到文件base64编码，比如图片
+                    
+                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+                    
+                    //这里还可以做一些 append 文件列表 DOM 的操作
+                    
+                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                  });
+              }
             ,done: function(res){
                 console.log(res)
             }
         });
-        //渲染特殊身份下拉框
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "https://www.longjuli.com/ajax",
-            dataType: "json",
-            //成功的回调函数
-            data: {
-                "a": "s1",
-                "t": "attenderspeciallist",
-            },
-            success: function(msg) {
-
-                var data = msg.data.reverse();
-
-                $.each(data, function(idx, con) {
-
-                    $("#select_special").after("<option value=" + con.specialid + ">" + con.specialname + "</option>");
-                })
-				$("#special_list").val($("#specialid").val());
-
-
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
-        upload.render({
-            elem: '#test-upload-drag'
-            ,url: '/upload/'
-            ,done: function(res){
-                console.log(res)
-            }
-        });
+        
+        // upload.render({
+        //     elem: '#test-upload-drag'
+        //     ,url: '/upload/'
+        //     ,done: function(res){
+        //         console.log(res)
+        //     }
+        // });
         form.render();
         form.on('select(component-form-isconvenor)', function(data){
           if(data.value == 1){
@@ -199,5 +167,64 @@
           if(data.value == 2){
               $("#convenornum_list").css("display","none");
           }
+        });
+        form.on('submit(addmeeting)', function(data) {
+            console.log(data)
+            console.log()
+            if(uploadfile == null){
+                return layer.msg("请选择证件照片")
+            }
+            var formdata = new FormData();
+            formdata.append('file',uploadfile);
+            formdata.append('name',data.field.author);
+            formdata.append('cardId',data.field.cardid);
+            formdata.append('company',data.field.company);
+            formdata.append('contacts',data.field.contacts);
+            formdata.append('meetingId',data.field.meeting_list);
+            formdata.append('duties',data.field.duties);
+            formdata.append('phone1',data.field.phone1);
+            formdata.append('phone2',data.field.phone2);
+            formdata.append('sexid',data.field.sexid);
+            formdata.append('contactsPhone',data.field.contactsphone);
+            formdata.append('attributes',JSON.stringify(attributes));
+            formdata.append('seatid','');
+            formdata.append('sortItems','');
+            formdata.append('viproomId',0);
+            formdata.append('camera','');
+            formdata.append('compareimg1','');
+            formdata.append('compareimg2','');
+            formdata.append('compareimg3','');
+            
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url+"/meetingcanhui/addMeetingCanHui",
+                contentType:false,
+                processData: false,
+                data:formdata,
+                xhrFields: {
+                    withCredentials: true
+                },
+                //成功的回调函数
+                success: function (msg) {
+                    
+                    if(msg.code==0){
+                        parent.layer.msg(msg.msg)
+                        var index = parent.layer.getFrameIndex(window.name)
+                        parent.layer.close(index)
+                        parent.ajaxs(data.field.meeting_list)
+                    }else{
+                        parent.layer.msg(msg.msg)
+                        var index = parent.layer.getFrameIndex(window.name)
+                        parent.layer.close(index)
+                    }
+    
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+            })
+            
+            return false;
         });
     })

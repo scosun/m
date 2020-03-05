@@ -7,7 +7,9 @@
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
-		<script src="/m/js/scosun.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+		<script src="../../../js/scosun.js"></script>
+		<link rel="stylesheet" href="../../../css/seat.css" media="all">
 	</head>
 	<body>
 		<div class="layui-form-item">
@@ -29,24 +31,28 @@
 			 	element = layui.element,
 			 	table = layui.table,
 			 	layer = layui.layer,
-			 	router = layui.router();
-				var roomid = $("#roomid").val();
+				 router = layui.router();
+				 var url = "https://f.longjuli.com";
+				 var uri = window.location.search;
+			var str = uri.substr(1);
+			window.roomid = str.substring(str.indexOf("=")+1,str.length);
+			// console.log(roomid)
+			
 				$.ajax({
-					url: "https://www.longjuli.com/ajax",
-					type: "POST",
+					url: url+"/roomtemplate/findByIdTemplatecode",
+					type: "post",
 					async: true,
 					data: {
-						"a": "s",
-						"t": "seatzone",
-						"c": roomid
+						"id": roomid
 					},
 					success: function(data) {
 						var datas = data.data
-						$("body").html(datas.code);
+						console.log(datas)
+						$("body").html(datas.templatecode);
 					}
 				})
 		 })
 	</script>
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="jquery-3.1.1.min.js"></script>
 	<script src="meeting_room_zq.js" type="text/javascript" charset="utf-8"></script>
 </html>

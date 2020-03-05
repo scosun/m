@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>详细信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <style>
+        .detailedinfo{
+            font-size: 14px;
+        }
+        .detailedinfo p{
+            line-height: 30px;
+        }
+        .detailedinfo p.a{
+            color:#008908
+        }
+        .detailedinfo p.b{
+            color:#4600ff
+        }
+        .detailedinfo p.c{
+            color:#ff0000
+        }
+        .detailedinfo p.d{
+            color:#0f0f0f
+        }
+
+
+    </style>
+</head>
+<body>
+<div style="padding:10px 20px">
+    <div class="detailedinfo" id="detailedinfo">
+        <p>共<span  id="total"></span>条记录</p>
+        <p>委员总数：<span id="totals"></span></p>
+        <p>已报到：<span id="report"></span></p>
+        <p class="a" >本人：<span id="ben"></span></p>
+        <p class="b" >代理：<span id="dai"></span></p>
+        <p class="c" >未报到：<span id="wei"></span></p>
+        <p>报到率：<span id="rate"></span></p>
+    </div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'user', 'table', 'tree', 'util', 'laydate'], function () {
+				var $ = layui.$,
+					form = layui.form,
+					element = layui.element,
+					table = layui.table,
+					layer = layui.layer,
+					tree = layui.tree,
+					laydate = layui.laydate,
+					util = layui.util,
+					router = layui.router();
+				
+				// var url = "http://127.0.0.1:8083"
+                var url = "https://f.longjuli.com"
+                var uri = window.location.search;
+			var str = uri.substr(4);
+			
+                $.ajax({
+                            async: false,
+                            type: "get",
+                            url: url + "/meetingcanhui/statistical",
+                            dataType: "json",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            data: {
+                                meetingId:str,
+                               
+
+                            },
+                            //成功的回调函数
+                            success: function (msg) {
+                              
+                               $('#total').text(msg.total)
+                                $('#totals').text(msg.total)
+                                $('#report').text(msg.report)
+                                $('#ben').text(msg.ben)
+                               $('#dai').text(msg.dai)
+                                $('#wei').text(msg.wei)
+                                $('#rate').text(msg.rate+"%")
+                                $.each(msg.address,function(key,val){
+                                    $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;'   +  val.address  +    '<span >&nbsp;&nbsp;&nbsp;应到: '   +val.headcount+'  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;'+val.fullycount+'</span></p>')
+                                   
+                                })
+                            },
+                            //失败的回调函数
+                            error: function () {
+                                console.log("error")
+                            }
+                        })
+				
+		})
+		</script>
+</body>
+</html>

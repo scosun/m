@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>人员查询</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+<script src="../../../js/scosun.js"></script>
+<style type="text/css">
+	.layui-btn {background-color: #666;}
+	.layui-btn-danger {background-color: #FF5722;}
+	.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+	.w60{
+		width: 60px;
+	}
+	.w40{
+		width: 40px;
+	}
+	.textC{
+		text-align: center;
+	}
+	.layui-btn-sign-red,.layui-btn-sign-green {
+		height: 20px;
+		line-height: 20px;
+		padding: 0 4px;
+		font-size: 12px;
+		background-color: #fff;
+		border: 1px solid #e6e6e6;
+	}
+	.layui-btn-sign-red{color:#ff0000;border-color:#ff0000}
+	.layui-btn-sign-green{color:#008908;border-color:#008908}
+	.layui-btn-sign-red:hover{color:#fff;border-color:#ff0000;background-color: #ff0000;}
+	.layui-btn-sign-green:hover{color:#fff;border-color:#008908;background-color: #008908;}
+	.cursorD{cursor: default;}
+	.layui-btn-group .layui-btn:only-child {
+    		border-radius:2px;
+	}
+
+</style>
+</head>
+<body>
+<div class="layui-card layadmin-header">
+	<div class="layui-breadcrumb" lay-filter="breadcrumb">
+		<a lay-href="">主页</a>
+		<a><cite>组件</cite></a>
+		<a><cite>数据表格</cite></a>
+		<a><cite>数据操作</cite></a>
+	</div>
+</div>
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-body">
+					<div>
+                        <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                            <button class="layui-btn" data-type="allcheck">全选</button>
+						</div>
+                        <!-- 右侧筛选条件 -->
+                        
+                        <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                            <div class="layui-inline">
+                                <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload" autocomplete="off">
+                            </div>
+                            <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                        </div>
+                        <!-- 右侧筛选条件 end-->
+                    </div>
+						<!-- 右侧筛选条件 end-->
+					</div>
+					<table id="test-table-operate" lay-filter="test-table-operate" style="display: block;"></table>
+					<script type="text/html" id="test-table-operate-barDemo" >
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">人工审核</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">回复记录</a>
+                        <a class="layui-btn layui-btn-xs" style="background-color: #FF5722;" lay-event="del">删除</a>
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+    index: 'lib/index' //主入口模块
+}).use(['index', 'table', 'jquery'], function() {
+    var table = layui.table,
+        admin = layui.admin,
+        form = layui.form,
+        $ = layui.jquery;
+
+    // #test-table-operate
+    var url = "https://f.longjuli.com"
+    var uri = window.location.search;
+	var meetingid= uri.substr(11);
+    var devices = {};
+    var arrangeList = [];
+    $.ajax({
+        async: true,
+        type: "get",
+        url: url + "/meeting/findAll",
+        dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
+        //成功的回调函数
+        success: function (msg) {
+            var data = msg;
+            $.each(data.data, function (idx, con) {
+                $("#select_meets").after("<option value=" + con.id + ">" + con.name +
+                    "</option>");
+            })
+            form.render();
+        },
+        //失败的回调函数
+        error: function () {
+            console.log("error")
+        }
+    })
+    form.on('select(component-form-select)', function (data) {
+
+       
+    });
+    
+        table.render({
+        elem: '#test-table-operate',
+        // height: 'full-200',
+        //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
+        method: 'get',
+        // url: url+'/smsnotice/meetingByperson',
+          url: url+'/smsnotice/meetingByperson',
+        where:{
+            id: meetingid
+        },
+        xhrFields: {
+            withCredentials: true
+        },
+        page: {
+            layout: ['prev', 'page', 'next', 'count', 'skip']
+        },
+        
+        cols: [
+            [ //表头
+                {
+                    field: 'id',
+                    title: 'ID',
+                    width:60,
+                    align: 'center',
+                    unresize: 'false',
+                },
+                {
+                    field: 'name',
+                    title: '姓名',
+                    align: 'left',
+                }, {
+                    field: 'phone1',
+                    title: '手机号',
+                    align: 'left',
+                },
+                {
+                    field: 'company',
+                    title: '单位',
+                    align: 'left'
+                },
+                {
+                    field: 'duties',
+                    title: '职务',
+                    align: 'left'
+                },
+                 {
+                    field: 'isleave',
+                    title: '参会状态',
+                    align: 'left',
+                    toolbar: '#test-table-operate-barDemo'
+                },
+            ]
+        ],
+
+        event: true,
+        page: true,
+        limit: 15,
+        skin: 'nob',
+        limits: [5, 10, 15],
+        done: function(res, curr, count) {
+            table_data = res.data;
+            layer.closeAll('loading');
+            // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+            // layer.close(index);    //返回数据关闭loading
+        },
+    });
+        
+
+
+    window.onkeyup = function(ev) {
+        var key = ev.keyCode || ev.which;
+        if (key == 27) { //按下Escape
+            layer.closeAll('iframe'); //关闭所有的iframe层
+
+        }
+    }
+
+    var $ = layui.$,
+        active = {
+            allcheck: function() {
+                layer.open({
+                    type: 2,
+                    title: '发送短信',
+                    maxmin: true,
+                    area: ['60%', '60%'],
+                    btn: ['确定', '取消'],
+                    content: 'smsnoticeBymeetingsend.html',
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#ruleclick");
+                        submit.click();
+                    }
+                    // content: '/gkzytb/franchiser/rigthColumnJsonList'
+                });
+
+            },
+            detailedinfo: function() {
+                layer.open({
+                    type: 2,
+                    title: '详细信息',
+                    maxmin: true,
+                    area: ['60%', '60%'],
+                    //btn: ['确定', '取消'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: 'detailedinfo.html',
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#ruleclick");
+                        submit.click();
+                    }
+                    // content: '/gkzytb/franchiser/rigthColumnJsonList'n
+                });
+            },
+            add:function(){
+                if($('#select-room').val()==-1){
+                           return layer.msg("请选择会议")
+                       }
+                layer.open({
+                    type: 2,
+                    title: '人员编辑',
+                    maxmin: true,
+                    area: ['100%', '100%'],
+                    btn: ['确定', '取消'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: 'smsnoticebyMeetingadd.html?meetingid='+$('#select-room').val(),
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success:function(layero,index){
+                        
+                    }
+                }); 
+            }
+                       
+
+        };
+
+
+    //监听工具条
+    table.on('tool(test-table-operate)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'edit') {
+            layer.open({
+                type: 2,
+                //title: '收藏管理 (考生姓名：张无忌)',
+                title:data.name+'的短信回复记录',
+                shadeClose: false, //弹出框之外的地方是否可以点击
+                area: ['90%', '90%'],
+                maxmin: true,
+                btn: ['刷新', '返回'],
+                closeBtn: 1,
+                //offset: '-43px',
+                content: 'smsreplylist.html?meetingid='+meetingid+"&phone="+obj.data.phone1,
+                success: function(layero, index) {
+                    // var body = layui.layer.getChildFrame('body', index);
+                    // var roomid;
+                    // // 取到弹出层里的元素，并把编辑的内容放进去
+                    // body.find("#ruleid").val(data.id);
+                    // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                },
+                yes:function(index,layero){
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                         
+                }
+            });
+        }
+    });
+
+
+
+    $('.layui-ds').on('click', function() {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+});
+
+</script>
+</body>
+</html>

@@ -7,21 +7,29 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<style type="text/css">
+			.layui-form-label{
+				width: 100px;
+			}
+			.layui-input-block {
+				margin-left: 130px;
+			}
+		</style>
 	</head>
 	<body>
-		<div class="layui-fluid">
-			<div class="layui-card">
-				<div class="layui-card-body" style="padding: 10px;">
+		<!-- <div class="layui-fluid">
+			<div class="layui-card"> -->
+				<div class="layui-card-body" style="padding: 20px 20px 0 0;">
 					<form class="layui-form" action="" lay-filter="component-form-group">
 						<div class="layui-form-item">
-							<label class="layui-form-label">请输入用户名:</label>
+							<label class="layui-form-label">请输入用户名</label>
 							<div class="layui-input-block">
 								<input type="text" name="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off" id="username"
 								 disabled="disabled" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item" style="margin-top: 15px">
-							<label class="layui-form-label">管理组:</label>
+							<label class="layui-form-label">管理组</label>
 							<div class="layui-input-block">
 								<select name="group" lay-skin="select" lay-filter="component-form-different" id="group" style="width: 400px">
 									<option value="" selected="selected"></option>
@@ -30,7 +38,9 @@
 							</div>
 						</div>
 						<input type="text" name="use" lay-verify="required" placeholder="请输入用户名" autocomplete="off" id="use" style="display: none;"/>
-						 </form> </div> </div> </div> </div> <script src="../../../layuiadmin/layui/layui.js"></script>
+						 </form> </div> </div>
+						 <!-- </div> </div> -->
+						 <script src="../../../layuiadmin/layui/layui.js"></script>
 						<script>
 							layui.config({
 								base: '../../../layuiadmin/' //静态资源所在路径
@@ -43,9 +53,9 @@
 									layer = layui.layer,
 									laydate = layui.laydate,
 									form = layui.form;
-								
+                                    var url="https://f.longjuli.com"
 								$.ajax({
-									url: "http://140.143.237.247:8083/role/findAll",
+									url: url+"/role/findAll",
 									type: "get",
 									async: true,
 									xhrFields: {

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>绑定列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+<style type="text/css">
+.layui-btn {background-color: #666;}
+.layui-btn-danger {background-color: #FF5722;}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+html{background-color: #fff;}
+</style>
+</head>
+<body>
+<div class="layui-fluid" style="padding: 0;">
+	<div class="layui-col-md12">
+		<div class="layui-row grid-demo grid-demo-bg1">
+			<div class="layui-col-md12">
+				<div class="layui-card">
+					<div class="layui-card-body" style="height:28px;border-bottom: 1px solid #f6f6f6;padding: 8px 15px 4px;">
+						<span class="layui-breadcrumb"  style="height:28px;float: left;">
+							<a onclick="asd()"><cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新 </cite></a>
+						</span>
+						<div style="height:28px; float: left;">
+								　　会议室：<span>****G1526</span>　　设备型号：<span>阿里云电子墨水屏席签</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md12">
+				<div class="layui-card">
+					<div class="layui-card-body">
+						<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+						<script type="text/html" id="table-content-list">
+							<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit">修改</a>							
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+var tablezonetable;
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table'], function() {
+		var $ = layui.$,
+		setter = layui.setter,
+		admin = layui.admin,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		datas = null,
+		router = layui.router();
+	
+	$.ajax({
+		url: "https://www.longjuli.com/ajax",
+		type: "POST",
+		data: {
+			"a": "s1",
+			"t": "roomlist"
+		},
+		async: false,
+		success: function(data) {
+			console.log(data.data)
+
+			table.render({
+				elem: '#test-table-operate',
+				data: data.data,
+				//height: 515,
+				
+				skin: 'line',
+				even: true,
+				page: false, //开启分页
+				//limits: [5, 10, 15] //显示
+				//limit: 10 //每页默认显示的数量
+					
+				cols: [
+					[{
+						field: 'roomid',
+						width: '20%',
+						title: 'ID',
+						sort: true
+					}, {
+						field: 'roomname',
+						title: '座位号',
+						//align: "center"
+					}, {
+						field: 'templatefilename',
+						title: '设备串码',
+					}, {
+						width: 100,
+						//align: 'center',
+						title: '操作',
+						toolbar: '#table-content-list'
+					}]
+				]
+			})
+
+		},
+		error: function(error) {
+			console.log(error)
+		}
+	})
+
+	table.on('tool(test-table-operate)', function(obj) {
+		var age = obj.data;
+		if (obj.event === 'edit') {
+			layer.open({
+				type: 2,
+				title: '修改',
+				content: 'meetings_binding_edit.html',
+				//maxmin: true,
+				area: ['500px', '340px'],
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+				},
+				success: function(layero, index) {
+				}
+			});
+		}
+	})
+	
+
+})
+function asd() {
+	location.reload();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>模板下载列表</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+		<script src="../../../js/scosun.js"></script>
+		<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="layui-fluid">
+		    <div class="layui-row layui-col-space15">
+		        <div class="layui-col-md12">
+		            <div class="layui-card">
+		                <div class="layui-card-body">
+							<form class="layui-form" action="" lay-filter="component-form-group">
+								<div class="layui-form-item">
+									<label class="layui-form-label">word模板</label>
+									<div class="layui-input-block">
+										<select class="dialogWordDownSelect" id="wordDown" name="wordDown" style="width: 50%;"></select>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script>
+			var meetingid;
+			var roomtemplateid;
+			function init(m_id,r_id){
+				meetingid = m_id;
+				roomtemplateid = r_id;
+			}
+		</script>
+		<script>
+			layui.config({
+			    base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+			    index: 'lib/index' //主入口模块
+			}).use(['index', 'table', 'form'], function(){
+			  var $ = layui.$,
+			  table = layui.table
+			  ,form = layui.form;
+			  var url = "https://f.longjuli.com";
+			  /* var url = "http://127.0.0.1:8083"; */
+			  $.ajax({
+				  url:url+"/wordtemplate/findByRoomtemplateid",
+				  data:{"meetingid":meetingid,"roomtemplateid":roomtemplateid},
+				  type:"post",
+				  success:function(data){
+					  var html = "";
+					  if(data.code == 200){
+						  $.each(data.data, function (index, item) {
+							  html += "<option value='" + item.id + "'>" + item.wordname + "</option>";
+						  });
+						  $("#wordDown").append(html);
+						  //append后必须从新渲染
+						  form.render('select');
+					  }
+				  }
+			  })
+			});
+		</script>
+	</body>
+</html>
+

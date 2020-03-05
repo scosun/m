@@ -1,281 +1,1185 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>编排规则</title>
-		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<link rel="stylesheet" href="../../../../layuiadmin/layui/css/layui.css" media="all">
-		<link rel="stylesheet" href="../../../../layuiadmin/style/admin.css" media="all">
-	</head>
-	<body>
+    <head>
+        <meta charset="utf-8">
+        <title>界别</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <link rel="stylesheet" href="../../../../layuiadmin/layui/css/layui.css" media="all">
+        <link rel="stylesheet" href="../../../../layuiadmin/style/admin.css" media="all">
+        <style type="text/css">
+            .layui-btn {
+                background-color: #666;
+            }
 
-		<div class="layui-card layadmin-header">
-			<div class="layui-breadcrumb" lay-filter="breadcrumb">
-				<a lay-href="">主页</a>
-				<a><cite>组件</cite></a>
-				<a><cite>数据表格</cite></a>
-				<a><cite>属性列表</cite></a>
-			</div>
-		</div>
+            .layui-btn-danger {
+                background-color: #FF5722;
+            }
 
-		<div class="layui-fluid">
-			<div class="layui-row layui-col-space15">
-				<div class="layui-col-md12">
-					<div class="layui-card">
-						<div class="layui-card-header">属性列表</div>
-						<!-- <div class="layui-card-body">
-							<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-								<button class="layui-btn" data-type="add">增加</button>
+            .layui-laypage .layui-laypage-curr .layui-laypage-em {
+                background-color: #666;
+            }
+            .layui-btn+.layui-btn {
+                margin-left: 0;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="../../../../css/scosun.css" />
+        <script src="../../../../js/scosun.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
 
-								<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-								<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-								<button class="layui-btn" data-type="isAll">验证是否全选</button>
+        <div class="layui-card layadmin-header">
+            <div class="layui-breadcrumb" lay-filter="breadcrumb">
+                <a lay-href="">主页</a>
+                <a><cite>组件</cite></a>
+                <a><cite>数据表格</cite></a>
+                <a><cite>属性列表</cite></a>
+            </div>
+        </div>
 
-							</div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        
+                        <div class="layui-card-body">
+                            <div>
+                                <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                                    <!-- <button class="layui-btn" data-type="add">增加</button>
+                            	<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+                            	<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+                            	<button class="layui-btn" data-type="isAll">验证是否全选</button> -->
+                                </div>
+                                <!-- 右侧筛选条件 -->
+                                <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                    <div class="layui-inline">
+                                        <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+                                            autocomplete="off">
+                                    </div>
+                                    <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                                </div>
+                                <!-- 右侧筛选条件 end-->
+                            </div>
 
-							<table id="test-table-operate" lay-filter="test-table-operate"></table>
+
+                            <table id="test-table-operate" lay-filter="test-table-operate"></table>
 
 
-							<script type="text/html" id="test-table-operate-barDemo">
-								<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail"> 查看</a>
+                            <script type="text/html" id="test-table-operate-barDemo">
+                                <a class="layui-btn layui-btn-xs" lay-event="children">子属性</a>
 								  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 								  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
             </script>
-						</div> -->
-						<center>
-							<br/>
-							<br/>
-							<br/>
-							<br/>
-							<br/>
-						<h1 style="height: 500px;"> 待完善...</h1>
-						</center>
-					</div>
-				</div>
-			</div>
-		</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<script src="../../../../layuiadmin/layui/layui.js"></script>
+        <script src="../../../../layuiadmin/layui/layui.js"></script>
 
 
-		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-		<script>
-			layui.config({
-				base: '../../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-				index: 'lib/index' //主入口模块
-			}).use(['index', 'table', 'jquery'], function() {
-				var table = layui.table,
-					admin = layui.admin,
-					$ = layui.jquery;
+        <script>
+            layui.config({
+                base: '../../../../layuiadmin/' //静态资源所在路径
+            }).extend({
+                index: 'lib/index' //主入口模块
+            }).use(['index', 'table', 'jquery'], function() {
+                var table = layui.table,
+                    admin = layui.admin,
+                    $ = layui.jquery;
+                var url = "https://f.longjuli.com"
+                $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
+                $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url + "/permission/getpremission",
+                    datatype: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    //成功的回调函数
+                    success: function(msg) {
+                        var data = msg.data;
+                        if (msg.code != 0) {
+                            location.href = "user/login.html"
+                        }
+                        if (isEmptyObject(data) != 0) {
+                          
+                            window.a = data
+                           
+                            
+                            if ($.inArray("addatt", data) != -1) {
+                                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>")
+                            }
+                           
+                            if ($.inArray("delatt", data) != -1) {
+                                $('#buttongroup').before('<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>');
+                            }
+                
+                        } else {
+                
+                
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error)
+                    },
+                })
+                function isEmptyObject(obj) {
+                
+                    var jlength = 0;
+                    for (var key in obj) {
+                        if (key != "null") {
+                            jlength++;
+                        }
+                    };
+                    return jlength
+                };
+                var devices = {};
 
-				// #test-table-operate
+                var attributes = [];
 
-				$.ajax({
-					async: true,
-					type: "post",
-					url: "https://www.longjuli.com/ajax",
-					dataType: "json",
-					//成功的回调函数
-					data: {
-						"a": "s1",
-						"t": "meeting"
-					},
-					success: function(msg) {
+                window.i = 0;
+                var gobackid = 0;
+                window.gobackArr = []
+                var uri = "https://m.longjuli.com/v1//attributes?parent_id=" + i;
+                //删除接口
+                var add = "https://m.longjuli.com/v1/attributes";
+                var find = "https://m.longjuli.com/v1//attributes";
+                var dele = "https://m.longjuli.com/v1//attributes/batch_delete"
 
-						var data = msg.data;
+                table.render({
+                    elem: '#test-table-operate',
+                    // height: 'full-200',
+                    url: url + "/attribute/findAllbylayui" //数据接口
+                        ,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    where: {
+                        url: find
+                    },
+
+                    method: 'get',
+                    page: {
+                        layout: ['prev', 'page', 'next', 'count', 'skip']
+                    },
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'id',
+                                title: 'ID',
+                                align: 'left',
+                                unresize: 'false',
+                                width: '7%'
+                            },
+                            {
+                                field: 'name',
+                                title: '属性名',
+                                align: 'left',
+                            }, {
+                                field: 'children_num',
+                                title: '子数量',
+                                align: 'left',
+
+                            },
+                            {
+                                field: 'sign',
+                                title: '缩写标签',
+                                align: 'left',
+                                templet: function(data) {
+                                    if (data.sign != "" && data.color != "") {
+
+                                        return "<span class='layui-badge' style='background-color: " +
+                                            data.color + "';>" + data.sign + "</span>"
+
+                                    } else {
+                                        return '';
+                                    }
+                                },
 
 
-						data.reverse()
+                            },
+                            {
+                                width: 160,
+                                //align: 'right',
+                                //flxed: 'right',
+                                title: '操作',
+                                toolbar: '#test-table-operate-barDemo',
+                            }
+                        ]
+                    ],
+
+                    event: true,
+                    page: true,
+                    limit: 15,
+                    skin: 'line',
+                    even: true,
+                    limits: [5, 10, 15],
+                    done: function(res, curr, count) {
+                        table_data = res.data;
+                        console.log(res)
+
+                        layer.closeAll('loading');
+                        attributes.length = 0;
+                        // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                        // layer.close(index);    //返回数据关闭loading
+                    },
 
 
 
-						table.render({
-							elem: '#test-table-operate',
-							data: data,
-							height: 515,
-							cols: [
-								[
-									// 表头
-									{
-										type: 'checkbox',
-										fixed: 'left'
-									},
-									{
-										field: 'meetingid',
-										title: 'id',
-										sort: true,
-										align: 'left',
-										width: '5%',
-										event: 'seeDetail',
-										style: 'cursor: pointer;'
-									}, {
-										field: 'meetingname',
-										title: '会议名',
-										width: '10%',
-										align: "center",
 
-									}, {
-										field: 'roomname',
-										title: '会议室地点',
-										width: '15%',
-										align: "center",
+                });
 
-									}, {
-										field: 'time',
-										title: '会议时间',
-										width: '18%',
-										align: "center",
+                // 					window.onkeyup = function(ev) {
+                // 					var key = ev.keyCode || ev.which;
+                // 					if (key == 27) { //按下Escape
+                // 						layer.closeAll('iframe'); //关闭所有的iframe层
 
-									}, {
-										field: 'roomname',
-										title: '会议地点',
-										width: '15%',
-										sort: true,
-										align: "center",
+                // 					}
+                // 				}
+                window.reloads = function() {
+                    if (i != 0) {
+                        uri = "https://m.longjuli.com/v1/attributes?parent_id=" + gobackArr[i - 1];
+                        console.log(i)
+                        table.render({
+                            elem: '#test-table-operate',
+                            // height: 'full-200',
+                            url: url + "/attribute/gobackbylayui" //数据接口
+                                ,
+                            where: {
+                                url: uri
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
 
-									}, {
-										field: 'modifytime',
-										title: '修改时间',
-										width: '15%',
-										sort: true,
-										align: "center",
+                            method: 'get',
+                            page: {
+                                layout: ['prev', 'page', 'next', 'count', 'skip']
+                            },
+                            cols: [
+                                [ //表头
+                                    {
+                                        type: 'checkbox',
+                                        fixed: 'left'
+                                    },
+                                    {
+                                        field: 'id',
+                                        title: 'ID',
+                                        align: 'left',
+                                        unresize: 'false',
+                                        width: '7%'
+                                    },
+                                    {
+                                        field: 'name',
+                                        title: '属性名',
+                                        align: 'left',
+                                    }, {
+                                        field: 'children_num',
+                                        title: '子数量',
+                                        align: 'left',
 
-									}, {
-										width: 178,
-										align: 'center',
-										flxed: 'right',
-										toolbar: '#test-table-operate-barDemo'
-									}
-								]
-							],
-							skin: 'row', //表格风格
-							even: true, //隔行背景
-							page: true, //是否显示分页
-							limits: [5, 10, 15], //显示
-							limit: 10 //每页默认显示的数量
-						});
+                                    },
+                                    {
+                                        field: 'sign',
+                                        title: '缩写标签',
+                                        align: 'left',
+                                        templet: function(data) {
+                                            if (data.sign != "" && data.color != "") {
 
-					},
-					//失败的回调函数
-					error: function() {
-						console.log("error")
-					}
-				})
+                                                return "<span class='layui-badge' style='background-color: " +
+                                                    data.color + "';>" + data.sign +
+                                                    "</span>"
 
-				//监听表格复选框选择
-				table.on('checkbox(test-table-operate)', function(obj) {
-					console.log(obj)
-				});
-				//监听工具条
-				table.on('tool(test-table-operate)', function(obj) {
-					var data = obj.data;
-					if (obj.event === 'detail') {
-						layer.msg('ID：' + data.id + ' 的查看操作');
-					} else if (obj.event === 'del') {
-						layer.confirm('真的删除行么', function(index) {
-							obj.del();
+                                            } else {
+                                                return '';
+                                            }
+                                        },
 
-							$.ajax({
-								async: false,
-								type: "post",
-								url: "https://www.longjuli.com/ajax",
-								dataType: "json",
-								//成功的回调函数
-								data: {
-									"a": "d",
-									"id": obj.data.meetingid
-								},
-								success: function(msg) {
 
-									if (msg.state == 1) {
-										layer.msg("删除成功");
-									} else {
-										layer.msg("删除失败");
+                                    },
+                                    {
+                                        width: 160,
+                                        // align: 'right',
+                                        // flxed: 'right',
+                                        title: '操作',
+                                        toolbar: '#test-table-operate-barDemo',
+                                    }
+                                ]
+                            ],
 
-									}
+                            event: true,
+                            page: true,
+                            limit: 15,
+                            skin: 'line',
+                            even: true,
+                            limits: [5, 10, 15],
+                            done: function(res, curr, count) {
+                                table_data = res.data;
 
-								},
-								//失败的回调函数
-								error: function() {
-									console.log("error")
-								}
-							})
-							layer.close(index);
-						});
-					} else if (obj.event === 'edit') {
-						layer.open({
-							type: 2,
-							title: '编辑信息',
-							shadeClose: true, //弹出框之外的地方是否可以点击
-							offset: '10%',
-							area: ['60%', '80%'],
-							content: 'from_hy.html',
-							success: function(layero, index) {
-								var body = layui.layer.getChildFrame('body', index);
-								if (data) {
-									console.log(data.time);
-									var datatime = data.time;
-									var arrdatatime = datatime.split(" ");
-									console.log(arrdatatime[0])
-									console.log()
+                                layer.closeAll('loading');
+                                attributes.length = 0;
+                                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                // layer.close(index);    //返回数据关闭loading
+                            },
 
-									// console.log(data)
-									// 取到弹出层里的元素，并把编辑的内容放进去
-									body.find(".id").val(data.meetingid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
 
-									body.find(".hyname").val(data.meetingname); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
-									body.find("#test-laydate-limit1").val(arrdatatime[0]); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
-									body.find("#test-laydate-limit3").val(arrdatatime[1].substring(2)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
 
-									// 记得重新渲染表单
-								}
-							}
-						});
-					}
-				});
 
-				var $ = layui.$,
-					active = {
-						getCheckData: function() { //获取选中数据
-							var checkStatus = table.checkStatus('test-table-operate'),
-								data = checkStatus.data;
-							layer.alert(JSON.stringify(data));
-						},
-						getCheckLength: function() { //获取选中数目
-							var checkStatus = table.checkStatus('test-table-operate'),
-								data = checkStatus.data;
-							layer.msg('选中了：' + data.length + ' 个');
-						},
-						isAll: function() { //验证是否全选
-							var checkStatus = table.checkStatus('test-table-operate');
-							layer.msg(checkStatus.isAll ? '全选' : '未全选')
-						},
-						add: function() {
-							layer.open({
-								type: 2,
-								title: '增加规则',
-								shadeClose: true, //弹出框之外的地方是否可以点击
-								offset: '10%',
-								area: ['60%', '80%'],
-								content: 'meet_creat_from.html',
-								yes: function(index, layero) {
-									
-								}
-								// content: '/gkzytb/franchiser/rigthColumnJsonList'
-							});
+                        });
 
-						},
-					};
+                    } else {
+                        table.render({
+                    elem: '#test-table-operate',
+                    // height: 'full-200',
+                    url: url + "/attribute/findAllbylayui" //数据接口
+                        ,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    where: {
+                        url: find
+                    },
 
-				$('.test-table-operate-btn .layui-btn').on('click', function() {
-					var type = $(this).data('type');
-					active[type] ? active[type].call(this) : '';
-				});
+                    method: 'get',
+                    page: {
+                        layout: ['prev', 'page', 'next', 'count', 'skip']
+                    },
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'id',
+                                title: 'ID',
+                                align: 'left',
+                                unresize: 'false',
+                                width: '7%'
+                            },
+                            {
+                                field: 'name',
+                                title: '属性名',
+                                align: 'left',
+                            }, {
+                                field: 'children_num',
+                                title: '子数量',
+                                align: 'left',
 
-			});
-		</script>
-	</body>
+                            },
+                            {
+                                field: 'sign',
+                                title: '缩写标签',
+                                align: 'left',
+                                templet: function(data) {
+                                    if (data.sign != "" && data.color != "") {
+
+                                        return "<span class='layui-badge' style='background-color: " +
+                                            data.color + "';>" + data.sign + "</span>"
+
+                                    } else {
+                                        return '';
+                                    }
+                                },
+
+
+                            },
+                            {
+                                width: 160,
+                                // align: 'right',
+                                // flxed: 'right',
+                                title: '操作',
+                                toolbar: '#test-table-operate-barDemo',
+                            }
+                        ]
+                    ],
+
+                    event: true,
+                    page: true,
+                    limit: 15,
+                    skin: 'line',
+                    even: true,
+                    limits: [5, 10, 15],
+                    done: function(res, curr, count) {
+                        table_data = res.data;
+                        console.log(res)
+
+                        layer.closeAll('loading');
+                        attributes.length = 0;
+                        // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                        // layer.close(index);    //返回数据关闭loading
+                    },
+
+
+
+
+                });
+                    }
+
+                }
+
+                //监听表格复选框选择
+                table.on('checkbox(test-table-operate)', function(obj) {
+                    // console.log(obj.checked); //当前是否选中状态
+                    // // console.log(obj.data); //选中行的相关数据
+                    // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+                    // // console.log(table.checkStatus('test-table-operate').data); // 获取表格中选中行的数据
+                    if (obj.checked && obj.type == 'one') {
+                        var devi = {};
+                        devi = obj.data.id;
+                        attributes.push(devi)
+                    }
+                    if (!obj.checked && obj.type == 'one') {
+                        var index = attributes.indexOf(obj.data.id);
+                        if (index > -1) {
+                            attributes.splice(index, 1);
+                        }
+                    }
+                    if (!obj.checked && obj.type == 'all') {
+                        attributes.length = 0;
+
+                    }
+                    if (obj.checked && obj.type == 'all') {
+                        $.each(table.checkStatus('test-table-operate').data, function(idx, con) {
+                            var devi = {};
+                            devi = con.id;
+
+                            attributes.push(devi)
+                        });
+                        attributes = Array.from(new Set(attributes))
+                    }
+                    console.log(attributes)
+
+                });
+                //监听工具条
+                table.on('tool(test-table-operate)', function(obj) {
+                    var data = obj.data;
+
+                    if (obj.event === 'del') {
+                        layer.confirm('真的删除行么', function(index) {
+                            var attributeArr = [];
+                            attributeArr.push(obj.data.id);
+
+                            $.ajax({
+                                async: false,
+                                type: "post",
+                                url: url + "/attribute/delete",
+                                dataType: "json",
+                                contentType: 'application/json',
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                //成功的回调函数
+                                data: JSON.stringify({
+                                    "url": dele,
+                                    "attribute_ids": attributeArr
+
+                                }),
+                                success: function(msg) {
+
+                                    if (msg.code == '0') {
+                                        layer.msg("删除成功");
+                                        reloads();
+                                    } else {
+                                        layer.msg("删除失败");
+
+                                    }
+
+                                },
+                                //失败的回调函数
+                                error: function() {
+                                    console.log("error")
+                                }
+                            })
+                            layer.close(index);
+                        });
+                    } else if (obj.event === 'edit') {
+                        layer.open({
+                            type: 2,
+                            title: '编辑信息',
+                            shadeClose: true, //弹出框之外的地方是否可以点击
+                            offset: '10%',
+                            area: ['60%', '80%'],
+                            content: 'attributes.html',
+                            btn: ['确定', '取消'],
+                            yes: function(index, layero) {
+                                var body = layui.layer.getChildFrame('body', index);
+                                var updateurl = "https://m.longjuli.com/v1//attributes/" +
+                                    obj.data.id
+                                $.ajax({
+                                    async: false,
+                                    type: "post",
+                                    url: url + "/attribute/add",
+                                    dataType: "json",
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    contentType: 'application/json',
+                                    //成功的回调函数
+                                    data: JSON.stringify({
+                                        "url": updateurl,
+                                        "name": body.find('#name').val(),
+                                        "sign": body.find('#sign').val(),
+                                        "color": body.find('#color').val()
+
+                                    }),
+                                    success: function(msg) {
+
+                                        if (msg.code == '0') {
+                                            layer.msg("修改成功");
+                                            layer.close(index);
+                                            reloads();
+                                        } else {
+                                            layer.msg("修改失败");
+
+                                        }
+
+                                    },
+                                    //失败的回调函数
+                                    error: function() {
+                                        console.log("error")
+                                    }
+                                })
+                            },
+                            success: function(layero, index) {
+                                var body = layui.layer.getChildFrame('body', index);
+                                body.find('#name').val(obj.data.name),
+                                    body.find('#sign').val(obj.data.sign),
+                                    body.find('#color').val(obj.data.color)
+                            }
+                        });
+                    }
+                    if (obj.event === 'children') {
+                        $('#goback').removeClass('layui-hide');
+                        i++
+                        gobackArr.push(obj.data.id)
+                        gobackid = obj.data.id;
+                        console.log(obj.data);
+                        console.log(gobackArr);
+                        uri = "https://m.longjuli.com/v1//attributes?parent_id=" + obj.data.id;
+
+                        table.render({
+                            elem: '#test-table-operate',
+                            // height: 'full-200',
+                            url: url + "/attribute/childrenbylayui" //数据接口
+                                ,
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            where: {
+                                url: uri
+                            },
+
+                            method: 'get',
+                            page: {
+                                layout: ['prev', 'page', 'next', 'count', 'skip']
+                            },
+                            cols: [
+                                [ //表头
+                                    {
+                                        type: 'checkbox',
+                                        fixed: 'left'
+                                    },
+                                    {
+                                        field: 'id',
+                                        title: 'ID',
+                                        align: 'left',
+                                        unresize: 'false',
+                                        width: '7%'
+                                    },
+                                    {
+                                        field: 'name',
+                                        title: '属性名',
+                                        align: 'left',
+                                    }, {
+                                        field: 'children_num',
+                                        title: '子数量',
+                                        align: 'left',
+
+                                    },
+                                    {
+                                        field: 'sign',
+                                        title: '缩写标签',
+                                        align: 'left',
+                                        templet: function(data) {
+                                            if (data.sign != "" && data.color != "") {
+
+                                                return "<span class='layui-badge' style='background-color: " +
+                                                    data.color + "';>" + data.sign +
+                                                    "</span>"
+
+                                            } else {
+                                                return '';
+                                            }
+                                        },
+
+
+                                    },
+                                    {
+                                        width: 160,
+                                        // align: 'right',
+                                        // flxed: 'right',
+                                        title: '操作',
+                                        toolbar: '#test-table-operate-barDemo',
+                                    }
+                                ]
+                            ],
+
+                            event: true,
+                            page: true,
+                            limit: 15,
+                            skin: 'line',
+                            even: true,
+                            limits: [5, 10, 15],
+                            done: function(res, curr, count) {
+                                table_data = res.data;
+
+                                layer.closeAll('loading');
+                                attributes.length = 0;
+                                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                // layer.close(index);    //返回数据关闭loading
+                            },
+
+
+
+
+                        });
+
+                    }
+                });
+
+
+                active = {
+                    add: function() {
+
+                        layer.open({
+                            type: 2,
+                            title: '添加属性规则',
+                            shadeClose: true, //弹出框之外的地方是否可以点击
+                            offset: '10%',
+                            area: ['60%', '80%'],
+                            btn: ['确定', '取消'],
+                            content: 'attributes.html',
+                            yes: function(index, layero) {
+                                var body = layui.layer.getChildFrame('body', index);
+                                var datas;
+                                if (i == 0) {
+                                    datas = JSON.stringify({
+                                        "url": add,
+                                        "name": body.find('#name').val(),
+                                        "sign": body.find('#sign').val(),
+                                        "color": body.find('#color').val()
+
+                                    })
+                                } else {
+                                    datas = JSON.stringify({
+                                        "url": add,
+                                        "name": body.find('#name').val(),
+                                        "sign": body.find('#sign').val(),
+                                        "color": body.find('#color').val(),
+                                        "parent_id": gobackArr[i - 1]
+
+                                    })
+                                }
+                                console.log(gobackArr[i - 1])
+                                $.ajax({
+                                    async: false,
+                                    type: "post",
+                                    url: url + "/attribute/add",
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    //成功的回调函数
+                                    data: datas,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    success: function(msg) {
+
+                                        if (msg.code == '0') {
+                                            layer.msg("添加成功");
+                                            reloads();
+                                            layer.close(index)
+                                        } else {
+                                            layer.msg("添加失败");
+
+                                        }
+
+                                    },
+                                    //失败的回调函数
+                                    error: function() {
+                                        console.log("error")
+                                    }
+                                })
+                            },
+                            success: function(layero, index) {
+                                var body = layui.layer.getChildFrame('body', index);
+
+
+                            }
+                        });
+
+
+                    },
+                    search: function() {
+                        var checkStatus = table.checkStatus('test-table-operate')
+                        console.log(checkStatus)
+                        let demoReload = $('#demoReload').val();
+                        if(demoReload==''&&demoReload==null){
+                            return layer.msg("请输入要搜索的值");
+                        }
+                        if (i == 0) {
+
+                            table.render({
+                                elem: '#test-table-operate',
+                                // height: 'full-200',
+                                url: url + "/attribute/selectSeatch" //数据接口
+                                    ,
+                                where: {
+                                    url: 'https://m.longjuli.com/v1/attributes?q='+demoReload
+                                },
+
+                                method: 'get',
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                page: {
+                                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                                },
+                                cols: [
+                                    [ //表头
+                                        {
+                                            type: 'checkbox',
+                                            fixed: 'left'
+                                        },
+                                        {
+                                            field: 'id',
+                                            title: 'ID',
+                                            align: 'left',
+                                            unresize: 'false',
+                                            width: '7%'
+                                        },
+                                        {
+                                            field: 'name',
+                                            title: '属性名',
+                                            align: 'left',
+                                        }, {
+                                            field: 'children_num',
+                                            title: '子数量',
+                                            align: 'left',
+
+                                        },
+                                        {
+                                            field: 'sign',
+                                            title: '缩写标签',
+                                            align: 'left',
+                                            templet: function(data) {
+                                                if (data.sign != "" && data.color != "") {
+
+                                                    return "<span class='layui-badge' style='background-color: " +
+                                                        data.color + "';>" + data.sign +
+                                                        "</span>"
+
+                                                } else {
+                                                    return '';
+                                                }
+                                            },
+
+
+                                        },
+                                        {
+                                            width: 160,
+                                            // align: 'right',
+                                            // flxed: 'right',
+                                            title: '操作',
+                                            toolbar: '#test-table-operate-barDemo',
+                                        }
+                                    ]
+                                ],
+
+                                event: true,
+                                page: true,
+                                limit: 15,
+                                skin: 'line',
+                                even: true,
+                                limits: [5, 10, 15],
+                                done: function(res, curr, count) {
+                                    table_data = res.data;
+
+                                    layer.closeAll('loading');
+                                    attributes.length = 0;
+                                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                    // layer.close(index);    //返回数据关闭loading
+                                },
+
+
+
+
+                            });
+                        } else {
+                            console.log( gobackArr[i-1])
+                            u = "https://m.longjuli.com/v1/attributes?q="+demoReload +"&parent_id="+
+                                gobackArr[i-1]
+                            $('#goback').removeClass('layui-hide');
+                            console.log(gobackArr)
+                            console.log(i)
+
+                            table.render({
+                                elem: '#test-table-operate',
+                                // height: 'full-200',
+                                url: url + "/attribute/gobackbylayui" //数据接口
+                                    ,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                where: {
+                                    url: u
+                                },
+
+                                method: 'get',
+                                page: {
+                                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                                },
+                                cols: [
+                                    [ //表头
+                                        {
+                                            type: 'checkbox',
+                                            fixed: 'left'
+                                        },
+                                        {
+                                            field: 'id',
+                                            title: 'ID',
+                                            align: 'left',
+                                            unresize: 'false',
+                                            width: '7%'
+                                        },
+                                        {
+                                            field: 'name',
+                                            title: '属性名',
+                                            align: 'left',
+                                        }, {
+                                            field: 'children_num',
+                                            title: '子属性',
+                                            align: 'left',
+
+                                        },
+                                        {
+                                            width: 160,
+                                            // align: 'right',
+                                            // flxed: 'right',
+                                            title: '操作',
+                                            toolbar: '#test-table-operate-barDemo',
+                                        }
+                                    ]
+                                ],
+
+                                event: true,
+                                page: true,
+                                limit: 15,
+                                skin: 'line',
+                                even: true,
+                                limits: [5, 10, 15],
+                                done: function(res, curr, count) {
+                                    table_data = res.data;
+
+                                    layer.closeAll('loading');
+                                    attributes.length = 0;
+                                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                    // layer.close(index);    //返回数据关闭loading
+                                },
+
+
+
+
+                            });
+
+                        }
+                    
+                        
+
+                    },
+                    getCheckData: function() { //获取选中数据
+                        // var checkStatus = table.checkStatus('test-table-operate'),
+                        //     data = checkStatus.data;
+                        // layer.alert(JSON.stringify(data));
+                        // console.log(checkStatus.data)
+                        var cb = $(".layui-form-checkbox");
+                        $(".layui-form-checkbox").each(function() {
+                            // if (flag) {
+                            $(this).click();
+                            // } else {
+                            //     $(this).removeClass('layui-form-checked')
+                            // }
+                        })
+
+
+                    },
+                    getCheckLength: function() { //获取选中数目
+                    if ( attributes.length == 0 ) {
+                        return layer.msg("请选择属性后再批量删除")
+                    }
+                        layer.confirm('真的删除么', function(index) {
+
+
+
+                            $.ajax({
+                                async: false,
+                                type: "post",
+                                
+                                url: url + "/attribute/delete",
+                                dataType: "json",
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                contentType: 'application/json',
+                                //成功的回调函数
+                                data: JSON.stringify({
+                                    "url": dele,
+                                    "attribute_ids": attributes
+
+                                }),
+                                success: function(msg) {
+
+                                    if (msg.code == '0') {
+                                        layer.msg("删除成功");
+                                        reloads();
+                                    } else {
+                                        layer.msg("删除失败");
+
+                                    }
+
+                                },
+                                //失败的回调函数
+                                error: function() {
+                                    console.log("error")
+                                }
+                            })
+                            layer.close(index);
+                        })
+                    },
+                    isAll: function() {
+                        layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function(index) {
+                            // $.ajax({
+                            //         async: false,
+                            //         type: "get",
+                            //         url: url+"/meetingspecialcanhua/empty",
+                            //         dataType: "json",
+                            //         //成功的回调函数
+                            //         data: {
+
+                            //         },
+                            //         success: function(msg) {
+                            //             if (msg.code == 0) {
+                            //                 layer.msg("清空成功");
+                            //                 reloads(); // 父页面刷新
+
+                            //             } else {
+                            //                 layer.msg(msg.msg);
+
+
+                            //             }
+
+                            //         },
+                            //         //失败的回调函数
+                            //         error: function() {
+                            //             console.log("error")
+                            //         }
+                            //     })
+                            layer.close(index);
+                        }); //验证是否全选
+
+                    },
+                    goback: function() {
+                        i--;
+
+                        console.log(i)
+                        if (i == 0) {
+                            gobackArr.length = 0;
+                            $('#goback').addClass('layui-hide');
+
+                            table.render({
+                                elem: '#test-table-operate',
+                                // height: 'full-200',
+                                url: url + "/attribute/findAllbylayui" //数据接口
+                                    ,
+                                where: {
+                                    url: 'https://m.longjuli.com/v1/attributes'
+                                },
+
+                                method: 'get',
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                page: {
+                                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                                },
+                                cols: [
+                                    [ //表头
+                                        {
+                                            type: 'checkbox',
+                                            fixed: 'left'
+                                        },
+                                        {
+                                            field: 'id',
+                                            title: 'ID',
+                                            align: 'left',
+                                            unresize: 'false',
+                                            width: '7%'
+                                        },
+                                        {
+                                            field: 'name',
+                                            title: '属性名',
+                                            align: 'left',
+                                        }, {
+                                            field: 'children_num',
+                                            title: '子数量',
+                                            align: 'left',
+
+                                        },
+                                        {
+                                            field: 'sign',
+                                            title: '缩写标签',
+                                            align: 'left',
+                                            templet: function(data) {
+                                                if (data.sign != "" && data.color != "") {
+
+                                                    return "<span class='layui-badge' style='background-color: " +
+                                                        data.color + "';>" + data.sign +
+                                                        "</span>"
+
+                                                } else {
+                                                    return '';
+                                                }
+                                            },
+
+
+                                        },
+                                        {
+                                            width: 160,
+                                            // align: 'right',
+                                            // flxed: 'right',
+                                            title: '操作',
+                                            toolbar: '#test-table-operate-barDemo',
+                                        }
+                                    ]
+                                ],
+
+                                event: true,
+                                page: true,
+                                limit: 15,
+                                skin: 'line',
+                                even: true,
+                                limits: [5, 10, 15],
+                                done: function(res, curr, count) {
+                                    table_data = res.data;
+
+                                    layer.closeAll('loading');
+                                    attributes.length = 0;
+                                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                    // layer.close(index);    //返回数据关闭loading
+                                },
+
+
+
+
+                            });
+                        } else {
+
+                            u = "https://m.longjuli.com/v1/attributes/cur_level?attribute_id=" +
+                                gobackArr[i]
+                            $('#goback').removeClass('layui-hide');
+                            console.log(gobackArr)
+                            console.log(i)
+
+                            table.render({
+                                elem: '#test-table-operate',
+                                // height: 'full-200',
+                                url: url + "/attribute/gobackbylayui" //数据接口
+                                    ,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                where: {
+                                    url: u
+                                },
+
+                                method: 'get',
+                                page: {
+                                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                                },
+                                cols: [
+                                    [ //表头
+                                        {
+                                            type: 'checkbox',
+                                            fixed: 'left'
+                                        },
+                                        {
+                                            field: 'id',
+                                            title: 'ID',
+                                            align: 'left',
+                                            unresize: 'false',
+                                            width: '7%'
+                                        },
+                                        {
+                                            field: 'name',
+                                            title: '属性名',
+                                            align: 'left',
+                                        }, {
+                                            field: 'children_num',
+                                            title: '子属性',
+                                            align: 'left',
+
+                                        },
+                                        {
+                                            width: 160,
+                                            // align: 'right',
+                                            // flxed: 'right',
+                                            title: '操作',
+                                            toolbar: '#test-table-operate-barDemo',
+                                        }
+                                    ]
+                                ],
+
+                                event: true,
+                                page: true,
+                                limit: 15,
+                                skin: 'line',
+                                even: true,
+                                limits: [5, 10, 15],
+                                done: function(res, curr, count) {
+                                    table_data = res.data;
+
+                                    layer.closeAll('loading');
+                                    attributes.length = 0;
+                                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                                    // layer.close(index);    //返回数据关闭loading
+                                },
+
+
+
+
+                            });
+
+                        }
+                    }
+
+                };
+
+                $(' .layui-ds').on('click', function() {
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                });
+
+            });
+        </script>
+
+    </body>
 </html>
