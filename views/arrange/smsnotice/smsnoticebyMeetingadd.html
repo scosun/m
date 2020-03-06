@@ -1,277 +1,489 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>选择人员</title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-<style type="text/css">
-.layui-form-label{
-	width: 100px;
-}
-.layui-input-block {
-	margin-left: 130px;
-}
-.layui-form-label span{color: #f00;font-size: 14px;margin-right: 5px;}
-.layui-input-block span,p span{color: #f00;font-size: 14px;margin:0 5px;}
-</style>
+    <meta charset="utf-8">
+    <title>选择人员</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <script src="../../../js/scosun.js"></script>
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .layui-form-label span {
+            color: #f00;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .layui-input-block span,
+        p span {
+            color: #f00;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+    </style>
 </head>
+
 <body>
-<div class="layui-card-body" style="padding: 20px 20px 0 0;">
-	<form class="layui-form" action="" lay-filter="component-form-group">
-        <div class="test-table-reload-btn" style="float:right;margin-top: -35px;">
-            <div class="layui-inline">
-            <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
-                autocomplete="off">
+    <div class="layui-card-body" style="padding: 20px 20px 0 0;">
+        <div>
+            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;margin-left: 10px;" id="group">
+                <button class="layui-btn layui-ds" data-type="isAll">全选</button>
+                <button class="layui-btn layui-ds" data-type="notAll">取消全选</button>
+                <!-- <button class="layui-btn" data-type="add">增加</button>
+                <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+                <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+                <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
             </div>
-            <button class="layui-btn layui-ds" data-type="search">搜索</button>
+            <!-- 右侧筛选条件 -->
+            <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                <div class="layui-inline">
+                    <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload" autocomplete="off">
+                </div>
+                <button class="layui-btn layui-ds" data-type="search">搜索</button>
+            </div>
+            <!-- 右侧筛选条件 end-->
         </div>
         <table id="test-table-operate" lay-filter="test-table-operate" style="margin-top: 20px;"></table>
-		
-        <div class="layui-form-item layui-layout-admin layui-hide">
-            <div class="layui-input-block">
-                <div style="position: absolute;right: 0px;bottom: 0px;">
-                    <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+
+        <form class="layui-form" action="" lay-filter="component-form-group">
+
+            <div class="layui-form-item layui-layout-admin layui-hide">
+                <div class="layui-input-block">
+                    <div style="position: absolute;right: 0px;bottom: 0px;">
+                        <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
                 </div>
             </div>
-        </div>
-	</form>
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script>
-layui.config({
-	base: '../../../layuiadmin/' //静态资源所在路径
-}).extend({
-	index: 'lib/index' //主入口模块
-}).use(['index', 'form', 'laydate', 'element','table'], function() {
-	var $ = layui.$,
-		admin = layui.admin,
-		element = layui.element,
-		layer = layui.layer,
-		laydate = layui.laydate,
-        form = layui.form,
-        table = layui.table;
-    var url="https://f.longjuli.com"
-    var devices = {};
-    var deviceList = [];
-    var checkedSet = new Set();
-    var uri = window.location.search;
-	var meetingid= uri.substr(11);
-    $.ajax({
-		url: url+"/Smsperson/findBymeetingid",
-		type: "get",
-        dataType: "json",
-        data:{
-            id:meetingid 
-        },
-		async: false,
-		xhrFields: {
-			withCredentials: true
-		},
-		success: function(data) {
-            if(data.data!=null){
-                var personids = data.data.personids;
-            var personidarr = personids.split(",")
-            var dataIntArr = []
-            dataIntArr=personidarr.map(function(data){  
-            return +data;  
-    })
-            checkedSet = new Set(dataIntArr);
-            console.log(checkedSet);
-            
-            }
-			
-		},
-		error: function(error) {
-			console.log(error)
-		}
+        </form>
+    </div>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form', 'laydate', 'element', 'table'], function () {
+            var $ = layui.$,
+                admin = layui.admin,
+                element = layui.element,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                form = layui.form,
+                table = layui.table;
+            var url = "https://f.longjuli.com"
+            // var url = "http://127.0.0.1:8083"
+            var devices = {};
+            var deviceList = [];
+            var checkedSet = new Set();
+            var uri = window.location.search;
+            var meetingid = uri.substr(11);
+            $.ajax({
+                url: url + "/Smsperson/findBymeetingid",
+                type: "get",
+                dataType: "json",
+                data: {
+                    id: meetingid
+                },
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.data != null) {
+                        var personids = data.data.personids;
+                        var personidarr = personids.split(",")
+                        var dataIntArr = []
+                        dataIntArr = personidarr.map(function (data) {
+                            return +data;
+                        })
+                        checkedSet = new Set(dataIntArr);
+                        console.log(checkedSet);
 
-    })
-		
-    table.render({
-        elem: '#test-table-operate',
-        // height: 'full-200',
-        //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
-        method: 'get',
-        url: url+'/meetingcanhui/findMeetingCanHuiBylayui',
-        where:{
-            meetingId: meetingid
-        },
-        xhrFields: {
-            withCredentials: true
-        },
-        page: {
-            layout: ['prev', 'page', 'next', 'count', 'skip']
-        },
-        
-        cols: [
-            [ //表头
-            {
-                        type: 'checkbox',
-                        fixed: 'left'
+                    }
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+
+            })
+            table.render({
+                elem: '#test-table-operate',
+                // height: 'full-200',
+                //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
+                method: 'get',
+                url: url + '/meetingcanhui/findMeetingCanHuiBylayui',
+                where: {
+                    meetingId: meetingid
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                },
+
+                cols: [
+                    [ //表头
+                        {
+                            type: 'checkbox',
+                            fixed: 'left'
+                        },
+                        {
+                            field: 'id',
+                            title: 'ID',
+                            width: 60,
+                            align: 'center',
+                            unresize: 'false',
+
+                        },
+                        {
+                            field: 'name',
+                            title: '姓名',
+                            align: 'left',
+                        }, {
+                            field: 'phone1',
+                            title: '手机号',
+                            align: 'left',
+                        },
+                        {
+                            field: 'company',
+                            title: '单位',
+                            align: 'left'
+                        },
+                        {
+                            field: 'duties',
+                            title: '职务',
+                            align: 'left'
+                        }
+                    ]
+                ],
+
+                event: true,
+                page: true,
+                limit: 15,
+                skin: 'nob',
+                limits: [5, 10, 15],
+                parseData: function (res) {
+                    console.log(res)
+                    for (var i in res.data) {
+
+                        if (checkedSet.has(res.data[i].id)) {
+                            //如果set集合中有的话，给rows添加check属性选中
+                            res.data[i]["LAY_CHECKED"] = true;
+                        }
+                    }
+                    return {
+                        "code": res.code, //解析接口状态
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                },
+                done: function (res, curr, count) {
+                    table_data = res.data;
+                    layer.closeAll('loading');
+                },
+            });
+            window.reloads = function(){
+                table.render({
+                    elem: '#test-table-operate',
+                    // height: 'full-200',
+                    //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
+                    method: 'get',
+                    url: url + '/meetingcanhui/findMeetingCanHuiBylayui',
+                    where: {
+                        meetingId: meetingid
                     },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    width:60,
-                    align: 'center',
-                    unresize: 'false',
-                   
-                },
-                {
-                    field: 'name',
-                    title: '姓名',
-                    align: 'left',
-                }, {
-                    field: 'phone1',
-                    title: '手机号',
-                    align: 'left',
-                },
-                {
-                    field: 'company',
-                    title: '单位',
-                    align: 'left'
-                },
-                {
-                    field: 'duties',
-                    title: '职务',
-                    align: 'left'
-                },
-                 {
-                    field: '',
-                    title: '参会状态',
-                    align: 'left',
-                    toolbar: '#test-table-operate-barDemo'
-                },
-            ]
-        ],
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    page: {
+                        layout: ['prev', 'page', 'next', 'count', 'skip']
+                    },
 
-        event: true,
-        page: true,
-        limit: 15,
-        skin: 'nob',
-        limits: [5, 10, 15],
-        parseData:function(res){
-            console.log(res)
-            for(var i in res.data){
-                
-					    		if(checkedSet.has(res.data[i].id)){
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'id',
+                                title: 'ID',
+                                width: 60,
+                                align: 'center',
+                                unresize: 'false',
+
+                            },
+                            {
+                                field: 'name',
+                                title: '姓名',
+                                align: 'left',
+                            }, {
+                            field: 'phone1',
+                            title: '手机号',
+                            align: 'left',
+                        },
+                            {
+                                field: 'company',
+                                title: '单位',
+                                align: 'left'
+                            },
+                            {
+                                field: 'duties',
+                                title: '职务',
+                                align: 'left'
+                            }
+                        ]
+                    ],
+
+                    event: true,
+                    page: true,
+                    limit: 15,
+                    skin: 'nob',
+                    limits: [5, 10, 15],
+                    parseData: function (res) {
+                        console.log(res)
+                        for (var i in res.data) {
+
+                            if (checkedSet.has(res.data[i].id)) {
+                                //如果set集合中有的话，给rows添加check属性选中
+                                res.data[i]["LAY_CHECKED"] = true;
+                            }
+                        }
+                        return {
+                            "code": res.code, //解析接口状态
+                            "count": res.count, //解析数据长度
+                            "data": res.data //解析数据列表
+                        };
+                    },
+                    done: function (res, curr, count) {
+                        table_data = res.data;
+                        layer.closeAll('loading');
+                    },
+                });
+            }
+            $.ajax({
+                async: false,
+                type: "get",
+                url: url + "/smstemplate/findAll",
+                dataType: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                //成功的回调函数
+                success: function (msg) {
+                    var data = msg;
+                    $.each(data.data, function (idx, con) {
+                        $("#sms").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
+                            "</option>");
+                    })
+                    form.render();
+                },
+                //失败的回调函数
+                error: function () {
+                    console.log("error")
+                }
+            })
+            var active = {
+                search: function() {
+                    table.render({
+                        elem: '#test-table-operate',
+                        // height: 'full-200',
+                        //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
+                        method: 'get',
+                        url: url + '/meetingcanhui/smspersonBysearch',
+                        where: {
+                            id: meetingid,
+                            content:$('#demoReload').val()
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        page: {
+                            layout: ['prev', 'page', 'next', 'count', 'skip']
+                        },
+
+                        cols: [
+                            [ //表头
+                                {
+                                    type: 'checkbox',
+                                    fixed: 'left'
+                                },
+                                {
+                                    field: 'id',
+                                    title: 'ID',
+                                    width: 60,
+                                    align: 'center',
+                                    unresize: 'false',
+
+                                },
+                                {
+                                    field: 'name',
+                                    title: '姓名',
+                                    align: 'left',
+                                }, {
+                                field: 'phone1',
+                                title: '手机号',
+                                align: 'left',
+                            },
+                                {
+                                    field: 'company',
+                                    title: '单位',
+                                    align: 'left'
+                                },
+                                {
+                                    field: 'duties',
+                                    title: '职务',
+                                    align: 'left'
+                                }
+                            ]
+                        ],
+
+                        event: true,
+                        page: true,
+                        limit: 15,
+                        skin: 'nob',
+                        limits: [5, 10, 15],
+                        parseData: function (res) {
+                            console.log(res)
+                            for (var i in res.data) {
+
+                                if (checkedSet.has(res.data[i].id)) {
                                     //如果set集合中有的话，给rows添加check属性选中
-					    			res.data[i]["LAY_CHECKED"] = true;
-					    		}
+                                    res.data[i]["LAY_CHECKED"] = true;
+                                }
                             }
                             return {
-						        "code": res.code, //解析接口状态
-						        "count": res.count, //解析数据长度
-						        "data": res.data //解析数据列表
-						      };
-        },
-        done: function(res, curr, count) {
-            table_data = res.data;
-            layer.closeAll('loading');
-//             console.log(res);
-//                     var ar = arr1.filter(function(n) {
-//                     return arr2.indexOf(n) != -1
-//                 });
-//                 alert(ar);
-    // if(deviceList.length!=0){
-    //     for(var i = 0; i<=deviceList.length;i++){
-    //     var resultLength = indexOf(res.data,deviceList[i])
-    //     if(resultLength !=-1){
-    //         var cb = $(".layui-form-checkbox")[resultLength+1];
-    //         $(cb).click()
-    //         $(cb).addClass('layui-form-checked')
-            
-    //        }
-        
-        
-    // }    }
-    
-            // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
-            // layer.close(index);    //返回数据关闭loading
-        },
-    });
-	$.ajax({
-        async: false,
-        type: "get",
-        url: url+ "/smstemplate/findAll",
-        dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        //成功的回调函数
-        success: function (msg) {
-            var data = msg;
-            $.each(data.data, function (idx, con) {
-                $("#sms").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
-                    "</option>");
+                                "code": res.code, //解析接口状态
+                                "count": res.count, //解析数据长度
+                                "data": res.data //解析数据列表
+                            };
+                        },
+                        done: function (res, curr, count) {
+                            table_data = res.data;
+                            layer.closeAll('loading');
+                        },
+                    });
+
+                },
+                isAll:function () {
+                    $.ajax({
+                        url: url + "/Smsperson/findBymeetingid",
+                        type: "get",
+                        dataType: "json",
+                        data: {
+                            id: meetingid
+                        },
+                        async: false,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.data != null) {
+                                var personids = data.data.personids;
+                                var personidarr = personids.split(",")
+                                var dataIntArr = []
+                                dataIntArr = personidarr.map(function (data) {
+                                    return +data;
+                                })
+                                checkedSet = new Set(dataIntArr);
+                                console.log(checkedSet);
+
+                            }
+
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+
+                    })
+                    reloads()
+                },
+                notAll:function () {
+                    checkedSet = new Set();
+                    reloads();
+                }
+                };
+
+            table.on('checkbox(test-table-operate)', function (obj) {
+                if (!obj.checked && obj.type == 'all') {
+                    var data = layui.table.cache['test-table-operate']
+                    $.each(data, function (idx, con) {
+                        checkedSet.delete(con.id)
+                    });
+
+                }
+                if (obj.checked && obj.type == 'all') {
+
+                    $.each(table.checkStatus('test-table-operate').data, function (idx, con) {
+                        checkedSet.add(con.id);
+                    });
+                }
+                if (obj.checked && obj.type == 'one') {
+                    checkedSet.add(obj.data.id);
+                }
+                if (!obj.checked && obj.type == 'one') {
+                    checkedSet.delete(obj.data.id)
+                }
+                // if(obj.checked){
+
+                // 			  	}else{
+
+                // }
+                console.log(checkedSet);
+
+            });
+
+            $('.layui-ds').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            form.on('submit(addsms)', function (data) {
+                var checkbox = Array.from(checkedSet);
+                $.ajax({
+                    url: url + "/Smsperson/addPerson",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        personids: checkbox.join(","),
+                        meetingid: meetingid
+                    },
+                    async: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        layer.msg(data.msg);
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+
+                })
+                return false;
             })
-            form.render();
-        },
-        //失败的回调函数
-        error: function () {
-            console.log("error")
-        }
-    })
-	
-    table.on('checkbox(test-table-operate)', function(obj) {
-        if (!obj.checked && obj.type == 'all') {
-           var data = layui.table.cache['test-table-operate']
-            $.each(data, function(idx, con) {
-                checkedSet.delete(con.id)
-            });
 
-        }
-        if (obj.checked && obj.type == 'all') {
-            
-            $.each(table.checkStatus('test-table-operate').data, function(idx, con) {
-                checkedSet.add(con.id);
-            });
-        }
-        if (obj.checked && obj.type == 'one') {
-            checkedSet.add(obj.data.id);
-        }
-        if (!obj.checked && obj.type == 'one') {
-            checkedSet.delete(obj.data.id)
-        }
-        // if(obj.checked){
-					  		
-		// 			  	}else{
-					  		
-					  	// }
-					  console.log(checkedSet);
-                   
-    });
-    
-	form.on('submit(addsms)', function(data) {
-        layer.msg(666)
-        var checkbox = Array.from(checkedSet);
-		$.ajax({
-		url: url+"/Smsperson/addPerson",
-		type: "post",
-        dataType: "json",
-        data:{
-            personids:checkbox.join(","),
-            meetingid:meetingid
-        },
-		async: false,
-		xhrFields: {
-			withCredentials: true
-		},
-		success: function(data) {
-			layer.msg(data.msg);
-		},
-		error: function(error) {
-			console.log(error)
-		}
 
-    })
-    return false;
-	})
-});
-</script>
+        });
+    </script>
 </body>
+
 </html>

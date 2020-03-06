@@ -448,20 +448,19 @@ layui.config({
             search: function() {
                 table.render({
                     elem: '#test-table-operate',
-                    // height: 'full-200',
-                    url: url + "/meeting/meetingSearch" //数据接口
-                        ,
+
+                    method: 'get',
+                    url:url+'/smstemplate/search',
+                    where:{
+                        content:$("#demoReload").val()
+                    },
                     xhrFields: {
                         withCredentials: true
                     },
-                    where: {
-                        "meeting": $('#demoReload').val()
-                    },
-
-                    method: 'get',
                     page: {
                         layout: ['prev', 'page', 'next', 'count', 'skip']
                     },
+
                     cols: [
                         [ //表头
                             {
@@ -469,56 +468,52 @@ layui.config({
                                 fixed: 'left'
                             },
                             {
-                                field: 'id',
+                                field: 'smsTemplateId',
                                 title: 'ID',
-                                align: 'left',
+                                width:60,
+                                //align: 'center',
                                 unresize: 'false',
-                                width: '7%'
                             },
                             {
-                                field: 'name',
-                                title: '会议名称',
+                                field: 'smsTemplateName',
+                                title: '模版名称',
                                 align: 'left',
+                                width: 150,
                             }, {
-                                field: 'address',
-                                title: '会议地址',
-                                align: 'left',
-            
+                            field: 'smsTemplateContent',
+                            title: '模版内容',
+                            align: 'left',
+                        },
+                            {
+                                field: 'smsTemplateType',
+                                title: '模版类型',
+                                templet: function(data) {
+                                    if (data.smsTemplateType == 0) {
+                                        return '通知模板'
+                                    }
+                                    if (data.smsTemplateType == 1) {
+                                        return '报名模版'
+                                    }
+                                    if (data.smsTemplateType == undefined) {
+                                        return ''
+                                    }
+                                },
+                                width:100,
                             },
                             {
-                               
-                                align: 'center',
-                                flxed: '2',
-                                title: '座区图',
-                                toolbar: '#rulezone',
-                            },
-                            {
-                               
-                                align: 'center',
-                                flxed: '1',
-                                title: '编排',
-                                toolbar: '#type-list',
-                            }
-                            , {
-                                field: 'meetingtime',
-                                title: '时间',
-                                align: 'left',
-            
-                            },
-                            {
-                                width: '10%',
-                                align: 'right',
-                                flxed: 'right',
+                                width: 100,
                                 title: '操作',
-                                toolbar: '#test-table-operate-barDemo',
-                            }
+                                align: 'left',
+                                toolbar: '#test-table-operate-barDemo'
+                            },
+
                         ]
                     ],
-
                     event: true,
                     page: true,
                     limit: 15,
-                    skin: 'nob',
+                    skin: 'line',
+                    even: true,
                     limits: [5, 10, 15],
                     done: function(res, curr, count) {
                         table_data = res.data;
@@ -528,12 +523,7 @@ layui.config({
                         // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
                         // layer.close(index);    //返回数据关闭loading
                     },
-
-
-
-
                 });
-
             }
         };
 

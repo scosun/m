@@ -7,7 +7,7 @@ layui.config({
         admin = layui.admin,
         $ = layui.jquery;
     var url = "https://f.longjuli.com";
-    // var url = "http://127.0.0.1:8083";   
+    // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
     // #test-table-operate
@@ -334,7 +334,7 @@ layui.config({
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '选择人员',
+                title: '人员详情',
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
                 btn: ['保存', '返回'],
@@ -599,19 +599,19 @@ layui.config({
                 table.render({
                     elem: '#test-table-operate',
                     // height: 'full-200',
-                    url: url + "/meeting/meetingSearch" //数据接口
-                        ,
+                    //url: url + "/meeting/findAllBylayui", //数据接口
+                    method: 'get',
+                    where: {
+                        content: $('#demoReload').val()
+                    },
                     xhrFields: {
                         withCredentials: true
                     },
-                    where: {
-                        "meeting": $('#demoReload').val()
-                    },
-
-                    method: 'get',
+                    url: url + "/smsstatistics/selectSearch", //数据接口
                     page: {
                         layout: ['prev', 'page', 'next', 'count', 'skip']
                     },
+
                     cols: [
                         [ //表头
                             {
@@ -621,46 +621,48 @@ layui.config({
                             {
                                 field: 'id',
                                 title: 'ID',
-                                align: 'left',
+                                width: 60,
+                                //align: 'center',
                                 unresize: 'false',
-                                width: '7%'
                             },
                             {
-                                field: 'name',
-                                title: '会议名称',
+                                field: 'title',
+                                title: '通知标题',
                                 align: 'left',
                             }, {
-                                field: 'address',
-                                title: '会议地址',
+                            field: 'succeednotice',
+                            title: '成功通知',
+                            align: 'left',
+                        },
+                            {
+                                field: 'canhui',
+                                title: '确认参会',
                                 align: 'left',
-
-                            },{
-
-                               // align: 'center',
-                                flxed: '2',
-                                title: '座区图',
-                                toolbar: '#rulezone',
-                            },{
-
-                                //align: 'center',
-                                flxed: '1',
-                                title: '编排',
-                                toolbar: '#type-list',
-                            }, {
-                                field: 'meetingtime',
-                                title: '时间',
+                            },
+                            {
+                                field: 'leave',
+                                title: '确认请假',
                                 align: 'left',
-
-                            }, {
-                                width: 440,
-                                //align: 'right',
-                                //flxed: 'right',
+                            },
+                            {
+                                field: 'noreply',
+                                title: '未反馈',
+                                align: 'left',
+                            },
+                            {
+                                field: 'nosend',
+                                title: '发送失败',
+                                align: 'left',
+                            },
+                            {
                                 title: '操作',
+                                align: 'left',
                                 toolbar: '#test-table-operate-barDemo',
-                            }
+                                width:440,
+                            },
+
                         ]
                     ],
-
                     event: true,
                     page: true,
                     limit: 15,
@@ -675,12 +677,7 @@ layui.config({
                         // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
                         // layer.close(index);    //返回数据关闭loading
                     },
-
-
-
-
                 });
-
             }
         };
 
