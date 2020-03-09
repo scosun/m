@@ -80,6 +80,8 @@
 						<a class="layui-btn layui-btn-xs" lay-event="personedit">会议选择</a>
                         <a class="layui-btn layui-btn-xs"  lay-event="upload">Excel上传</a>
                         <a class="layui-btn layui-btn-xs"  lay-event="sendmail">发送短信</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="sendmailrecord">短信发送记录</a>
+						<a class="layui-btn layui-btn-xs"  lay-event="smsreply">短信回复记录</a>
 						<a class="layui-btn layui-btn-xs"  lay-event="edit">修改</a>
 						<a class="layui-btn layui-btn-xs"  lay-event="del">删除</a>
 					</script>
@@ -205,7 +207,7 @@
                         title: '操作',
                         align: 'left',
                         toolbar: '#test-table-operate-barDemo',
-                        width:440,
+                        width:'40%',
                     },
     
                 ]
@@ -274,7 +276,7 @@
                         title: '操作',
                         align: 'left',
                         toolbar: '#test-table-operate-barDemo',
-                        width:440,
+						width:'40%',
                     },
     
                 ]
@@ -376,7 +378,7 @@
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '导入人员',
+                title: 'Excel上传',
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['40%', '45%'],
                 btn: ['上传', '返回'],
@@ -393,7 +395,50 @@
                 }
 
             });
-        } else if (obj.event === 'sendmail') {
+
+        } else if (obj.event === 'sendmailrecord') {
+			layer.open({
+				type: 2,
+				//title: '收藏管理 (考生姓名：张无忌)',
+				title: '短信发送记录',
+				shadeClose: false, //弹出框之外的地方是否可以点击
+				area: ['75%', '85%'],
+				closeBtn: 1,
+				//offset: '-43px',
+				//  content: $('#show-view'),
+				content: 'flocksendmailrecord.html?meetingid=' + obj.data.id,
+				success: function (layero, index) {
+
+				},
+				yes: function (index, layero) {
+					var submit = layero.find('iframe').contents().find("#click");
+					submit.click();
+				}
+
+			});
+
+		}  else if (obj.event === 'smsreply') {
+			layer.open({
+				type: 2,
+				//title: '收藏管理 (考生姓名：张无忌)',
+				title: '短信回复记录',
+				shadeClose: false, //弹出框之外的地方是否可以点击
+				area: ['75%', '85%'],
+				closeBtn: 1,
+				//offset: '-43px',
+				//  content: $('#show-view'),
+				content: 'flocksmsreply.html?meetingid=' + obj.data.id,
+				success: function (layero, index) {
+
+				},
+				yes: function (index, layero) {
+					var submit = layero.find('iframe').contents().find("#click");
+					submit.click();
+				}
+
+			});
+
+		}else if (obj.event === 'sendmail') {
             layer.confirm('确认发送短信？', function (index) {
                 $.ajax({
                     async: false,
@@ -426,13 +471,10 @@
                 layer.close(index);
             });
         } else if (obj.event === 'edit') {
-            if (data.issendmail == 1) {
-                return layer.msg('当前短信已发送无法修改')
-            }
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '选择人员',
+                title: '修改',
                 maxmin: true,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['75%', '85%'],
@@ -440,7 +482,7 @@
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
-                content: 'smsnoticeupdate.html?meetingid=' + obj.data.meetingid + '&notice=' + obj.data.noticeid + '&apply=' + obj.data.applyid,
+                content: 'flocknoticeupdate.html?id=' + obj.data.id,
                 success: function (layero, index) {
                     var body = layui.layer.getChildFrame('body', index);
                     var iframeWin = window[layero.find('iframe')[0]['name']]
@@ -530,6 +572,7 @@
 
             });
         }
+
     });
     // form.on('submit(component-form-search)', function(data) {
     //     alert(1);

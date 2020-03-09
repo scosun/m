@@ -349,7 +349,7 @@ layui.config({
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '选择人员',
+                title: '短信发送记录',
                 maxmin: true,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],

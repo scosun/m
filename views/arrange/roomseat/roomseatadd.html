@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .layui-form-label span {
+            color: #f00;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .layui-input-block span,
+        p span {
+            color: #f00;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span>*</span>会议室</label>
+            <div class="layui-input-block">
+                <select name="roomid" lay-skin="select" lay-filter="component-form-select" id="roomid">
+                    <option value="-1">选择会议</option>
+                    <option value="" id="sms"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span>*</span>电子桌牌类型</label>
+            <div class="layui-input-block">
+                <select name="seattype" lay-skin="select" lay-filter="component-form-select" id="seattype">
+                    <option value="0">阿里E-ink桌牌</option>
+                    <option value="1" >龙居里E-ink桌牌</option>
+                    <option value="2" >龙居里LCD桌牌</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span>*</span>通讯方式</label>
+            <div class="layui-input-block">
+                <select name="communicationtype" lay-skin="select" lay-filter="component-form-select" id="communicationtype">
+                    <option value="0">LORA</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-layout-admin layui-hide">
+            <div class="layui-input-block">
+                <div style="position: absolute;right: 0px;bottom: 0px;">
+                    <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+        var $ = layui.$,
+            admin = layui.admin,
+            element = layui.element,
+            layer = layui.layer,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            form = layui.form;
+        var url = "https://f.longjuli.com"
+        // var url = "http://127.0.0.1:8083"
+        var uploadfile = null;
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/roomtemplate/findAll",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg;
+                $.each(data.data, function (idx, con) {
+                    $("#sms").after("<option value=" + con.id + ">" + con.name +
+                        "</option>");
+                })
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
+
+        form.on('submit(addsms)', function (data) {
+            data = data.field;
+            $.ajax({
+                url: url + "/roomseat/add",
+                type: "post",
+                dataType: "json",
+                data: {
+                    roomid:data.roomid,
+                    seattype:data.seattype,
+                    communicationtype:data.communicationtype
+
+
+                },
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        parent.layer.msg("添加成功")
+                        var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                        parent.layer.close(index);
+                        parent.reloads();
+                    }else{
+                        parent.layer.msg(data.msg)
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+
+            })
+            return false;
+        })
+
+    });
+</script>
+</body>
+
+</html>

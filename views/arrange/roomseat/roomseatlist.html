@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>控制管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+    <style type="text/css">
+        .layui-btn {background-color: #666;}
+        .layui-btn-danger {background-color: #FF5722;}
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+        html{background-color: #fff;}
+        .layui-btn+.layui-btn {
+            margin-left: 0
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid" style="padding:0">
+    <div class="layui-col-md12">
+        <div class="layui-row grid-demo grid-demo-bg1">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding: 8px 15px 4px;">
+						<span class="layui-breadcrumb">
+							<a><cite>控制管理列表</cite></a>
+							<a onclick="asd()" href="javascript:;"><cite>刷新</cite></a>
+						</span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div>
+                            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                                <button class="layui-btn layui-ds" data-type="add">增加</button>
+                                <!-- <button class="layui-btn" data-type="add">增加</button>
+                                <button class="layui-btn" data-type="dels">批量删除</button>
+                                <button class="layui-btn" data-type="allcheck">全选</button>
+                                <button class="layui-btn" data-type="delall">清空</button> -->
+                            </div>
+                            <!-- 右侧筛选条件 -->
+                            <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                <div class="layui-inline">
+                                    <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+                                           autocomplete="off">
+                                </div>
+                                <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                            </div>
+                            <!-- 右侧筛选条件 end-->
+                        </div>
+                        <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+                        <script type="text/html" id="table-zone-list">
+                            <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>
+                        </script>
+                        <script type="text/html" id="table-content-list">
+                            <a class="layui-btn layui-btn-xs layui-dd" lay-event="setUp" data-type="setUp">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs"
+                               lay-event="bindingList" data-type="bindingList">绑定列表</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+    var tablezonetable;
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user', 'table'], function() {
+        var $ = layui.$,
+            setter = layui.setter,
+            admin = layui.admin,
+            form = layui.form,
+            element = layui.element,
+            table = layui.table,
+            layer = layui.layer,
+            datas = null,
+            router = layui.router();
+        // var url = "http://127.0.0.1:8083"
+        var url = "https://f.longjuli.com"
+        table.render({
+            elem: '#test-table-operate',
+            // height: 'full-200',
+            //url: url + "/meeting/findAllBylayui", //数据接口
+            method: 'get',
+            where: {
+                status: 0
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            url: url + "/roomseat/findAll", //数据接口
+            page: {
+                layout: ['prev', 'page', 'next', 'count', 'skip']
+            },
+
+            cols: [
+                [{
+                    type: 'checkbox',
+                    fixed: 'left'
+                },{
+                    field: 'id',
+                    width: '15%',
+                    title: 'ID',
+                    sort: true
+                }, {
+                    field: 'roomname',
+                    title: '会议室名称',
+                    //align: "center"
+                }, {
+                    field: 'seatnum',
+                    width: '10%',
+                    title: '座位数量',
+                }, {
+                    field: 'seattype',
+                    width: '20%',
+                    title: '席签型号',
+                    templet: function(data) {
+                        if (data.seattype == 0){
+                            return '阿里E-ink桌牌'
+                        }else  if (data.seattype == 1){
+                            return '龙居里E-ink桌牌'
+                        }else  if (data.seattype == 2){
+                            return '龙居里LCD桌牌'
+                        }
+                    }
+                }, {
+                    field: 'seattype',
+                    width: '10%',
+                    title: '绑定数量'
+                }, {
+                    field: 'communicationtype',
+                    width: '10%',
+                    title: '通讯方式'
+                },{
+                    width: '8%',
+                    //align: 'center',
+                    title: '查看',
+                    toolbar: '#table-zone-list'
+                },{
+                    width: 140,
+                    //align: 'center',
+                    title: '操作',
+                    toolbar: '#table-content-list'
+                }
+                ]
+            ],
+            event: true,
+            page: true,
+            limit: 15,
+            skin: 'line',
+            even: true,
+            limits: [5, 10, 15],
+            done: function (res, curr, count) {
+                table_data = res.data;
+
+                layer.closeAll('loading');
+                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                // layer.close(index);    //返回数据关闭loading
+            },
+        });
+        window.reloads = function(){
+            table.render({
+                elem: '#test-table-operate',
+                // height: 'full-200',
+                //url: url + "/meeting/findAllBylayui", //数据接口
+                method: 'get',
+                where: {
+                    status: 0
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                url: url + "/roomseat/findAll", //数据接口
+                page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                },
+
+                cols: [
+                    [{
+                        type: 'checkbox',
+                        fixed: 'left'
+                    },{
+                        field: 'id',
+                        width: '15%',
+                        title: 'ID',
+                        sort: true
+                    }, {
+                        field: 'roomname',
+                        title: '会议室名称',
+                        //align: "center"
+                    }, {
+                        field: 'seatnum',
+                        width: '10%',
+                        title: '座位数量',
+                    }, {
+                        field: 'seattype',
+                        width: '20%',
+                        title: '席签型号',
+                        templet: function(data) {
+                            if (data.seattype == 0){
+                                return '阿里E-ink桌牌'
+                            }else  if (data.seattype == 1){
+                                return '龙居里E-ink桌牌'
+                            }else  if (data.seattype == 2){
+                                return '龙居里LCD桌牌'
+                            }
+                        }
+                    }, {
+                        field: 'seattype',
+                        width: '10%',
+                        title: '绑定数量'
+                    }, {
+                        field: 'communicationtype',
+                        width: '10%',
+                        title: '通讯方式'
+                    },{
+                        width: '8%',
+                        //align: 'center',
+                        title: '查看',
+                        toolbar: '#table-zone-list'
+                    },{
+                        width: 140,
+                        //align: 'center',
+                        title: '操作',
+                        toolbar: '#table-content-list'
+                    }
+                    ]
+                ],
+                event: true,
+                page: true,
+                limit: 15,
+                skin: 'line',
+                even: true,
+                limits: [5, 10, 15],
+                done: function (res, curr, count) {
+                    table_data = res.data;
+
+                    layer.closeAll('loading');
+                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                    // layer.close(index);    //返回数据关闭loading
+                },
+            });
+        }
+        var $ = layui.$,
+
+        active = {
+            //全选
+            getCheckData: function () { //获取选中数据
+                // var checkStatus = table.checkStatus('test-table-operate'),
+                //     data = checkStatus.data;
+                // layer.alert(JSON.stringify(data));
+                // console.log(checkStatus.data)
+                var cb = $(".layui-form-checkbox");
+                // $('.layui-cell-checkbox').click();
+
+                $(".layui-form-checkbox").each(function () {
+                    // if (flag) {
+
+                    $(this).click();
+
+                    // } else {
+                    //     $(this).removeClass('layui-form-checked')
+                    // }
+                })
+
+
+            },
+            //批量删除
+            getCheckLength: function () {
+                if (deviceList.length == 0) {
+                    return layer.msg("请选择会议后再批量删除")
+                }
+                //获取选中数目
+                layer.confirm('真的删除吗？', function () {
+                    $.ajax({
+                        async: false,
+                        type: "post",
+                        url: url + "/meeting/batchRemove",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        data: {
+                            "meetingid": deviceList.join(",")
+
+                        },
+                        success: function (msg) {
+                            if (msg.code == 0) {
+                                layer.msg("删除成功");
+                                reloads(); // 父页面刷新
+
+                            } else {
+                                layer.msg(msg.msg);
+
+
+                            }
+
+                        },
+                        //失败的回调函数
+                        error: function () {
+                            console.log("error")
+                        }
+                    })
+                })
+            },
+            //批量删除
+            isAll: function () { //验证是否全选
+
+                layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function (index) {
+                    $.ajax({
+                        async: false,
+                        type: "get",
+                        url: url + "/meeting/empty",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        data: {
+
+                        },
+                        success: function (msg) {
+                            if (msg.code == 0) {
+                                layer.msg("清空成功");
+                                reloads(); // 父页面刷新
+
+                            } else {
+                                layer.msg(msg.msg);
+
+
+                            }
+
+                        },
+                        //失败的回调函数
+                        error: function () {
+                            console.log("error")
+                        }
+                    })
+                    layer.close(index);
+                });
+
+
+            },
+            add: function () {
+                layer.open({
+                    type: 2,
+                    //title: '收藏管理 (考生姓名：张无忌)',
+                    title: '新建',
+                    shadeClose: false, //弹出框之外的地方是否可以点击
+                    area: ['60%', '70%'],
+                    btn: ['保存', '返回'],
+                    closeBtn: 1,
+                    //offset: '-43px',
+                    content: 'roomseatadd.html',
+                    success: function (layero, index) {
+                        // var body = layui.layer.getChildFrame('body', index);
+                        // var roomid;
+                        // // 取到弹出层里的元素，并把编辑的内容放进去
+                        // body.find("#ruleid").val(data.id);
+                        // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                    },
+                    yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    }
+                });
+            },
+            search: function () {
+                table.render({
+                    elem: '#test-table-operate',
+                    // height: 'full-200',
+                    //url: url + "/meeting/findAllBylayui", //数据接口
+                    method: 'get',
+                    where: {
+                        content: $('#demoReload').val()
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    url: url + "/smsstatistics/selectSearch", //数据接口
+                    page: {
+                        layout: ['prev', 'page', 'next', 'count', 'skip']
+                    },
+
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'id',
+                                title: 'ID',
+                                width: 60,
+                                //align: 'center',
+                                unresize: 'false',
+                            },
+                            {
+                                field: 'title',
+                                title: '通知标题',
+                                align: 'left',
+                            }, {
+                            field: 'succeednotice',
+                            title: '成功通知',
+                            align: 'left',
+                        },
+                            {
+                                field: 'canhui',
+                                title: '确认参会',
+                                align: 'left',
+                            },
+                            {
+                                field: 'leave',
+                                title: '确认请假',
+                                align: 'left',
+                            },
+                            {
+                                field: 'noreply',
+                                title: '未反馈',
+                                align: 'left',
+                            },
+                            {
+                                field: 'nosend',
+                                title: '发送失败',
+                                align: 'left',
+                            },
+                            {
+                                title: '操作',
+                                align: 'left',
+                                toolbar: '#test-table-operate-barDemo',
+                                width:440,
+                            },
+
+                        ]
+                    ],
+                    event: true,
+                    page: true,
+                    limit: 15,
+                    skin: 'line',
+                    even: true,
+                    limits: [5, 10, 15],
+                    done: function (res, curr, count) {
+                        table_data = res.data;
+
+                        layer.closeAll('loading');
+                        deviceList.length = 0;
+                        // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                        // layer.close(index);    //返回数据关闭loading
+                    },
+                });
+            }
+        };
+
+        table.on('tool(test-table-operate)', function(obj) {
+            var age = obj.data;
+            if (obj.event === 'setUp') {
+                layer.open({
+                    type: 2,
+                    title: '编辑',
+                    content: 'roomseatupdate.html?id='+obj.data.id+'&seattype='+obj.data.seattype+'&communicationtype='+obj.data.communicationtype+'&roomid='+obj.data.roomid,
+                    //maxmin: true,
+                    area: ['500px', '340px'],
+                    btn: ['提交', '取消'],
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success: function(layero, index) {
+                    }
+                });
+            } else if (obj.event === 'bindingList') {
+                layer.open({
+                    type: 2,
+                    title: '绑定列表',
+                    content: 'seatmaclist.html?roomid='+obj.data.roomid
+                    // ,maxmin: true
+                    ,
+                    area: ['100%', '100%'],
+                    scrollbar: false,
+                    yes: function(index, layero) {
+                    },
+                    success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find('#roomid').val(age.roomid)
+                    }
+                });
+            } else if (obj.event === 'zonelist') {
+                layer.open({
+                    type: 2,
+                    title: '会议室座区图',
+                    content: 'meetings_room_zq.html'
+                    // ,maxmin: true
+                    ,
+                    area: ['100%', '100%'],
+                    scrollbar: false,
+                    yes: function(index, layero) {
+                    },
+                    success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find('#roomid').val(age.roomid)
+                    }
+                });
+            }
+        })
+        $('.layui-ds').on('click', function () {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+
+    })
+    function asd() {
+        location.reload();
+    }
+</script>
+</body>
+</html>

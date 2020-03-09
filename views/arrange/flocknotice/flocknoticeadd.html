@@ -61,10 +61,10 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label"><span>*</span>手机号:</label>
+				<label class="layui-form-label">手机号:</label>
 				<div class="layui-input-block">
-					<input type="text" name="phone" lay-verify="required" placeholder="以,号隔开例如(1300000000,13000000001)" autocomplete="off"
-						id="username" class="layui-input">
+					<textarea type="text" name="phone"  placeholder="以,号隔开例如(1300000000,13000000001)" autocomplete="off"
+							  class="layui-input"> </textarea>
 				</div>
 			</div>
 		</form>
@@ -197,7 +197,7 @@
 							parent.layer.msg("添加成功")
 							var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
 							parent.layer.close(index);
-							parent.reloads();	
+							parent.reloads();
 						}else{
 							parent.layer.msg(data.msg)
 						}
