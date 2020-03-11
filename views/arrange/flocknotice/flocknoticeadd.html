@@ -44,10 +44,19 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label class="layui-form-label">选择输入方式:</label>
+				<div class="layui-input-block">
+					<select name="flag" lay-skin="select" lay-filter="component-form-selects">
+						<option value="-1">请选择输入方式</option>
+						<option value="0" >自定义输入</option>
+						<option value="1" >选择模版</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item layui-hide" id="template">
 				<label class="layui-form-label"><span>*</span>通知模版:</label>
 				<div class="layui-input-block">
 					<select name="noticeid" lay-skin="select" lay-filter="component-form-select" id="smslist">
-						<option value="-1">请选择通知模版</option>
 						<option value="" id="smss"></option>
 					</select>
 				</div>
@@ -60,13 +69,24 @@
 					</div>
 				</div>
 			</div>
+			<div class="layui-form-item layui-hide" id="content" >
+				<label class="layui-form-label">内容:</label>
+				<div class="layui-input-block">
+					<textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+				</div>
+			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">手机号:</label>
 				<div class="layui-input-block">
-					<textarea type="text" name="phone"  placeholder="以,号隔开例如(1300000000,13000000001)" autocomplete="off"
-							  class="layui-input"> </textarea>
+					<!--					<textarea type="text" name="phone" placeholder="请输入内容111" autocomplete="off"-->
+					<!--							  class="layui-textarea"> </textarea>-->
+					<textarea name="phone" id="phone" placeholder="请输入手机号，多个手机号的格式为13000000000,13011111111(逗号请用英文下的逗号)" class="layui-textarea"></textarea>
+					<p id="label">已输入<span id="smslength">0</span>个字符，共<span id="phones">0</span>个手机号。<br/>
+					</p>
 				</div>
 			</div>
+
+
 		</form>
 	</div>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
@@ -86,28 +106,10 @@
 			var url = "https://f.longjuli.com"
 			// var url = "http://127.0.0.1:8083"
 			var uploadfile = null;
-			// $.ajax({
-			// 	async: false,
-			// 	type: "get",
-			// 	url: url + "/meeting/findAll",
-			// 	dataType: "json",
-			// 	xhrFields: {
-			// 		withCredentials: true
-			// 	},
-			// 	//成功的回调函数
-			// 	success: function (msg) {
-			// 		var data = msg;
-			// 		$.each(data.data, function (idx, con) {
-			// 			$("#sms").after("<option value=" + con.id + ">" + con.name +
-			// 				"</option>");
-			// 		})
-			// 		form.render();
-			// 	},
-			// 	//失败的回调函数
-			// 	error: function () {
-			// 		console.log("error")
-			// 	}
-			// })
+			$('#phone').bind('input propertychange', function () {
+				$('#smslength').text($(this).val().length);
+				$('#phones').text($(this).val().split(",").length);
+			});
 			$.ajax({
 				async: false,
 				type: "get",
@@ -176,8 +178,24 @@
 			// 	btns: ['clear', 'now', 'confirm'],
 			// 	theme: 'molv'
 			// })
+			form.on('select(component-form-selects)', function (data) {
+				if (data.value == "0"){
+					$('#template').addClass('layui-hide');
+					$('#content').removeClass('layui-hide');
+				}
+				if (data.value == "1"){
+					$('#template').removeClass('layui-hide');
+					$('#content').addClass('layui-hide');
+				}
+
+
+			});
 			form.on('submit(addsms)', function (data) {
+
 				var data = data.field;
+				if (data.flag == -1){
+					return layer.msg("请选择输入方式")
+				}
 				console.log(data);
 				$.ajax({
 					url: url + "/flolckstatistics/add",
@@ -186,7 +204,8 @@
 					data: {
 						title: data.title,
 						templateid: data.noticeid,
-						phone:data.phone
+						phone:data.phone,
+						content:data.content
 					},
 					async: false,
 					xhrFields: {

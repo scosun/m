@@ -86,19 +86,22 @@
                 laydate = layui.laydate,
                 form = layui.form,
                 table = layui.table;
-            // var url = "https://f.longjuli.com"
-            var url = "http://127.0.0.1:8083"
+            var url = "https://f.longjuli.com"
+            // var url = "http://127.0.0.1:8083"
             var devices = {};
             var deviceList = [];
             var checkedSet = new Set();
             var uri = window.location.search;
-            var meetingid = uri.substr(11);
+            var meetingid = uri.substring(uri.indexOf("=")+1,uri.indexOf("&"))
+            var mid = uri.substr(uri.lastIndexOf("=")+1);
+
+            console.log(mid)
             $.ajax({
                 url: url + "/Smsperson/findBymeetingid",
                 type: "get",
                 dataType: "json",
                 data: {
-                    id: meetingid
+                    id: mid
                 },
                 async: false,
                 xhrFields: {
@@ -113,7 +116,6 @@
                             return +data;
                         })
                         checkedSet = new Set(dataIntArr);
-                        console.log(checkedSet);
 
                     }
 
@@ -181,7 +183,6 @@
                 skin: 'nob',
                 limits: [5, 10, 15],
                 parseData: function (res) {
-                    console.log(res)
                     for (var i in res.data) {
 
                         if (checkedSet.has(res.data[i].id)) {
@@ -259,7 +260,7 @@
                     skin: 'nob',
                     limits: [5, 10, 15],
                     parseData: function (res) {
-                        console.log(res)
+
                         for (var i in res.data) {
 
                             if (checkedSet.has(res.data[i].id)) {
@@ -362,7 +363,6 @@
                         skin: 'nob',
                         limits: [5, 10, 15],
                         parseData: function (res) {
-                            console.log(res)
                             for (var i in res.data) {
 
                                 if (checkedSet.has(res.data[i].id)) {
@@ -404,7 +404,7 @@
                                     return +data;
                                 })
                                 checkedSet = new Set(dataIntArr);
-                                console.log(checkedSet);
+
 
                             }
 
@@ -447,7 +447,7 @@
                 // 			  	}else{
 
                 // }
-                console.log(checkedSet);
+
 
             });
 
@@ -464,7 +464,7 @@
                     dataType: "json",
                     data: {
                         personids: checkbox.join(","),
-                        meetingid: meetingid
+                        meetingid: mid
                     },
                     async: false,
                     xhrFields: {

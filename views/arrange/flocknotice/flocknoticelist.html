@@ -507,7 +507,7 @@
                     async: false,
                     type: "get",
                     maxmin: true,
-                    url: url + "/smsstatistics/delete",
+                    url: url + "/flolckstatistics/delete",
                     datatype: 'json',
                     data: {
                         id: obj.data.id,
@@ -664,6 +664,7 @@
                     },
                     yes: function (index, layero) {
                         var submit = layero.find('iframe').contents().find("#click");
+                        console.log(submit)
                         submit.click();
                     }
                 });

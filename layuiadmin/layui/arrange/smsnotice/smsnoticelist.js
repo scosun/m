@@ -323,7 +323,7 @@ layui.config({
                 btn: ['保存', '返回'],
                 closeBtn: 1,
                 //offset: '-43px',
-                content: 'smsnoticebyMeetingadd.html?meetingid=' + obj.data.meetingid,
+                content: 'smsnoticebyMeetingadd.html?meetingid=' + obj.data.meetingid+"&id="+obj.data.id,
                 success: function (layero, index) {},
                 yes: function (index, layero) {
                     var submit = layero.find('iframe').contents().find("#click");
@@ -341,7 +341,7 @@ layui.config({
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
-                content: 'smsnoticebyMeeting.html?meetingid=' + obj.data.meetingid,
+                content: 'smsnoticebyMeeting.html?meetingid=' + obj.data.id,
                 success: function (layero, index) {},
 
             });
@@ -357,7 +357,7 @@ layui.config({
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
-                content: 'smsrecordlist.html?meetingid=' + obj.data.meetingid,
+                content: 'smsrecordlist.html?meetingid=' + obj.data.id,
                 success: function (layero, index) {},
 
             });
