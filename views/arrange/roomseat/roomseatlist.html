@@ -500,12 +500,15 @@
             } else if (obj.event === 'zonelist') {
                 layer.open({
                     type: 2,
-                    title: '会议室座区图',
+                    // title: '会议室座区图',
                     content: 'meetings_room_zq.html'
                     // ,maxmin: true
                     ,
-                    area: ['100%', '100%'],
+                    area: ['100%', '106%'],
                     scrollbar: false,
+                    shadeClose: false, //弹出框之外的地方是否可以点击
+                    closeBtn: 1,
+                    offset: '-43px',
                     yes: function(index, layero) {
                     },
                     success: function(layero, index) {
