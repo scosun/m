@@ -172,7 +172,9 @@
             var url = "https://f.longjuli.com"
             // var url="http://127.0.0.1:8083";
             var uri = window.location.search;
-            var sid = uri.substr(4)
+            var sid = uri.substring(uri.indexOf("=")+1,uri.indexOf('&'));
+            var random = uri.substring(uri.lastIndexOf("=")+1);
+
             
             var checkedSet = new Set();
             $.ajax({
@@ -180,7 +182,7 @@
                     type: "get",
                     dataType: "json",
                     data: {
-                        statisticsid: sid,
+                        id: sid,
                     },
                     async: false,
                     xhrFields: {
@@ -381,6 +383,7 @@
                         ids: checkbox.join(","),
                         meetingid: $('#select-room').val(),
                         id: sid,
+                        random:random
                     },
                     async: false,
                     xhrFields: {
@@ -390,8 +393,7 @@
                         if (data.code == 0) {
                             parent.layer.msg("添加成功")
                             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                            parent.layer.close(index);
-                            parent.reload();
+
                         } else {
                             parent.layer.msg(data.msg)
                         }

@@ -59,7 +59,7 @@
 				<div class="layui-card-body">
 					<div>
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-                            <button class="layui-btn" data-type="allcheck">全选</button>
+                            <button class="layui-btn layui-ds" id="click" data-type="allcheck">刷新</button>
 						</div>
                         <!-- 右侧筛选条件 -->
                         
@@ -98,10 +98,13 @@
 
     // #test-table-operate
     var url = "https://f.longjuli.com"
+	// var url = "http://127.0.0.1:8083"
     var uri = window.location.search;
-	var meetingid= uri.substr(11);
-    var devices = {};
-    var arrangeList = [];
+	var meetingid= uri.substring(uri.indexOf("=")+1,uri.indexOf("&"));
+	var meetid= uri.substring(uri.indexOf("s")+2,uri.lastIndexOf("&"));
+	var mid  = uri.substr(uri.lastIndexOf("=")+1);
+
+    console.log(meetid)
     $.ajax({
         async: true,
         type: "get",
@@ -137,7 +140,9 @@
         // url: url+'/smsnotice/meetingByperson',
           url: url+'/smsnotice/meetingByperson',
         where:{
-            id: meetingid
+            id: meetingid,
+			meetingid:mid
+
         },
         xhrFields: {
             withCredentials: true
@@ -219,7 +224,9 @@
 				// url: url+'/smsnotice/meetingByperson',
 				url: url+'/smsnotice/meetingByperson',
 				where:{
-					id: meetingid
+					id: meetingid,
+					meetingid:mid
+
 				},
 				xhrFields: {
 					withCredentials: true
@@ -271,10 +278,9 @@
 								}
 							},
 						},
-
 						{
 							field: 'isleave',
-							title: '参会状态',
+							title: '操作',
 							align: 'left',
 							toolbar: '#test-table-operate-barDemo'
 						},
@@ -307,19 +313,7 @@
     var $ = layui.$,
         active = {
             allcheck: function() {
-                layer.open({
-                    type: 2,
-                    title: '发送短信',
-                    maxmin: true,
-                    area: ['60%', '60%'],
-                    btn: ['确定', '取消'],
-                    content: 'smsnoticeBymeetingsend.html',
-                    yes: function(index, layero) {
-                        var submit = layero.find('iframe').contents().find("#ruleclick");
-                        submit.click();
-                    }
-                    // content: '/gkzytb/franchiser/rigthColumnJsonList'
-                });
+                reloads();
 
             },
             detailedinfo: function() {
@@ -378,7 +372,7 @@
                 btn: ['刷新', '返回'],
                 closeBtn: 1,
                 //offset: '-43px',
-                content: 'smsreplylist.html?meetingid='+meetingid+"&phone="+obj.data.phone1,
+                content: 'smsreplylist.html?meetingid='+meetid+"&phone="+obj.data.phone1,
                 success: function(layero, index) {
                     // var body = layui.layer.getChildFrame('body', index);
                     // var roomid;

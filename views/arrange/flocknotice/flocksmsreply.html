@@ -87,8 +87,8 @@
             $ = layui.jquery;
 
         // #test-table-operate
-        var url = "https://f.longjuli.com"
-        //  var url = "http://127.0.0.1:8083"
+        // var url = "https://f.longjuli.com"
+         var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var meetingid= uri.substr(11);
 
@@ -98,7 +98,7 @@
             //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
             method: 'get',
             // url: url+'/smsnotice/meetingByperson',
-            url: url+'/smsreply/findAll',
+            url: url+'/smsreply/selectReplyperson',
             where:{
                 extno:"415"+meetingid
             },
@@ -117,6 +117,21 @@
                         width:60,
                         align: 'center',
                         unresize: 'false',
+                    },
+                    {
+                        field: 'name',
+                        title: '姓名',
+                        align: 'left',
+                    },
+                    {
+                        field: 'company',
+                        title: '单位',
+                        align: 'left',
+                    },
+                    {
+                        field: 'duties',
+                        title: '职务',
+                        align: 'left',
                     },
                     {
                         field: 'mobile',
@@ -226,10 +241,10 @@
                         //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
                         method: 'get',
                         // url: url+'/smsnotice/meetingByperson',
-                        url: url+'/smsreply/searchreply',
+                        url: url+'/smsreply/selectReplypersonSearch',
                         where:{
                             content:$('#demoReload').val(),
-                            extno:"415"+meetingid
+                            extno:"415"+meetingid,
                         },
                         xhrFields: {
                             withCredentials: true
@@ -246,6 +261,21 @@
                                     width:60,
                                     align: 'center',
                                     unresize: 'false',
+                                },
+                                {
+                                    field: 'name',
+                                    title: '姓名',
+                                    align: 'left',
+                                },
+                                {
+                                    field: 'company',
+                                    title: '单位',
+                                    align: 'left',
+                                },
+                                {
+                                    field: 'duties',
+                                    title: '职务',
+                                    align: 'left',
                                 },
                                 {
                                     field: 'mobile',

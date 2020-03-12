@@ -367,7 +367,7 @@
                 btn: ['保存', '返回'],
                 closeBtn: 1,
                 //offset: '-43px',
-                content: 'flockmeeting.html?id=' + obj.data.id,
+                content: 'flockmeeting.html?id='+ obj.data.id+"&random="+obj.data.random,
                 success: function (layero, index) {},
                 yes: function (index, layero) {
                     var submit = layero.find('iframe').contents().find("#click");
@@ -406,7 +406,7 @@
 				closeBtn: 1,
 				//offset: '-43px',
 				//  content: $('#show-view'),
-				content: 'flocksendmailrecord.html?meetingid=' + obj.data.id,
+				content: 'flocksendmailrecord.html?meetingid=' + obj.data.random,
 				success: function (layero, index) {
 
 				},
@@ -427,7 +427,7 @@
 				closeBtn: 1,
 				//offset: '-43px',
 				//  content: $('#show-view'),
-				content: 'flocksmsreply.html?meetingid=' + obj.data.id,
+				content: 'flocksmsreply.html?meetingid=' + obj.data.random,
 				success: function (layero, index) {
 
 				},

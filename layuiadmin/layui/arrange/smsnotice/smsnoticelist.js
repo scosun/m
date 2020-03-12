@@ -289,6 +289,7 @@ layui.config({
                     maxmin: true,
                     data: {
                         statistics: obj.data.id,
+                        random:obj.data.random
                     },
                     xhrFields: {
                         withCredentials: true
@@ -313,6 +314,9 @@ layui.config({
             });
 
         } else if (obj.event === 'personedit') {
+            if (obj.data.issendmail == 1) {
+                return layer.msg('当前会议已发送');
+            }
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
@@ -337,12 +341,16 @@ layui.config({
                 title: '人员详情',
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
-                btn: ['保存', '返回'],
+                btn: ['刷新', '返回'],
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
-                content: 'smsnoticebyMeeting.html?meetingid=' + obj.data.id,
+                content: 'smsnoticebyMeeting.html?meetingid=' + obj.data.id+"&ids="+obj.data.random+"&meetid="+obj.data.meetingid,
                 success: function (layero, index) {},
+                yes:function (index,layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                }
 
             });
         } else if (obj.event === 'record') {
@@ -353,12 +361,16 @@ layui.config({
                 maxmin: true,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
-                btn: ['保存', '返回'],
+                btn: ['刷新', '返回'],
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
-                content: 'smsrecordlist.html?meetingid=' + obj.data.id,
+                content: 'smsrecordlist.html?meetingid=' + obj.data.random,
                 success: function (layero, index) {},
+                yes:function (index,layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                }
 
             });
         } else if (obj.event === 'edit') {
@@ -441,7 +453,8 @@ layui.config({
                     datatype: 'json',
                     data: {
                         id: obj.data.id,
-                        sid: obj.data.meetingid
+                        sid: obj.data.meetingid,
+                        extno:obj.data.random
                     },
                     xhrFields: {
                         withCredentials: true
