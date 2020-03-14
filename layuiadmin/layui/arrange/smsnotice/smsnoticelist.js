@@ -1,60 +1,20 @@
 layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
-    index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery'], function () {
+    index: 'lib/index', //主入口模块
+    dropdown: '/dropdown/dropdown'
+}).use(['index', 'table', 'jquery','dropdown'], function () {
     var table = layui.table,
         admin = layui.admin,
-        $ = layui.jquery;
+        $ = layui.jquery,
+        dropdown = 'dropdown';
+    // dropdown = layui.dropdown;
     var url = "https://f.longjuli.com";
     // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
     // #test-table-operate
     //渲染表格
-    $('#group').append(
-        '<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
-    )
-    $.ajax({
-        async: false,
-        type: "get",
-        url: "https://f.longjuli.com" + "/permission/getpremission",
-        datatype: 'json',
-
-        xhrFields: {
-            withCredentials: true
-        },
-        //成功的回调函数
-        success: function (msg) {
-            var data = msg.data;
-
-            if (msg.code != 0) {
-                location.href = "user/login.html"
-            }
-            window.a = data
-
-            //<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
-            if ($.inArray("addmeet", data) != -1) {
-                $('#buttongroup').before(
-                    "<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>"
-                )
-            }
-            if ($.inArray("emptymeet", data) != -1) {
-                $('#buttongroup').after(
-                    "<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>清空</button>"
-                );
-            }
-            if ($.inArray("batchmeet", data) != -1) {
-                $('#buttongroup').before(
-                    '<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>'
-                );
-            }
-
-        },
-        error: function (error) {
-            console.log(error)
-        },
-    })
 
     function isEmptyObject(obj) {
 
@@ -100,10 +60,10 @@ layui.config({
                     title: '通知标题',
                     align: 'left',
                 }, {
-                    field: 'succeednotice',
-                    title: '成功通知',
-                    align: 'left',
-                },
+                field: 'succeednotice',
+                title: '成功通知',
+                align: 'left',
+            },
                 {
                     field: 'canhui',
                     title: '确认参会',
@@ -127,7 +87,7 @@ layui.config({
                 {
                     title: '操作',
                     align: 'left',
-                    width: 440,
+                    width: 140,
                     toolbar: '#test-table-operate-barDemo'
                 },
 
@@ -184,10 +144,10 @@ layui.config({
                         title: '通知标题',
                         align: 'left',
                     }, {
-                        field: 'succeednotice',
-                        title: '成功通知',
-                        align: 'left',
-                    },
+                    field: 'succeednotice',
+                    title: '成功通知',
+                    align: 'left',
+                },
                     {
                         field: 'canhui',
                         title: '确认参会',
@@ -212,9 +172,9 @@ layui.config({
                         title: '操作',
                         align: 'left',
                         toolbar: '#test-table-operate-barDemo',
-                        width:440,
+                        width: 140,
                     },
-    
+
                 ]
             ],
             event: true,
@@ -671,7 +631,7 @@ layui.config({
                                 title: '操作',
                                 align: 'left',
                                 toolbar: '#test-table-operate-barDemo',
-                                width:440,
+                                width: 140,
                             },
 
                         ]

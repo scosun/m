@@ -75,6 +75,7 @@
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate" style="display: block;"></table>
 					<script type="text/html" id="test-table-operate-barDemo" >
+						<a class="layui-btn layui-btn-xs" lay-event="personsend">人工发送</a>
                         <a class="layui-btn layui-btn-xs" lay-event="person">人工审核</a>
                         <a class="layui-btn layui-btn-xs" lay-event="edit">回复记录</a>
                         <a class="layui-btn layui-btn-xs" style="background-color: #FF5722;" lay-event="del">删除</a>
@@ -441,6 +442,40 @@
 					})
 
 				}
+			});
+
+		}else  if (obj.event === 'personsend') {
+			layer.confirm('请确认信息正确并点击确认按钮后，短信会立即发送', function (index) {
+				$.ajax({
+					async: false,
+					type: "get",
+					url: url + "/smsstatistics/personsend",
+					datatype: 'json',
+					maxmin: true,
+					data: {
+						id: meetingid,
+						personid:obj.data.id
+					},
+					xhrFields: {
+						withCredentials: true
+					},
+					//成功的回调函数
+					success: function (msg) {
+						if (msg.code == 0) {
+							layer.msg(msg.msg)
+							// var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+							// layer.close(index);
+							reloads();
+						} else {
+							layer.msg(msg.msg)
+						}
+
+					},
+					error: function (error) {
+						console.log(error)
+					},
+				})
+				layer.close(index);
 			});
 
 		}

@@ -1,49 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>短信通知</title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
-<script src="../../../js/scosun.js"></script>
-<style type="text/css">
-	.layui-btn {background-color: #666;}
-	.layui-btn-danger {background-color: #FF5722;}
-	.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
-	.w60{
-		width: 60px;
-	}
-	.w40{
-		width: 40px;
-	}
-	.textC{
-		text-align: center;
-	}
-	.layui-btn-sign-red,.layui-btn-sign-green {
-		height: 20px;
-		line-height: 20px;
-		padding: 0 4px;
-		font-size: 12px;
-		background-color: #fff;
-		border: 1px solid #e6e6e6;
-	}
-	.layui-btn-sign-red{color:#ff0000;border-color:#ff0000}
-	.layui-btn-sign-green{color:#008908;border-color:#008908}
-	.layui-btn-sign-red:hover{color:#fff;border-color:#ff0000;background-color: #ff0000;}
-	.layui-btn-sign-green:hover{color:#fff;border-color:#008908;background-color: #008908;}
-	.cursorD{cursor: default;}
-	.layui-btn-group .layui-btn:only-child {
-    		border-radius:2px;
-	}
-	.layui-btn+.layui-btn {
-		margin-left: 0;
-	}
-</style>
+	<meta charset="utf-8">
+	<title>短信通知</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+	<script src="../../../js/scosun.js"></script>
+	<style type="text/css">
+		.layui-btn {background-color: #666;}
+		.layui-btn-danger {background-color: #FF5722;}
+		.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+		.w60{
+			width: 60px;
+		}
+		.w40{
+			width: 40px;
+		}
+		.textC{
+			text-align: center;
+		}
+		.layui-btn-sign-red,.layui-btn-sign-green {
+			height: 20px;
+			line-height: 20px;
+			padding: 0 4px;
+			font-size: 12px;
+			background-color: #fff;
+			border: 1px solid #e6e6e6;
+		}
+		.layui-btn-sign-red{color:#ff0000;border-color:#ff0000}
+		.layui-btn-sign-green{color:#008908;border-color:#008908}
+		.layui-btn-sign-red:hover{color:#fff;border-color:#ff0000;background-color: #ff0000;}
+		.layui-btn-sign-green:hover{color:#fff;border-color:#008908;background-color: #008908;}
+		.cursorD{cursor: default;}
+		.layui-btn-group .layui-btn:only-child {
+			border-radius:2px;
+		}
+		.layui-btn+.layui-btn {
+			margin-left: 0;
+		}
+		.dropdown-menu-nav.dropdown-bottom-right {
+			padding-left:10px;
+			padding-right:10px;
+		}
+		.dropdown-menu-nav.dropdown-top-right {
+			padding-left:10px;
+			padding-right:10px;
+		}
+		.layui-btn-primary {
+			border: 1px solid #ccc;
+			display: inline-block;
+			border-radius: 2px;
+		}
+		.layui-btn-sm {
+			height: 22px;
+			line-height: 22px;
+		}
+		.layui-btn-sm i {
+			display: inline-block;
+			vertical-align: middle;
+			color: #aaa;
+		}
+		.layui-btn-primary:hover {
+			border-color: #ccc;
+			color: #333;
+		}
+	</style>
 </head>
 <body>
 <div class="layui-card layadmin-header">
@@ -61,16 +88,13 @@
 				<div class="layui-card-body">
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-							<!-- <button class="layui-btn" data-type="add">增加</button>
-							<button class="layui-btn" data-type="dels">批量删除</button>
-							<button class="layui-btn" data-type="allcheck">全选</button>
-							<button class="layui-btn" data-type="delall">清空</button> -->
+							<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>
 						</div>
 						<!-- 右侧筛选条件 -->
 						<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
 							<div class="layui-inline">
-							<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
-								autocomplete="off">
+								<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+									   autocomplete="off">
 							</div>
 							<button class="layui-btn layui-ds" data-type="search">搜索</button>
 						</div>
@@ -78,13 +102,26 @@
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
 					<script type="text/html" id="test-table-operate-barDemo">
-						<a class="layui-btn layui-btn-xs" lay-event="personedit">人员编辑</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="sendmail">发送短信</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="record">短信记录</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="particulars">人员详情</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="nosend">错误发送</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="edit">修改</a>
-						<a class="layui-btn layui-btn-xs"  lay-event="del">删除</a>
+						<!--						<a class="layui-btn layui-btn-xs" lay-event="personedit">人员编辑</a>-->
+						<!--						<a class="layui-btn layui-btn-xs"  lay-event="sendmail">发送短信</a>-->
+						<!--						<a class="layui-btn layui-btn-xs"  lay-event="record">短信记录</a>-->
+						<!--						<a class="layui-btn layui-btn-xs"  lay-event="particulars">人员详情</a>-->
+						<!--						<a class="layui-btn layui-btn-xs"  lay-event="nosend">错误发送</a>-->
+						<div class="dropdown-menu dropdown-hover">
+							<a class="layui-btn-primary layui-btn-sm" data-dropdown="#dropUser{{d.LAY_INDEX}}"
+							   no-shade="true">更多操作<i class="layui-icon layui-icon-drop" style="font-size: 8px;margin-right: 0;"></i></a>
+							<ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
+								<div class="dropdown-anchor"></div>
+								<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+								<a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+								<a class="layui-btn layui-btn-xs" lay-event="personedit">人员编辑</a>
+								<a class="layui-btn layui-btn-xs" lay-event="sendmail">发送短信</a>
+								<a class="layui-btn layui-btn-xs" lay-event="record">短信记录</a>
+								<a class="layui-btn layui-btn-xs" lay-event="particulars">人员详情</a>
+								<a class="layui-btn layui-btn-xs" lay-event="nosend">错误发送</a>
+							</ul>
+						</div>
+
 					</script>
 				</div>
 			</div>
