@@ -20,7 +20,7 @@ layui.config({
     element.render();
     //初次渲染表格
     var url = "https://f.longjuli.com"
-    // var url="http://127.0.0.1:8083";
+    //     var url="http://127.0.0.1:8083";
     var devices = {};
     var attenderList = [];
     layer.msg("上方下拉框选择会议后自动加载相关人员");
@@ -83,7 +83,7 @@ layui.config({
     $.ajax({
         async: true,
         type: "get",
-        url: url + "/meeting/findAll",
+        url: url + "/meeting/findByMeeting",
         dataType: "json",
         xhrFields: {
             withCredentials: true

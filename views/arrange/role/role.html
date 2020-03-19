@@ -104,7 +104,7 @@
 				datas = null,
 				router = layui.router();
 			var url = "https://f.longjuli.com"
-			/* var url = "http://127.0.0.1:8083"; */
+			// var url = "http://127.0.0.1:8083";
 			$.ajax({
 				async: false,
 				type: "get",
@@ -263,10 +263,10 @@
 						content: 'roleupdate.html',
 						// maxmin: true,
 						area: ['100%', '100%'],
-
+						btn: ['保存', '返回'],
 						yes: function (index, layero) {
-							var body = layer.getChildFrame('body', index);
-							// console.log(body.find('#meeting_list').val() + "1s")
+								var submit = layero.find('iframe').contents().find("#click");
+								submit.click();
 						},
 						success: function (layero, index) {
 							console.log(obj)

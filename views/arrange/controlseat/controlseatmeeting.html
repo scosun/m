@@ -72,14 +72,18 @@
         var uri = window.location.search;
         var roomid = uri.substring(uri.indexOf("=")+1,uri.indexOf("&"));
         var meeting = uri.substring(uri.lastIndexOf("=")+1)
+
         var url = "https://f.longjuli.com"
         // var url = "http://127.0.0.1:8083"
         var uploadfile = null;
         $.ajax({
             async: false,
             type: "get",
-            url: url + "/meeting/findAll",
+            url: url + "/meeting/findByMeeting",
             dataType: "json",
+            data:{
+                "roomid":roomid
+            },
             xhrFields: {
                 withCredentials: true
             },

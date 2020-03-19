@@ -51,6 +51,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
                             <div class="layui-colla-item">
                                 <h2 class="layui-colla-title">管理组权限</h2>
                                 <div class="layui-colla-content layui-show">
@@ -133,19 +135,14 @@
                                 </div>
                             </div>
                         </div>
-                        <center>
-                            <div class="layui-form-item layui-layout-admin">
-                                <div class="layui-input-block">
-                                    <div class="layui-footer" style="left: 0;">
-                                        <button class="layui-btn" lay-submit="submit" lay-filter="component-form-demo1"
-                                            id="sub">提交</button>
-                                        <button type="button" class="layui-btn layui-btn-primary"
-                                            onclick="reloadwin()">重置</button>
-                                    </div>
-                                </div>
+                    <div class="layui-form-item layui-layout-admin layui-hide ">
+                        <div class="layui-input-block">
+                            <div style="position: absolute;right: 0px;bottom: 0px;">
+                                <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
-                        </center>
-
+                        </div>
+                    </div>
 
                 </form>
             </div>
@@ -166,8 +163,8 @@
                 layer = layui.layer,
                 laydate = layui.laydate,
                 form = layui.form;
-            var url = "https://f.longjuli.com"
-			/* var url = "http://127.0.0.1:8083"; */
+             var url = "https://f.longjuli.com"
+			//  var url = "http://127.0.0.1:8083";
             $.ajax({
                 url: url + "/permission/findAll",
                 type: "get",
@@ -261,7 +258,7 @@
 
                     $.each(data.data, function (index, item) {
 
-                        $('#' + item).click();
+                        $('#' + item).prop("checked","checked");
 
 
                     })
@@ -274,7 +271,7 @@
                 }
 
             })
-            form.on('submit(component-form-demo1)', function (data) {
+            form.on('submit(addmeeting)', function (data) {
                 data = data.field;
                 var a = [];
                 console.log(data)

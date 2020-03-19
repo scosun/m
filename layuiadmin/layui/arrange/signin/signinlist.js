@@ -18,7 +18,7 @@ layui.config({
     $.ajax({
         async: true,
         type: "get",
-        url: url + "/meeting/findAll",
+        url: url + "/meeting/findByMeeting",
         dataType: "json",
         xhrFields: {
             withCredentials: true

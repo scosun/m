@@ -18,7 +18,7 @@ layui.config({
     $.ajax({
         async: false,
         type: "get",
-        url:"https://f.longjuli.com" + "/permission/getpremission",
+        url:url+ "/permission/getpremission",
         datatype: 'json',
 
         xhrFields: {

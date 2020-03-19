@@ -123,6 +123,7 @@
                 <div class="layui-card-body">
                     <div>
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                            <button class="layui-btn layui-ds layui-hide"  data-type="getCheckData" id="click">全选</button>
                         </div>
                         <!-- 右侧筛选条件 -->
                         <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
@@ -134,14 +135,14 @@
                         </div>
                         <!-- 右侧筛选条件 end-->
                     </div>
-                    <table id="test-table-operate" lay-filter="test-table-operate"></table>
-                    <script type="text/html" id="table-zone-list">
-                        <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>
-                    </script>
-                    <script type="text/html" id="test-table-operate-barDemo">
-                        <a class="layui-btn layui-btn-xs" lay-event="edit">选择会议</a>
-                        <a class="layui-btn layui-btn-xs" lay-event="del">历史记录</a>
-                    </script>
+                    <table id="test-table-operate" lay-filter="test-table-operate" style="margin-top: 30px"></table>
+<!--                    <script type="text/html" id="table-zone-list">-->
+<!--                        <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>-->
+<!--                    </script>-->
+<!--                    <script type="text/html" id="test-table-operate-barDemo">-->
+<!--                    <a class="layui-btn layui-btn-xs" lay-event="edit">选择会议</a>-->
+<!--                    <a class="layui-btn layui-btn-xs" lay-event="del">历史记录</a>-->
+<!--                </script>-->
                 </div>
             </div>
         </div>
@@ -162,36 +163,24 @@
             dropdown = 'dropdown';
         var url = "https://f.longjuli.com";
         // var url = "http://127.0.0.1:8083";
+        var uri = window.location.search;
+        var roomid = uri.substr(4);
         var devices = {};
         var deviceList = [];
         // #test-table-operate
         //渲染表格
-        $('#group').append(
-            '<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
-        )
-        function isEmptyObject(obj) {
-
-            var jlength = 0;
-            for (var key in obj) {
-                if (key != "null") {
-                    jlength++;
-                }
-            }
-            ;
-            return jlength
-        };
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
             //url: url + "/meeting/findAllBylayui", //数据接口
             method: 'get',
             where: {
-                status: 0
+                roomid: roomid
             },
             xhrFields: {
                 withCredentials: true
             },
-            url: url + "/roomtemplate/findAllBylayui", //数据接口
+            url: url + "/historicalrecord/findAll", //数据接口
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
@@ -210,11 +199,11 @@
                     },
                     {
                         field: 'name',
-                        title: '会议室',
+                        title: '操作名称',
                         align: 'left',
                     }, {
-                    field: 'meetingstate',
-                    title: '状态',
+                    field: 'operationtime',
+                    title: '操作时间',
                     align: 'left',
                 },
                     {
@@ -228,22 +217,10 @@
                         align: 'left',
                     },
                     {
-                        field: 'startmeetingtime',
-                        title: '启动会议时间',
+                        field: 'remake',
+                        title: '备注',
                         align: 'left',
-                    },
-                    {
-                        width: '8%',
-                        //align: 'center',
-                        title: '查看',
-                        toolbar: '#table-zone-list'
-                    },
-                    {
-                        title: '操作',
-                        align: 'left',
-                        toolbar: '#test-table-operate-barDemo',
-                        width: 140,
-                    },
+                    }
 
                 ]
             ],
@@ -270,12 +247,12 @@
                 //url: url + "/meeting/findAllBylayui", //数据接口
                 method: 'get',
                 where: {
-                    status: 0
+                    roomid: roomid
                 },
                 xhrFields: {
                     withCredentials: true
                 },
-                url: url + "/roomtemplate/findAllBylayui", //数据接口
+                url: url + "/historicalrecord/findAll", //数据接口
                 page: {
                     layout: ['prev', 'page', 'next', 'count', 'skip']
                 },
@@ -294,11 +271,11 @@
                         },
                         {
                             field: 'name',
-                            title: '会议室',
+                            title: '操作名称',
                             align: 'left',
                         }, {
-                        field: 'meetingstate',
-                        title: '状态',
+                        field: 'operationtime',
+                        title: '操作时间',
                         align: 'left',
                     },
                         {
@@ -312,22 +289,10 @@
                             align: 'left',
                         },
                         {
-                            field: 'startmeetingtime',
-                            title: '启动会议时间',
+                            field: 'remake',
+                            title: '备注',
                             align: 'left',
-                        },
-                        {
-                            width: '8%',
-                            //align: 'center',
-                            title: '查看',
-                            toolbar: '#table-zone-list'
-                        },
-                        {
-                            title: '操作',
-                            align: 'left',
-                            toolbar: '#test-table-operate-barDemo',
-                            width: 140,
-                        },
+                        }
 
                     ]
                 ],
@@ -392,9 +357,6 @@
         table.on('tool(test-table-operate)', function (obj) {
             var data = obj.data;
             if (obj.event === 'zonelist') {
-                if (data.meetingstate == 0) {
-                    return layer.msg('请选择当前要开通的会议')
-                }
                 layer.open({
                     type: 2,
                     // title: '会议室座区图',
@@ -413,7 +375,7 @@
                 });
 
             }
-             else if (obj.event === 'edit') {
+            else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
                     //title: '收藏管理 (考生姓名：张无忌)',
@@ -436,26 +398,36 @@
 
                 });
             } else if (obj.event === 'del') {
-                layer.open({
-                    type: 2,
-                    //title: '收藏管理 (考生姓名：张无忌)',
-                    title: '历史记录',
-                    maxmin: true,
-                    shadeClose: false, //弹出框之外的地方是否可以点击
-                    area: ['50%', '63%'],
-                    btn: ['刷新', '返回'],
-                    closeBtn: 1,
-                    //offset: '-43px',
-                    //  content: $('#show-view'),
-                    content: 'conrolrecord.html?id=' + obj.data.id,
-                    success: function (layero, index) {
+                layer.confirm('确认删除吗？', function (index) {
+                    $.ajax({
+                        async: false,
+                        type: "get",
+                        maxmin: true,
+                        url: url + "/flolckstatistics/delete",
+                        datatype: 'json',
+                        data: {
+                            id: obj.data.id,
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        success: function (msg) {
+                            if (msg.code == 0) {
+                                layer.msg(msg.msg)
+                                // var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                                // layer.close(index);
+                                reloads();
+                            } else {
+                                layer.msg(msg.msg)
+                            }
 
-                    },
-                    yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#click");
-                        submit.click();
-                    }
-
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        },
+                    })
+                    layer.close(index);
                 });
 
             } else if (obj.event === 'nosend') {
@@ -508,22 +480,7 @@
             active = {
                 //全选
                 getCheckData: function () { //获取选中数据
-                    // var checkStatus = table.checkStatus('test-table-operate'),
-                    //     data = checkStatus.data;
-                    // layer.alert(JSON.stringify(data));
-                    // console.log(checkStatus.data)
-                    var cb = $(".layui-form-checkbox");
-                    // $('.layui-cell-checkbox').click();
-
-                    $(".layui-form-checkbox").each(function () {
-                        // if (flag) {
-
-                        $(this).click();
-
-                        // } else {
-                        //     $(this).removeClass('layui-form-checked')
-                        // }
-                    })
+                    reloads();
 
 
                 },

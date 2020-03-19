@@ -10,6 +10,7 @@ layui.config({
         laydate = layui.laydate,
         form = layui.form;
     var url="https://f.longjuli.com";
+    // var url="http://127.0.0.1:8083";
     var day2 = new Date();
     day2.setTime(day2.getTime());
     var hour = day2.getHours(); //得到小时
@@ -130,6 +131,7 @@ layui.config({
     });
 
  $('#addmeeting').click(()=>{
+     // location.href = "../meeting/meeting_room_form.html"
      layer.open({
         type: 2,
         title: '添加会议室',
@@ -155,7 +157,7 @@ layui.config({
            	success: function(data) {
            		if (data.code === 0) {
            			layer.msg('添加成功,请重新选择会议室');
-           	
+
                     $.ajax({
                         async: false,
                         type: "get",
@@ -166,21 +168,21 @@ layui.config({
                         },
                         //成功的回调函数
                         success: function(msg) {
-                    
+
                             var data = msg.data;
-                    
+
                             $.each(data, function(idx, con) {
-                    
+
                                 $("#select_meet").after("<option value=" + con.id + ">" + con.name +
                                     "</option>");
                             })
                            form.render(null, 'component-form-group');
-                           	
-                           
+
+
                         }
                     })
                     layer.close(index);
-           				
+
            		} else {
            			layer.msg(data.msg, {
            				icon: 5
@@ -197,8 +199,8 @@ layui.config({
            })
         },
         success: function(layero, index) {
-            
-            
+
+
         }
     });
  })

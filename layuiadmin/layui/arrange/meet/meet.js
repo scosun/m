@@ -7,6 +7,7 @@ layui.config({
         admin = layui.admin,
         $ = layui.jquery;
     var url = "https://f.longjuli.com";
+    // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
     // #test-table-operate
@@ -18,7 +19,7 @@ layui.config({
     $.ajax({
         async: false,
         type: "get",
-        url:"https://f.longjuli.com" + "/permission/getpremission",
+        url:url + "/permission/getpremission",
         datatype: 'json',
 
         xhrFields: {
@@ -75,7 +76,7 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/meeting/findAllBylayui" //数据接口
+        url: url + "/meeting/findMeetingBylayui" //数据接口
             ,
 
         method: 'get',
@@ -156,15 +157,15 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/meeting/findAllBylayui" //数据接口
-                ,
+            url: url + "/meeting/findMeetingBylayui" //数据接口
+            ,
 
             method: 'get',
-            xhrFields: {
-                withCredentials: true
-            },
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
+            },
+            xhrFields: {
+                withCredentials: true
             },
             cols: [
                 [ //表头
@@ -184,13 +185,13 @@ layui.config({
                         title: '会议名称',
                         align: 'left',
                     }, {
-                        field: 'address',
-                        title: '会议地址',
-                        align: 'left',
-    
-                    },
+                    field: 'address',
+                    title: '会议地址',
+                    align: 'left',
+
+                },
                     {
-                       
+
                         //align: 'center',
                         width: 80,
                         flxed: '2',
@@ -198,11 +199,11 @@ layui.config({
                         toolbar: '#rulezone',
                     }
                     , {
-                        field: 'meetingtime',
-                        title: '时间',
-                        align: 'left',
-    
-                    },
+                    field: 'meetingtime',
+                    title: '时间',
+                    align: 'left',
+
+                },
                     {
                         width: 100,
                         //align: 'right',
@@ -224,6 +225,8 @@ layui.config({
 
                 layer.closeAll('loading');
                 deviceList.length = 0;
+                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                // layer.close(index);    //返回数据关闭loading
             },
 
 
@@ -535,8 +538,8 @@ layui.config({
                     btn: ['确定', '取消'],
                     content: 'meet_create.html',
                     yes: function(index, layero) {
-                        var iframeWindow = window['layui-layer-iframe' + index]
-                        //iframeWindow.onappent();
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
 
                     }
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
