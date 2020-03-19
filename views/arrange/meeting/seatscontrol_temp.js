@@ -240,7 +240,7 @@ function bulidSeatsContainer(rownum,colnum,mleft,mtop,ism){
 			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
-		sleft = sLeft;
+		sleft = __sLeft;
 		if(ism){
 			sleft = mleft;
 		}
