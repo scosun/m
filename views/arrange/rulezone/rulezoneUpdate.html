@@ -162,7 +162,8 @@
 			"#8A2BE2",
 			"#FF4500"
 		];
-		var url = "https://f.longjuli.com"
+		var url = "https://f.longjuli.com";
+        //    var url = "http://127.0.0.1:8083"
        	var uri = window.location.search;
 		var str = uri.substr(1);
 		window.roomid = str.substring(str.indexOf("=")+1);
@@ -264,8 +265,8 @@
        	})
        	//绘制座区图方法
        	$.ajax({
-       	    url: url+"/roomtemplate/findByroomtemplate",
-       	    type: "get",
+       	    url: url+"/roomtemplate/findByIdTemplatecode",
+       	    type: "post",
        	    async: false,
        	    xhrFields: {
        	        withCredentials: true
@@ -276,7 +277,7 @@
        	    },
        	    success: function(data) {
        	        var datas = data.data;
-				$("body").append(data.data[0].templatecode);
+				$("body").append(datas.templatecode);
 				   
 				selectSeats();
 
