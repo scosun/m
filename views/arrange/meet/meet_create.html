@@ -29,13 +29,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">会议名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
+                        <input type="text" name="name" lay-verify="required" id="meetingname" placeholder="请输入" autocomplete="off" class="layui-input hyname">
                     </div>
                 </div>
                <div class="layui-form-item">
                     <label class="layui-form-label">会议室地点</label>
                     <div class="layui-input-inline" >
-                        <select name="meeting" lay-skin="select" lay-filter="component-form-select" id="meeting">
+                        <select name="meeting"  lay-skin="select" lay-filter="component-form-select" id="meeting">
                             <option value="" id="select_meet"></option>
 
                         </select>
@@ -48,7 +48,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">规则模板</label>
                     <div class="layui-input-inline">
-                        <select name="rule" lay-skin="select">
+                        <select name="rule" lay-skin="select" id="ruleid">
                             <option value="" id="select_rule"></option>
 
                         </select>
@@ -76,14 +76,14 @@
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
-                        <textarea name="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="memo" id="remake" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item layui-layout-admin layui-hide">
+                <div class="layui-form-item layui-layout-admin">
                     <div class="layui-input-block">
                         <div style="position: absolute;right: 0px;bottom: 0px;">
-                            <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">保存</button>
+                            <button type="reset" class="layui-btn layui-ds" data-type="cancel">取消</button>
                         </div>
                     </div>
                 </div>

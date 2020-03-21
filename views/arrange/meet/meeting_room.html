@@ -1,0 +1,125 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会议室表单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
+    <div class="layui-form-item">
+        <label class="layui-form-label">会议室名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" lay-verify="required" placeholder="请输入会议室名称" autocomplete="off" class="layui-input" id="roomname" name="ids">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="author" lay-verify="required" placeholder="请输入模板名称" autocomplete="off" id="templatefilename" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">编排规则</label>
+        <div class="layui-input-block">
+            <select name="label" lay-verify="required" id="seatrule">
+                <option value="">请选择标签</option>
+                <option  selected = "selected" value="0">左双右单</option>
+                <option value="1">左单右双</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板代码</label>
+        <div class="layui-input-block">
+            <textarea name="core" placeholder="请输入" class="layui-textarea" id="templatecode"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-layout-admin">
+        <div class="layui-input-block">
+            <div style="position: absolute;right: 0px;bottom: 0px;">
+                <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
+                <button type="reset" class="layui-btn layui-ds" data-type="cancel">返回</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,router = layui.router();
+        var url = "https://f.longjuli.com";
+        // var url="http://127.0.0.1:8083"
+        var name = getUrlParam("name");
+        var meeting = getUrlParam("meeting");
+        var  ruleid = getUrlParam("ruleid");
+        var  dates = getUrlParam("dates");
+        var  times = getUrlParam("times");
+        var  remake = getUrlParam("remake");
+        var active = {
+            cancel:function () {
+                location.href = "./meet_create.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake;
+
+            }
+        }
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return (r[2]); return null; //返回参数值
+        }
+        //监听提交
+        form.on('submit(addmeeting)', function(data){
+            var data = data.field; //获取提交的字段
+            $.ajax({
+                url: url+"/roomtemplate/addRoomtemplate",
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: {
+                    "name":data.title,
+                    "templatefilename": data.author,
+                    "seatrule": data.label,
+                    "templatecode": data.core
+                },
+                success: function(data) {
+                    if (data.code === 0) {
+                        parent.layer.msg('添加成功');
+                        console.log(data)
+                        location.href = "./meet_create.html?name="+name+"&meeting="+data.data+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake;
+                    } else {
+                        layer.msg(data.msg, {
+                            icon: 5
+                        });
+                        layer.close(index);
+                    }
+                },
+                error: function(error) {
+                    layer.msg('添加失败，服务器错误请稍后再试', {
+                        icon: 5
+                    });
+                    layer.close(index);
+                }
+            })
+        });
+        $('.layui-ds').on('click', function() {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+    })
+</script>
+</body>
+</html>

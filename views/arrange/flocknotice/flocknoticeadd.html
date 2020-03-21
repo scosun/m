@@ -103,81 +103,14 @@
 				upload = layui.upload,
 				laydate = layui.laydate,
 				form = layui.form;
-			var url = "https://f.longjuli.com"
+			 var url = "https://f.longjuli.com"
 			// var url = "http://127.0.0.1:8083"
 			var uploadfile = null;
 			$('#phone').bind('input propertychange', function () {
 				$('#smslength').text($(this).val().length);
 				$('#phones').text($(this).val().split(",").length);
 			});
-			$.ajax({
-				async: false,
-				type: "get",
-				url: url + "/smstemplate/findByselective?smsTemplateType=0",
-				where: {
-					smsTemplateType: 0
-				},
-				xhrFields: {
-					withCredentials: true
-				},
 
-				//成功的回调函数
-				success: function (msg) {
-					var data = msg;
-					$.each(data.data, function (idx, con) {
-						$("#smss").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
-							"</option>");
-					})
-					form.render();
-				},
-				//失败的回调函数
-				error: function () {
-					console.log("error")
-				}
-			})
-			// $.ajax({
-			// 	async: false,
-			// 	type: "get",
-			// 	url: url + "/smstemplate/findByselective?smsTemplateType=1",
-			// 	xhrFields: {
-			// 		withCredentials: true
-			// 	},
-			// 	where: {
-			// 		smsTemplateType: 1
-			// 	},
-			// 	//成功的回调函数
-			// 	success: function (msg) {
-			// 		var data = msg;
-			// 		$.each(data.data, function (idx, con) {
-			// 			$("#bao").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
-			// 				"</option>");
-			// 		})
-			// 		form.render();
-			// 	},
-			// 	//失败的回调函数
-			// 	error: function () {
-			// 		console.log("error")
-			// 	}
-			// })
-			// var day2 = new Date();
-			// day2.setTime(day2.getTime());
-			// var s2 = day2.getFullYear() + "-" + (day2.getMonth() + 1) + "-" + day2.getDate();
-			// var ins22 = laydate.render({
-			// 	elem: '#dates',
-			// 	min: s2,
-			// 	max: '2080-10-14',
-			// 	format: 'yyyy年MM月dd日' //可任意组合
-			// 	,
-			// 	theme: 'molv'
-			// });
-
-			// laydate.render({
-			// 	elem: '#times',
-			// 	type: 'time',
-			// 	format: 'HH:mm:ss',
-			// 	btns: ['clear', 'now', 'confirm'],
-			// 	theme: 'molv'
-			// })
 			form.on('select(component-form-selects)', function (data) {
 				if (data.value == "0"){
 					$('#template').addClass('layui-hide');

@@ -19,6 +19,7 @@ layui.config({
 	element.render();
     var url="https://f.longjuli.com"
 	// var url="http://127.0.0.1:8083"
+
     $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
 	$.ajax({
 	    async: false,

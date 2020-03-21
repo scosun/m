@@ -41,9 +41,13 @@
             <textarea name="" placeholder="请输入" class="layui-textarea" id="templatecode"></textarea>
         </div>
     </div>
-    <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
-        <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
+    <div class="layui-form-item layui-layout-admin layui-hide">
+        <div class="layui-input-block">
+            <div style="position: absolute;right: 0px;bottom: 0px;">
+                <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
     </div>
 </div>
 

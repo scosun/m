@@ -2,9 +2,10 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery'], function() {
+}).use(['index', 'table', 'jquery',], function() {
     var table = layui.table,
         admin = layui.admin,
+        router = layui.router(),
         $ = layui.jquery;
     var url = "https://f.longjuli.com";
     // var url = "http://127.0.0.1:8083";
@@ -535,7 +536,7 @@ layui.config({
                     type: 2,
                     title: '添加会议',
                     area: ['75%', '85%'],
-                    btn: ['确定', '取消'],
+                    // btn: ['确定', '取消'],
                     content: 'meet_create.html',
                     yes: function(index, layero) {
                         var submit = layero.find('iframe').contents().find("#click");

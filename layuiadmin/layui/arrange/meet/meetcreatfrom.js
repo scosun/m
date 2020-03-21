@@ -8,6 +8,7 @@ layui.config({
         element = layui.element,
         layer = layui.layer,
         laydate = layui.laydate,
+        router = layui.router(),
         form = layui.form;
     var url="https://f.longjuli.com";
     // var url="http://127.0.0.1:8083";
@@ -78,7 +79,7 @@ layui.config({
     $.ajax({
         async: false,
         type: "get",
-        url: url + "/roomtemplate/findAll",
+        url: url + "/roomtemplate/findByroomtemplate",
         dataType: "json",
         xhrFields: {
             withCredentials: true
@@ -95,35 +96,70 @@ layui.config({
             })
         }
     })
+    var names = getUrlParam("name");
+    var meetings = getUrlParam("meeting");
+    var  ruleids = getUrlParam("ruleid");
+    var  datess = getUrlParam("dates");
+    var  timess = getUrlParam("times");
+    var  remakes= getUrlParam("remake");
+    if (names!=""&&names!=null){
+        $('#meetingname').val(decodeURI(names));
+    }
+    if (meetings!=""&&meetings!=null){
+                $('#meeting').val(decodeURI(meetings));
+                console.log(decodeURI(meetings))
+                form.render(null, 'component-form-group');
+    }
+    if (ruleids!=""&&ruleids!=null){
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/ruletemplate/findByruletemplate",
+            dataType: "json",
+            data: {
+                "roomid": meetings
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function(msg) {
+                var data = msg.data;
+                $("#select_rule").parent().find("option").filter(".selectOp").remove();
+                form.render(null, 'component-form-group');
+                $.each(data, function(idx, con) {
 
 
-    // $.ajax({
-    //     async: false,
-    //     type: "post",
-    //     url: "https://www.longjuli.com/ajax",
-    //     dataType: "json",
-    //     //成功的回调函数
-    //     data: {
-    //         "a": "s1",
-    //         "t": "rulelist"
-    //     },
-    //     success: function(msg) {
+                    $("#select_rule").after("<option class='selectOp' value=" + con
+                        .id + ">" + con.name + "</option>");
+                })
+                $('#ruleid').val(ruleids);
+                form.render(null, 'component-form-group');
 
-    //         var data = msg.data;
-
-    //         $.each(data, function(idx, con) {
-
-    //             $("#select_meet").after("<option value=" + con.ruleid + ">" + con.rulename +
-    //                 "</option>");
-    //         })
-
-    //     },
-    //     //失败的回调函数
-    //     error: function() {
-    //         console.log("error")
-    //     }
-    // })
-
+                // .parent()
+                // }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        })
+    }
+    if (datess!=""&&datess!=null){
+        $('#dates').val(decodeURI(datess));
+    }
+    if (timess!=""&&timess!=null){
+        $('#times').val(decodeURI(timess));
+    }
+    if (remakes!=""&&remakes!=null){
+        $('#remake').val(decodeURI(remakes));
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+         var uri = window.location.search;
+        var r = uri.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return r[2]; return null; //返回参数值
+    }
     form.render(null, 'component-form-group');
 
     laydate.render({
@@ -131,109 +167,50 @@ layui.config({
     });
 
  $('#addmeeting').click(()=>{
-     // location.href = "../meeting/meeting_room_form.html"
-     layer.open({
-        type: 2,
-        title: '添加会议室',
-        shadeClose: true, //弹出框之外的地方是否可以点击
-        offset: '10%',
-        area: ['70%', '60%'],
-        btn: ['确定', '取消'],
-        content: '../meeting/meeting_room_form.html',
-        yes: function(index, layero) {
-           var body = layer.getChildFrame('body', index);
-           $.ajax({
-           	url: url+"/roomtemplate/addRoomtemplate",
-           	type: "POST",
-            xhrFields: {
-                withCredentials: true
-            },
-           	data: {
-           		"name": body.find('#roomname').val(),
-           		"templatefilename": body.find('#templatefilename').val(),
-           		"seatrule": body.find('#seatrule').val(),
-           		"templatecode": body.find('#templatecode').val()
-           	},
-           	success: function(data) {
-           		if (data.code === 0) {
-           			layer.msg('添加成功,请重新选择会议室');
-
-                    $.ajax({
-                        async: false,
-                        type: "get",
-                        url: url + "/roomtemplate/findAll",
-                        dataType: "json",
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        //成功的回调函数
-                        success: function(msg) {
-
-                            var data = msg.data;
-
-                            $.each(data, function(idx, con) {
-
-                                $("#select_meet").after("<option value=" + con.id + ">" + con.name +
-                                    "</option>");
-                            })
-                           form.render(null, 'component-form-group');
-
-
-                        }
-                    })
-                    layer.close(index);
-
-           		} else {
-           			layer.msg(data.msg, {
-           				icon: 5
-           			});
-           			layer.close(index);
-           		}
-           	},
-           	error: function(error) {
-           		layer.msg('添加失败，服务器错误请稍后再试', {
-           			icon: 5
-           		});
-           		layer.close(index);
-           	}
-           })
-        },
-        success: function(layero, index) {
-
-
-        }
-    });
+      var name = $('#meetingname').val();
+     var meeting = $('#meeting').val();
+     var  ruleid = $('#ruleid').val();
+     var  dates = $('#dates').val();
+     var  times = $('#times').val();
+     var  remake = $('#remake').val();
+      location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
  })
  $('#addrule').click(()=>{
   
     if ($('#meeting').val() == '') {
     	return layer.msg('请选择会议后再新建规则');
     }
-    var addrule =layer.open({
-        type: 2,
-        title: '添加编排规则',
-        shadeClose: true, //弹出框之外的地方是否可以点击
-        offset: '10%',
-        // area: ['%', '75%'],
-        btn: ['确定', '取消'],
-        content: '../arrangeman/group.html',
-        yes: function(index, layero) {
-           var submit = layero.find('iframe').contents().find("#ruleclickBymeet");
-           								submit.click();
-        },
-        success: function(layero, index) {
-          var body = layui.layer.getChildFrame('body', index);
-            body.find("#meetingid").val($('#meeting').val());
-            
-        }
-    });
-    layer.full(addrule)
+     var name = $('#meetingname').val();
+     var meeting = $('#meeting').val();
+     var  ruleid = $('#ruleid').val();
+     var  dates = $('#dates').val();
+     var  times = $('#times').val();
+     var  remake = $('#remake').val();
+     location.href = decodeURI("./group.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
+    // var addrule =layer.open({
+    //     type: 2,
+    //     title: '添加编排规则',
+    //     shadeClose: true, //弹出框之外的地方是否可以点击
+    //     offset: '10%',
+    //     // area: ['%', '75%'],
+    //     btn: ['确定', '取消'],
+    //     content: '../arrangeman/group.html',
+    //     yes: function(index, layero) {
+    //        var submit = layero.find('iframe').contents().find("#ruleclickBymeet");
+    //        								submit.click();
+    //     },
+    //     success: function(layero, index) {
+    //       var body = layui.layer.getChildFrame('body', index);
+    //         body.find("#meetingid").val($('#meeting').val());
+    //
+    //     }
+    // });
+    // layer.full(addrule)
  })
 
 
     /* 监听指定开关 */
     form.on('select(component-form-select)', function(data) {
-      
         $.ajax({
             async: false,
             type: "get",
@@ -283,6 +260,14 @@ function getMyDay(date){
     if(date.getDay()==6) week="星期六";
     return week;
 }
+    var active = {
+        cancel:function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);
+            parent.reloads(); // 父页面刷新
+
+        }
+    }
     /* 监听提交 */
     form.on('submit(addmeeting)', function(data) {
         // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
@@ -343,5 +328,9 @@ function getMyDay(date){
             }
         })
         return false;
+    });
+    $('.layui-ds').on('click', function() {
+        var type = $(this).data('type');
+        active[type] && active[type].call(this);
     });
 });
