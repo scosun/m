@@ -11,6 +11,7 @@
             .layui-form-label{
              width: 100px;
             }
+            .zi-ding-yi-btn{position: fixed;left:0; right: 0;bottom:0;padding-top:10px;background-color: #fff;}
             .layui-input-block {
              margin-left: 130px;
             }
@@ -24,7 +25,7 @@
     
     <body>
 
-        <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
+        <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 57px 0; ">
             <form class="layui-form" action="" lay-filter="component-form-group">
                 <div class="layui-form-item">
                     <label class="layui-form-label">会议名称</label>
@@ -81,10 +82,14 @@
                 </div>
                 <div class="layui-form-item layui-layout-admin">
                     <div class="layui-input-block">
-                        <div style="position: absolute;right: 0px;bottom: 0px;">
-                            <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">保存</button>
-                            <button type="reset" class="layui-btn layui-ds" data-type="cancel">取消</button>
+                        <div class="layui-layer-btn zi-ding-yi-btn">
+                            <a class="layui-layer-btn0"lay-submit="" lay-filter="addmeeting" id="click">确定</a>
+                            <a class="layui-layer-btn1 layui-ds" type="reset" data-type="cancel">取消</a>
                         </div>
+<!--                        <div style="position: absolute;right: 0px;bottom: 0px;">-->
+<!--                            <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">保存</button>-->
+<!--                            <button type="reset" class="layui-btn layui-ds" data-type="cancel">取消</button>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </form>

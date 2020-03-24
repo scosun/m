@@ -41,7 +41,7 @@ layui.config({
 	           
 	            
 	            if ($.inArray("addroom", data) != -1) {
-	                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>")
+	                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
 	            }
 	            if ($.inArray("emptyroom", data) != -1) {
 	                $('#buttongroup').after("<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>清空</button>");
@@ -287,7 +287,7 @@ layui.config({
 				type: 2,
 				title: '信息维护',
 				content: 'meeting_room_form.html',
-				//maxmin: true,
+				maxmin: true,
 				area: ['60%', '80%'],
 				btn: ['确定','打开会场编辑器', '取消'],
 				yes: function(index, layero) {
@@ -409,7 +409,7 @@ layui.config({
 				type: 2,
 				title: '座区图',
 				content: 'meeting_room_zq.html?roomid='+age.id
-					// ,maxmin: true
+					,maxmin: true
 					,
 				area: ['100%', '100%'],
 				scrollbar: false,
@@ -436,7 +436,7 @@ window.onkeyup = function(ev) {
 				type: 2,
 				title: '<p style="">新增会议室</p>',
 				content: 'meeting_room_form.html'
-					// ,maxmin: true
+					,maxmin: true
 					,
 				area: ['60%', '80%'],
 				btn: ['确定', '取消'],

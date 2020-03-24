@@ -36,7 +36,7 @@ layui.config({
                 //<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
                 if ($.inArray("addmeet", data) != -1) {
                     $('#buttongroup').before(
-                        "<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>"
+                        "<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>"
                     )
                 }
                 if ($.inArray("emptymeet", data) != -1) {

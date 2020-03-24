@@ -374,6 +374,7 @@ layui.config({
                     title: '参会人员筛选',
                     area: ['60%', '60%'],
                     btn: ['确定', '取消'],
+                    maxmin: true,
                     content: 'screening.html',
                     yes: function (index, layero) {
                         var submit = layero.find('iframe').contents().find("#ruleclick");
@@ -399,6 +400,7 @@ layui.config({
                     type: 2,
                     title: '详细信息',
                     area: ['60%', '60%'],
+                    maxmin: true,
                     //btn: ['确定', '取消'],
                     shadeClose: true, //点击遮罩关闭
                     content: 'detailedinfo.html?id='+$('#select-room').val(),
@@ -566,7 +568,8 @@ layui.config({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
                 title: '报到',
-                shadeClose: false, //弹出框之外的地方是否可以点击
+                shadeClose: false,
+                maxmin: true,//弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
                 btn: ['报到', '返回'],
                 closeBtn: 1,

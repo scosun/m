@@ -112,7 +112,7 @@
                            
                             
                             if ($.inArray("addatt", data) != -1) {
-                                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>")
+                                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
                             }
                            
                             if ($.inArray("delatt", data) != -1) {
@@ -509,6 +509,7 @@
                             shadeClose: true, //弹出框之外的地方是否可以点击
                             offset: '10%',
                             area: ['60%', '80%'],
+                            maxmin: true,
                             content: 'attributes.html',
                             btn: ['确定', '取消'],
                             yes: function(index, layero) {
@@ -667,6 +668,7 @@
                             shadeClose: true, //弹出框之外的地方是否可以点击
                             offset: '10%',
                             area: ['60%', '80%'],
+                            maxmin: true,
                             btn: ['确定', '取消'],
                             content: 'attributes.html',
                             yes: function(index, layero) {

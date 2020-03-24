@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>排序属性</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-input-block {
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div id="tree"></div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-layout-admin layui-hide">
+        <div class="layui-input-block">
+            <div style="position: absolute;right: 0px;bottom: 0px;">
+                <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form', 'upload', 'tree'], function () {
+            var $ = layui.$
+                , upload = layui.upload
+                , form = layui.form,
+                tree = layui.tree
+            var url = "https://f.longjuli.com"
+            var uploadfile = null;
+            var attributes = [];
+              var data;
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url+"/attribute/findtree",
+            datatype: 'json',
+
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                data = msg.data
+            },
+            error: function (error) {
+                console.log(error)
+            },
+        })
+        //渲染
+        var inst1 = tree.render({
+            elem: '#tree'  //绑定元素
+            , data: data,
+            showCheckbox: true,
+            oncheck: function (obj) {
+                // console.log(obj.data); //得到当前点击的节点数据
+                // console.log(obj.checked.id); //得到当前节点的展开状态：open、close、normal
+                // console.log(obj.elem); //得到当前节点元素
+                // console.log(obj.data.id)
+                if(obj.checked == true){
+                        attributes.push(obj.data.id);
+                }else{
+                        var i = $.inArray(obj.data.id,attributes)
+                        // console.log(i)
+                    if( i != -1){
+                        attributes.splice(i,1)
+                    } 
+                    // console.log(attributes)
+                }
+            }
+        });
+        form.on('submit(addmeeting)', function (data) {
+            // layer.msg('66')
+            if (attributes.length == 0) {
+                return layer.msg("请选择属性")
+            }
+            // var formdata = new FormData();
+            // formdata.append('file', uploadfile);
+            var attribute = attributes.join(",")
+            // console.log(attribute)
+            window.location=url + "/excel/download/"+attribute;
+            return false;
+        });
+    })
+    </script>
+</body>
+</html>

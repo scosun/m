@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>编排规则</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+        <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+        <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+        <script src="../../../js/scosun.js"></script>
+        <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css">
+			.Intelligent {
+            background: #666 url(../../../images/Intelligent.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            .attribute {
+            background: #666 url(../../../images/attribute.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            .custom {
+            background: #666 url(../../../images/custom.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            .exportb {
+            background: #666 url(../../../images/exportb.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            .importb {
+            background: #666 url(../../../images/importb.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            .saveb {
+            background: #666 url(../../../images/saveb.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+            }
+            
+            .layui-btn+.layui-btn {
+            margin-left: 0;
+            }
+            .layui-card-body{
+                padding-top:12px
+            }
+
+            .layui-input-block {
+                margin-left: 0
+            }
+
+    </style>
+</head>
+<body>
+    <div class="layui-col-md12">
+        <div class="layui-row grid-demo grid-demo-bg1">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card">
+
+                        <div class="layui-card-body">
+                            <div>
+                                <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;"
+                                    id="group">
+                                </div>
+                                <!-- 右侧筛选条件 -->
+                                <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                    <div class="layui-inline">
+                                        <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+                                            autocomplete="off">
+                                    </div>
+                                    <button class="layui-btn layui-ds btnsearch" data-type="search" id="btnsearch"
+                                        data="搜索">搜索</button>
+                                </div>
+                                <!-- 右侧筛选条件 end-->
+                            </div>
+                            <div>
+
+                            <div class="layui-tab">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this">智能排序</li>
+                                    <li>默认排序</li>
+                                    <li>自定义排序</li>
+                                </ul>
+                                <div class="layui-tab-content">
+                                    <!-- tab1  智能排序 -->
+                                    <div class="layui-tab-item layui-show">
+                                        <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate">
+                                        </table>
+                                        <!-- 详情 -->
+                                        <script type="text/html" id="details">
+                                            <a class=" layui-icon " lay-event="details" style="font-size:1.4rem">&#xe60b;</a>
+                                        </script>
+                                        <!-- 不排序 -->
+                                        <script type="text/html" id="notorder">
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block">
+                                                    <input type="checkbox" name="close" lay-skin="switch" lay-text="">
+                                                     <!--<input type="checkbox" name="close" lay-skin="switch" lay-text="" checked="">-->
+                                                </div>
+                                            </div>
+                                        </script>
+                                        <!-- 调整 -->
+                                        <script type="text/html" id="Adjust">
+                                            <img src="../../../images/rightbtn.png" lay-event="Adjust" width="20">
+                                        </script>
+                                    </div>
+                                    <!-- tab2  默认排序 -->
+                                    <div class="layui-tab-item">默认排序</div>
+                                    <!-- tab3  自定义排序 -->
+                                    <div class="layui-tab-item">自定义排序</div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="attendersortlist.js" type="text/javascript"
+        charset="utf-8"></script>
+</body>
+</html>

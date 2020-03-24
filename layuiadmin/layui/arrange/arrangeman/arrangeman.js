@@ -9,6 +9,7 @@ layui.config({
 
     // #test-table-operate
     var url = "https://f.longjuli.com"
+    //  var url="http://127.0.0.1:8083";
     var devices = {};
     var arrangeList = [];
     $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
@@ -33,7 +34,7 @@ layui.config({
                
                 
                 if ($.inArray("addrule", data) != -1) {
-                    $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>")
+                    $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
                 }
                 if ($.inArray("emptyroom", data) != -1) {
                     $('#buttongroup').after("<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>清空</button>");
@@ -61,12 +62,12 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/ruletemplate/findAlllayuiBystatus" //数据接口
+        url: url + "/ruletemplate/findRuleTemplateBylayui" //数据接口
             ,
 
         method: 'get',
         where:{
-            status:0
+            stauts:0
         },
         xhrFields: {
             withCredentials: true
@@ -153,13 +154,16 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/ruletemplate/findAllBylayui" //数据接口
-                ,
+            url: url + "/ruletemplate/findRuleTemplateBylayui" //数据接口
+            ,
+
+            method: 'get',
+            where:{
+                stauts:0
+            },
             xhrFields: {
                 withCredentials: true
             },
-
-            method: 'get',
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
@@ -174,22 +178,22 @@ layui.config({
                         title: 'ID',
                         //align: 'center',
                         unresize: 'false',
-                        width: '7%'
+                        width:80,
                     },
                     {
                         field: 'name',
                         title: '编排规则名称',
                         align: 'left',
                     }, {
-                        field: 'roomname',
-                        title: '会议室名称',
-                        align: 'left',
-                    },
+                    field: 'roomname',
+                    title: '会议室名称',
+                    align: 'left',
+                },
                     {
                         field: 'stauts',
                         title: '会议规则',
-                        width: '15%',
-                        align: "left",
+                        align: 'left',
+                        width:80,
                         templet: function(data) {
                             if (data.stauts == 0) {
                                 return '标准规则'
@@ -331,7 +335,8 @@ layui.config({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
                 title: '  ',
-                shadeClose: false, //弹出框之外的地方是否可以点击
+                shadeClose: false,
+                maxmin: true,//弹出框之外的地方是否可以点击
                 area: ['100%', '106%'],
                 closeBtn: 1,
                 offset: '-43px',
@@ -355,6 +360,7 @@ layui.config({
                     title: '添加编排规则',
                     area: ['70%', '75%'],
                     btn: ['确定', '取消'],
+                    maxmin: true,
                     content: 'group.html',
                     yes: function(index, layero) {
                         var submit = layero.find('iframe').contents().find("#ruleclick");

@@ -123,7 +123,7 @@
 				<div class="layui-card-body">
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-							<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>
+							<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
 							<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>人员模版下载</button>
 							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>
 						<!-- 右侧筛选条件 -->
@@ -420,6 +420,7 @@
 					title: 'Excel上传',
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['40%', '45%'],
+					maxmin: true,
 					btn: ['上传', '返回'],
 					closeBtn: 1,
 					//offset: '-43px',
@@ -440,6 +441,7 @@
 					type: 2,
 					//title: '收藏管理 (考生姓名：张无忌)',
 					title: '短信发送记录',
+					maxmin: true,
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['75%', '85%'],
 					closeBtn: 1,
@@ -460,6 +462,7 @@
 				layer.open({
 					type: 2,
 					//title: '收藏管理 (考生姓名：张无忌)',
+					maxmin: true,
 					title: '短信回复记录',
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['75%', '85%'],
@@ -482,7 +485,6 @@
 					$.ajax({
 						async: false,
 						type: "get",
-						maxmin: true,
 						url: url + "/flockperson/sendmail",
 						datatype: 'json',
 						data: {
@@ -545,7 +547,6 @@
 					$.ajax({
 						async: false,
 						type: "get",
-						maxmin: true,
 						url: url + "/flolckstatistics/delete",
 						datatype: 'json',
 						data: {
@@ -581,7 +582,6 @@
 					$.ajax({
 						async: false,
 						type: "get",
-						maxmin: true,
 						url: url + "/smsstatistics/nosend",
 						datatype: 'json',
 						data: {
@@ -690,6 +690,7 @@
 							type: 2,
 							//title: '收藏管理 (考生姓名：张无忌)',
 							title: '新建短信通知',
+							maxmin: true,
 							shadeClose: false, //弹出框之外的地方是否可以点击
 							area: ['75%', '85%'],
 							btn: ['保存', '返回'],

@@ -9,6 +9,7 @@ layui.config({
 
     // #test-table-operate
     var url = "https://f.longjuli.com"
+    //  var url="http://127.0.0.1:8083";
     var devices = {};
     var arrangeList = [];
     $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
@@ -33,7 +34,7 @@ layui.config({
                
                 
                 if ($.inArray("addrule", data) != -1) {
-                    $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>")
+                    $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
                 }
                 if ($.inArray("emptyroom", data) != -1) {
                     $('#buttongroup').after("<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>清空</button>");
@@ -61,12 +62,12 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/ruletemplate/findAlllayuiBystatus" //数据接口
+        url: url + "/ruletemplate/findRuleTemplateBylayui" //数据接口
             ,
 
         method: 'get',
         where:{
-            status:1
+            stauts:1
         },
         xhrFields: {
             withCredentials: true
@@ -146,16 +147,16 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/ruletemplate/findAlllayuiBystatus" //数据接口
-                ,
-                where:{
-                    status:1
-                },
+            url: url + "/ruletemplate/findRuleTemplateBylayui" //数据接口
+            ,
+
+            method: 'get',
+            where:{
+                stauts:1
+            },
             xhrFields: {
                 withCredentials: true
             },
-
-            method: 'get',
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
@@ -170,26 +171,25 @@ layui.config({
                         title: 'ID',
                         //align: 'center',
                         unresize: 'false',
-                        width: '7%'
                     },
                     {
                         field: 'name',
                         title: '编排规则名称',
                         align: 'left',
                     }, {
-                        field: 'roomname',
-                        title: '会议室名称',
-                        align: 'left',
-                    },
+                    field: 'roomname',
+                    title: '会议室名称',
+                    align: 'left',
+                },
                     {
                         field: 'stauts',
                         title: '会议规则',
-                        width: '15%',
-                        align: "left",
+                        align: 'left',
                         templet: function(data) {
-                                return '快速规则'
-                            
-                            
+
+                            return '快速规则'
+
+
                         },
 
                     },
@@ -300,7 +300,7 @@ layui.config({
                     success: function(msg) {
 
                         if (msg.code == '0') {
-                            layer.msg("删除成功");
+                            layer.msg(msg.msg);
                             reloads();
                         } else {
                             layer.msg("删除失败");
@@ -324,6 +324,7 @@ layui.config({
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '106%'],
                 closeBtn: 1,
+                maxmin: true,
                 offset: '-43px',
                 content: 'territory_rules.html',
                 success: function(layero, index) {
@@ -344,6 +345,7 @@ layui.config({
                     type: 2,
                     title: '添加编排规则',
                     area: ['70%', '75%'],
+                    maxmin: true,
                     btn: ['确定', '取消'],
                     content: 'fastgroup.html',
                     yes: function(index, layero) {

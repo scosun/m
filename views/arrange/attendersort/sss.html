@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<button class="layui-btn" id="getCheckedData">获得表格选中行</button>
+<table id="grid" lay-filter="grid"></table>
+
+<script src="../../../layuiadmin/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+  layui.use(['table', 'layer', 'element', 'jquery', 'form'],
+          function (table, layer, element, $, form) {
+    var jsonData = [{
+      id: 1,
+      city: 20000,
+    }, {
+      id: 2,
+      city: 20001
+    }];
+
+    // 监听修改update到表格中
+    /*form.on('select(testSelect)', function (data) {
+      debugger;
+      var elem = $(data.elem);
+      var trElem = elem.parents('tr');
+      var tableData = table.cache['grid'];
+      // 更新到表格的缓存数据中，才能在获得选中行等等其他的方法中得到更新之后的值
+      tableData[trElem.data('index')][elem.attr('name')] = data.value;
+      // 其他的操作看需求 TODO
+    });*/
+    /*$('#getCheckedData').click(function () {
+      debugger;
+      // 验证一下下拉选择之后有没有作用到表格缓存数据
+      var checkStatus = table.checkStatus('grid'); //test即为基础参数id对应的值
+      console.log(checkStatus.data); //获取选中行的数据
+      console.log(checkStatus.data.length); //获取选中行数量，可作为是否有选中行的条件
+      console.log(checkStatus.isAll); //表格是否全选
+    });*/
+    var tableIns = table.render({
+      elem: '#grid',
+      width: 600,
+      height: 300,
+      data: jsonData,
+      done: function (res, curr, count) {
+        console.log(444);
+        count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+        layui.each($('select'), function (index, item) {
+          var elem = $(item);
+          elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+        });
+        form.render();
+      },
+      size: 'lg',
+      cols: [[ //表头
+        {type: 'checkbox', fixed: true},
+        {field: 'id', title: 'ID', fixed: true},
+        {
+          field: 'city',
+          title: '城市',
+          align: 'center',
+          width: 200,
+          templet: function (d) {
+            // 模板的实现方式也是多种多样，这里简单返回固定的
+            return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.city + '" >\n' +
+                    '        <option value=""></option>\n' +
+                    '        <option value="18000">北京</option>\n' +
+                    '        <option value="20000">上海</option>\n' +
+                    '        <option value="20001">广州</option>\n' +
+                    '        <option value="20002">深圳</option>\n' +
+                    '        <option value="20003">杭州</option>\n' +
+                    '      </select>';
+          }
+        }
+      ]]
+    });
+  });
+</script>
+
+</body>
+</html>

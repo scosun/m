@@ -190,6 +190,7 @@ layui.config({
 				type: 2,
 				title: '编辑对应关系方案',
 				shadeClose: false, //弹出框之外的地方是否可以点击
+				maxmin: true,
 				offset: '10%',
 				area: ['60%', '80%'],
 				content: 'attender2rule_update.html#/id='+_id,
@@ -336,6 +337,7 @@ layui.config({
 					title: '增加对应关系方案',
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					offset: '10%',
+					maxmin: true,
 					area: ['60%', '80%'],
 					content: 'attender2rule_new.html',
 					btn: ['保存', '取消'],

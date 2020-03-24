@@ -49,7 +49,7 @@ layui.config({
                 window.a = data
 
                 if ($.inArray("addperson", data) != -1) {
-                    $('#buttongroup').before("<button class='layui-btn layui-ds btnadd' data-type='add' id='addmeeting' data='增加'>增加</button>")
+                    $('#buttongroup').before("<button class='layui-btn layui-ds btnadd' data-type='add' id='addmeeting' data='增加'>新增</button>")
                 }
                 if ($.inArray("emptyperson", data) != -1) {
                     $('#buttongroup').after("<button class='layui-btn layui-ds btnempty' data-type='isAll' id='emptymeet' data='清空'>清空</button>");
@@ -251,7 +251,7 @@ layui.config({
                 type: 2,
                 title: '信息维护',
                 content: 'attender_upform.html',
-                // maxmin: true,
+                maxmin: true,
                 area: ['60%', '80%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
@@ -336,6 +336,7 @@ layui.config({
                 title: '人员请假',
                 content: 'attender_leave.html',
                 area: ['45%', '40%'],
+                maxmin: true,
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
                     var body = layer.getChildFrame('body', index);
@@ -404,7 +405,7 @@ layui.config({
                 type: 2,
                 title: '<p style="">新增人员</p>',
                 content: 'attender_form.html',
-                // maxmin: true,
+                maxmin: true,
                 area: ['60%', '80%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
@@ -424,7 +425,7 @@ layui.config({
                 type: 2,
                 title: '<p style="">批量导入</p>',
                 content: 'uploadattender.html',
-                // maxmin: true,
+                maxmin: true,
                 area: ['40%', '40%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
@@ -444,7 +445,7 @@ layui.config({
                 type: 2,
                 title: '<p style="">下载模板</p>',
                 content: 'downloadattender.html',
-                // maxmin: true,
+                maxmin: true,
                 area: ['60%', '75%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
@@ -466,7 +467,7 @@ layui.config({
                 type: 2,
                 title: '批量上传参会人员信息',
                 content: 'uploadphotos.html',
-                // maxmin: true,
+                 maxmin: true,
                 area: ['60%', '71%'],
                 btn: ['提交', '取消'],
                 yes: function (index, layero) {},

@@ -40,7 +40,7 @@ layui.config({
 
                 if ($.inArray("addmeet", data) != -1) {
                     $('#buttongroup').before(
-                        "<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>增加</button>"
+                        "<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>"
                     )
                 }
                 if ($.inArray("emptymeet", data) != -1) {
@@ -334,6 +334,7 @@ layui.config({
                 // shadeClose: true, //弹出框之外的地方是否可以点击
                 // offset: '10%',
                 area: ['75%', '85%'],
+                maxmin: true,
                 btn: ['确定', '取消'],
                 content: 'form.html',
                 yes: function(index, layero) {
@@ -418,6 +419,7 @@ layui.config({
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '106%'],
                 closeBtn: 1,
+                maxmin: true,
                 offset: '-43px',
                 content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
                 success: function(layero, index) {
@@ -536,6 +538,7 @@ layui.config({
                     type: 2,
                     title: '添加会议',
                     area: ['75%', '85%'],
+                    maxmin: true,
                     // btn: ['确定', '取消'],
                     content: 'meet_create.html',
                     yes: function(index, layero) {

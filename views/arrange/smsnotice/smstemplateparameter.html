@@ -59,7 +59,7 @@
 				<div class="layui-card-body">
 					<div>
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-                            <button class="layui-btn layui-ds" data-type="add">增加</button>
+                            <button class="layui-btn layui-ds" data-type="add">新增</button>
 							<!-- 
 							<button class="layui-btn" data-type="dels">批量删除</button>
 							<button class="layui-btn" data-type="allcheck">全选</button>
@@ -237,6 +237,7 @@
                     type: 2,
                     title: '发送短信',
                     area: ['60%', '60%'],
+					maxmin: true,
                     btn: ['确定', '取消'],
                     content: 'smsnoticeBymeetingsend.html',
                     yes: function(index, layero) {
@@ -252,6 +253,7 @@
                     type: 2,
                     title: '详细信息',
                     area: ['60%', '60%'],
+					maxmin: true,
                     //btn: ['确定', '取消'],
                     shadeClose: true, //点击遮罩关闭
                     content: 'detailedinfo.html',
@@ -269,6 +271,7 @@
                 layer.open({
                     type: 2,
                     title: '人员编辑',
+					maxmin: true,
                     area: ['100%', '100%'],
                     btn: ['确定', '取消'],
                     shadeClose: true, //点击遮罩关闭
@@ -386,6 +389,7 @@
                     type: 2,
                     title: '人员编辑',
                     area: ['100%', '100%'],
+					maxmin: true,
                     btn: ['确定', '取消'],
                     shadeClose: true, //点击遮罩关闭
                     content: 'smstemplateparameteredit.html?id='+obj.data.id,

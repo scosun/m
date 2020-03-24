@@ -235,6 +235,8 @@
         var $ = layui.$,
             active = {
                 search: function() {
+                    var content= undefined
+                    $('#demoReload').val()=="" ? content =undefined:content= $('#demoReload').val()
                     table.render({
                         elem: '#test-table-operate',
                         // height: 'full-200',
@@ -243,7 +245,7 @@
                         // url: url+'/smsnotice/meetingByperson',
                         url: url+'/smsreply/selectReplypersonSearch',
                         where:{
-                            content:$('#demoReload').val(),
+                            content:content,
                             extno:"415"+meetingid,
                         },
                         xhrFields: {
