@@ -261,8 +261,8 @@
             })
             //绘制座区图方法
             $.ajax({
-                    url: url+"/roomtemplate/findByroomtemplate",
-                    type: "get",
+                    url: url+"/roomtemplate/findByIdTemplatecode",
+                    type: "post",
                     async: false,
                     xhrFields: {
                         withCredentials: true
@@ -272,7 +272,7 @@
                     },
                     success: function(data) {
                         var datas = data.data;
-                        $("body").append(data.data[0].templatecode);
+                        $("body").append(data.data.templatecode);
                         selectSeats();
                         queryAllSeatStatus(roomid, ruleid);
                     }

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>自定义排序</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<style type="text/css">
+.sort_table{
+	margin-top:10px;
+}
+.sort_table th{
+	text-align: left;
+	padding-top:5px;
+	padding-bottom:5px
+}
+.sort_table td{
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px
+}
+.layui-input, .layui-select, .layui-textarea {
+	height: 28px;}
+.layui-form-select dl {
+	top: 27px;}
+.layui-form-selectup dl {
+	top: auto;
+	bottom: 27px;
+}
+.layui-form-select dl dd, .layui-form-select dl dt {
+	line-height: 26px;
+}
+.layui-laypage select {
+	color:#000
+}
+</style>
+</head>
+<body>
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
+	<p style="padding:10px 0 0 20px">
+		<button class="layui-btn" data-type="reload">添加条件</button>
+		<button class="layui-btn" data-type="reload">删除条件</button>
+		<button class="layui-btn" data-type="reload">复制条件</button>
+	</p>
+	<div style="margin:0 10px 0 20px;">
+		<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+		<!-- 次序 -->
+		<script type="text/html" id="test-table-operate-cixu">
+			<select name="interest" lay-skin="select" lay-filter="component-form-select">
+				<option value="1">升序</option>
+				<option value="2">降序</option>
+			</select>
+		</script>
+		<!-- 删除 -->
+		<script type="text/html" id="test-table-operate-del">
+			<span style="color:#ff0000" lay-event="source_pop">删除</span>
+		</script>
+		<!-- 调整 -->
+		<script type="text/html" id="Adjust">
+			<img src="../../../images/rightbtn.png" lay-event="Adjust" width="20">
+		</script>
+	</div>
+
+
+	
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table','tree', 'util'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		tree = layui.tree,
+		util = layui.util,
+		router = layui.router();
+
+	//表格内容
+	table.render({
+		elem: '#test-table-operate'
+		//,url: url + "/meetingcanhui/findMeetingCanHuiBylayui" //数据接口
+		,xhrFields: {
+			withCredentials: true
+		}
+
+		,data:[
+			{
+				id: 1,
+				aaa: '默认规则',
+				bbb: 1,
+			}
+			,{
+				id: 2,
+				aaa: '行业规则',
+				bbb: 2,
+			}
+			,{
+				id: 3,
+				aaa: '自定义规则',
+				bbb: 2,
+			}
+		],
+		method: 'get',
+		page: {
+			layout: ['prev', 'page', 'next', 'count', 'skip']
+		},
+		cols: [
+			[ //表头
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				},
+				{
+					field: 'id',
+					title: '序号',
+					width: 60
+				},
+				{
+					field: 'aaa',
+					title: '排序条件',
+					align: 'leftleft',
+				},
+				{
+					field: 'bbb',
+					width: 120,
+					title: '次序',
+					align: 'left',
+					templet: function (d) {
+						// 模板的实现方式也是多种多样，这里简单返回固定的
+
+						return '<select class="cgselect" name="interest" lay-skin="select" lay-filter="component-form-select">\n' +
+								'	<option value="1">升序</option>\n' +
+								'	<option value="2">降序</option>\n' +
+								'</select>'
+
+					}
+				},
+				{
+					field: '',
+					width: 80,
+					align: 'left',
+					title: '删除',
+					toolbar: '#test-table-operate-del',
+				},
+				{
+					field: '',
+					width: 80,
+					align: 'left',
+					title: '调整',
+					toolbar: '#Adjust',
+				},
+			]
+		],
+
+		event: true,
+		page: true,
+		limit: 15,
+		skin: 'line',
+		even: true,
+		limits: [5, 10, 15],
+		done: function (res, curr, count) {
+
+				//解决表格中下拉框不显示问题
+				count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+				layui.each($('select.cgselect'), function (index, item) {
+					var elem = $(item);
+					elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+				});
+				form.render();
+
+			table_data = res.data;
+
+			layer.closeAll('loading');
+			// layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+			// layer.close(index);    //返回数据关闭loading
+		},
+	});
+
+
+
+})
+</script>
+</body>
+</html>

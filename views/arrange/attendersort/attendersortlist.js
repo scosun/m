@@ -4,7 +4,7 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'form', 'table','layedit', 'laydate'], function () {
+}).use(['index', 'user', 'form', 'table','layedit', 'laydate', 'upload'], function () {
     var a = {};
     var b = {};
     var $ = layui.$,
@@ -14,6 +14,7 @@ layui.config({
         element = layui.element,
         table = layui.table,
         layer = layui.layer,
+         upload = layui.upload,
         layedit = layui.layedit,
         laydate = layui.laydate,
         datas = null,
@@ -22,6 +23,7 @@ layui.config({
     //初次渲染表格
     var url = "https://f.longjuli.com"
     // var url="http://127.0.0.1:8083";
+    var storage = window.sessionStorage;
     var devices = {};
     var attenderList = [];
     layer.msg("点击导入，导入excel模板之后，才有人员信息");
@@ -41,6 +43,34 @@ layui.config({
         layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
     });
 
+    upload.render({
+        elem: '#importb'
+        , url: url+'/meetingcanhui/attendersort',
+        // auto: false,
+        exts:'xls|xlsx',
+        //bindAction: '#btn99',
+        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+        //     obj.preview(function (index, file, result) {
+        //         // console.log(index); //得到文件索引
+        //         // console.log(file);
+        //         uploadfile = file //得到文件对象
+        //         // console.log(uploadfile)
+        //         // console.log(result); //得到文件base64编码，比如图片
+        //
+        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+        //
+        //         //这里还可以做一些 append 文件列表 DOM 的操作
+        //
+        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+        //     });
+        // },
+         done: function (res) {
+           ajaxs(res);
+
+             storage.setItem("data",JSON.stringify(res));
+        }
+    });
 
     function isEmptyObject(obj) {
         var jlength = 0;
@@ -51,7 +81,7 @@ layui.config({
         };
         return jlength
     };
-    // window.ajaxs = function (value) {
+    window.ajaxs = function (data) {
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
@@ -60,37 +90,7 @@ layui.config({
             xhrFields: {
                 withCredentials: true
             },
-            // where: {
-            //     "meetingId": 269
-            // },
-            data:[{
-                    id: 30,
-                    name: "dddd",
-                    duties: "测试",
-                    duty: "XXXXXXXXXX",
-                    phone1: "15621308386",
-                    isleave: 0,
-                    modifytime: "2020-01-19 01:10:21",
-                }
-                ,{
-                    id: 31,
-                    name: "ccc",
-                    duties: "测试",
-                    duty: "XXXXXXXXXX",
-                    phone1: "15621308386",
-                    isleave: 0,
-                    modifytime: "2020-01-19 01:10:21",
-                }
-                ,{
-                    id: 32,
-                    name: "vvv",
-                    duties: "测试",
-                    phone1: "15621308386",
-                    duty: "XXXXXXXXXX",
-                    isleave: 0,
-                    modifytime: "2020-01-19 01:10:21",
-                }
-            ],
+           data:data.data,
             method: 'get',
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
@@ -114,11 +114,11 @@ layui.config({
                         align: 'leftleft',
                     },
                     {
-                        field: 'duties',
+                        field: 'company',
                         title: '单位',
                         align: 'left',
                     }, {
-                        field: 'duty',
+                        field: 'duties',
                         align: 'left',
                         title: '职务'
                     },
@@ -144,16 +144,17 @@ layui.config({
             skin: 'line',
             even: true,
             limits: [5, 10, 15],
-            done: function (res, curr, count) {
-                table_data = res.data;
-
-                layer.closeAll('loading');
-                attenderList.length = 0;
-                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
-                // layer.close(index);    //返回数据关闭loading
+            parseData: function (res, curr, count) {
+                console.log(6666)
+                res = data
+                return {
+                    "code": res.code, //解析接口状态
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
             },
         });
-    // }
+    }
 
     window.onkeyup = function (ev) {
         var key = ev.keyCode || ev.which;
@@ -334,14 +335,18 @@ layui.config({
                 type: 2,
                 title: '<p style="">自定义排序</p>',
                 content: 'custom_pop.html',
-                // maxmin: true,
+                maxmin: true,
                 area: ['60%', '80%'],
                 btn: ['确定', '取消'],
                 yes: function (index, layero) {
+
                 },
                 success: function (layero, index) {
                 }
             })
+        },
+        exportb:function(){
+            console.log(JSON.parse(storage.getItem("data")));
         },
         search: function () {
             if ($('#select-room').val() == '-1') {

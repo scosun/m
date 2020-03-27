@@ -10,6 +10,7 @@ layui.config({
         laydate = layui.laydate,
         form = layui.form;
     var url = "https://f.longjuli.com";
+    var url = "http://127.0.0.1:8083";
     console.log()
 
     $.ajax({
@@ -136,10 +137,6 @@ layui.config({
         }
 
 
-        // if(openid == 1) {
-        // 	  
-        // }
-
         return false;
     });
     form.on('submit(component-form-demo2)', function(data) {
@@ -166,7 +163,6 @@ layui.config({
             //成功的回调函数
             data: {
                 "name": data.field.user,
-                "stauts": 0,
                 "roomid": data.field.meeting,
                 "roomname": $("#select-room option:selected").text()
             },
@@ -175,7 +171,8 @@ layui.config({
                     var data = msg.state;
                     var index = parent.layer.getFrameIndex(window.name); 
                     parent.reloads()//先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭 
+                    parent.layer.close(index); //再执行关闭
+                    console.log(msg);
                     open(msg);
                 } else {
 

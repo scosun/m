@@ -69,73 +69,71 @@
                 <div class="">
                     <div class="layui-logo layui-icon" lay-href="arrange/meet/meet.html">
                         <span><img src="../layuiadmin/style/res/logo.svg" /></span>
-
                     </div>
-
                     <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                         lay-filter="layadmin-system-side-menu">
                         <li data-name="home" class="layui-nav-item ">
                             <a href="javascript:;" lay-tips="主页" lay-direction="2">
                                 <i class="layui-icon layui-icon-home"></i>
-                                <cite>座区编排</cite>
+                                <cite>我的会议</cite>
                             </a>
                             <dl class="layui-nav-child">
-                                <dd id="meet"><a lay-href="arrange/meet/meet.html">我的会议</a></dd>
-                                <!-- <dd data-name="property"><a>会议管理</a>
-										<dl class="layui-nav-child">
-											<dd><a lay-href="arrange/meet/meet.html">列表</a></dd>
-											<dd data-name="metingman"><a lay-href="arrange/model/model.html">对应关系</a></a></dd>
-										</dl>
-									</dd> -->
-
-                                <dd data-name="property"><a>我的会场</a>
-                                    <dl class="layui-nav-child">
-                                        <dd id="meeting"><a lay-href="arrange/meeting/meeting_room.html">会场列表</a></dd>
-                                        <dd data-name="metingman"><a
-                                                lay-href="arrange/rulezone/rulezone.html">会场座区设定</a></a></dd>
-                                        <!-- <dd data-name="metingman"><a lay-href="arrange/model/model.html">所在地列表</a></a></dd>
-											<dd data-name="metingman"><a lay-href="arrange/model/model.html">贵宾室列表</a></a></dd> -->
-                                        <dd><a lay-filter="seatmap" lay-href="arrange/attendersort/attender_sort_list.html">参会排序</a></dd>
-                                        <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
-                                        <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd>
-                                        
-                                    </dl>
-                                </dd>
-
-                                <dd data-name="property"><a>参会人员</a>
-                                    <dl class="layui-nav-child">
-                                      
-                                            <!-- <dd><a lay-href="arrange/attender/attender_list2.html">人员列表</a></dd> -->
-                                         
-                                        <dd id="person"><a lay-href="arrange/attender/attender_list.html">人员列表</a>
-
-                                        </dd> 
-                                        
-                                        
-                                        <dd data-name="property" id="type"><a
-                                                lay-href="arrange/peotype/typelist/typelist.html">属性列表</a></dd>
-                                    </dl>
-                                </dd>
-
-                                <dd data-name="property"><a>编排规则</a>
-                                    <dl class="layui-nav-child">
-                                                <dd id="rule"><a lay-href="arrange/arrangeman/arrangeman.html">标准规则</a>
-                                                    <dd id="rule"><a lay-href="arrange/arrangeman/fastarrangeman.html">快速规则</a>
-                                        <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>
-                                    </dl>
-                                </dd>
+                                <dd id="meet"><a lay-href="arrange/meet/meet.html">会议列表</a></dd>
+                                <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>
                             </dl>
+                        </li>
+                        <li data-name="component" class="layui-nav-item ">
+                            <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                                <i class="layui-icon layui-icon-home"></i>
+                                <cite>我的会场</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd id="meeting"><a lay-href="arrange/meeting/meeting_room.html">会场列表</a></dd>
+                                <dd data-name="metingman"><a
+                                        lay-href="arrange/rulezone/rulezone.html">会场座区设定</a></dd>
+                                <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
+                                <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd>
+                            </dl>
+                            </dl>
+                        </li>
+                        <li data-name="component" class="layui-nav-item ">
+                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>参会人员</cite>
+                        </a>
+                            <dl class="layui-nav-child">
+                                <dd id="person"><a lay-href="arrange/attender/attender_list.html">人员列表</a>
+                                </dd>
+
+                            <dd data-name="property" id="type"><a
+                                    lay-href="arrange/peotype/typelist/typelist.html">属性列表</a></dd>
+                                <dd><a lay-href="arrange/attendersort/attender_sort_list.html">智能排序</a></dd>
+                            </dl>
+                        </dl>
+                    </li>
+                        <li data-name="component" class="layui-nav-item ">
+                            <a href="javascript:;" lay-tips="组件" lay-direction="2">
+                                <i class="layui-icon layui-icon-home"></i>
+                                <cite>编排规则</cite>
+                            </a>
+                                <dl class="layui-nav-child">
+                                    <dd id="rules"><a lay-href="arrange/arrangeman/arrangeman.html">规则列表</a></dd>
+                                </dl>
                         </li>
                         <li data-name="component" class="layui-nav-item">
                             <a href="javascript:;" lay-tips="组件" lay-direction="2">
                                 <i class="layui-icon layui-icon-rate"></i>
-                                <cite>电子席签</cite>
+                                <cite>电子桌牌</cite>
                             </a>
                             <dl class="layui-nav-child">
-                                <dd data-name="grid"><a lay-href="arrange/roomseat/roomseatlist.html">桌牌管理</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/controlseat/controlseatlist.html">桌牌控制</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">会场绑定</a></dd>
+
+                                <dd data-name="grid"><a lay-href="arrange/seatproduct/seatproductlists.html">产品列表</a></dd>
+                                <dd data-name="grid"><a lay-href="arrange/seatproduct/seatdevicelist.html">设备列表</a></dd>
+                                <dd data-name="grid"><a lay-href="arrange/controlseat/controlseatlist.html">设备绑定</a></dd>
+                                <dd data-name="grid"><a lay-href="arrange/roomseat/roomseatlist.html">群控管理</a></dd>
+
+<!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>-->
+<!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">会场绑定</a></dd>-->
                             </dl>
                         </li>
 
@@ -146,47 +144,45 @@
                             </a>
                             <dl class="layui-nav-child">
                                 <dd data-name="grid">
-                                    <a lay-href="">签到</a>
+                                    <a lay-href="">入场签到</a>
                                 </dd>
                             </dl>
                         </li>
                         <li data-name="component" class="layui-nav-item"  >
                             <a  href="javascript:;" lay-tips="组件" lay-direction="2">
                                 <i class="layui-icon layui-icon-date"></i>
-                                <cite>参会签到</cite>
+                                <cite>参会报到</cite>
                             </a>
                              <dl class="layui-nav-child">
                                 <dd data-name="grid">
-                                    <a lay-href="arrange/signin/signinlist.html">快速签到</a>
+                                    <a lay-href="arrange/signin/signinlist.html">报到列表</a>
                                 </dd>
                             </dl>
                         </li>
                         <li data-name="component" class="layui-nav-item">
                             <a href="javascript:;" lay-tips="组件" lay-direction="2">
                                 <i class="layui-icon layui-icon-rate"></i>
-                                <cite>通知列表</cite>
+                                <cite>短信通知</cite>
                             </a>
                             <dl class="layui-nav-child">
                                 <dd data-name="grid">
-                                    <a lay-href="arrange/smsnotice/smstemplatelist.html">短信模板</a>
-                                </dd>
-                                <dd data-name="grid">
-                                    <a lay-href="arrange/smsnotice/smstemplateparameter.html">短信标签参数</a>
+                                    <a lay-href="arrange/smsnotice/smsnoticelist.html">会议通知</a>
                                 </dd>
                                 <dd data-name="grid">
                                     <a lay-href="arrange/flocknotice/flocknoticelist.html">短信群发</a>
                                 </dd>
                                 <dd data-name="grid">
-                                    <a lay-href="arrange/smsnotice/smsnoticelist.html">会议通知</a>
+                                    <a lay-href="arrange/smsnotice/smstemplatelist.html">短信模板</a>
                                 </dd>
-                                
-                             
+                                <dd data-name="grid">
+                                    <a lay-href="arrange/smsnotice/smstemplateparameter.html">标签参数</a>
+                                </dd>
                             </dl>
                         </li>
                         <li data-name="component" class="layui-nav-item" id="avirGroup">
                             <a href="javascript:;" lay-tips="组件" lay-direction="2">
                                 <i class="layui-icon layui-icon-user"></i>
-                                <cite>管理组</cite>
+                                <cite>系统管理</cite>
                             </a>
                             <dl class="layui-nav-child">
                                 <dd data-name="grid" id="user">

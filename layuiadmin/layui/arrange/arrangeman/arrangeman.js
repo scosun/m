@@ -66,9 +66,9 @@ layui.config({
             ,
 
         method: 'get',
-        where:{
-            stauts:0
-        },
+        // where:{
+        //     stauts:0
+        // },
         xhrFields: {
             withCredentials: true
         },
@@ -96,24 +96,6 @@ layui.config({
                     field: 'roomname',
                     title: '会议室名称',
                     align: 'left',
-                },
-                {
-                    field: 'stauts',
-                    title: '会议规则',
-                    align: 'left',
-                    width:80,
-                    templet: function(data) {
-                        if (data.stauts == 0) {
-                            return '标准规则'
-                        }
-                        if (data.stauts == 1) {
-                            return '快速规则'
-                        }
-                        if (data.stauts == undefined) {
-                            return ''
-                        }
-                    },
-
                 },
                 {
                     field: 'modifytime',

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编排规则</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <script src="../../../js/scosun.js"></script>
+    <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        .btnadd {
+            background: #666 url(../../../images/btnadd.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btndel {
+            background: #666 url(../../../images/btndel.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btncheckall {
+            background: #666 url(../../../images/btncheckall.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btndow {
+            background: #666 url(../../../images/btndow.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btnempty {
+            background: #666 url(../../../images/btnempty.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btnsearch {
+            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btnupload {
+            background: #666 url(../../../images/btnupload.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btnuploadimg {
+            background: #666 url(../../../images/btnuploadimg.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .btnsearch {
+            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+        .layui-btn+.layui-btn {
+            margin-left: 0;
+        }
+        .layui-card-body{
+            padding-top:12px
+        }
+    </style>
+</head>
+<body>
+<div class="layui-col-md12">
+    <div class="layui-row grid-demo grid-demo-bg1">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div>
+                            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;"
+                                 id="group">
+                                <button class='layui-btn layui-ds' data-type='add' id='addmeeting' data='增加'>新增</button>
+                                <button class="layui-btn" id="importb" data-type="getCheckData">Excel导入</button>
+<!--                                <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
+<!--                                <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
+                            </div>
+
+                            <div class="layui-input-inline"
+                                 style="margin-bottom:10px;margin-left:10px;width: 25%">
+                                <form class="layui-form" action="">
+                                    <select name="interest" lay-skin="select" lay-filter="component-form-select"
+                                            id="select-room">
+                                        <option value="-1">选择产品</option>
+                                        <option value="" id="select_meets"></option>
+                                    </select>
+                                </form>
+                            </div>
+
+                            <!-- <div class="layui-btn-group test-table-operate-btn1" style="margin-left: 20px;margin-bottom: 10px;"
+                                id="group">
+                                 <button class="layui-btn" data-type="add">增加</button>
+                                <button class="layui-btn" data-type="getCheckData">获取选中行数据</button> -->
+                            <!-- <button class="layui-btn layui-ds" data-type="upload">批量导入</button>
+                                <button class="layui-btn layui-ds" data-type="download">下载模板</button> -->
+                            <!-- </div> -->
+                            <!-- 右侧筛选条件 -->
+                            <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                <div class="layui-inline">
+                                    <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+                                           autocomplete="off">
+                                </div>
+                                <button class="layui-btn layui-ds btnsearch" data-type="search" id="btnsearch"
+                                        data="搜索">搜索</button>
+                            </div>
+                            <!-- 右侧筛选条件 end-->
+                        </div>
+                        <div>
+                            <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate">
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="table-content-list">
+<!--   <a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+</script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    var indexs = 0;
+
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user', 'form', 'table','upload'], function () {
+        var a = {};
+        var b = {};
+
+        var $ = layui.$,
+            setter = layui.setter,
+            admin = layui.admin,
+            form = layui.form,
+            element = layui.element,
+            table = layui.table,
+            layer = layui.layer,
+            upload = layui.upload
+            datas = null,
+            router = layui.router();
+        element.render();
+        //初次渲染表格
+        // var url = "https://f.longjuli.com"
+            var url="http://127.0.0.1:8083";
+        var devices = {};
+        var attenderList = [];
+        upload.render({
+            elem: '#importb'
+            , url: url+'/meetingcanhui/attendersort',
+            // auto: false,
+            exts:'xls|xlsx',
+            //bindAction: '#btn99',
+            //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+            //     obj.preview(function (index, file, result) {
+            //         // console.log(index); //得到文件索引
+            //         // console.log(file);
+            //         uploadfile = file //得到文件对象
+            //         // console.log(uploadfile)
+            //         // console.log(result); //得到文件base64编码，比如图片
+            //
+            //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+            //
+            //         //这里还可以做一些 append 文件列表 DOM 的操作
+            //
+            //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+            //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+            //     });
+            // },
+            done: function (res) {
+                ajaxs(res);
+
+                storage.setItem("data",JSON.stringify(res));
+            }
+        });
+        layer.msg("上方下拉框选择产品后自动加载相关设备");
+        // $.ajax({
+        //     async: false,
+        //     type: "get",
+        //     url: url + "/permission/getpremission",
+        //     datatype: 'json',
+        //
+        //     xhrFields: {
+        //         withCredentials: true
+        //     },
+        //     //成功的回调函数
+        //     success: function (msg) {
+        //         var data = msg.data;
+        //         console.log(data);
+        //         if (msg.code != 0) {
+        //             location.href = "user/login.html"
+        //         }
+        //         if (isEmptyObject(data) != 0) {
+        //
+        //             window.a = data
+        //
+        //             if ($.inArray("addperson", data) != -1) {
+        //                 $('#buttongroup').before("<button class='layui-btn layui-ds btnadd' data-type='add' id='addmeeting' data='增加'>新增</button>")
+        //             }
+        //             if ($.inArray("emptyperson", data) != -1) {
+        //                 $('#buttongroup').after("<button class='layui-btn layui-ds btnempty' data-type='isAll' id='emptymeet' data='清空'>清空</button>");
+        //             }
+        //             if ($.inArray("batchperson", data) != -1) {
+        //                 $('#buttongroup').before('<button class="layui-btn layui-ds btndel" data-type="getCheckLength" id="batchmeet" data="批量删除">批量删除</button>');
+        //             }
+        //
+        //         } else {
+        //
+        //
+        //         }
+        //     },
+        //     error: function (error) {
+        //         console.log(error)
+        //     },
+        // })
+
+        function isEmptyObject(obj) {
+
+            var jlength = 0;
+            for (var key in obj) {
+                if (key != "null") {
+                    jlength++;
+                }
+            };
+            return jlength
+        };
+
+        //渲染下拉框的ajax
+        $.ajax({
+            async: true,
+            type: "get",
+            url: url + "/tablesignproduct/selectProduct",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg;
+                $.each(data.data, function (idx, con) {
+                    $("#select_meets").after("<option value=" + con.productKey + ">" + con.productName +
+                        "</option>");
+                })
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
+        //选中以后更新表的ajax
+        window.ajaxs = function (value) {
+
+            table.render({
+                elem: '#test-table-operate',
+                // height: 'full-200',
+                url: url + "/tablesigndevice/selectSeletive" //数据接口
+                ,
+                xhrFields: {
+                    withCredentials: true
+                },
+                where: {
+                    "productKey": value
+                },
+
+                method: 'get',
+                page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                },
+                cols: [
+                    [ //表头
+                        {
+                            type: 'checkbox',
+                            fixed: 'left'
+                        },
+                        {
+                            field: 'iotId',
+                            title: 'ID',
+                            align: 'left',
+                            unresize: 'false',
+                            width: 80
+                        },
+                        {
+                            field: 'deviceName',
+                            title: '设备姓名',
+                            align: 'leftleft',
+                        },
+                        {
+                            field: 'nickname',
+                            // width: '25%',
+                            title: '备注名称',
+                            align: 'left',
+                        }, {
+                        field: 'deviceStatus',
+                        align: 'left',
+                        title: '设备状态',
+                        templet: function(data) {
+                            if (data.deviceStatus == 'ONLINE') {
+                                return '在线'
+                            }
+                            if (data.deviceStatus == 'OFFLINE') {
+                                return '离线'
+                            }
+                            if (data.deviceStatus == 'UNACTIVE') {
+                                return '未激活'
+                            }
+                            if (data.deviceStatus == 'UNACTIVE') {
+                                return '设备已禁用'
+                            }
+                            if (data.deviceStatus == undefined) {
+                                return ''
+                            }
+                        },
+                    },
+                        {
+                            field: 'productKey',
+                            align: 'left',
+                            title: '绑定产品',
+
+                        },
+
+                        {
+                            field: 'GmtCreate',
+                            title: '更新时间',
+                            align: 'left',
+
+                        },
+                        {
+                            width: 140,
+                            //align: 'right',
+                            //flxed: 'right',
+                            title: '操作',
+                            toolbar: '#table-content-list',
+                        }
+                    ]
+                ],
+
+                event: true,
+                page: true,
+                limit: 15,
+                skin: 'line',
+                even: true,
+                limits: [5, 10, 15],
+                done: function (res, curr, count) {
+                    table_data = res.data;
+
+                    layer.closeAll('loading');
+                    attenderList.length = 0;
+                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                    // layer.close(index);    //返回数据关闭loading
+                },
+            });
+        }
+
+        window.onkeyup = function (ev) {
+            var key = ev.keyCode || ev.which;
+            if (key == 27) { //按下Escape
+                layer.closeAll('iframe'); //关闭所有的iframe层
+
+            }
+        }
+        //监听下拉框选中
+        form.on('select(component-form-select)', function (data) {
+
+            ajaxs(data.value)
+            window.indexs = data.value;
+        });
+        //监听选中的复选框
+        table.on('checkbox(test-table-operate)', function (obj) {
+            if (obj.checked && obj.type == 'one') {
+                var devi = {};
+                devi = obj.data.id;
+                attenderList.push(devi)
+            }
+            if (!obj.checked && obj.type == 'one') {
+                var index = attenderList.indexOf(obj.data.id);
+                if (index > -1) {
+                    attenderList.splice(index, 1);
+                }
+            }
+            if (!obj.checked && obj.type == 'all') {
+                attenderList.length = 0;
+
+            }
+            if (obj.checked && obj.type == 'all') {
+                $.each(table.checkStatus('test-table-operate').data, function (idx, con) {
+                    var devi = {};
+                    devi = con.id;
+
+                    attenderList.push(devi)
+                });
+                attenderList = Array.from(new Set(attenderList))
+            }
+            console.log(attenderList)
+
+        });
+
+        table.on('tool(test-table-operate)', function (obj) {
+            var age = obj.data;
+            console.log(age);
+            if (obj.event === 'del') {
+                layer.confirm('真的删除吗？', function () {
+                    $.ajax({
+                        url: url + "/tablesigndevice/delect",
+                        type: "get",
+                        data: {
+
+                            "productKey": age.productKey,
+                            "deviceName": age.deviceName
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.code == "0") {
+                                layer.msg('成功删除', {
+                                    icon: 1
+                                })
+                                ajaxs(age.meetingId);
+
+
+                            } else {
+                                layer.msg('删除失败，请稍后再试', {
+                                    icon: 5
+                                });
+                            }
+
+                        },
+                        error: function (error) {
+
+                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                icon: 5
+                            });
+                        }
+
+                    })
+
+                });
+            }
+
+        })
+
+        //弹出层区
+
+        var active = {
+            add: function () {
+                //  console.log($('#select-room').val())
+                if ($('#select-room').val() == '-1') {
+                    return layer.msg("请选择产品后再添加设备")
+                }
+
+                layer.open({
+                    type: 2,
+                    title: '<p style="">新增设备</p>',
+                    content: 'seatdeviceadd.html?productKey='+$('#select-room').val(),
+                    maxmin: true,
+                    area: ['60%', '80%'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success: function (layero, index) {
+                        var body = layui.layer.getChildFrame('body', index);
+                        var a = indexs + "";
+                        body.find('#meetingid').val(indexs)
+                    }
+                });
+
+            },
+            search: function () {
+                var search = undefined
+                $('#demoReload').val() === ''?search = undefined:search = $('#demoReload').val()
+                table.render({
+                    elem: '#test-table-operate',
+                    // height: 'full-200',
+                    url: url + "/tablesigndevice/selectSearch" //数据接口
+                    ,
+                    where: {
+                        "deviceName": search,
+                    },
+
+                    method: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    page: {
+                        layout: ['prev', 'page', 'next', 'count', 'skip']
+                    },
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'iotId',
+                                title: 'ID',
+                                align: 'left',
+                                unresize: 'false',
+                                width: 80
+                            },
+                            {
+                                field: 'deviceName',
+                                title: '姓名',
+                                align: 'leftleft',
+                            },
+                            {
+                                field: 'nickname',
+                                // width: '25%',
+                                title: '备注名称',
+                                align: 'left',
+                            }, {
+                            field: 'deviceStatus',
+                            align: 'left',
+                            title: '设备状态',
+                            templet: function(data) {
+                                if (data.deviceStatus == 'ONLINE') {
+                                    return '在线'
+                                }
+                                if (data.deviceStatus == 'OFFLINE') {
+                                    return '离线'
+                                }
+                                if (data.deviceStatus == 'UNACTIVE') {
+                                    return '未激活'
+                                }
+                                if (data.deviceStatus == 'UNACTIVE') {
+                                    return '设备已禁用'
+                                }
+                            },
+                        },
+                            {
+                                field: 'ProductKey',
+                                align: 'left',
+                                title: '绑定设备',
+
+                            },
+
+                            {
+                                field: 'GmtCreate',
+                                title: '更新时间',
+                                align: 'left',
+
+                            },
+                            {
+                                width: 140,
+                                //align: 'right',
+                                //flxed: 'right',
+                                title: '操作',
+                                toolbar: '#table-content-list',
+                            }
+                        ]
+                    ],
+
+
+                    event: true,
+                    page: true,
+                    limit: 15,
+                    skin: 'line',
+                    even: true,
+                    limits: [5, 10, 15],
+                    done: function (res, curr, count) {
+                        table_data = res.data;
+
+                        layer.closeAll('loading');
+                        attenderList.length = 0;
+                        // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                        // layer.close(index);    //返回数据关闭loading
+                    },
+
+
+
+
+                });
+
+            },
+            getCheckData: function () { //获取选中数据
+
+                if ($('#select-room').val() == '-1') {
+                    return layer.msg("请选择会议后再添加人员")
+                }
+                var cb = $(".layui-form-checkbox");
+                $(".layui-form-checkbox").each(function () {
+
+                    $(this).click();
+
+                })
+
+
+            },
+            getCheckLength: function () { //获取选中数目
+                if ($('#select-room').val() == '-1') {
+                    return layer.msg("请选择会议后再删除人员")
+                }
+                if (attenderList.length == 0) {
+                    return layer.msg("请选择要删除的人员")
+                }
+                layer.confirm('确定要批量删除吗?', function (index) {
+
+                    $.ajax({
+                        async: false,
+                        type: "post",
+                        url: url + "/meetingcanhui/batchRemove",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        data: {
+                            "meetingcanhuiid": attenderList.join(",")
+
+                        },
+                        success: function (msg) {
+                            if (msg.code == 0) {
+                                layer.msg("删除成功");
+                                ajaxs($('#select-room').val()); // 父页面刷新
+
+                            } else {
+                                layer.msg(msg.msg);
+
+
+                            }
+
+                        },
+                        //失败的回调函数
+                        error: function () {
+                            console.log("error")
+                        }
+                    })
+                })
+            },
+            isAll: function () { //验证是否全选
+                layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function (index) {
+                    $.ajax({
+                        async: false,
+                        type: "get",
+                        url: url + "/meetingcanhui/empty",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        data: {
+
+                        },
+                        success: function (msg) {
+                            if (msg.code == 0) {
+                                layer.msg("清空成功");
+                                reloads(); // 父页面刷新
+
+                            } else {
+                                layer.msg(msg.msg);
+
+
+                            }
+
+                        },
+                        //失败的回调函数
+                        error: function () {
+                            console.log("error")
+                        }
+                    })
+                    layer.close(index);
+                });
+
+            },
+
+
+
+        }
+        //弹出层选项区
+
+        $('.layui-ds').on('click', function () {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+
+        /*右侧菜单HOVER显示提示文字*/
+        $('.test-table-operate-btn button').each(function () {
+            var _id = $(this).attr('id');
+            var _data = $(this).attr('data');
+            $("#" + _id).hover(function () {
+                openMsg();
+            }, function () {
+                layer.close(subtips);
+            });
+            function openMsg() {
+                subtips = layer.tips(_data, '#' + _id, { tips: [3, '#666'], time: 30000 });
+            }
+        })
+
+
+    })
+</script>
+</body>
+</html>
