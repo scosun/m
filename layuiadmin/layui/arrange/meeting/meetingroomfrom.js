@@ -23,4 +23,79 @@ layui.config({
         parent.layui.table.reload('test-table-operate'); //重载表格
         parent.layer.close(index); //再执行关闭
     });
+
+    var editid = +$("#editid").val();
+    if(editid){
+        //编辑
+        $("#seatmapbtn").text("编辑座区图");
+    }
+
+    var url="https://f.longjuli.com"
+
+    function editSeatMap(){
+        $.ajax({
+            url: url+"/roomtemplate/findByIdTemplatecode",
+            type: "POST",
+            data: {
+                "id": editid
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(data) {
+                console.log("---findByIdTemplatecode----",data)
+                if (data.code == "0") {
+                    var templatecode = data.data.templatecode;
+                    sessionStorage.setItem("_seatscomplete",templatecode);
+                    // var topLayui = parent === self ? layui : top.layui;
+                    // topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
+
+                    parent.layer.open({
+                        type: 2,
+                        title: '座区图',
+                        content: 'seatmapseditor.html',
+                        maxmin: true,
+                        area: ['100%', '100%'],
+                        scrollbar: false,
+                        yes: function(index, layero) {
+                        },
+                        success: function(layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                        }
+                    });
+
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 5
+                    });
+                }
+            },
+            error: function(error) {
+                
+            }
+        });
+    }
+
+    $("#seatmapbtn").bind("click",function(){
+        if(editid){
+            //编辑
+            editSeatMap();
+        }else{
+            //新增
+            sessionStorage.setItem("_seatscomplete","");
+            parent.layer.open({
+                type: 2,
+                title: '座区图',
+                content: 'seatmapseditor.html',
+                maxmin: true,
+                area: ['100%', '100%'],
+                scrollbar: false,
+                yes: function(index, layero) {
+                },
+                success: function(layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                }
+            });
+        }
+    })
 })

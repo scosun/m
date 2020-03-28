@@ -1981,18 +1981,21 @@ function completeSeats(){
 }
 
 function saveCompleteSeats(){
-	var seathtml = $("#seatcontainer").html().trim();
+	// var seathtml = $("#seatcontainer").html().trim();
 	var copyhtml = $("#seatcontainer").prop("outerHTML").trim();
-	var flag = copyText(copyhtml); //传递文本
-	alert(flag ? "复制成功！" : "复制失败！");
+	// var flag = copyText(copyhtml); //传递文本
+	// alert(flag ? "复制成功！" : "复制失败！");
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 
-	sessionStorage.setItem("_seatscomplete",seathtml);
+	sessionStorage.setItem("_seatnum",allseats.length);
+	sessionStorage.setItem("_seatscomplete",copyhtml);
 }
 function clearCompleteSeats(){
 	sessionStorage.setItem("_seatscomplete","");
 }
 function loadSessionData(){
 	var html = sessionStorage.getItem("_seatscomplete") || "";
+	// console.log(html)
 	if(html){
 		$("#seatcontainer").prop("outerHTML",html);
 		clearCompleteSeats();	
@@ -2018,6 +2021,34 @@ function copyText(text) {
 	currentFocus.focus();
 	return flag;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

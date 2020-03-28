@@ -289,9 +289,18 @@ layui.config({
 				content: 'meeting_room_form.html',
 				maxmin: true,
 				area: ['60%', '80%'],
-				btn: ['确定','打开会场编辑器', '取消'],
+				// btn: ['确定','打开会场编辑器', '取消'],
+				btn: ['确定','取消'],
 				yes: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
+					
+					var seatnum = age.seatnum;
+					var templatecode = sessionStorage.getItem("_seatscomplete") || undefined;
+					if(templatecode){
+						seatnum = +sessionStorage.getItem("_seatnum") || 0;
+					}
+					
+					
 					$.ajax({
 						url: url+"/roomtemplate/updateRoomtemplate",
 						type: "POST",
@@ -303,7 +312,9 @@ layui.config({
 							"name": body.find('#roomname').val(),
 							"templatefilename": body.find('#templatefilename').val(),
 							"seatrule": body.find('#seatrule').val(),
-							"templatecode": body.find('#templatecode').val()
+							// "templatecode": body.find('#templatecode').val(),
+							"templatecode": templatecode,
+							"seatnum":seatnum
 						},
 						success: function(data) {
 							if (data.code == '0') {
@@ -326,34 +337,34 @@ layui.config({
 					})
 				},
 				btn2:function(index, layero){
-					$.ajax({
-						url: url+"/roomtemplate/findByIdTemplatecode",
-						type: "POST",
-						data: {
-							"id": age.id
-						},
-						xhrFields: {
-							withCredentials: true
-						},
-						success: function(data) {
-							console.log("---findByIdTemplatecode----",data)
-							if (data.code == "0") {
-								var templatecode = data.data.templatecode;
+					// $.ajax({
+					// 	url: url+"/roomtemplate/findByIdTemplatecode",
+					// 	type: "POST",
+					// 	data: {
+					// 		"id": age.id
+					// 	},
+					// 	xhrFields: {
+					// 		withCredentials: true
+					// 	},
+					// 	success: function(data) {
+					// 		console.log("---findByIdTemplatecode----",data)
+					// 		if (data.code == "0") {
+					// 			var templatecode = data.data.templatecode;
 
-								sessionStorage.setItem("_seatscomplete",templatecode);
-								var topLayui = parent === self ? layui : top.layui;
-								topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
-							} else {
-								layer.msg(data.msg, {
-									icon: 5
-								});
-							}
-						},
-						error: function(error) {
+					// 			sessionStorage.setItem("_seatscomplete",templatecode);
+					// 			var topLayui = parent === self ? layui : top.layui;
+					// 			topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
+					// 		} else {
+					// 			layer.msg(data.msg, {
+					// 				icon: 5
+					// 			});
+					// 		}
+					// 	},
+					// 	error: function(error) {
 							
-						}
-					});
-					return false;
+					// 	}
+					// });
+					// return false;
 				},
 				btn3:function(index, layero){
 					console.log("btn3----")
@@ -362,6 +373,8 @@ layui.config({
 					var body = layer.getChildFrame('body', index);
 					console.log("age------",age)
 					if (age) {
+						body.find('#editid').val(age.id);
+
 						body.find('#roomname').val(age.name);
 						body.find('#templatefilename').val(age.templatefilename);
 						if (age.seatrule == "左双右单") {
@@ -442,6 +455,16 @@ window.onkeyup = function(ev) {
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
+
+					var templatecode = sessionStorage.getItem("_seatscomplete") || "";
+					if(!templatecode){
+						layer.msg('模板未保存');
+						return;
+					}else{
+						sessionStorage.setItem("_seatscomplete","");
+					}
+					var seatnum = +sessionStorage.getItem("_seatnum") || 0;
+
 					$.ajax({
 						url: url+"/roomtemplate/addRoomtemplate",
 						type: "POST",
@@ -452,7 +475,9 @@ window.onkeyup = function(ev) {
 							"name": body.find('#roomname').val(),
 							"templatefilename": body.find('#templatefilename').val(),
 							"seatrule": body.find('#seatrule').val(),
-							"templatecode": body.find('#templatecode').val()
+							// "templatecode": body.find('#templatecode').val()
+							"templatecode": templatecode,
+							"seatnum":seatnum
 						},
 						success: function(data) {
 							if (data.code === 0) {

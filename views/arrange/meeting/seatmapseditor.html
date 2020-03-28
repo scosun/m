@@ -237,9 +237,7 @@
 		<!-- 右侧菜单 end-->
 	</header>
 
-	<div id="seatcontainer" class="seatcontainer"><div style="position:absolute;left:10px;top:65px;">
-		<img style="height:20px;" src="../../../images/leftright-ts.svg">
-	</div><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="mousecontainerId"></div><div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div><svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1"><line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/></svg><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
+	<div id="seatcontainer" class="seatcontainer"><div style="position:absolute;left:10px;top:65px;"><img style="height:20px;" src="../../../images/leftright-ts.svg"></div><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="mousecontainerId"></div><div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div><svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1"><line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/></svg><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script src="seatscontrol_temp.js"></script>
@@ -257,9 +255,9 @@ layui.config({
 		router = layui.router();
 		
 		//在这里我想得到页面 二次显示的事件
-		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
-			loadSessionData();
-        })
+// 		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
+// 			loadSessionData();
+//         })
 
 
 		function openRectangleMeeting(){
