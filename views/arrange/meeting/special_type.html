@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
-	<div class="layui-form-item">
+	<!-- <div class="layui-form-item">
 		<label class="layui-form-label">会场类别</label>
         <div class="layui-input-block">
             <select class="dialogRuleSelect" lay-skin="select" lay-filter="meetrule-form-select" id="meet_typeid">
@@ -19,7 +19,7 @@
 				<option value="2">异形会场</option>
             </select>
         </div>
-	</div>
+	</div> -->
 
 
 	<div class="layui-form" id="meet1form">
@@ -75,16 +75,16 @@ layui.config({
 		layer = layui.layer,
 		router = layui.router();
 		
-		form.on('select(meetrule-form-select)', function(data){
-			var id = +data.value;
-			if(id == 1){
-				$("#meet1form").show();
-				$("#meet2form").hide();
-			}else{
-				$("#meet2form").show();
-				$("#meet1form").hide();
-			}
-		});
+		// form.on('select(meetrule-form-select)', function(data){
+		// 	var id = +data.value;
+		// 	if(id == 1){
+		// 		$("#meet1form").show();
+		// 		$("#meet2form").hide();
+		// 	}else{
+		// 		$("#meet2form").show();
+		// 		$("#meet1form").hide();
+		// 	}
+		// });
 
 		$('#colnum').on('keydown', function (event) {
 			if (event.keyCode == 13) {
@@ -102,64 +102,42 @@ layui.config({
 			}
 		});
 
-		$('#seatnum,#centernum').on('keydown', function (event) {
-			if (event.keyCode == 13) {
-				var layer = layui.layer;
-				var ccx = +$("#ccx").val() || 0;
-				var ccy = +$("#ccy").val() || 0;
-				var r1 = +$("#r1").val() || 0;
-				var seatnum = +$("#seatnum").val() || 0;
-				var centernum = $("#centernum").val() || "";
-
-				// if(ccx <= 0 || ccy <= 0){
-				// 	layer.msg('圆心坐标输入错误');
-				// 	return false;
-				// }
-				// if(r1 <= 0 ){
-				// 	layer.msg('半径输入错误');
-				// 	return false;
-				// }
-				if(seatnum <= 0 ){
-					layer.msg('座位数量输入错误');
-					return false;
-				}
-				
-				if(centernum == ""){
-					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
-					// window.parent.createCircleSeatMap(ccx,ccy,r1,seatnum);
-					window.parent.mouseCreateSeatMap(1,seatnum);
-				}else{
-					if(centernum <= 0){
-						layer.msg('中间座位数输入错误');
-						return false;
-					}
-					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
-					// window.parent.createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-					window.parent.mouseCreateSeatMap(2,seatnum,centernum);
-				}
-
-				// if(ccx > 0 && ccy > 0 && ){
-				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// 	parent.layer.close(index);		//关闭窗口
-				// 	window.parent.creatSeats(rownum,colnum);
-				// }else{
-				// 	layer.msg('行，列数字输入错误');
-				// }
-				return false
-			}
-		});
-		// $('#colnum').on('keydown', function (event) {
+		// $('#seatnum,#centernum').on('keydown', function (event) {
 		// 	if (event.keyCode == 13) {
 		// 		var layer = layui.layer;
-		// 		var ruleid = +$("#ruleselect").val() || 0;
-		// 		if(rownum > 0 && colnum > 0){
+		// 		var ccx = +$("#ccx").val() || 0;
+		// 		var ccy = +$("#ccy").val() || 0;
+		// 		var r1 = +$("#r1").val() || 0;
+		// 		var seatnum = +$("#seatnum").val() || 0;
+		// 		var centernum = $("#centernum").val() || "";
+
+		// 		// if(ccx <= 0 || ccy <= 0){
+		// 		// 	layer.msg('圆心坐标输入错误');
+		// 		// 	return false;
+		// 		// }
+		// 		// if(r1 <= 0 ){
+		// 		// 	layer.msg('半径输入错误');
+		// 		// 	return false;
+		// 		// }
+		// 		if(seatnum <= 0 ){
+		// 			layer.msg('座位数量输入错误');
+		// 			return false;
+		// 		}
+				
+		// 		if(centernum == ""){
 		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
         //        		parent.layer.close(index);		//关闭窗口
-		// 			window.parent.autoCode(ruleid);
+		// 			// window.parent.createCircleSeatMap(ccx,ccy,r1,seatnum);
+		// 			window.parent.mouseCreateSeatMap(1,seatnum);
 		// 		}else{
-		// 			layer.msg('行，列数字输入错误');
+		// 			if(centernum <= 0){
+		// 				layer.msg('中间座位数输入错误');
+		// 				return false;
+		// 			}
+		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        //        		parent.layer.close(index);		//关闭窗口
+		// 			// window.parent.createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+		// 			window.parent.mouseCreateSeatMap(2,seatnum,centernum);
 		// 		}
 		// 		return false
 		// 	}

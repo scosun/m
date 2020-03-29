@@ -1,130 +1,14 @@
 
-
-
-$(function(){
-	// $("#dragbtn").bind("click",dragSeats);
-	// $("#canceldragbtn").bind("click",cancelDragSeats);
-	// $("#lockbtn").bind("click",bindLockSeats);
-	
-
-
-	
-
-	// $("#createareabtn").bind("click",createArea);
-	
-
-	// $("#createcolbtn").bind("click",createColNum);
-
-	// $("#createacolbtn").bind("click",createColAisle);
-	// $("#createarowbtn").bind("click",createRowAisle);
-
-
-
-
-	
-	$("#refreshbtn").bind("click",refreshContainer);
-
-	$("#rightbtn").bind("click",bindContextMenu);
-	$("#cancelrightbtn").bind("click",removeContextMenu);
-	$("#dleftmovebtn").bind("click",leftMoveSeats);
-	$("#drightmovebtn").bind("click",rightMoveSeats);
-	$("#dtopmovebtn").bind("click",topMoveSeats);
-	$("#dbottommovebtn").bind("click",bottomMoveSeats);
-	$("#savelocalbtn").bind("click",saveLocalSeats);
-	$("#restorelocalbtn").bind("click",restoreLocalSeats);
-	$("#completebtn").bind("click",completeSeats);
-
-	$("#nav-rollback").bind("click",resetSeats);
-	$("#nav-forward").bind("click",revertSeats);
-
-	$("#createbtn").bind("click",creatSeats);
-	$("#nav-delete").bind("click",deleteSeats);
-	$("#nav-mark").bind("click",setRowNum);
-	$("#nav-radio").bind("click",bindOneSeats);
-	$("#nav-selection").bind("click",selectSeats);
-
-	$("#nav-align-center").bind("click",xCenterSeats);
-	$("#nav-align-center-v").bind("click",yCenterSeats);
-	$("#nav-vertical-c").bind("click",xAvgSeats);
-	$("#nav-horizontal-c").bind("click",yAvgSeats);
-	$("#nav-align-left").bind("click",leftSeats);
-	$("#nav-align-right").bind("click",rightSeats);
-	$("#nav-align-up").bind("click",topSeats);
-	$("#nav-align-down").bind("click",bottomSeats);
-
-	$("#nav-drag").bind("click",dragMoveSeats);
-	$("#canceldragbtn").bind("click",unDragMoveSeats);
-
-	$("#selectrow").bind("click",selectSeatRow);
-	$("#selectcol").bind("click",selectSeatCol);
-	$("#selectall").bind("click",selectSeatAll);
-	$("#unselectall").bind("click",unSelectSeatAll);
-
-	$("#reduceradiusbtn").bind("click",reduceSeatsRadius);
-	$("#addradiusbtn").bind("click",addSeatsRadius);
-
-	// $("#createbtn2").bind("click",creatSeats2);
-
-	//加载默认数据
-	loadSessionData();
-});
-
-function boxCreateSeats(){
-	__boxCreate = true;
-	selectSeats();
-}
-
-function mouseCreateSeatMap(mt,seatnum,centernum){
-	
-	removeContainerEvent();
-	$("#circlemousexyId").show();
-
-	var hasCircle = false;
-	$("#seatcontainer").bind({
-		dblclick:function(e){
-			removeContainerEvent();
-			$("#seatcontainerId").append($("#mousecontainerId").html());
-			$("#mousecontainerId").html('');
-
-			countMaxWidth();
-			clearCompleteSeats();
-			selectSeats();
-		},
-		click:function(e){
-			if(!hasCircle){
-				hasCircle = true;
-			}
-		},
-		mousemove:function(e){
-			var sl = $("#seatcontainer").position().left;
-			var st = $("#seatcontainer").position().top;
-			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-			var x = event.x - sl + scrollX - 3;
-			var y = event.y - st + scrollY - 3;
-			if(!hasCircle){
-				$("#circlemousexyId").css({"top":y+"px","left":x+"px"});
-			}else{
-				var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
-				var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
-				$("#circlemouseline").attr({"x1":x1,"y1":y1,"x2":x,"y2":y});
-
-				// var angle = Math.atan2((y1-y), (x1-x)) //弧度  0.6435011087932844
-				// var theta = Math.abs(angle*(180/Math.PI));
-
-				var r1 = Math.sqrt(Math.pow(x-x1,2) + Math.pow(y-y1,2));
-
-				// $("#seatcontainerId").html('');
-				if(mt == 1){
-					createCircleSeatMap(x1,y1,r1,seatnum,1);
-				}else{
-					createRunSeatMap(x1,y1,r1,seatnum,centernum,1);
-				}
-				
-			}
-		}
-	});
-}
+var __boxCreate = false;
+var __longEvent = false;
+var __maxWidth;
+var showRuleIds = [];
+var isDrop = false;
+var meetingid  = 0;
+var areas = [];
+var __sTop = 110;
+var __sLeft = 50;
+var colId = 0;
 
 function refreshContainer(){
 	__sTop = 110;
@@ -134,342 +18,30 @@ function refreshContainer(){
 	$("#seatcontainerId").html('');
 }
 
-function hideMeetTitle(){
-	$("#meetingname").hide();
-	$("#meetingaddress").hide();
-	$("#meetingtime").hide();
-	$("#meetingremark").hide();
-}
 
-function creatSeats2(rownum,colnum,mleft,mtop){
-	// countMaxWidth();
-	appendSeatsContainer(rownum,colnum,mleft,mtop);
+function bindOneSeats(){
+	if(__longEvent){
+		return;
+	}
 
-	getAllSeatsNode();
-}
-function appendSeatsContainer(rownum,colnum,mleft,mtop){
-	var seathtml = [];
-	
-	var stop = mtop;
-	var sleft = mleft;
+	console.log("bindOneSeats------------");
 
-	for(var j = 1; j <= +rownum; j++){
-		for(var i = 0; i < +colnum; i ++){
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'">' + (i+1) + '</div>');
-			sleft = sleft + 50;
+	removeContainerEvent();
+
+	selList.unbind("click");
+	selList.bind("click",function(evt){
+		var sel = $(this);
+		if(isLocked(this)){
+			return;
 		}
-		sleft = mleft;
-		stop = stop + 50;
-	}
-
-	$("#mousecontainerId").html(seathtml.join(''));
-	// $("#seatcontainerId").append(seathtml.join(''));
-}
-
-var isDrop = false;
-var meetingid  = 0;
-
-
-var areas = [];
-
-function creatSeats(rownum,colnum,mleft,mtop,ism){
-	// countMaxWidth(+rownum,+colnum);
-	bulidSeatsContainer(rownum,colnum,mleft,mtop,ism);
-
-	if(!ism){
-		countMaxWidth();
-		clearCompleteSeats();
-		selectSeats();
-	}
-}
-
-var maxWidth;
-function countMaxWidth(issave){
-	// maxWidth = colnum*50 + 100;
-	// $(".seatcontainer").width(colnum*50 + 100);
-	// $(".seatcontainer").height(rownum*50 + 200);
-
-	hideMeetTitle();
-	
-	var seats = $("#seatcontainerId .seatdiv");
-	var tops = [];
-	var lefts = [];
-	seats.each(function(item){
-		let left = parseFloat($(this).css("left"));
-		let top = parseFloat($(this).css("top"));
-		tops.push(top);
-		lefts.push(left);
+		if (!sel.hasClass(seledClass)) {
+			sel.addClass(seledClass);
+		} else {
+			sel.removeClass(seledClass);
+		}
 	});
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-
-	// var width = lefts[lefts.length - 1] - lefts[0];
-	// var height = tops[tops.length - 1] - tops[0];
-	var width = lefts[lefts.length - 1];
-	var height = tops[tops.length - 1];
-
-	maxWidth = width + 150;
-	if(issave){
-		$("#seatcontainer").width(width + 150);
-	}
-	$("#seatcontainer").height(height + 250);
 }
 
-var __sTop = 110;
-var __sLeft = 50;
-var colId = 0;
-
-// $("div[id$=-1]")
-// 获取 id -1结尾的div
-function bulidSeatsContainer(rownum,colnum,mleft,mtop,ism){
-	var seathtml = [];
-	
-	mleft = mleft || 0;
-	mtop = mtop || 0;
-
-	var stop = __sTop;
-	var sleft = __sLeft;
-
-	if(ism){
-		stop = mtop;
-		sleft = mleft;
-	}
-
-	for(var j = 1; j <= +rownum; j++){
-		for(var i = 0; i < +colnum; i ++){
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
-			sleft = sleft + 50;
-		}
-		sleft = __sLeft;
-		if(ism){
-			sleft = mleft;
-		}
-		stop = stop + 50;
-	}
-	__sTop = stop;
-	console.log(sleft,stop)
-
-	$("#seatcontainerId").append(seathtml.join(''));
-}
-
-
-
-var __runRow = 0;
-function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ism){
-
-	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism);
-	
-	if(!ism){
-		countMaxWidth();
-		clearCompleteSeats();
-		selectSeats();
-	}
-}
-
-function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
-	//长半径,//高半径, 两个半径一样就是圆形
-	// var r1 = +$("#r1").val() || 400;
-	if(ism){
-		ccx = ccx - ((centernum-1)*50+20)/2;
-	}
-
-	//每个座位的宽高,用来计算位置偏移
-	var seatw = 40;
-	var seath = 40;
-
-	__runRow++;
-	var seathtml = [];
-	
-	//先画跑道上下座位
-
-	var sleft = ccx - 20;
-	var stop = ccy - r1 - 20;
-
-	for(var aa = 1; aa <= 2; aa++){
-		var ang = 270 + ((aa-1)*180);
-		for(var bb = 0; bb < +centernum; bb++){
-			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
-			// stop = stop + 50;
-			sleft = sleft + 50;
-		}
-		sleft = ccx - 20;
-		stop = stop + r1*2;
-	}
-
-
-	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
-
-	var rightseats = seatnum/2 + 1;
-	var rightccx = ccx + (centernum - 1)*50;
-	//每个座位所占的角度,按平均算
-	var angleSpace = 180/rightseats;
-	//开始角度,3点方向,为0度,270就是12点
-	var startage = 270;
-	for (var i = 1; i <rightseats; i++) {
-		var sang = i * angleSpace + startage;
-		var x = rightccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
-		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
-
-		var ang = i * angleSpace - 270;
-		if(ang == 0 || ang >= 180){
-			ang = ang + 90;
-		}else{
-			ang = ang - 90;
-		}
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '辛海涛' + '</div>');
-		
-	}
-	var leftseats = seatnum/2 + 1;
-	var leftccx = ccx;
-	//每个座位所占的角度,按平均算
-	var angleSpace = 180/leftseats;
-	//开始角度,3点方向,为0度, 450就是6点钟
-	var startage = 450;
-	for (var n = 1; n <leftseats; n++) {
-		var sang = n * angleSpace + startage;
-		var x = leftccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
-		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
-
-		var ang = n * angleSpace - 450;
-		if(ang == 0 || ang >= 180){
-			ang = ang + 90;
-		}else{
-			ang = ang - 90;
-		}
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '辛海涛' + '</div>');
-		
-	}
-	// for (var j = 0; j <seatnum; j++) {
-	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
-	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
-	// 	// x = dleft + x;
-	// 	// y = dtop + y;
-
-	// 	var ang = j * angleSpace;
-	// 	if(ang == 0 || ang >= 180){
-	// 		ang = ang + 90;
-	// 	}else{
-	// 		ang = ang - 90;
-	// 	}
-	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
-	
-	// }
-	if(!ism){
-		$("#seatcontainerId").append(seathtml.join(''));
-	}else{
-		$("#mousecontainerId").html(seathtml.join(''));
-	}
-}
-
-
-
-var __circleRow = 0;
-function createCircleSeatMap(ccx,ccy,r1,seatnum,ism){
-	// countCircleMaxWidth(ccx,ccy,r1,seatnum);
-
-	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism);
-	
-	if(!ism){
-		countMaxWidth();
-		clearCompleteSeats();
-		selectSeats();
-	}
-}
-
-function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
-	//长半径,//高半径, 两个半径一样就是圆形
-	// var r1 = +$("#r1").val() || 400;
-	if(ism){
-		r1 = r1 + 30;
-	}
-
-	//每个座位的宽高,用来计算位置偏移
-	var seatw = 40;
-	var seath = 40;
-
-	//开始角度,默认3点方向,为0度
-	var startage = 270;
-
-	var angleSpace = 360/seatnum;
-
-	__circleRow++;
-	var seathtml = [];
-	
-	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
-
-	for (var i = 0; i < seatnum; i++) {
-		var sang = i * angleSpace + startage;
-		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
-		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
-
-		var ang = i * angleSpace - 270;
-		if(ang == 0 || ang >= 180){
-			ang = ang + 90;
-		}else{
-			ang = ang - 90;
-		}
-		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
-		
-	}
-	// for (var j = 0; j <seatnum; j++) {
-	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
-	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
-	// 	// x = dleft + x;
-	// 	// y = dtop + y;
-
-	// 	var ang = j * angleSpace;
-	// 	if(ang == 0 || ang >= 180){
-	// 		ang = ang + 90;
-	// 	}else{
-	// 		ang = ang - 90;
-	// 	}
-	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
-	
-	// }
-	
-
-	if(!ism){
-		$("#seatcontainerId").append(seathtml.join(''));
-	}else{
-		$("#mousecontainerId").html(seathtml.join(''));
-	}
-}
-
-
-function reduceSeatsRadius(){
-	var seled = $("#seatcontainerId .seled");
-	for(var i = 0,len = seled.length; i < len; i++){
-		var r = parseInt($(seled[i]).attr("r"));
-		var sang = parseInt($(seled[i]).attr("ang"));
-		var circle = $(seled[i]).attr("circle").split("-");
-		
-		var ccx = +circle[0];
-		var ccy = +circle[1];
-		var r1 = r - 1;
-		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
-		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
-
-		$(seled[i]).css({"top": y +"px","left": x + "px"});
-		$(seled[i]).attr({r:r1});
-	}
-}
-function addSeatsRadius(){
-	var seled = $("#seatcontainerId .seled");
-	for(var i = 0,len = seled.length; i < len; i++){
-		var r = parseInt($(seled[i]).attr("r"));
-		var sang = parseInt($(seled[i]).attr("ang"));
-		var circle = $(seled[i]).attr("circle").split("-");
-		
-		var ccx = +circle[0];
-		var ccy = +circle[1];
-		var r1 = r + 1;
-		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
-		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
-
-		$(seled[i]).css({"top": y +"px","left": x + "px"});
-		$(seled[i]).attr({r:r1});
-	}
-}
 
 function selectSeatRow(){
 	var seled = $("#seatcontainerId .seled");
@@ -537,6 +109,1318 @@ function selectSeatAll(){
 function unSelectSeatAll(){
 	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	allseats.removeClass("seled");
+}
+
+
+function boxCreateSeats(){
+	__boxCreate = true;
+	selectSeats();
+}
+
+function selectSeats(){
+	getAllSeatsNode();
+	bindContainerEvent();
+}
+
+
+function dragMoveSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+
+	if(seled.length == 0){
+		return;
+	}
+
+	var lefts = [];
+	var tops = [];
+	// var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		// var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	var l = lefts[0];
+	var t = tops[0];
+
+	var moveseats = seled.clone();
+	for(var j = 0,len = moveseats.length; j < len; j++){
+		var sl = $(seled[j]).position().left;
+		var st = $(seled[j]).position().top;
+		$(moveseats[j]).css({"left":sl-lefts[0],"top":st-tops[0]});
+	}
+
+	moveStartLeft = l;
+	moveStartTop = t;
+	$("#" + movecontainerId).css({"width":w+"px","height":h+"px","left":l+"px","top":t+"px"});
+	$("#" + movecontainerId).html(moveseats);
+	$("#" + movecontainerId).show();
+
+	removeContainerEvent();
+
+	$("#" + movecontainerId).on({
+		dblclick:function(e){
+			dblclickMoveSeats();
+			selectSeats();
+		},
+		mousedown:function(e){
+			var el=$(this);
+			var os = el.offset(); dx = e.pageX-os.left, dy = e.pageY-os.top;
+			$(document).on('mousemove.drag', function(e){
+				el.offset({top: e.pageY-dy, left: e.pageX-dx});
+			});
+		},
+	   	mouseup: function(e){ 
+		   $(document).off('mousemove.drag');
+		}
+	});
+}
+
+function unDragMoveSeats(){
+	$("#movecontainerId").hide();
+	$("#movecontainerId").html('');
+	selectSeats();
+
+}
+function leftMoveSeats(){
+	var seled = $("#seatcontainerId ."+seledClass);
+
+	seled.each(function(){
+		var left = parseFloat($(this).css("left"));
+		$(this).css("left",left-1+"px");
+	});
+}
+function rightMoveSeats(){
+	var seled = $("#seatcontainerId ."+seledClass);
+
+	seled.each(function(){
+		var left = parseFloat($(this).css("left"));
+		$(this).css("left",left+1+"px");
+	});
+}
+function topMoveSeats(){
+	var seled = $("#seatcontainerId ."+seledClass);
+
+	seled.each(function(){
+		var top = parseFloat($(this).css("top"));
+		$(this).css("top",top-1+"px");
+	});
+}
+function bottomMoveSeats(){
+	var seled = $("#seatcontainerId ."+seledClass);
+
+	seled.each(function(){
+		var top = parseFloat($(this).css("top"));
+		$(this).css("top",top+1+"px");
+	});
+}
+
+
+function xAvgSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+		}
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sw = gids.length * 50;
+		var ssw = gids.length * 40;
+		if(w > sw){
+			var moveleft = (w-ssw)/(gids.length-1);
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("left", (l + i*(40 + moveleft)) +"px");
+			})
+		}
+	}
+}
+
+function yAvgSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var w = $(seled[i]).width();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
+		}
+
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth;
+	var h = tops[tops.length-1] - tops[0] + seatHeight;
+	var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sh = gids.length * 50;
+		var ssh = gids.length * 40;
+		if(h > sh){
+			var movetop = (h-ssh)/(gids.length-1);
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("top", (t + i*(40 + movetop)) +"px");
+			})
+		}
+	}
+}
+
+
+
+function xCenterSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+		}
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sw = gids.length * 50;
+		if(w > sw){
+			var moveleft = w/2 - sw/2;
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("left", (l + 50*i + moveleft) +"px");
+			})
+		}
+	}
+
+}
+
+function yCenterSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var w = $(seled[i]).width();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
+		}
+		// if(seledgroup[kid]){
+		// 	seledgroup[kid].push(id);
+		// }else{
+		// 	seledgroup[kid] = [];
+		// 	seledgroup[kid].push(id);
+		// }
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 8;
+	var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sh = gids.length * 50;
+		if(h > sh){
+			var movetop = Math.floor(h/2 - sh/2);
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("top", (t + 50*i + movetop) +"px");
+			})
+		}
+	}
+}
+
+
+function leftSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+	
+	var lefts = [];
+	// var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
+
+		lefts.push(+sl);
+		// tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+		}
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	// tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	var l = lefts[0];
+	// var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sw = gids.length * 50;
+		if(w > sw){
+			// var moveleft = w/2 - sw/2;
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("left", (l + 50*i) +"px");
+			})
+		}
+	}
+
+}
+
+function rightSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+	
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+		var h = $(seled[i]).height();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+		}
+	}
+
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+
+	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		var sw = gids.length * 50;
+		if(w > sw){
+			var moveleft = w - sw;
+			gids.forEach(function(_id,i){
+				$("#" + _id).css("left", (l + moveleft + 50*i) +"px");
+			})
+		}
+	}
+
+}
+function topSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+	
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		var w = $(seled[i]).width();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
+		}
+	}
+
+	// lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+	// console.log(lefts,tops);
+	
+	// var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	// var l = lefts[0];
+	var t = tops[0];
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		gids.forEach(function(_id,i){
+			console.log(i)
+			$("#" + _id).css("top", (t + 50*i) +"px");
+		});
+	}
+
+}
+function bottomSeats(){
+	if(__longEvent){
+		return;
+	}
+
+	var seled = $("#seatcontainerId ."+seledClass);
+	seled.removeClass(seledClass);
+	
+	var lefts = [];
+	var tops = [];
+	var seledgroup = {};
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		var w = $(seled[i]).width();
+
+		lefts.push(+sl);
+		tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = "-"+id.split('-')[1];
+		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[sl] = [];
+			seledgroup[sl].push(id);
+		}
+	}
+
+	// lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return b - a;});
+	// console.log(lefts,tops);
+
+	// var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
+	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
+	// var l = lefts[0];
+	var t = tops[0];
+
+	for(var gk in seledgroup){
+		var gids = seledgroup[gk];
+		gids.forEach(function(_id,i){
+			$("#" + _id).css("top", (t - 50*i) +"px");
+		});
+	}
+
+}
+
+var __delSeatsData = [];
+function deleteSeats(){
+	var seled = $("#seatcontainerId ."+seledClass);
+	if(seled.length == 0){return;}
+
+	seled.removeClass(seledClass);
+	__delSeatsData.push(seled);
+
+	seled.remove();
+	// seled.css("display","none");
+}
+
+function resetSeats(){
+	if(__longEvent){
+		return;
+	}
+	var pop = __delSeatsData.pop();
+	if(pop && pop.length > 0){
+		$("#seatcontainerId").append(pop);
+		// pop.each(function(){
+		// 	$(this).css("display","block");
+		// });
+	}
+
+	// var seled =  $("#seatcontainerId ."+seledClass);
+	// if(seled.length == 0){return;}
+	// seled.removeClass(seledClass);
+	// seled.each(function(){
+	// 	var id = this.id;
+	// 	$(this).removeClass("aisleseats");
+	// 	var num = id.split("-");
+	// 	$(this).html(num[1])
+	// });
+}
+
+function revertSeats(){
+	if(__longEvent){
+		return;
+	}
+	var seled =  $("#seatcontainerId ."+seledClass);
+	if(seled.length == 0){return;}
+	seled.removeClass(seledClass);
+	seled.each(function(){
+		var id = this.id;
+		$(this).removeClass("rownumseats");
+		var num = id.split("-");
+		$(this).html(num[1]);
+	});
+}
+
+
+function setRowNum(){
+	
+	var seled =  $("#seatcontainerId ."+seledClass);
+	if(seled.length == 0){return;}
+	
+	seled = seled.sort(function(a,b){
+		var topa = parseFloat($(a).css("top"));
+		var topb = parseFloat($(b).css("top"));
+		return topa - topb;
+	});
+
+	seled.removeClass(seledClass);
+	seled.addClass("rownumseats");
+	seled.each(function(_i){
+		$(this).html((_i+1) + "排");
+	});
+}
+
+
+function completeSeats(){
+	countMaxWidth(1);
+
+	// saveLocalSeats();
+
+	$("#meetingname").show();
+	$("#meetingaddress").show();
+	$("#meetingtime").show();
+	$("#meetingremark").show();
+
+
+	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+	seats.each(function(){
+		var id = this.id;
+		var arr = id.split("-");
+		var nid = arr[0] + "-" + arr[1];
+		$(this).attr("id",nid);
+	})
+	var rownum = $("#seatcontainerId .rownumseats");
+	// console.log(seats,seats.html(),rownum,rownum.html())
+	$("#seatcontainerId").html('');
+	$("#seatcontainerId").append(seats);
+	$("#seatcontainerId").append(rownum);
+	
+	saveCompleteSeats();
+	// var topLayui = parent === self ? layui : top.layui;
+	// if(topLayui){
+	// 	topLayui.index.openTabsPage("arrange/meeting/meeting_room.html", "会场列表");
+	// }else{
+	// 	alert("数据已保存");
+	// }
+
+	// location.href = "meeting_room.html";
+	// var html = '<div id="seatcontainerId">' + seats.html() + rownum.html() + '</div>';
+	// localStorage.setItem("_completeSeats",html);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function saveCompleteSeats(){
+	// var seathtml = $("#seatcontainer").html().trim();
+	var copyhtml = $("#seatcontainer").prop("outerHTML").trim();
+	// var flag = copyText(copyhtml); //传递文本
+	// alert(flag ? "复制成功！" : "复制失败！");
+	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+
+	sessionStorage.setItem("_seatnum",allseats.length);
+	sessionStorage.setItem("_seatscomplete",copyhtml);
+}
+
+
+function isRow(seledgroup,d,h){
+	for(var k in seledgroup){
+		if(+k >= d && +k <= h){
+			return k;
+		}
+	}
+	return false;
+}
+
+function countMaxWidth(issave){
+	// maxWidth = colnum*50 + 100;
+	// $(".seatcontainer").width(colnum*50 + 100);
+	// $(".seatcontainer").height(rownum*50 + 200);
+
+	hideMeetTitle();
+	
+	var seats = $("#seatcontainerId .seatdiv");
+	var tops = [];
+	var lefts = [];
+	seats.each(function(item){
+		let left = parseFloat($(this).css("left"));
+		let top = parseFloat($(this).css("top"));
+		tops.push(top);
+		lefts.push(left);
+	});
+	lefts = lefts.sort(function(a,b){return a - b;});
+	tops = tops.sort(function(a,b){return a - b;});
+
+	// var width = lefts[lefts.length - 1] - lefts[0];
+	// var height = tops[tops.length - 1] - tops[0];
+	var width = lefts[lefts.length - 1];
+	var height = tops[tops.length - 1];
+
+	__maxWidth = width + 150;
+	if(issave){
+		$("#seatcontainer").width(width + 150);
+	}
+	$("#seatcontainer").height(height + 250);
+}
+function isLocked(el){
+	return $(el).hasClass(lockClass);
+}
+
+function removeContainerEvent(){
+	$("#circlemousexyId").hide();
+	$("#circlemouseline").attr({"x1":0,"y1":0,"x2":0,"y2":0});
+	$("#seatcontainer").unbind("mousedown");
+	$("#seatcontainer").unbind("mousemove");
+	$("#seatcontainer").unbind("mouseup");
+	$("#seatcontainer").unbind("dblclick");
+	$("#seatcontainer").unbind("click");
+
+	// $("." + seatContainerClass).unbind("mousedown");
+	// $("." + seatContainerClass).unbind("mousemove");
+	// $("." + seatContainerClass).unbind("mouseup");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(function(){
+	$("#refreshbtn").bind("click",refreshContainer);
+
+	$("#nav-radio").bind("click",bindOneSeats);
+	$("#selectrow").bind("click",selectSeatRow);
+	$("#selectcol").bind("click",selectSeatCol);
+	$("#selectall").bind("click",selectSeatAll);
+	$("#unselectall").bind("click",unSelectSeatAll);
+
+	$('#nav-add').on('click',boxCreateSeats);
+
+	$("#nav-selection").bind("click",selectSeats);
+
+	$("#nav-drag").bind("click",dragMoveSeats);
+	$("#canceldragbtn").bind("click",unDragMoveSeats);
+	$("#dleftmovebtn").bind("click",leftMoveSeats);
+	$("#drightmovebtn").bind("click",rightMoveSeats);
+	$("#dtopmovebtn").bind("click",topMoveSeats);
+	$("#dbottommovebtn").bind("click",bottomMoveSeats);
+
+	$("#nav-vertical-c").bind("click",xAvgSeats);
+	$("#nav-horizontal-c").bind("click",yAvgSeats);
+
+	$("#nav-align-center").bind("click",xCenterSeats);
+	$("#nav-align-center-v").bind("click",yCenterSeats);
+	$("#nav-align-left").bind("click",leftSeats);
+	$("#nav-align-right").bind("click",rightSeats);
+	$("#nav-align-up").bind("click",topSeats);
+	$("#nav-align-down").bind("click",bottomSeats);
+
+	$("#nav-delete").bind("click",deleteSeats);
+
+	$("#nav-rollback").bind("click",resetSeats);
+	$("#nav-forward").bind("click",revertSeats);
+
+	$("#nav-mark").bind("click",setRowNum);
+
+	$("#completebtn").bind("click",completeSeats);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	$("#rightbtn").bind("click",bindContextMenu);
+	$("#cancelrightbtn").bind("click",removeContextMenu);
+	
+	$("#savelocalbtn").bind("click",saveLocalSeats);
+	$("#restorelocalbtn").bind("click",restoreLocalSeats);
+	
+	$("#createbtn").bind("click",creatSeats);
+
+	$("#reduceradiusbtn").bind("click",reduceSeatsRadius);
+	$("#addradiusbtn").bind("click",addSeatsRadius);
+
+	// $("#createbtn2").bind("click",creatSeats2);
+
+	//加载默认数据
+	loadSessionData();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+function mouseCreateSeatMap(mt,seatnum,centernum){
+	removeContainerEvent();
+	$("#circlemousexyId").show();
+
+	var hasCircle = false;
+	$("#seatcontainer").bind({
+		dblclick:function(e){
+			removeContainerEvent();
+			$("#seatcontainerId").append($("#mousecontainerId").html());
+			$("#mousecontainerId").html('');
+
+			countMaxWidth();
+			// clearCompleteSeats();
+			selectSeats();
+		},
+		click:function(e){
+			if(!hasCircle){
+				hasCircle = true;
+			}
+		},
+		mousemove:function(e){
+			var sl = $("#seatcontainer").position().left;
+			var st = $("#seatcontainer").position().top;
+			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+			var x = event.x - sl + scrollX - 3;
+			var y = event.y - st + scrollY - 3;
+			if(!hasCircle){
+				$("#circlemousexyId").css({"top":y+"px","left":x+"px"});
+			}else{
+				var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
+				var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
+				$("#circlemouseline").attr({"x1":x1,"y1":y1,"x2":x,"y2":y});
+
+				// var angle = Math.atan2((y1-y), (x1-x)) //弧度  0.6435011087932844
+				// var theta = Math.abs(angle*(180/Math.PI));
+
+				var r1 = Math.sqrt(Math.pow(x-x1,2) + Math.pow(y-y1,2));
+
+				// $("#seatcontainerId").html('');
+				if(mt == 1){
+					createCircleSeatMap(x1,y1,r1,seatnum,1);
+				}else{
+					createRunSeatMap(x1,y1,r1,seatnum,centernum,1);
+				}
+				
+			}
+		}
+	});
+}
+
+var __circleRow = 0;
+function createCircleSeatMap(ccx,ccy,r1,seatnum,ism){
+	// countCircleMaxWidth(ccx,ccy,r1,seatnum);
+
+	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism);
+	
+	if(!ism){
+		countMaxWidth();
+		// clearCompleteSeats();
+		selectSeats();
+	}
+}
+
+
+function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
+	//长半径,//高半径, 两个半径一样就是圆形
+	// var r1 = +$("#r1").val() || 400;
+	if(ism){
+		r1 = r1 + 30;
+	}
+
+	//每个座位的宽高,用来计算位置偏移
+	var seatw = 40;
+	var seath = 40;
+
+	//开始角度,默认3点方向,为0度
+	var startage = 270;
+
+	var angleSpace = 360/seatnum;
+
+	__circleRow++;
+	var seathtml = [];
+	
+	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+
+	for (var i = 0; i < seatnum; i++) {
+		var sang = i * angleSpace + startage;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = i * angleSpace - 270;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		// seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
+		
+	}
+	// for (var j = 0; j <seatnum; j++) {
+	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
+	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
+	// 	// x = dleft + x;
+	// 	// y = dtop + y;
+
+	// 	var ang = j * angleSpace;
+	// 	if(ang == 0 || ang >= 180){
+	// 		ang = ang + 90;
+	// 	}else{
+	// 		ang = ang - 90;
+	// 	}
+	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
+	
+	// }
+	
+
+	if(!ism){
+		$("#seatcontainerId").append(seathtml.join(''));
+	}else{
+		$("#mousecontainerId").html(seathtml.join(''));
+	}
+}
+
+var __runRow = 0;
+function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ism){
+
+	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism);
+	
+	if(!ism){
+		countMaxWidth();
+		clearCompleteSeats();
+		selectSeats();
+	}
+}
+
+function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
+	//长半径,//高半径, 两个半径一样就是圆形
+	// var r1 = +$("#r1").val() || 400;
+	if(ism){
+		ccx = ccx - ((centernum-1)*50+20)/2;
+	}
+
+	//每个座位的宽高,用来计算位置偏移
+	var seatw = 40;
+	var seath = 40;
+
+	__runRow++;
+	var seathtml = [];
+	
+	//先画跑道上下座位
+
+	var sleft = ccx - 20;
+	var stop = ccy - r1 - 20;
+
+	for(var aa = 1; aa <= 2; aa++){
+		var ang = 270 + ((aa-1)*180);
+		for(var bb = 0; bb < +centernum; bb++){
+			// seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
+			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
+			// stop = stop + 50;
+			sleft = sleft + 50;
+		}
+		sleft = ccx - 20;
+		stop = stop + r1*2;
+	}
+
+
+	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+
+	var rightseats = seatnum/2 + 1;
+	var rightccx = ccx + (centernum - 1)*50;
+	//每个座位所占的角度,按平均算
+	var angleSpace = 180/rightseats;
+	//开始角度,3点方向,为0度,270就是12点
+	var startage = 270;
+	for (var i = 1; i <rightseats; i++) {
+		var sang = i * angleSpace + startage;
+		var x = rightccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = i * angleSpace - 270;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '辛海涛' + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '</div>');
+		
+	}
+	var leftseats = seatnum/2 + 1;
+	var leftccx = ccx;
+	//每个座位所占的角度,按平均算
+	var angleSpace = 180/leftseats;
+	//开始角度,3点方向,为0度, 450就是6点钟
+	var startage = 450;
+	for (var n = 1; n <leftseats; n++) {
+		var sang = n * angleSpace + startage;
+		var x = leftccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - seath/2;
+
+		var ang = n * angleSpace - 450;
+		if(ang == 0 || ang >= 180){
+			ang = ang + 90;
+		}else{
+			ang = ang - 90;
+		}
+		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '辛海涛' + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '</div>');
+		
+	}
+	// for (var j = 0; j <seatnum; j++) {
+	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
+	// 	var y = ccy + (r1) * Math.sin((j * angleSpace + startage)/180 * Math.PI);// - seath/2;
+	// 	// x = dleft + x;
+	// 	// y = dtop + y;
+
+	// 	var ang = j * angleSpace;
+	// 	if(ang == 0 || ang >= 180){
+	// 		ang = ang + 90;
+	// 	}else{
+	// 		ang = ang - 90;
+	// 	}
+	// 	seathtml.push('<div style="transform: rotate('+ang+'deg);width:1px;height:1px;background:red;position:absolute;transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" ></div>');
+	
+	// }
+	if(!ism){
+		$("#seatcontainerId").append(seathtml.join(''));
+	}else{
+		$("#mousecontainerId").html(seathtml.join(''));
+	}
+}
+
+function creatSeats(rownum,colnum,mleft,mtop,ism){
+	// countMaxWidth(+rownum,+colnum);
+	bulidSeatsContainer(rownum,colnum,mleft,mtop,ism);
+
+	if(!ism){
+		countMaxWidth();
+		clearCompleteSeats();
+		selectSeats();
+	}
+}
+
+
+function autoCode(ruleid){
+	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)");
+	// seled.removeClass(seledClass);
+	
+	// var lefts = [];
+	// var tops = [];
+	var seledgroup = {};
+	var seledrowv = [];
+	for(var i = 0,len = seled.length; i < len; i++){
+		var sl = $(seled[i]).position().left;
+		var st = $(seled[i]).position().top;
+
+		var h = $(seled[i]).height();
+
+		// lefts.push(+sl);
+		// tops.push(+st);
+
+		var id = seled[i].id;
+		// var kid = id.split('-')[0]+"-";
+		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+		if(kid){
+			seledgroup[kid].push(id);
+		}else{
+			seledgroup[st] = [];
+			seledgroup[st].push(id);
+			seledrowv.push(st);
+		}
+	}
+
+	seledrowv = seledrowv.sort(function(a,b){return a-b;});
+	seledrowv.forEach(function(ik,rowid){
+		var col = seledgroup[ik];
+		col.sort(function(a,b){
+			var la = $("#" + a).position().left;
+			var lb = $("#" + b).position().left;
+			return la - lb;
+		});
+		var oae = oddAndEven(col.length);
+		var seatsnum = [];
+		if(ruleid == 1){
+			seatsnum = oae.odd.concat(oae.even.reverse());
+		}else if(ruleid == 2){
+			seatsnum = oae.even.concat(oae.odd.reverse());
+		}
+		col.forEach(function(oid,colid){
+			// var oid = col[ck];
+			$("#" + oid).html(seatsnum[colid]);
+			$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-"+new Date().getTime());
+		});
+	});
+
+	// var oae = oddAndEven(seatnum);
+	// var seatsnum = [];
+	// if(+seatrule == 1){
+	// 	seatsnum = oae.odd.concat(oae.even.reverse());
+	// }else if(+seatrule == 2){
+	// 	seatsnum = oae.even.concat(oae.odd.reverse());
+	// }else if(+seatrule == 3){
+	// 	seatsnum = oae.desc.reverse();
+	// }else if(+seatrule == 4){
+	// 	seatsnum = oae.desc;
+	// }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function hideMeetTitle(){
+	$("#meetingname").hide();
+	$("#meetingaddress").hide();
+	$("#meetingtime").hide();
+	$("#meetingremark").hide();
+}
+
+function creatSeats2(rownum,colnum,mleft,mtop){
+	// countMaxWidth();
+	appendSeatsContainer(rownum,colnum,mleft,mtop);
+
+	getAllSeatsNode();
+}
+function appendSeatsContainer(rownum,colnum,mleft,mtop){
+	var seathtml = [];
+	
+	var stop = mtop;
+	var sleft = mleft;
+
+	for(var j = 1; j <= +rownum; j++){
+		for(var i = 0; i < +colnum; i ++){
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'">' + (i+1) + '</div>');
+			sleft = sleft + 50;
+		}
+		sleft = mleft;
+		stop = stop + 50;
+	}
+
+	$("#mousecontainerId").html(seathtml.join(''));
+	// $("#seatcontainerId").append(seathtml.join(''));
+}
+
+
+
+// $("div[id$=-1]")
+// 获取 id -1结尾的div
+function bulidSeatsContainer(rownum,colnum,mleft,mtop,ism){
+	var seathtml = [];
+	
+	mleft = mleft || 0;
+	mtop = mtop || 0;
+
+	var stop = __sTop;
+	var sleft = __sLeft;
+
+	if(ism){
+		stop = mtop;
+		sleft = mleft;
+	}
+
+	for(var j = 1; j <= +rownum; j++){
+		for(var i = 0; i < +colnum; i ++){
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
+			sleft = sleft + 50;
+		}
+		sleft = __sLeft;
+		if(ism){
+			sleft = mleft;
+		}
+		stop = stop + 50;
+	}
+	__sTop = stop;
+	console.log(sleft,stop)
+
+	$("#seatcontainerId").append(seathtml.join(''));
+}
+
+
+
+
+
+
+function reduceSeatsRadius(){
+	var seled = $("#seatcontainerId .seled");
+	for(var i = 0,len = seled.length; i < len; i++){
+		var r = parseInt($(seled[i]).attr("r"));
+		var sang = parseInt($(seled[i]).attr("ang"));
+		var circle = $(seled[i]).attr("circle").split("-");
+		
+		var ccx = +circle[0];
+		var ccy = +circle[1];
+		var r1 = r - 1;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
+
+		$(seled[i]).css({"top": y +"px","left": x + "px"});
+		$(seled[i]).attr({r:r1});
+	}
+}
+function addSeatsRadius(){
+	var seled = $("#seatcontainerId .seled");
+	for(var i = 0,len = seled.length; i < len; i++){
+		var r = parseInt($(seled[i]).attr("r"));
+		var sang = parseInt($(seled[i]).attr("ang"));
+		var circle = $(seled[i]).attr("circle").split("-");
+		
+		var ccx = +circle[0];
+		var ccy = +circle[1];
+		var r1 = r + 1;
+		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - 40/2;
+		var y = ccy + (r1) * Math.sin((sang)/180 * Math.PI) - 40/2;
+
+		$(seled[i]).css({"top": y +"px","left": x + "px"});
+		$(seled[i]).attr({r:r1});
+	}
 }
 
 
@@ -672,10 +1556,6 @@ function createRowAisle(){
 
 
 
-function selectSeats(){
-	getAllSeatsNode();
-	bindContainerEvent();
-}
 
 
 
@@ -693,25 +1573,7 @@ function bindLockSeats(){
 	})
 }
 
-function isLocked(el){
-	return $(el).hasClass(lockClass);
-}
 
-function bindOneSeats(){
-	removeContainerEvent();
-
-	selList.bind("click",function(evt){
-		var sel = $(this);
-		if(isLocked(this)){
-			return;
-		}
-		if (!sel.hasClass(seledClass)) {
-			sel.addClass(seledClass);
-		} else {
-			sel.removeClass(seledClass);
-		}
-	})
-}
 
 function unbindOneSeats(){
 	selList.unbind("click");
@@ -747,19 +1609,7 @@ function bindContainerEvent(){
 	// }
 }
 
-function removeContainerEvent(){
-	$("#circlemousexyId").hide();
-	$("#circlemouseline").attr({"x1":0,"y1":0,"x2":0,"y2":0});
-	$("#seatcontainer").unbind("mousedown");
-	$("#seatcontainer").unbind("mousemove");
-	$("#seatcontainer").unbind("mouseup");
-	$("#seatcontainer").unbind("dblclick");
-	$("#seatcontainer").unbind("click");
 
-	// $("." + seatContainerClass).unbind("mousedown");
-	// $("." + seatContainerClass).unbind("mousemove");
-	// $("." + seatContainerClass).unbind("mouseup");
-}
 
 function cancelDragSeats(){
 	$("#" + dragcontainerId).html("");
@@ -988,7 +1838,7 @@ function containerMouseDown(){
 }
 
 var isSelect = false;
-var __boxCreate = false;
+
 function containerMouseMove(evt){
 	evt = window.event || arguments[0];
 	var _x = null;
@@ -1269,607 +2119,18 @@ function bindMenu(seatno){
 
 
 
-var delSeatsData = [];
-function deleteSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	if(seled.length == 0){return;}
-
-	seled.removeClass(seledClass);
-	delSeatsData.push(seled);
-
-	seled.remove();
-	// seled.css("display","none");
-}
-
-function resetSeats(){
-	var pop = delSeatsData.pop();
-	if(pop && pop.length > 0){
-		$("#seatcontainerId").append(pop);
-		// pop.each(function(){
-		// 	$(this).css("display","block");
-		// });
-	}
-
-	// var seled =  $("#seatcontainerId ."+seledClass);
-	// if(seled.length == 0){return;}
-	// seled.removeClass(seledClass);
-	// seled.each(function(){
-	// 	var id = this.id;
-	// 	$(this).removeClass("aisleseats");
-	// 	var num = id.split("-");
-	// 	$(this).html(num[1])
-	// });
-}
 
 
-function setRowNum(){
-	
-	var seled =  $("#seatcontainerId ."+seledClass);
-	if(seled.length == 0){return;}
-	
-	seled = seled.sort(function(a,b){
-		var topa = parseFloat($(a).css("top"));
-		var topb = parseFloat($(b).css("top"));
-		return topa - topb;
-	});
 
-	seled.removeClass(seledClass);
-	seled.addClass("rownumseats");
-	seled.each(function(_i){
-		$(this).html((_i+1) + "排");
-	});
-}
 
-function revertSeats(){
-	var seled =  $("#seatcontainerId ."+seledClass);
-	if(seled.length == 0){return;}
-	seled.removeClass(seledClass);
-	seled.each(function(){
-		var id = this.id;
-		$(this).removeClass("rownumseats");
-		var num = id.split("-");
-		$(this).html(num[1]);
-	});
-}
 
-function isRow(seledgroup,d,h){
-	for(var k in seledgroup){
-		if(+k >= d && +k <= h){
-			return k;
-		}
-	}
-	return false;
-}
+
+
 var movecontainerId = "movecontainerId";
 var moveStartLeft = 0;
 var moveStartTop = 0;
-function xCenterSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
 
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var h = $(seled[i]).height();
 
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[st] = [];
-			seledgroup[st].push(id);
-		}
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sw = gids.length * 50;
-		if(w > sw){
-			var moveleft = w/2 - sw/2;
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("left", (l + 50*i + moveleft) +"px");
-			})
-		}
-	}
-
-}
-
-function yCenterSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var w = $(seled[i]).width();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = "-"+id.split('-')[1];
-		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[sl] = [];
-			seledgroup[sl].push(id);
-		}
-		// if(seledgroup[kid]){
-		// 	seledgroup[kid].push(id);
-		// }else{
-		// 	seledgroup[kid] = [];
-		// 	seledgroup[kid].push(id);
-		// }
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 8;
-	var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sh = gids.length * 50;
-		if(h > sh){
-			var movetop = Math.floor(h/2 - sh/2);
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("top", (t + 50*i + movetop) +"px");
-			})
-		}
-	}
-}
-
-function xAvgSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var h = $(seled[i]).height();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[st] = [];
-			seledgroup[st].push(id);
-		}
-		// if(seledgroup[kid]){
-		// 	seledgroup[kid].push(id);
-		// }else{
-		// 	seledgroup[kid] = [];
-		// 	seledgroup[kid].push(id);
-		// }
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sw = gids.length * 50;
-		var ssw = gids.length * 40;
-		if(w > sw){
-			var moveleft = (w-ssw)/(gids.length-1);
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("left", (l + i*(40 + moveleft)) +"px");
-			})
-		}
-	}
-}
-
-function yAvgSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var w = $(seled[i]).width();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = "-"+id.split('-')[1];
-		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[sl] = [];
-			seledgroup[sl].push(id);
-		}
-
-		// if(seledgroup[kid]){
-		// 	seledgroup[kid].push(id);
-		// }else{
-		// 	seledgroup[kid] = [];
-		// 	seledgroup[kid].push(id);
-		// }
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth;
-	var h = tops[tops.length-1] - tops[0] + seatHeight;
-	var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sh = gids.length * 50;
-		var ssh = gids.length * 40;
-		if(h > sh){
-			var movetop = (h-ssh)/(gids.length-1);
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("top", (t + i*(40 + movetop)) +"px");
-			})
-		}
-	}
-}
-
-function leftSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-	
-	var lefts = [];
-	// var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var h = $(seled[i]).height();
-
-		lefts.push(+sl);
-		// tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[st] = [];
-			seledgroup[st].push(id);
-		}
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	// tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	var l = lefts[0];
-	// var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sw = gids.length * 50;
-		if(w > sw){
-			// var moveleft = w/2 - sw/2;
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("left", (l + 50*i) +"px");
-			})
-		}
-	}
-
-}
-
-function rightSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-	
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-		var h = $(seled[i]).height();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[st] = [];
-			seledgroup[st].push(id);
-		}
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		var sw = gids.length * 50;
-		if(w > sw){
-			var moveleft = w - sw;
-			gids.forEach(function(_id,i){
-				$("#" + _id).css("left", (l + moveleft + 50*i) +"px");
-			})
-		}
-	}
-
-}
-function topSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-	
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-
-		var w = $(seled[i]).width();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = "-"+id.split('-')[1];
-		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[sl] = [];
-			seledgroup[sl].push(id);
-		}
-	}
-
-	// lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-	// console.log(lefts,tops);
-	
-	// var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	// var l = lefts[0];
-	var t = tops[0];
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		gids.forEach(function(_id,i){
-			console.log(i)
-			$("#" + _id).css("top", (t + 50*i) +"px");
-		});
-	}
-
-}
-function bottomSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
-	
-	var lefts = [];
-	var tops = [];
-	var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-
-		var w = $(seled[i]).width();
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = "-"+id.split('-')[1];
-		var kid = isRow(seledgroup,(sl - w/2),(sl + w/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[sl] = [];
-			seledgroup[sl].push(id);
-		}
-	}
-
-	// lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return b - a;});
-	// console.log(lefts,tops);
-
-	// var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	// var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	// var l = lefts[0];
-	var t = tops[0];
-
-	for(var gk in seledgroup){
-		var gids = seledgroup[gk];
-		gids.forEach(function(_id,i){
-			$("#" + _id).css("top", (t - 50*i) +"px");
-		});
-	}
-
-}
-
-function autoCode(ruleid){
-	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)");
-	// seled.removeClass(seledClass);
-	
-	// var lefts = [];
-	// var tops = [];
-	var seledgroup = {};
-	var seledrowv = [];
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-
-		var h = $(seled[i]).height();
-
-		// lefts.push(+sl);
-		// tops.push(+st);
-
-		var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		var kid = isRow(seledgroup,(st - h/2),(st + h/2));
-		if(kid){
-			seledgroup[kid].push(id);
-		}else{
-			seledgroup[st] = [];
-			seledgroup[st].push(id);
-			seledrowv.push(st);
-		}
-	}
-
-	seledrowv = seledrowv.sort(function(a,b){return a-b;});
-	seledrowv.forEach(function(ik,rowid){
-		var col = seledgroup[ik];
-		col.sort(function(a,b){
-			var la = $("#" + a).position().left;
-			var lb = $("#" + b).position().left;
-			return la - lb;
-		});
-		var oae = oddAndEven(col.length);
-		var seatsnum = [];
-		if(ruleid == 1){
-			seatsnum = oae.odd.concat(oae.even.reverse());
-		}else if(ruleid == 2){
-			seatsnum = oae.even.concat(oae.odd.reverse());
-		}
-		col.forEach(function(oid,colid){
-			// var oid = col[ck];
-			$("#" + oid).html(seatsnum[colid]);
-			$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-"+new Date().getTime());
-		});
-	});
-
-	// var oae = oddAndEven(seatnum);
-	// var seatsnum = [];
-	// if(+seatrule == 1){
-	// 	seatsnum = oae.odd.concat(oae.even.reverse());
-	// }else if(+seatrule == 2){
-	// 	seatsnum = oae.even.concat(oae.odd.reverse());
-	// }else if(+seatrule == 3){
-	// 	seatsnum = oae.desc.reverse();
-	// }else if(+seatrule == 4){
-	// 	seatsnum = oae.desc;
-	// }
-}
-
-function unDragMoveSeats(){
-	$("#movecontainerId").hide();
-	$("#movecontainerId").html('');
-	selectSeats();
-}
-
-function dragMoveSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-
-	var lefts = [];
-	var tops = [];
-	// var seledgroup = {};
-	for(var i = 0,len = seled.length; i < len; i++){
-		var sl = $(seled[i]).position().left;
-		var st = $(seled[i]).position().top;
-
-		lefts.push(+sl);
-		tops.push(+st);
-
-		// var id = seled[i].id;
-		// var kid = id.split('-')[0]+"-";
-		// if(seledgroup[kid]){
-		// 	seledgroup[kid].push(id);
-		// }else{
-		// 	seledgroup[kid] = [];
-		// 	seledgroup[kid].push(id);
-		// }
-	}
-
-	lefts = lefts.sort(function(a,b){return a - b;});
-	tops = tops.sort(function(a,b){return a - b;});
-
-	var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 10;
-	var h = tops[tops.length-1] - tops[0] + seatHeight + 2;
-	var l = lefts[0];
-	var t = tops[0];
-
-	var moveseats = seled.clone();
-	for(var j = 0,len = moveseats.length; j < len; j++){
-		var sl = $(seled[j]).position().left;
-		var st = $(seled[j]).position().top;
-		$(moveseats[j]).css({"left":sl-lefts[0],"top":st-tops[0]});
-	}
-
-	moveStartLeft = l;
-	moveStartTop = t;
-	$("#" + movecontainerId).css({"width":w+"px","height":h+"px","left":l+"px","top":t+"px"});
-	$("#" + movecontainerId).html(moveseats);
-	$("#" + movecontainerId).show();
-
-	removeContainerEvent();
-
-	$("#" + movecontainerId).on({
-		dblclick:function(e){
-			dblclickMoveSeats();
-			selectSeats();
-		},
-		mousedown:function(e){
-			var el=$(this);
-			var os = el.offset(); dx = e.pageX-os.left, dy = e.pageY-os.top;
-			$(document).on('mousemove.drag', function(e){
-				el.offset({top: e.pageY-dy, left: e.pageX-dx});
-			});
-		},
-	   	mouseup: function(e){ 
-		   $(document).off('mousemove.drag');
-		}
-	});
-}
 
 function dblclickMoveSeats(){
 
@@ -1891,38 +2152,7 @@ function dblclickMoveSeats(){
 	$("#movecontainerId").html('');
 }
 
-function leftMoveSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
 
-	seled.each(function(){
-		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left-1+"px");
-	});
-}
-function rightMoveSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-
-	seled.each(function(){
-		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left+1+"px");
-	});
-}
-function topMoveSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-
-	seled.each(function(){
-		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top-1+"px");
-	});
-}
-function bottomMoveSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
-
-	seled.each(function(){
-		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top+1+"px");
-	});
-}
 
 
 function saveLocalSeats(){
@@ -1937,59 +2167,7 @@ function restoreLocalSeats(){
 	}
 }
 
-function completeSeats(){
-	countMaxWidth(1);
 
-	saveLocalSeats();
-
-	$("#meetingname").show();
-	$("#meetingaddress").show();
-	$("#meetingtime").show();
-	$("#meetingremark").show();
-
-	// $("#mousecontainerId").remove();
-	// $("#circlemousexyId").remove();
-	// $("#circlemousesvg").remove();
-
-	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-	seats.each(function(){
-		var id = this.id;
-		var arr = id.split("-");
-		var nid = arr[0] + "-" + arr[1];
-		$(this).attr("id",nid);
-	})
-	var rownum = $("#seatcontainerId .rownumseats");
-	// console.log(seats,seats.html(),rownum,rownum.html())
-	$("#seatcontainerId").html('');
-	$("#seatcontainerId").append(seats);
-	$("#seatcontainerId").append(rownum);
-	
-	saveCompleteSeats();
-
-	
-	
-	// var topLayui = parent === self ? layui : top.layui;
-	// if(topLayui){
-	// 	topLayui.index.openTabsPage("arrange/meeting/meeting_room.html", "会场列表");
-	// }else{
-	// 	alert("数据已保存");
-	// }
-
-	// location.href = "meeting_room.html";
-	// var html = '<div id="seatcontainerId">' + seats.html() + rownum.html() + '</div>';
-	// localStorage.setItem("_completeSeats",html);
-}
-
-function saveCompleteSeats(){
-	// var seathtml = $("#seatcontainer").html().trim();
-	var copyhtml = $("#seatcontainer").prop("outerHTML").trim();
-	// var flag = copyText(copyhtml); //传递文本
-	// alert(flag ? "复制成功！" : "复制失败！");
-	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-
-	sessionStorage.setItem("_seatnum",allseats.length);
-	sessionStorage.setItem("_seatscomplete",copyhtml);
-}
 function clearCompleteSeats(){
 	sessionStorage.setItem("_seatscomplete","");
 }
@@ -2107,6 +2285,40 @@ function copyText(text) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*****
+
+
 function bindBoxEvent(){
 	// document.onmousedown = function () {
 		
@@ -2129,7 +2341,6 @@ function clearEventBubble(evt) {
 	// else
 	// 	evt.returnValue = false;
 }
-
 
 
 
@@ -2953,3 +3164,6 @@ function getCookie(name)
         return null;
     }
 }
+
+
+ */

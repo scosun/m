@@ -91,6 +91,68 @@
 			top: 65px;
 		}
 	</style>
+
+	<!-- /* dragDiv 拖动工具箱 3.25 */ -->
+<style type="text/css">
+	.clear{clear:both; height:0; width:100%;}
+	.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;}
+	.clearfix{zoom: 1; clear:both;}
+	#dragDiv{position: fixed;top:100px;right: 10px;z-index: 10000;width:92px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;
+		box-shadow:0 0 5px rgba(0,0,0,0.3);
+	}
+	#dragDiv .title{position:relative;height:24px; background-color: #ebebeb;}
+	#dragDiv .title h2{padding:0 10px;font-size:12px;height:24px;line-height:24px;border-bottom:1px solid #f6f6f6;}
+	#dragDiv .title div{position:absolute;height:24px;top:0;right:0;}
+	#dragDiv .title a{float:left;width:24px;height:24px;display:block;}
+	#dragDiv .title a img{margin-left:2px; margin-top:2px;width:20px;}
+	
+	
+	#dragDiv .toollist{width:80px;padding-top:10px;padding-left:10px;background:#f1f1f1;}
+	#dragDiv .toollist_li{float:left;position:relative;width:30px;height:30px;margin-right:10px;margin-bottom:10px;}
+	#dragDiv .toollist_li > a{ display: block;float:left; text-align: center;width:28px;height:28px;border:1px solid #f1f1f1;}
+	#dragDiv .toollist_li img{width:20px;height:20px;margin-top:4px}
+	#dragDiv .toollist_li.has_child > a{background:url(../../../images/has_child.png) no-repeat right bottom;}
+	#dragDiv .toollist_li > a:hover,
+	#dragDiv .toollist_li.on > a,
+	#dragDiv .toollist_li.has_child > a:hover,
+	#dragDiv .toollist_li.has_child.on > a{border:1px solid #d3d3d3;background-color:#d8d8d8;}
+	
+	#dragDiv .toollist_li .child_cont{
+		position:absolute;
+		left:30px;
+		top:30px;
+		width: 40px;
+		background:#f1f1f1;
+		border:1px solid #f6f6f6;
+		border-radius:2px;
+		box-shadow: 0 0 8px rgba(0,0,0,0.2);
+		padding-top:5px;
+		padding-bottom:5px;
+		z-index: 10;
+	}
+	
+	#dragDiv .toollist_li .child_cont.leftSet{
+		left:-12px;
+	}
+	#dragDiv .toollist_li .child_cont.bottomSet{
+		left:30px;
+		top:auto;
+		bottom:30px;
+	}
+	#dragDiv .toollist_li .child_cont.leftbottomSet{
+		left:-12px;
+		top:auto;
+		bottom:30px;
+	}
+	
+	#dragDiv .child_cont_li{float:left;position:relative;width:30px;height:30px;margin-left:5px;margin-bottom:10px;}
+	#dragDiv .child_cont_li:last-child{margin-bottom:0;}
+	#dragDiv .child_cont_li > a{ display: block;float:left; text-align: center;width:28px;height:28px;border:1px solid #f1f1f1;}
+	#dragDiv .child_cont_li img{width:20px;height:20px;margin-top:4px}
+	#dragDiv .child_cont_li.on > a,
+	#dragDiv .child_cont_li > a:hover{border:1px solid #d3d3d3;background-color:#d8d8d8;}
+	
+	</style>
 </head>
 <body>
 	<header>
@@ -98,11 +160,8 @@
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图编辑器</cite></a>|
 			<a><cite id="refreshbtn" style="cursor: pointer;">刷新</cite></a>
 		</span>
-		<!-- 右侧菜单 -->
+		<!-- 右侧菜单
 		<span class="layui-right-nav">
-
-				
-
 			<ul class="layui-nav layui-bg-cyan">
 				<li class="layui-nav-item">
 					<a href="javascript:;">设置</a>
@@ -192,55 +251,309 @@
 					</dl>
 				</li>
 			</ul>
-
-			
-			<!-- <li class="layui-nav-item"><a href="">社区</a></li> -->
-			<!-- <li id="completebtn" class="layui-nav-item"><a href="">完成</a></li> -->
 		</span>
-		<!--
+		 -->
+		
+		<!-- 右侧菜单 end-->
+
+		<!-- 右侧菜单 -->
 		<span class="layui-right-nav">
-			<i id="completebtn" data="完成"><img src="../../../images/completebtn.png"></i>
-			<i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
-			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i>
-			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/savelocalbtn.png"></i>
-			<i id="dleftmovebtn" data="左移"><img src="../../../images/dleftmovebtn.png"></i>
-			<i id="drightmovebtn" data="右移"><img src="../../../images/drightmovebtn.png"></i>
-			<i id="dtopmovebtn" data="上移"><img src="../../../images/dtopmovebtn.png"></i>
-			<i id="dbottommovebtn" data="下移"><img src="../../../images/dbottommovebtn.png"></i>
-			<i id="rightbtn" data="右键"><img src="../../../images/rightbtn.png"></i>
-			<i id="cancelrightbtn" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
-
-			<i id="nav-pladd" data="批量新建"><img src="../../../images/pladd.png"></i>
-			<i id="nav-down" data="设置行列" style="margin-left:-12px;"><img src="../../../images/angle-down.png" style="width: 14px;margin-top: 4px;"></i>
-			<i id="nav-add" data="新建"><img src="../../../images/add.png"></i>
+			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/completebtn.png"></i>
+			<i id="completebtn" data="保存座区图数据"><img src="../../../images/savelocalbtn.png"></i>
+			<!-- <i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
+			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i> -->
 			
-
-			<i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i>
-			<i id="nav-rollback" data="恢复删除"><img src="../../../images/rollback.png"></i>
-			
-			<i id="nav-mark" data="标注"><img src="../../../images/mark.png"></i>
-			<i id="nav-forward" data="恢复座区"><img src="../../../images/forward.png"></i>
-			
-			<i id="nav-radio" data="单选"><img src="../../../images/radio.png"></i>
-			<i id="nav-selection" data="框选"><img src="../../../images/selection.png"></i>
-			<i id="nav-align-up" data="上对齐"><img src="../../../images/align-up.png"></i>
-			<i id="nav-align-down" data="下对齐"><img src="../../../images/align-down.png"></i>
-			<i id="nav-align-center-v" data="上下居中"><img src="../../../images/align-center-v.png"></i>
-			<i id="nav-align-left" data="左对齐"><img src="../../../images/align-left.png"></i>
-			<i id="nav-align-center" data="左右居中"><img src="../../../images/align-center.png"></i>
-			<i id="nav-align-right" data="右对齐"><img src="../../../images/align-right.png"></i>
-			<i id="nav-vertical-c" data="水平分布"><img src="../../../images/vertical-distribution-center.png"></i>
-			<i id="nav-horizontal-c" data="垂直分布"><img src="../../../images/horizontal-distribution-center.png"></i>
-			<i id="nav-drag" data="拖动"><img src="../../../images/drag.png"></i>
 		</span>
-		-->
 		<!-- 右侧菜单 end-->
 	</header>
+	<!-- dragDiv 拖动工具箱 3.25 -->
+	<div id="dragDiv">
+		<div class="title">
+			<h2>工具箱</h2>
+			<div>
+				<a class="Jreduction" href="javascript:;" title="还原"><img src="../../../images/reduction.png"></a>
+			</div>
+		</div>
+		<div class="toollist clearfix">
+			<div class="toollist_li has_child">
+				<a id="nav-radio" href="javascript:;" alt="单选" title="单选" class="testB"><img src="../../../images/radio.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="selectrow" href="javascript:;" alt="选中全部行" title="选中全部行" class="testA"><img src="../../../images/drag.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="selectcol" href="javascript:;" alt="选中全部列" title="选中全部列" class="testB"><img src="../../../images/radio.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="selectall" href="javascript:;" alt="全选" title="全选" class="testC"><img src="../../../images/selection.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="unselectall" href="javascript:;" alt="取消全选" title="取消全选" class="testD"><img src="../../../images/re-election.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li ">
+				<a id="nav-add" href="javascript:;" alt="拖拽绘制" title="拖拽绘制"><img src="../../../images/drag.png"></a>
+				<!-- <div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="nav-down" href="javascript:;" alt="矩形绘制" title="矩形绘制"><img src="../../../images/drag.png"></a>
+					</div>
+				</div> -->
+			</div>
+			<div class="toollist_li">
+				<a id="nav-selection" href="javascript:;" alt="框选" title="框选"><img src="../../../images/selection.png"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="create-circle-down" href="javascript:;" alt="环形绘制" title="环形绘制"><img src="../../../images/pladd.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="create-run-down" href="javascript:;" alt="跑道绘制" title="跑道绘制"><img src="../../../images/radio.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a href="javascript:;" alt="多边形绘制" title="多边形绘制"><img src="../../../images/re-election.png"></a>
+			</div>
+			<div class="toollist_li ">
+				<a href="javascript:;" alt="椭圆绘制" title="椭圆绘制"><img src="../../../images/rightbtn.png"></a>
+
+			</div>
+			<div class="toollist_li">
+				<a id="nav-down" href="javascript:;" alt="矩形绘制" title="矩形绘制"><img src="../../../images/vacancy.png"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="nav-drag" href="javascript:;" alt="拖拽移动" title="拖拽移动"><img src="../../../images/parallelism.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="canceldragbtn" href="javascript:;" alt="取消拖拽" title="取消拖拽"><img src="../../../images/drag.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="dtopmovebtn" href="javascript:;" alt="上移座区" title="上移座区"><img src="../../../images/radio.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="dbottommovebtn" href="javascript:;" alt="下移座区" title="下移座区"><img src="../../../images/selection.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="dleftmovebtn" href="javascript:;" alt="左移座区" title="左移座区"><img src="../../../images/re-election.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="drightmovebtn" href="javascript:;" alt="右移座区" title="右移座区"><img src="../../../images/re-election.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="nav-vertical-c" href="javascript:;" alt="水平分布" title="水平分布"><img src="../../../images/re-election.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="nav-horizontal-c" href="javascript:;" alt="垂直分布" title="垂直分布"><img src="../../../images/drag.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/rightbtn.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="nav-align-right" href="javascript:;" alt="右对齐" title="右对齐"><img src="../../../images/drag.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="nav-align-center" href="javascript:;" alt="左右居中" title="左右居中"><img src="../../../images/radio.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="nav-align-up" href="javascript:;" alt="上对齐" title="上对齐"><img src="../../../images/selection.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="nav-align-down" href="javascript:;" alt="下对齐" title="下对齐"><img src="../../../images/re-election.png"></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="nav-align-center-v" href="javascript:;" alt="上下居中" title="上下居中"><img src="../../../images/re-election.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a id="nav-delete" href="javascript:;" alt="删除" title="删除"><img src="../../../images/vacancy.png"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="nav-rollback" href="javascript:;" alt="恢复删除" title="恢复删除"><img src="../../../images/parallelism.png"></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/drag.png"></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a id="nav-mark" href="javascript:;" alt="标注" title="标注"><img src="../../../images/vacancy.png"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a href="javascript:;" alt="111" title="拖拽匹配"><img src="../../../images/parallelism.png"></a>
+			</div>
+			
+		</div> 
+	</div>
+
+
 
 	<div id="seatcontainer" class="seatcontainer"><div style="position:absolute;left:10px;top:65px;"><img style="height:20px;" src="../../../images/leftright-ts.svg"></div><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="mousecontainerId"></div><div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div><svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1"><line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/></svg><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script src="seatscontrol_temp.js"></script>
+
+<!-- /* dragDiv 拖动工具箱 3.25*/ -->
+<script type="text/javascript">
+	/*-------------------------- + 获取id, class, tagName +-------------------------- */
+	var get = {
+		byId: function(id) {
+			return typeof id === "string" ? document.getElementById(id) : id
+		},
+		byClass: function(sClass, oParent) {
+			var aClass = [];
+			var reClass = new RegExp("(^| )" + sClass + "( |$)");
+			var aElem = this.byTagName("*", oParent);
+			for (var i = 0; i < aElem.length; i++) reClass.test(aElem[i].className) && aClass.push(aElem[i]);
+			return aClass
+		},
+		byTagName: function(elem, obj) {
+			return (obj || document).getElementsByTagName(elem)
+		}
+	};
+	/*-------------------------- + 拖拽函数 +-------------------------- */
+	function dragAction(oDrag, handle){
+		var disX = dixY = 0;
+		var oJreduction = get.byClass("Jreduction", oDrag)[0];
+		handle = handle || oDrag;
+		handle.style.cursor = "move";
+		handle.onmousedown = function (event){
+			var event = event || window.event;
+			disX = event.clientX - oDrag.offsetLeft;
+			disY = event.clientY - oDrag.offsetTop;
+			document.onmousemove = function (event){
+				var event = event || window.event;
+				var iL = event.clientX - disX;
+				var iT = event.clientY - disY;
+				var maxL = document.documentElement.clientWidth - oDrag.offsetWidth - 10;
+				var maxT = document.documentElement.clientHeight - oDrag.offsetHeight - 10;
+				
+				iL <= 8 && (iL = 8);
+				iT <= 65 && (iT = 65);
+				iL >= maxL && (iL = maxL);
+				iT >= maxT && (iT = maxT);
+				oDrag.style.left = iL + "px";
+				oDrag.style.top = iT + "px";
+				return false
+			};
+			document.onmouseup = function (){
+				document.onmousemove = null;
+				document.onmouseup = null;
+				this.releaseCapture && this.releaseCapture()
+			};
+			this.setCapture && this.setCapture();
+			return false
+		};	
+		//还原到原来位置
+		oJreduction.onclick = function (){
+			oDrag.style.left ='auto';
+			oDrag.style.top = 65 + "px";
+		};
+	}
+	window.onload = window.onresize = function (){
+		var oDrag = document.getElementById("dragDiv");
+		var oTitle = get.byClass("title", oDrag)[0];
+		dragAction(oDrag, oTitle);
+	}
+</script>
+
+<!-- /* 点击、长按事件 3.25*/ -->
+<script>
+	$(document).click(function(){
+		$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
+		$('.toollist .on').removeClass("on");
+	});
+	$(".child_cont_li").click(function(evt){
+		console.log("child_cont_li-----------click");
+		evt.stopPropagation();
+
+		$('.child_cont_li').removeClass("on");
+		 $(this).addClass("on");
+		//  $(this).siblings().removeClass("on");
+		// var cloneA= $(this).children().clone(true);
+		//alert(cloneA)
+		// $(this).parent().prev().remove();
+		// $(this).parent().before(cloneA);
+	});
+
+	$('.toollist_li > a').bind('click',function(evt){
+		evt.stopPropagation();
+		if(!__longEvent){
+			$('.toollist_li').removeClass("on");
+			$(this).addClass("on");
+		}else{
+			setTimeout(function(){
+				__longEvent = false;
+			},500);
+		}
+		return false;
+	});
+
+	var obj = $('.toollist_li.has_child');
+	for(let i = 0; i<obj.length; i++){
+		// 给a添加长按事件和点击事件
+		addLongDown(obj[i] , function(evt){
+			console.log("long click-----------")
+			__longEvent = true;
+
+			evt.stopPropagation();
+			var _this = obj[i];
+			//$(_this).children("a").event.stopPropagation();
+			$(_this).addClass("on");
+			$(_this).siblings().removeClass("on");
+			var _left = ( document.documentElement.clientWidth-$(_this).offset().left ) - 30 < 67;
+			var _bottom = ( document.documentElement.clientHeight-$(_this).offset().top ) - 30 < 175;
+			if(_left){
+				if(_bottom){
+					$(_this).children(".child_cont").addClass("leftbottomSet").show()
+				}else{
+					$(_this).children(".child_cont").addClass("leftSet").show()
+				}
+			}else{
+				if(_bottom){
+					$(_this).children(".child_cont").addClass("bottomSet").show()
+				}else{
+					$(_this).children(".child_cont").show()
+				}
+			}
+			$(_this).siblings().children(".child_cont").hide();
+		});
+
+		// obj[i].addEventListener('click' , function(){
+		// 	var _this = obj[i];
+		// 	$(_this).addClass("on");
+		// 	$(_this).siblings().removeClass("on");
+		// 	$(_this).siblings().children(".child_cont").hide();
+		// 	//event.stopPropagation();
+		// })
+	}
+	function addLongDown(ele , fn){
+		var time = 0; // 用于计算按下时间
+		var flag = false; // 判断按下时间否是大于500毫秒
+		var t;
+		ele.addEventListener('mousedown' , function(e){ // 按下计时
+			time = 0;
+			flag = false;
+			time = new Date().getTime();
+			t = setTimeout(function(){
+				flag = (new Date().getTime() - time) > 300;
+				if(flag){
+					fn.call(this , e); // 按下大于500毫秒执行回调函数
+				}
+			}, 500);
+		});
+		ele.addEventListener('mouseup' , function(e){ // 抬起计算
+			clearTimeout(t);
+		});
+	}
+
+	
+</script>
+
 <script type="text/javascript">
 layui.config({
 	base: '../../../layuiadmin/' //静态资源所在路径
@@ -325,6 +638,70 @@ layui.config({
 			});
 		}
 
+
+		/*环形绘制*/
+		$('#create-circle-down').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+
+			layer.open({
+				type: 2,
+				title: '设置座位数',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['500px', '210px'],
+				content: 'special_circle_type.html',
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					
+					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+					
+					if(seatnum <= 0 ){
+						layer.msg('座位数量输入错误');
+						return false;
+					}
+						
+					mouseCreateSeatMap(1,seatnum);
+					layer.close(index);
+				}
+			});
+			
+		});
+		/*跑道绘制*/
+		$('#create-run-down').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '设置座位数',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['500px', '280px'],
+				content: 'special_run_type.html',
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+					var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
+
+					
+					if(seatnum <= 0 ){
+						layer.msg('座位数量输入错误');
+						return false;
+					}
+						
+					if(centernum <= 0){
+						layer.msg('中间座位数输入错误');
+						return false;
+					}
+					// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+					mouseCreateSeatMap(2,seatnum,centernum);
+					layer.close(index);
+				}
+			});
+			
+		});
+
+
+
 		/*右侧菜单 设置行列弹框*/
 		$('#nav-down').on('click', function(){
 			layer.open({
@@ -332,58 +709,58 @@ layui.config({
 				title: '设置行列',
 				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['650px', '320px'],
+				area: ['500px', '260px'],
 				content: 'special_type.html',
-				btn: ['提交', '取消'],
+				btn: ['确定', '取消'],
 				yes: function(index, layero) {
-					var meet_typeid = +layero.find('iframe').contents().find("#meet_typeid").val() || 0;
+					// var meet_typeid = +layero.find('iframe').contents().find("#meet_typeid").val() || 0;
 
-					if(meet_typeid == 1){
+					// if(meet_typeid == 1){
 						// openRectangleMeeting();
-						var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-						var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
-						if(rownum > 0 && colnum > 0){
-							creatSeats(rownum,colnum);
-							layer.close(index);
-						}else{
-							layer.msg('行，列数字输入错误');
-						}
+					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					if(rownum > 0 && colnum > 0){
+						creatSeats(rownum,colnum);
+						layer.close(index);
 					}else{
-						// openSpecialMeeting();
-						// var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
-						// var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
-						// var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
-						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-						var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
-
-						// if(ccx <= 0 || ccy <= 0){
-						// 	layer.msg('圆心坐标输入错误');
-						// 	return false;
-						// }
-						// if(r1 <= 0 ){
-						// 	layer.msg('半径输入错误');
-						// 	return false;
-						// }
-						if(seatnum <= 0 ){
-							layer.msg('座位数量输入错误');
-							return false;
-						}
-						
-						if(centernum == ""){
-							// createCircleSeatMap(ccx,ccy,r1,seatnum);
-							mouseCreateSeatMap(1,seatnum);
-							layer.close(index);
-						}else{
-							if(centernum <= 0){
-								layer.msg('中间座位数输入错误');
-								return false;
-							}
-							layer.close(index);		//关闭窗口
-							// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-							mouseCreateSeatMap(2,seatnum,centernum);
-						}
+						layer.msg('行，列数字输入错误');
 					}
-					layer.close(index);
+					// }else{
+					// 	// openSpecialMeeting();
+					// 	// var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
+					// 	// var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
+					// 	// var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
+					// 	var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+					// 	var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
+
+					// 	// if(ccx <= 0 || ccy <= 0){
+					// 	// 	layer.msg('圆心坐标输入错误');
+					// 	// 	return false;
+					// 	// }
+					// 	// if(r1 <= 0 ){
+					// 	// 	layer.msg('半径输入错误');
+					// 	// 	return false;
+					// 	// }
+					// 	if(seatnum <= 0 ){
+					// 		layer.msg('座位数量输入错误');
+					// 		return false;
+					// 	}
+						
+					// 	if(centernum == ""){
+					// 		// createCircleSeatMap(ccx,ccy,r1,seatnum);
+					// 		mouseCreateSeatMap(1,seatnum);
+					// 		layer.close(index);
+					// 	}else{
+					// 		if(centernum <= 0){
+					// 			layer.msg('中间座位数输入错误');
+					// 			return false;
+					// 		}
+					// 		layer.close(index);		//关闭窗口
+					// 		// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+					// 		mouseCreateSeatMap(2,seatnum,centernum);
+					// 	}
+					// }
+					// layer.close(index);
 
 					// var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
 					// var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
@@ -397,37 +774,16 @@ layui.config({
 			});
 			
 		});
-		$('#nav-add').on('click', function(){
-			boxCreateSeats();
-			// layer.open({
-			// 	type: 2,
-			// 	title: '添加行列',
-			// 	shadeClose: true, //弹出框之外的地方是否可以点击
-			// 	offset: '10%',
-			// 	area: ['340px', '230px'],
-			// 	content: 'seatmapseditor_pop.html',
-			// 	btn: ['提交', '取消'],
-			// 	yes: function(index, layero) {
-			// 		var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-			// 		var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
-			// 		if(rownum > 0 && colnum > 0){
-			// 			creatSeats2(rownum,colnum);
-			// 			layer.close(index);
-			// 		}else{
-			// 			layer.msg('行，列数字输入错误');
-			// 		}
-			// 	}
-			// });
-		});
+		
 		$('#autocodebtn img').on('click', function(){
 			layer.open({
 				type: 2,
 				title: '自动编排',
 				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['340px', '260px'],
+				area: ['500px', '220px'],
 				content: 'seatmapseditor_code.html',
-				btn: ['提交', '取消'],
+				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
 					autoCode(ruleid);
@@ -435,6 +791,9 @@ layui.config({
 				}
 			});
 		});
+
+
+
 		/*右侧菜单HOVER显示提示文字*/
 		var subtips;
 		$('.layui-right-nav i').each(function(){
