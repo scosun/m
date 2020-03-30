@@ -45,13 +45,13 @@
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>产品的key</label>
-            <div class="layui-input-block">
-                <input type="text" name="productkey" lay-verify="required" placeholder="请输入产品的key" autocomplete="off"
-                       id="productkey" class="layui-input">
-            </div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label"><span>*</span>产品的key</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" name="productkey" lay-verify="required" placeholder="请输入产品的key" autocomplete="off"-->
+<!--                       id="productkey" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label"><span>*</span>产品名称</label>
             <div class="layui-input-block">
@@ -151,10 +151,19 @@
         <div class="layui-form-item">
             <label class="layui-form-label">LoRaWAN入网凭证ID</label>
             <div class="layui-input-block">
-                <input type="text" name="joinpermissionid"  placeholder="请输入 LoRaWAN入网凭证ID" autocomplete="off"
-                       id="joinPermissionId" class="layui-input">
+                <select name="joinpermissionid" lay-skin="select" lay-filter="component-form-select" id="meetingid">
+                    <option value="">连网方式为LoRaWAN的请选择LoRaWAN入网凭证ID</option>
+                    <option value="" id="joinid"></option>
+                </select>
             </div>
         </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label"></label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" name="joinpermissionid"  placeholder="请输入 LoRaWAN入网凭证ID" autocomplete="off"-->
+<!--                       id="joinPermissionId" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">资源组ID</label>
             <div class="layui-input-block">
@@ -208,19 +217,41 @@
         var url = "http://127.0.0.1:8083"
         var uploadfile = null;
         $.ajax({
-                async: false,
-                type: "get",
-                // url: url + "/roomtemplate/findByroomtemplate",
-                url: "https://f.longjuli.com" + "/roomtemplate/findByroomtemplate",
-                dataType: "json",
-                xhrFields: {
-                    withCredentials: true
-                },
-                //成功的回调函数
-                success: function (msg) {
+            async: false,
+            type: "get",
+            // url: url + "/roomtemplate/findByroomtemplate",
+            url: "https://f.longjuli.com" + "/roomtemplate/findByroomtemplate",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
                 var data = msg;
                 $.each(data.data, function (idx, con) {
                     $("#sms").after("<option value=" + con.id + ">" + con.name +
+                        "</option>");
+                })
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/tableSign/findLoRaJoinPermissions",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg;
+                $.each(data, function (idx, con) {
+                    $("#joinid").after("<option value=" + con.joinPermissionId + ">" + con.joinPermissionName +
                         "</option>");
                 })
                 form.render();
@@ -256,7 +287,6 @@
                 dataType: "json",
                 data: {
                   meetingid:data.meetingid,
-                    productKey:data.productkey,
                     productName:data.productname,
                     nodeType:data.nodetype,
                     aliyunCommodityCode:data.aliyuncommoditycode,

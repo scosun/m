@@ -83,13 +83,13 @@ layui.config({
             	type: 'checkbox',
             	fixed: 'left'
             },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    align: 'left',
-                    unresize: 'false',
-                    width:'7%'
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     align: 'left',
+                //     unresize: 'false',
+                //     width:'7%'
+                // },
                 {
                     field: 'name',
                     title: '会议室名称',
@@ -174,13 +174,13 @@ layui.config({
 			type: 'checkbox',
 			fixed: 'left'
 		},
-		    {
-			field: 'id',
-			title: 'ID',
-			align: 'left',
-			unresize: 'false',
-			width:'7%'
-		    },
+		    // {
+			// field: 'id',
+			// title: 'ID',
+			// align: 'left',
+			// unresize: 'false',
+			// width:'7%'
+		    // },
 		    {
 			field: 'name',
 			title: '会议室名称',
@@ -420,7 +420,7 @@ layui.config({
 		} else if (obj.event === 'zonelist') {
 			layer.open({
 				type: 2,
-				title: '座区图',
+				title: obj.data.name,
 				content: 'meeting_room_zq.html?roomid='+age.id
 					,maxmin: true
 					,
@@ -524,13 +524,13 @@ window.onkeyup = function(ev) {
 				type: 'checkbox',
 				fixed: 'left'
 			},
-			    {
-				field: 'id',
-				title: 'ID',
-				align: 'left',
-				unresize: 'false',
-				width:'7%'
-			    },
+			    // {
+				// field: 'id',
+				// title: 'ID',
+				// align: 'left',
+				// unresize: 'false',
+				// width:'7%'
+			    // },
 			    {
 				field: 'name',
 				title: '会议室名称',

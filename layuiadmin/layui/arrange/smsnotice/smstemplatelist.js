@@ -88,13 +88,13 @@ layui.config({
                     type: 'checkbox',
                     fixed: 'left'
                 },
-                {
-                    field: 'smsTemplateId',
-                    title: 'ID',
-                    width:60,
-                    //align: 'center',
-                    unresize: 'false',
-                },
+                // {
+                //     field: 'smsTemplateId',
+                //     title: 'ID',
+                //     width:60,
+                //     //align: 'center',
+                //     unresize: 'false',
+                // },
                 {
                     field: 'smsTemplateName',
                     title: '模版名称',
@@ -110,10 +110,10 @@ layui.config({
                     title: '模版类型',
                     templet: function(data) {
                         if (data.smsTemplateType == 0) {
-                            return '通知模板'
+                            return '<span class="layui-badge layui-bg-orange">通知模版</span>'
                         }
                         if (data.smsTemplateType == 1) {
-                            return '报名模版'
+                            return '<span class="layui-badge layui-bg-blue">报名模板</span>'
                         }
                         if (data.smsTemplateType == undefined) {
                             return ''
@@ -169,13 +169,13 @@ layui.config({
                         type: 'checkbox',
                         fixed: 'left'
                     },
-                    {
-                        field: 'smsTemplateId',
-                        title: 'ID',
-                        width:60,
-                        align: 'center',
-                        unresize: 'false',
-                    },
+                    // {
+                    //     field: 'smsTemplateId',
+                    //     title: 'ID',
+                    //     width:60,
+                    //     align: 'center',
+                    //     unresize: 'false',
+                    // },
                     {
                         field: 'smsTemplateName',
                         title: '模版名称',
@@ -190,10 +190,10 @@ layui.config({
                         title: '模版类型',
                         templet: function(data) {
                             if (data.smsTemplateType == 0) {
-                                return '通知模板'
+                                return '<span class="layui-badge layui-bg-orange">通知模版</span>'
                             }
                             if (data.smsTemplateType == 1) {
-                                return '报名模版'
+                                return '<span class="layui-badge layui-bg-blue">报名模板</span>'
                             }
                             if (data.smsTemplateType == undefined) {
                                 return ''
@@ -467,13 +467,13 @@ layui.config({
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
-                                field: 'smsTemplateId',
-                                title: 'ID',
-                                width:60,
-                                //align: 'center',
-                                unresize: 'false',
-                            },
+                            // {
+                            //     field: 'smsTemplateId',
+                            //     title: 'ID',
+                            //     width:60,
+                            //     //align: 'center',
+                            //     unresize: 'false',
+                            // },
                             {
                                 field: 'smsTemplateName',
                                 title: '模版名称',
@@ -489,10 +489,10 @@ layui.config({
                                 title: '模版类型',
                                 templet: function(data) {
                                     if (data.smsTemplateType == 0) {
-                                        return '通知模板'
+                                        return '<span class="layui-badge layui-bg-orange">通知模版</span>'
                                     }
                                     if (data.smsTemplateType == 1) {
-                                        return '报名模版'
+                                        return '<span class="layui-badge layui-bg-blue">报名模板</span>'
                                     }
                                     if (data.smsTemplateType == undefined) {
                                         return ''

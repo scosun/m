@@ -48,13 +48,13 @@ layui.config({
                     type: 'checkbox',
                     fixed: 'left'
                 },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    width: 60,
-                    //align: 'center',
-                    unresize: 'false',
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     width: 60,
+                //     //align: 'center',
+                //     unresize: 'false',
+                // },
                 {
                     field: 'title',
                     title: '通知标题',
@@ -132,13 +132,13 @@ layui.config({
                         type: 'checkbox',
                         fixed: 'left'
                     },
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        width: 60,
-                        //align: 'center',
-                        unresize: 'false',
-                    },
+                    // {
+                    //     field: 'id',
+                    //     title: 'ID',
+                    //     width: 60,
+                    //     //align: 'center',
+                    //     unresize: 'false',
+                    // },
                     {
                         field: 'title',
                         title: '通知标题',
@@ -589,13 +589,13 @@ layui.config({
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
-                                field: 'id',
-                                title: 'ID',
-                                width: 60,
-                                //align: 'center',
-                                unresize: 'false',
-                            },
+                            // {
+                            //     field: 'id',
+                            //     title: 'ID',
+                            //     width: 60,
+                            //     //align: 'center',
+                            //     unresize: 'false',
+                            // },
                             {
                                 field: 'title',
                                 title: '通知标题',

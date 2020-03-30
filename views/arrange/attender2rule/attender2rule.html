@@ -16,6 +16,11 @@
 	.layui-btn+.layui-btn {
 		margin-left: 0;
 	}
+	.btnsearch {
+		background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+		background-size: 1.2rem 1.2rem;
+		text-indent: -9999px;
+	}
 </style>
 </head>
 <body>
@@ -31,7 +36,7 @@
 	<div class="layui-row layui-col-space15">
 		<div class="layui-col-md12">
 			<div class="layui-card">
-				<div class="layui-card-header">参会人员和座区规则对应关系方案</div>
+
 				<div class="layui-card-body">
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
@@ -46,7 +51,7 @@
 							<div class="layui-inline">
 								<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="search-key" autocomplete="off">
 							</div>
-							<button class="layui-btn" data-type="reload">搜索</button>
+							<button class="layui-btn btnsearch" data-type="reload">搜索</button>
 						</div>
 						<!-- 右侧筛选条件 end-->
 					</div>

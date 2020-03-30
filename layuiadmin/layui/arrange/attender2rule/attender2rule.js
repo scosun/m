@@ -45,15 +45,16 @@ layui.config({
 								type: 'checkbox',
 								fixed: 'left'
 							},
+							// {
+							// 	field: 'id',
+							// 	title: 'ID',
+							// 	sort: true,
+							// 	align: 'left',
+							// 	width: '10%',
+							// 	event: 'seeDetail',
+							// 	style: 'cursor: pointer;'
+							// },
 							{
-								field: 'id',
-								title: 'ID',
-								sort: true,
-								align: 'left',
-								width: '10%',
-								event: 'seeDetail',
-								style: 'cursor: pointer;'
-							}, {
 								field: 'name',
 								title: '对应关系名称',
 								//align: "center"

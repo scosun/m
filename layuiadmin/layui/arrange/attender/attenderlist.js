@@ -127,13 +127,13 @@ layui.config({
                         type: 'checkbox',
                         fixed: 'left'
                     },
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        align: 'left',
-                        unresize: 'false',
-                        width: 80
-                    },
+                    // {
+                    //     field: 'id',
+                    //     title: 'ID',
+                    //     align: 'left',
+                    //     unresize: 'false',
+                    //     width: 80
+                    // },
                     {
                         field: 'name',
                         title: '姓名',
@@ -506,13 +506,13 @@ layui.config({
                             type: 'checkbox',
                             fixed: 'left'
                         },
-                        {
-                            field: 'id',
-                            title: 'ID',
-                            align: 'left',
-                            unresize: 'false',
-                            width: 80
-                        },
+                        // {
+                        //     field: 'id',
+                        //     title: 'ID',
+                        //     align: 'left',
+                        //     unresize: 'false',
+                        //     width: 80
+                        // },
                         {
                             field: 'name',
                             title: '姓名',

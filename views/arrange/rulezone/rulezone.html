@@ -12,6 +12,13 @@
 		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
 		<script src="../../../js/scosun.js"></script>
         <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.btnsearch {
+				background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+				background-size: 1.2rem 1.2rem;
+				text-indent: -9999px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="layui-fluid" style="padding:3px 0">
@@ -19,15 +26,15 @@
 				<div class="layui-row grid-demo grid-demo-bg1">
 					<div class="layui-col-md12">
 						<div class="layui-card">
-								
+
 								<div class="layui-card-body">
 									<div class="layui-row" style="margin-bottom:10px">
-                                        
+
                                         <div style="float:right">
                                             <div class="layui-inline">
                                                 <input class="layui-input" name="id" id="demoReload" autocomplete="off">
                                             </div>
-                                            <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                                            <button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
                                         </div>
                                     </div>
                                     <!-- <div class="layui-row">
@@ -45,6 +52,7 @@
                                     </div> -->
 									
 									<div>
+										<div class="" style="font-size: 15px"><img src="../../../images/help.svg"  style="margin-left: 5px;width: 15px;height: 15px;padding-bottom: 5px"/>&nbsp;&nbsp;对会场座位进行片区设置，以提高入场引导效率</div>
 										<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
 									</div>
 									<script type="text/html" id="table-zone-list">
@@ -111,13 +119,13 @@
 		            cols: [
 		                [ //表头
 		                
-					{
-						field: 'id',
-						title: 'ID',
-						align: 'left',
-						unresize: 'false',
-						width:60
-					},
+					// {
+					// 	field: 'id',
+					// 	title: 'ID',
+					// 	align: 'left',
+					// 	unresize: 'false',
+					// 	width:60
+					// },
 					{
 						field: 'name',
 						title: '会议室名称',
@@ -177,13 +185,13 @@
 		                cols: [
 					[ //表头
 					
-						{
-							field: 'id',
-							title: 'ID',
-							align: 'left',
-							unresize: 'false',
-							width:60
-						},
+						// {
+						// 	field: 'id',
+						// 	title: 'ID',
+						// 	align: 'left',
+						// 	unresize: 'false',
+						// 	width:60
+						// },
 						{
 							field: 'name',
 							title: '会议室名称',
@@ -397,13 +405,13 @@
 		    		     cols: [
 						[ //表头
 						
-							{
-								field: 'id',
-								title: 'ID',
-								align: 'left',
-								unresize: 'false',
-								width:60
-							},
+							// {
+							// 	field: 'id',
+							// 	title: 'ID',
+							// 	align: 'left',
+							// 	unresize: 'false',
+							// 	width:60
+							// },
 							{
 								field: 'name',
 								title: '会议室名称',

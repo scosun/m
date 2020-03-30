@@ -81,12 +81,12 @@ layui.config({
                     type: 'checkbox',
                     fixed: 'left'
                 },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    //align: 'center',
-                    unresize: 'false',
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     //align: 'center',
+                //     unresize: 'false',
+                // },
                 {
                     field: 'name',
                     title: '编排规则名称',
@@ -166,12 +166,12 @@ layui.config({
                         type: 'checkbox',
                         fixed: 'left'
                     },
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        //align: 'center',
-                        unresize: 'false',
-                    },
+                    // {
+                    //     field: 'id',
+                    //     title: 'ID',
+                    //     //align: 'center',
+                    //     unresize: 'false',
+                    // },
                     {
                         field: 'name',
                         title: '编排规则名称',
@@ -466,13 +466,13 @@ layui.config({
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
-                                field: 'id',
-                                title: 'ID',
-                                //align: 'center',
-                                unresize: 'false',
-                                width: '7%'
-                            },
+                            // {
+                            //     field: 'id',
+                            //     title: 'ID',
+                            //     //align: 'center',
+                            //     unresize: 'false',
+                            //     width: '7%'
+                            // },
                             {
                                 field: 'name',
                                 title: '编排规则名称',

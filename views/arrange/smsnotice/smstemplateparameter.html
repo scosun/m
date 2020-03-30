@@ -40,8 +40,13 @@
 	.layui-btn-group .layui-btn:only-child {
     		border-radius:2px;
 	}
-
+	.btnsearch {
+		background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+		background-size: 1.2rem 1.2rem;
+		text-indent: -9999px;
+	}
 </style>
+
 </head>
 <body>
 <div class="layui-card layadmin-header">
@@ -71,7 +76,7 @@
 							<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
 								autocomplete="off">
 							</div>
-							<button class="layui-btn layui-ds" data-type="search">搜索</button>
+							<button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
 						</div>
 						<!-- 右侧筛选条件 end-->
 					</div>
@@ -124,13 +129,13 @@
         
         cols: [
             [ //表头
-                {
-                    field: 'id',
-                    title: 'ID',
-                    width:60,
-                    align: 'center',
-                    unresize: 'false',
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     width:60,
+                //     align: 'center',
+                //     unresize: 'false',
+                // },
                 {
                     field: 'name',
                     title: '模版标签名',
@@ -150,11 +155,12 @@
             ]
         ],
 
-        event: true,
-        page: true,
-        limit: 15,
-        skin: 'nob',
-        limits: [5, 10, 15],
+		event: true,
+		page: true,
+		limit: 15,
+		skin: 'line',
+		even: true,
+		limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
             layer.closeAll('loading');
@@ -179,13 +185,13 @@
         
         cols: [
             [ //表头
-                {
-                    field: 'id',
-                    title: 'ID',
-                    width:60,
-                    align: 'center',
-                    unresize: 'false',
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     width:60,
+                //     align: 'center',
+                //     unresize: 'false',
+                // },
                 {
                     field: 'name',
                     title: '名称',
@@ -207,11 +213,12 @@
             ]
         ],
 
-        event: true,
-        page: true,
-        limit: 15,
-        skin: 'nob',
-        limits: [5, 10, 15],
+			event: true,
+			page: true,
+			limit: 15,
+			skin: 'line',
+			even: true,
+			limits: [5, 10, 15],
         done: function(res, curr, count) {
             table_data = res.data;
             layer.closeAll('loading');
@@ -270,7 +277,7 @@
                        }
                 layer.open({
                     type: 2,
-                    title: '人员编辑',
+                    title: '新增标签',
 					maxmin: true,
                     area: ['100%', '100%'],
                     btn: ['确定', '取消'],
@@ -306,13 +313,13 @@
 
 					cols: [
 						[ //表头
-							{
-								field: 'id',
-								title: 'ID',
-								width:60,
-								align: 'center',
-								unresize: 'false',
-							},
+							// {
+							// 	field: 'id',
+							// 	title: 'ID',
+							// 	width:60,
+							// 	align: 'center',
+							// 	unresize: 'false',
+							// },
 							{
 								field: 'name',
 								title: '模版标签名',

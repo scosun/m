@@ -105,7 +105,13 @@
 			border-color: #ccc;
 			color: #333;
 		}
+		.btnsearch {
+			background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+			background-size: 1.2rem 1.2rem;
+			text-indent: -9999px;
+		}
 	</style>
+
 </head>
 <body>
 <div class="layui-card layadmin-header">
@@ -133,7 +139,7 @@
 									<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
 										   autocomplete="off">
 								</div>
-								<button class="layui-btn layui-ds" data-type="search">搜索</button>
+								<button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
 							</div>
 						<!-- 右侧筛选条件 end-->
 					</div>
@@ -220,13 +226,13 @@
 						type: 'checkbox',
 						fixed: 'left'
 					},
-					{
-						field: 'id',
-						title: 'ID',
-						width: 60,
-						//align: 'center',
-						unresize: 'false',
-					},
+					// {
+					// 	field: 'id',
+					// 	title: 'ID',
+					// 	width: 60,
+					// 	//align: 'center',
+					// 	unresize: 'false',
+					// },
 					{
 						field: 'title',
 						title: '通知标题',
@@ -289,13 +295,13 @@
 							type: 'checkbox',
 							fixed: 'left'
 						},
-						{
-							field: 'id',
-							title: 'ID',
-							width: 60,
-							//align: 'center',
-							unresize: 'false',
-						},
+						// {
+						// 	field: 'id',
+						// 	title: 'ID',
+						// 	width: 60,
+						// 	//align: 'center',
+						// 	unresize: 'false',
+						// },
 						{
 							field: 'title',
 							title: '通知标题',
@@ -734,13 +740,13 @@
 										type: 'checkbox',
 										fixed: 'left'
 									},
-									{
-										field: 'id',
-										title: 'ID',
-										width: 60,
-										//align: 'center',
-										unresize: 'false',
-									},
+									// {
+									// 	field: 'id',
+									// 	title: 'ID',
+									// 	width: 60,
+									// 	//align: 'center',
+									// 	unresize: 'false',
+									// },
 									{
 										field: 'title',
 										title: '通知标题',

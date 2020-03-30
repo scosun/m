@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
     <style type="text/css">
         .layui-btn {background-color: #666;}
         .layui-btn-danger {background-color: #FF5722;}
@@ -17,7 +18,13 @@
         .layui-btn+.layui-btn {
             margin-left: 0
         }
+        .btnsearch {
+            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
     </style>
+
 </head>
 <body>
 <div class="layui-fluid" style="padding:0">
@@ -50,10 +57,23 @@
                                     <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
                                            autocomplete="off">
                                 </div>
-                                <button class="layui-btn layui-ds" data-type="search">搜索</button>
+                                <button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
                             </div>
                             <!-- 右侧筛选条件 end-->
                         </div>
+                        <div class="" style="font-size: 15px"><img src="../../../images/help.svg"  style="margin-left: 5px;width: 15px;height: 15px;padding-bottom: 5px"/>&nbsp;&nbsp;&nbsp;通过二维码绑定桌牌和座位小程序进行操作。
+                            <div class="dropdown-menu dropdown-hover">
+                            <a class="icon-btn">
+                                &nbsp;点击绑定 <i class="layui-icon layui-icon-drop"></i></a>
+                            <div class="dropdown-menu-nav dropdown-bottom-right"
+                                 style="width: 280px; height: 280px;padding:10px; margin:0 auto;">
+                                <div class="dropdown-anchor"></div>
+                                <!-- 下面是自定义内容 -->
+                                <img src="../../../images/wechatapp.jpg"
+                                     width="100%" height="100%" style="text-align:center">
+                                <!-- //end.自定义内容结束 -->
+                            </div>
+                        </div></div>
                         <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
                         <script type="text/html" id="table-zone-list">
                             <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>
@@ -76,8 +96,9 @@
     layui.config({
         base: '../../../layuiadmin/' //静态资源所在路径
     }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'user', 'table'], function() {
+        index: 'lib/index' ,//主入口模块
+        dropdown: '/dropdown/dropdown'
+    }).use(['index', 'user', 'table','dropdown'], function() {
         var $ = layui.$,
             setter = layui.setter,
             admin = layui.admin,
@@ -86,6 +107,7 @@
             table = layui.table,
             layer = layui.layer,
             datas = null,
+            dropdown = 'dropdown',
             router = layui.router();
         // var url = "http://127.0.0.1:8083"
         var url = "https://f.longjuli.com"
@@ -106,12 +128,14 @@
                 [{
                     type: 'checkbox',
                     fixed: 'left'
-                },{
-                    field: 'id',
-                    width: '15%',
-                    title: 'ID',
-                    sort: true
-                }, {
+                },
+                //     {
+                //     field: 'id',
+                //     width: '15%',
+                //     title: 'ID',
+                //     sort: true
+                // },
+                    {
                     field: 'roomname',
                     title: '会议室名称',
                     //align: "center"
@@ -188,12 +212,14 @@
                     [{
                         type: 'checkbox',
                         fixed: 'left'
-                    },{
-                        field: 'id',
-                        width: '15%',
-                        title: 'ID',
-                        sort: true
-                    }, {
+                    },
+                    //     {
+                    //     field: 'id',
+                    //     width: '15%',
+                    //     title: 'ID',
+                    //     sort: true
+                    // },
+                        {
                         field: 'roomname',
                         title: '会议室名称',
                         //align: "center"
@@ -399,13 +425,13 @@
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
-                                field: 'id',
-                                title: 'ID',
-                                width: 60,
-                                //align: 'center',
-                                unresize: 'false',
-                            },
+                            // {
+                            //     field: 'id',
+                            //     title: 'ID',
+                            //     width: 60,
+                            //     //align: 'center',
+                            //     unresize: 'false',
+                            // },
                             {
                                 field: 'title',
                                 title: '通知标题',

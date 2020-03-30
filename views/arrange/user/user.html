@@ -82,8 +82,8 @@
                     layer = layui.layer,
                     datas = null,
                     router = layui.router();
-                 var url = "https://f.longjuli.com"
-                /* var url = "http://127.0.0.1:8083" */
+                 // var url = "https://f.longjuli.com"
+                 var url = "http://127.0.0.1:8083"
                 $.ajax({
                     async: false,
                     type: "get",
@@ -146,12 +146,13 @@
 						            type: 'checkbox',
 						            fixed: 'left'
 						        },
-						        {
-						            field: 'userId',
-						            width: '7%',
-						            title: 'ID',
-						            sort: true
-						        }, {
+						        // {
+						        //     field: 'userId',
+						        //     width: '7%',
+						        //     title: 'ID',
+						        //     sort: true
+						        // },
+                                {
 						            field: 'username',
 						            title: '用户名',
 						            align: "left"
@@ -181,8 +182,12 @@
 						                }
 						            },
 						
-						        }, 
-						
+						        },
+                                {
+                                    field: 'ip',
+                                    title: '登录ip',
+                                    align: "left",
+                                },
 						        {
 						            field: 'lastLoginTime',
 						

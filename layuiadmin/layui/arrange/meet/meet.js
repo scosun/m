@@ -93,13 +93,13 @@ layui.config({
                     type: 'checkbox',
                     fixed: 'left'
                 },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    align: 'left',
-                    unresize: 'false',
-                    width: '7%'
-                },
+                // {
+                //     field: 'id',
+                //     title: 'ID',
+                //     align: 'left',
+                //     unresize: 'false',
+                //     width: '7%'
+                // },
                 {
                     field: 'name',
                     title: '会议名称',
@@ -174,13 +174,13 @@ layui.config({
                         type: 'checkbox',
                         fixed: 'left'
                     },
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        align: 'left',
-                        unresize: 'false',
-                        width: '7%'
-                    },
+                    // {
+                    //     field: 'id',
+                    //     title: 'ID',
+                    //     align: 'left',
+                    //     unresize: 'false',
+                    //     width: '7%'
+                    // },
                     {
                         field: 'name',
                         title: '会议名称',
@@ -573,13 +573,13 @@ layui.config({
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
-                                field: 'id',
-                                title: 'ID',
-                                align: 'left',
-                                unresize: 'false',
-                                width: '7%'
-                            },
+                            // {
+                            //     field: 'id',
+                            //     title: 'ID',
+                            //     align: 'left',
+                            //     unresize: 'false',
+                            //     width: '7%'
+                            // },
                             {
                                 field: 'name',
                                 title: '会议名称',

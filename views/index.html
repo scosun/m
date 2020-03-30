@@ -106,7 +106,7 @@
                                 </dd>
 
                             <dd data-name="property" id="type"><a
-                                    lay-href="arrange/peotype/typelist/typelist.html">属性列表</a></dd>
+                                    lay-href="arrange/typelist/typelist.html">属性列表</a></dd>
                                 <dd><a lay-href="arrange/attendersort/attender_sort_list.html">智能排序</a></dd>
                             </dl>
                         </dl>
@@ -128,9 +128,10 @@
                             <dl class="layui-nav-child">
 
                                 <dd data-name="grid"><a lay-href="arrange/seatproduct/seatproductlists.html">产品列表</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/seatproduct/seatdevicelist.html">设备列表</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/controlseat/controlseatlist.html">设备绑定</a></dd>
-                                <dd data-name="grid"><a lay-href="arrange/roomseat/roomseatlist.html">群控管理</a></dd>
+                                <dd data-name="seatdevicelist"><a lay-href="arrange/seatproduct/seatdevicelist.html">设备列表</a></dd>
+                                <dd data-name="roomseatlist"><a lay-href="arrange/roomseat/roomseatlist.html">设备绑定</a></dd>
+                                <dd data-name="controlseatlist"><a lay-href="arrange/controlseat/controlseatlist.html">群控管理</a></dd>
+
 
 <!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>-->
 <!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">会场绑定</a></dd>-->
@@ -189,7 +190,7 @@
                                     <a lay-href="arrange/user/user.html">用户管理</a>
                                 </dd>
                                 <dd data-name="button" id="role">
-                                    <a lay-href="arrange/role/role.html">管理组管理</a>
+                                    <a lay-href="arrange/role/role.html">权限组管理</a>
                                 </dd>
                             </dl>
                         </li>
@@ -295,8 +296,8 @@
 
     <script src="../layuiadmin/layui/layui.js"></script>
     <script>
-        var url = "https://f.longjuli.com"
-        // var url = "http://127.0.0.1:8083"
+        // var url = "https://f.longjuli.com"
+        var url = "http://127.0.0.1:8083"
         $.ajax({
             async: false,
             type: "get",

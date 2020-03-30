@@ -77,7 +77,8 @@
                             <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;"
                                  id="group">
                                 <button class='layui-btn layui-ds' data-type='add' id='addmeeting' data='增加'>新增</button>
-                                <button class="layui-btn" id="importb" data-type="getCheckData">Excel导入</button>
+                                <button class="layui-btn" id="importb" data-type="getCheckData"data='导入设备'>ß导入</button>
+                                <button class='layui-btn layui-ds' data-type='download' id='emptymeet'>模版下载</button>
 <!--                                <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
 <!--                                <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
                             </div>
@@ -112,6 +113,7 @@
                             <!-- 右侧筛选条件 end-->
                         </div>
                         <div>
+
                             <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate">
                             </table>
                         </div>
@@ -152,13 +154,13 @@
             router = layui.router();
         element.render();
         //初次渲染表格
-        // var url = "https://f.longjuli.com"
-            var url="http://127.0.0.1:8083";
+        var url = "https://f.longjuli.com"
+            // var url="http://127.0.0.1:8083";
         var devices = {};
         var attenderList = [];
         upload.render({
             elem: '#importb'
-            , url: url+'/meetingcanhui/attendersort',
+            , url: url+'/tablesigndevice/excelDeviceToList',
             // auto: false,
             exts:'xls|xlsx',
             //bindAction: '#btn99',
@@ -179,9 +181,8 @@
             //     });
             // },
             done: function (res) {
-                ajaxs(res);
+                ajaxs(window.indexs);
 
-                storage.setItem("data",JSON.stringify(res));
             }
         });
         layer.msg("上方下拉框选择产品后自动加载相关设备");
@@ -259,6 +260,7 @@
                 console.log("error")
             }
         })
+
         //选中以后更新表的ajax
         window.ajaxs = function (value) {
 
@@ -284,24 +286,19 @@
                             type: 'checkbox',
                             fixed: 'left'
                         },
-                        {
-                            field: 'iotId',
-                            title: 'ID',
-                            align: 'left',
-                            unresize: 'false',
-                            width: 80
-                        },
+                        // {
+                        //     field: 'iotId',
+                        //     title: 'ID',
+                        //     align: 'left',
+                        //     unresize: 'false',
+                        //     width: 80
+                        // },
                         {
                             field: 'deviceName',
-                            title: '设备姓名',
+                            title: '设备名称',
                             align: 'leftleft',
                         },
                         {
-                            field: 'nickname',
-                            // width: '25%',
-                            title: '备注名称',
-                            align: 'left',
-                        }, {
                         field: 'deviceStatus',
                         align: 'left',
                         title: '设备状态',
@@ -585,18 +582,8 @@
                 });
 
             },
-            getCheckData: function () { //获取选中数据
-
-                if ($('#select-room').val() == '-1') {
-                    return layer.msg("请选择会议后再添加人员")
-                }
-                var cb = $(".layui-form-checkbox");
-                $(".layui-form-checkbox").each(function () {
-
-                    $(this).click();
-
-                })
-
+            download: function () { //获取选中数据
+                window.location = url + "/tablesigndevice/download";
 
             },
             getCheckLength: function () { //获取选中数目

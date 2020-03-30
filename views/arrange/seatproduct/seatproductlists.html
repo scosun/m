@@ -70,7 +70,13 @@
       border-color: #ccc;
       color: #333;
     }
+    .btnsearch {
+      background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+      background-size: 1.2rem 1.2rem;
+      text-indent: -9999px;
+    }
   </style>
+
 </head>
 <body>
 <div class="layui-card layadmin-header">
@@ -96,7 +102,7 @@
                 <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
                        autocomplete="off">
               </div>
-              <button class="layui-btn layui-ds" data-type="search">搜索</button>
+              <button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
             </div>
             <!-- 右侧筛选条件 end-->
           </div>
@@ -170,50 +176,51 @@
             field: 'productName',
             title: '产品名字',
             align: 'left',
-          }, {
-          field: 'nodeType',
-          title: '节点类型',
-          align: 'left',
-          templet: function(data) {
-            if (data.nodeType == 0) {
-              return '设备'
-            }
-            if (data.nodeType == 1) {
-              return '网关'
-            }
           },
-        },
-          {
-            field: 'aliyunCommodityCode',
-            title: '产品版本类型',
-            align: 'left',
-            templet: function(data) {
-              if (data.aliyunCommodityCode == 'iothub_senior') {
-                return '使用物模型'
-              }
-              if (data.aliyunCommodityCode == 'iothub') {
-                return '不使用物模型'
-              }
-            },
-          },
-          {
-            field: 'dataFormat',
-            title: '产品数据格式',
-            align: 'left',
-            templet: function(data) {
-              if (data.dataFormat == 0) {
-                return '透传/自定义格式'
-              }
-              if (data.dataFormat == 1) {
-                return 'Alink协议'
-              }
-            },
-          },
-          {
-            field: 'categoryId',
-            title: '设备类型',
-            align: 'left',
-          },
+        //   {
+        //   field: 'nodeType',
+        //   title: '节点类型',
+        //   align: 'left',
+        //   templet: function(data) {
+        //     if (data.nodeType == 0) {
+        //       return '设备'
+        //     }
+        //     if (data.nodeType == 1) {
+        //       return '网关'
+        //     }
+        //   },
+        // },
+        //   {
+        //     field: 'aliyunCommodityCode',
+        //     title: '产品版本类型',
+        //     align: 'left',
+        //     templet: function(data) {
+        //       if (data.aliyunCommodityCode == 'iothub_senior') {
+        //         return '使用物模型'
+        //       }
+        //       if (data.aliyunCommodityCode == 'iothub') {
+        //         return '不使用物模型'
+        //       }
+        //     },
+        //   },
+        //   {
+        //     field: 'dataFormat',
+        //     title: '产品数据格式',
+        //     align: 'left',
+        //     templet: function(data) {
+        //       if (data.dataFormat == 0) {
+        //         return '透传/自定义格式'
+        //       }
+        //       if (data.dataFormat == 1) {
+        //         return 'Alink协议'
+        //       }
+        //     },
+        //   },
+        //   {
+        //     field: 'categoryId',
+        //     title: '设备类型',
+        //     align: 'left',
+        //   },
           // {
           //   field: 'description',
           //   title: '描述信息',
@@ -224,32 +231,32 @@
           //   title: '设备接入网关的协议类型',
           //   align: 'left',
           // },
-          {
-            field: 'netType',
-            title: '连网方式',
-            align: 'left',
-          },
-          {
-            field: 'authType',
-            title: '设备接入物联网平台认证方式',
-            align: 'left',
-            templet: function(data) {
-              if (data.authType == 'secret') {
-                return '使用设备密钥进行设备身份认证'
-              }
-              if (data.authType == 'id2') {
-                return '使用物联网设备身份认证ID²'
-              }
-              if (data.authType == 'x509') {
-                return '使用设备X.509证书进行设备身份认证²'
-              }
-            },
-          },
-          {
-            field: 'id2',
-            title: '是否使用ID²认证。',
-            align: 'left',
-          },
+          // {
+          //   field: 'netType',
+          //   title: '连网方式',
+          //   align: 'left',
+          // },
+          // {
+          //   field: 'authType',
+          //   title: '设备接入物联网平台认证方式',
+          //   align: 'left',
+          //   templet: function(data) {
+          //     if (data.authType == 'secret') {
+          //       return '使用设备密钥进行设备身份认证'
+          //     }
+          //     if (data.authType == 'id2') {
+          //       return '使用物联网设备身份认证ID²'
+          //     }
+          //     if (data.authType == 'x509') {
+          //       return '使用设备X.509证书进行设备身份认证²'
+          //     }
+          //   },
+          // },
+          // {
+          //   field: 'id2',
+          //   title: '是否使用ID²认证。',
+          //   align: 'left',
+          // },
           {
             field: 'devicecount',
             title: '设备数量',
@@ -331,50 +338,51 @@
               field: 'productName',
               title: '产品名字',
               align: 'left',
-            }, {
-            field: 'nodeType',
-            title: '节点类型',
-            align: 'left',
-            templet: function(data) {
-              if (data.nodeType == 0) {
-                return '设备'
-              }
-              if (data.nodeType == 1) {
-                return '网关'
-              }
             },
-          },
-            {
-              field: 'aliyunCommodityCode',
-              title: '产品版本类型',
-              align: 'left',
-              templet: function(data) {
-                if (data.aliyunCommodityCode == 'iothub_senior') {
-                  return '使用物模型'
-                }
-                if (data.aliyunCommodityCode == 'iothub') {
-                  return '不使用物模型'
-                }
-              },
-            },
-            {
-              field: 'dataFormat',
-              title: '产品数据格式',
-              align: 'left',
-              templet: function(data) {
-                if (data.dataFormat == 0) {
-                  return '透传/自定义格式'
-                }
-                if (data.dataFormat == 1) {
-                  return 'Alink协议'
-                }
-              },
-            },
-            {
-              field: 'categoryId',
-              title: '设备类型',
-              align: 'left',
-            },
+            //   {
+            //   field: 'nodeType',
+            //   title: '节点类型',
+            //   align: 'left',
+            //   templet: function(data) {
+            //     if (data.nodeType == 0) {
+            //       return '设备'
+            //     }
+            //     if (data.nodeType == 1) {
+            //       return '网关'
+            //     }
+            //   },
+            // },
+            //   {
+            //     field: 'aliyunCommodityCode',
+            //     title: '产品版本类型',
+            //     align: 'left',
+            //     templet: function(data) {
+            //       if (data.aliyunCommodityCode == 'iothub_senior') {
+            //         return '使用物模型'
+            //       }
+            //       if (data.aliyunCommodityCode == 'iothub') {
+            //         return '不使用物模型'
+            //       }
+            //     },
+            //   },
+            //   {
+            //     field: 'dataFormat',
+            //     title: '产品数据格式',
+            //     align: 'left',
+            //     templet: function(data) {
+            //       if (data.dataFormat == 0) {
+            //         return '透传/自定义格式'
+            //       }
+            //       if (data.dataFormat == 1) {
+            //         return 'Alink协议'
+            //       }
+            //     },
+            //   },
+            //   {
+            //     field: 'categoryId',
+            //     title: '设备类型',
+            //     align: 'left',
+            //   },
             // {
             //   field: 'description',
             //   title: '描述信息',
@@ -385,32 +393,32 @@
             //   title: '设备接入网关的协议类型',
             //   align: 'left',
             // },
-            {
-              field: 'netType',
-              title: '连网方式',
-              align: 'left',
-            },
-            {
-              field: 'authType',
-              title: '设备接入物联网平台认证方式',
-              align: 'left',
-              templet: function(data) {
-                if (data.authType == 'secret') {
-                  return '使用设备密钥进行设备身份认证'
-                }
-                if (data.authType == 'id2') {
-                  return '使用物联网设备身份认证ID²'
-                }
-                if (data.authType == 'x509') {
-                  return '使用设备X.509证书进行设备身份认证²'
-                }
-              },
-            },
-            {
-              field: 'id2',
-              title: '是否使用ID²认证。',
-              align: 'left',
-            },
+            // {
+            //   field: 'netType',
+            //   title: '连网方式',
+            //   align: 'left',
+            // },
+            // {
+            //   field: 'authType',
+            //   title: '设备接入物联网平台认证方式',
+            //   align: 'left',
+            //   templet: function(data) {
+            //     if (data.authType == 'secret') {
+            //       return '使用设备密钥进行设备身份认证'
+            //     }
+            //     if (data.authType == 'id2') {
+            //       return '使用物联网设备身份认证ID²'
+            //     }
+            //     if (data.authType == 'x509') {
+            //       return '使用设备X.509证书进行设备身份认证²'
+            //     }
+            //   },
+            // },
+            // {
+            //   field: 'id2',
+            //   title: '是否使用ID²认证。',
+            //   align: 'left',
+            // },
             {
               field: 'devicecount',
               title: '设备数量',
@@ -730,76 +738,87 @@
                         field: 'productName',
                         title: '产品名字',
                         align: 'left',
-                      }, {
-                      field: 'nodeType',
-                      title: '节点类型',
-                      align: 'left',
-                      templet: function(data) {
-                        if (data.nodeType == 0) {
-                          return '设备'
-                        }
-                        if (data.nodeType == 1) {
-                          return '网关'
-                        }
                       },
-                    },
-                      {
-                        field: 'aliyunCommodityCode',
-                        title: '产品版本类型',
-                        align: 'left',
-                        templet: function(data) {
-                          if (data.aliyunCommodityCode == 'iothub_senior') {
-                            return '使用物模型'
-                          }
-                          if (data.aliyunCommodityCode == 'iothub') {
-                            return '不使用物模型'
-                          }
-                        },
-                      },
-                      {
-                        field: 'dataFormat',
-                        title: '产品数据格式',
-                        align: 'left',
-                        templet: function(data) {
-                          if (data.dataFormat == 0) {
-                            return '透传/自定义格式'
-                          }
-                          if (data.dataFormat == 1) {
-                            return 'Alink协议'
-                          }
-                        },
-                      },
-                      {
-                        field: 'categoryId',
-                        title: '设备类型',
-                        align: 'left',
-                      },
-                      {
-                        field: 'netType',
-                        title: '连网方式',
-                        align: 'left',
-                      },
-                      {
-                        field: 'authType',
-                        title: '设备接入物联网平台认证方式',
-                        align: 'left',
-                        templet: function(data) {
-                          if (data.authType == 'secret') {
-                            return '使用设备密钥进行设备身份认证'
-                          }
-                          if (data.authType == 'id2') {
-                            return '使用物联网设备身份认证ID²'
-                          }
-                          if (data.authType == 'x509') {
-                            return '使用设备X.509证书进行设备身份认证²'
-                          }
-                        },
-                      },
-                      {
-                        field: 'id2',
-                        title: '是否使用ID²认证。',
-                        align: 'left',
-                      },
+                      //   {
+                      //   field: 'nodeType',
+                      //   title: '节点类型',
+                      //   align: 'left',
+                      //   templet: function(data) {
+                      //     if (data.nodeType == 0) {
+                      //       return '设备'
+                      //     }
+                      //     if (data.nodeType == 1) {
+                      //       return '网关'
+                      //     }
+                      //   },
+                      // },
+                      //   {
+                      //     field: 'aliyunCommodityCode',
+                      //     title: '产品版本类型',
+                      //     align: 'left',
+                      //     templet: function(data) {
+                      //       if (data.aliyunCommodityCode == 'iothub_senior') {
+                      //         return '使用物模型'
+                      //       }
+                      //       if (data.aliyunCommodityCode == 'iothub') {
+                      //         return '不使用物模型'
+                      //       }
+                      //     },
+                      //   },
+                      //   {
+                      //     field: 'dataFormat',
+                      //     title: '产品数据格式',
+                      //     align: 'left',
+                      //     templet: function(data) {
+                      //       if (data.dataFormat == 0) {
+                      //         return '透传/自定义格式'
+                      //       }
+                      //       if (data.dataFormat == 1) {
+                      //         return 'Alink协议'
+                      //       }
+                      //     },
+                      //   },
+                      //   {
+                      //     field: 'categoryId',
+                      //     title: '设备类型',
+                      //     align: 'left',
+                      //   },
+                      // {
+                      //   field: 'description',
+                      //   title: '描述信息',
+                      //   align: 'left',
+                      // },
+                      // {
+                      //   field: 'protocolType',
+                      //   title: '设备接入网关的协议类型',
+                      //   align: 'left',
+                      // },
+                      // {
+                      //   field: 'netType',
+                      //   title: '连网方式',
+                      //   align: 'left',
+                      // },
+                      // {
+                      //   field: 'authType',
+                      //   title: '设备接入物联网平台认证方式',
+                      //   align: 'left',
+                      //   templet: function(data) {
+                      //     if (data.authType == 'secret') {
+                      //       return '使用设备密钥进行设备身份认证'
+                      //     }
+                      //     if (data.authType == 'id2') {
+                      //       return '使用物联网设备身份认证ID²'
+                      //     }
+                      //     if (data.authType == 'x509') {
+                      //       return '使用设备X.509证书进行设备身份认证²'
+                      //     }
+                      //   },
+                      // },
+                      // {
+                      //   field: 'id2',
+                      //   title: '是否使用ID²认证。',
+                      //   align: 'left',
+                      // },
                       {
                         field: 'devicecount',
                         title: '设备数量',

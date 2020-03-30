@@ -265,7 +265,8 @@ layui.config({
                         //align: 'center',
                         templet: function (data) {
                             return "<a  class = 'tplink' title='"+data.phone1+"'>"+data.card_id+"</a>"
-                        }
+                        },
+                        style:'padding-left: 10px'
                     },
                     {
                         field: 'name',
@@ -275,6 +276,7 @@ layui.config({
                         field: 'sexid',
                         title: '性别',
                         align: 'left',
+                        width: '7%',
                         templet: function (data) {
                             if (data.sexid == 1) {
                                 return '男'
