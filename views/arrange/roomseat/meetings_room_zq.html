@@ -87,9 +87,9 @@
 			font-size: 20px;">|</span>
 			<div class="layui-form " style="width: 130px;float: left;">
 				<select class="dialogRuleSelect" lay-filter="component-timeselect" id="ruleselect">
+					<option value="5">频率5秒</option>
+					<option value="10">频率10秒</option>
 					<option value="20">频率20秒</option>
-					<option value="30">频率30秒</option>
-					<option value="60">频率60秒</option>
 				</select>
 			</div>
 			<span style="float: left;
@@ -167,7 +167,7 @@
 
 
 		var macdata = {};
-		var interTime = 20;
+		var interTime = 5;
 		var inter = null;
 		var chkseat = {};
 

@@ -3,3 +3,22 @@
 3.桌牌管理websocket查询绑定状态（跟 海超对接）
 4.桌牌控制websocket接口，同时需要支持右键修改人名（跟 书贤 对接）
 5.参会人员列表拖拽排序（等 海超 完成之后 再集成）
+
+http://192.168.0.111/officer/v1/peoples/sort-by-attendees
+
+
+content-type: application/json
+
+
+
+{
+    
+"attendees": 
+[
+        
+"id": 1,
+        "name": "王桂松"
+    
+]
+
+}
