@@ -61,48 +61,51 @@ html {
     background: #666 url(../images/btnadd.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btndel{
+}
+.btndel{
     background: #666 url(../images/btndel.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btncheckall{
+}
+.btncheckall{
     background: #666 url(../images/btncheckall.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btndow{
+}
+.btndow{
     background: #666 url(../images/btndow.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btnempty{
+}
+.btnempty{
     background: #666 url(../images/btnempty.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btnsearch{
+}
+.btnsearch{
     background: #666 url(../images/btnsearch.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btnupload{
+}
+.btnupload{
     background: #666 url(../images/btnupload.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btnuploadimg{
+}
+.btnuploadimg{
     background: #666 url(../images/btnuploadimg.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
-    .btnsearch{
+}
+.btnsearch{
     background: #666 url(../images/btnsearch.png) no-repeat center center;
     background-size: 1.2rem 1.2rem;
     text-indent: -9999px;
-    }
+}
 
-
+.layui-layout-admin .layui-body {
+    top: 48px;
+    bottom: 0;
+}
 
 
