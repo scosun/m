@@ -4346,9 +4346,7 @@ body .layui-table-tips .layui-layer-content {
 
 .layui-badge {
     height: 18px;
-    line-height: 18px;
-    width: 18px;
-    padding: 0;
+    line-height: 18px
 }
 
 .layui-badge-dot {
