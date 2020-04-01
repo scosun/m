@@ -414,10 +414,10 @@
 				</div>
 			</div>
 			<div class="toollist_li">
-				<a href="javascript:;" alt="多边形座区" title="多边形座区"><img src="../../../images/toolkit/polygon.svg"></a>
+				<a id="polygonbtn" href="javascript:;" alt="多边形座区" title="多边形座区"><img src="../../../images/toolkit/polygon.svg"></a>
 			</div>
 			<div class="toollist_li">
-				<a href="javascript:;" alt="椭圆形座区" title="椭圆形座区"><img src="../../../images/toolkit/the_oval.svg"></a>
+				<a id="ovalbtn" href="javascript:;" alt="椭圆形座区" title="椭圆形座区"><img src="../../../images/toolkit/the_oval.svg"></a>
 			</div>
 			<div class="toollist_li">
 				<a data="nav-add" href="javascript:;" alt="快速绘制" title="快速绘制"><img src="../../../images/toolkit/pladd.png"></a>
@@ -483,7 +483,7 @@
 				<a data="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/toolkit/restore.svg"><span>恢复座区</span></a>
 				<div class="child_cont" style="display: none;">
 					<div class="child_cont_li on">
-						<a data="nav-rollback" href="javascript:;" alt="恢复删除" title="恢复删除"><img src="../../../images/toolkit/prev_step.svg"><span>上一步操作</span></a>
+						<a data="nav-rollback" href="javascript:;" alt="恢复删除" title="恢复删除"><img src="../../../images/toolkit/prev_step.svg"><span>恢复删除</span></a>
 					</div>
 					<div class="child_cont_li">
 						<a data="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/toolkit/restore.svg"><span>恢复座区</span></a>
@@ -593,7 +593,7 @@
 		var src = $(this).find("img").attr("src");
 		var data = $(this).attr("data");
 		var title = $(this).attr("title");
-		$(this).parent().parent().prev().attr({"data":data,"title":title});
+		$(this).parent().parent().prev().attr({"data":data,"title":title,"alt":title});
 		$(this).parent().parent().prev().find("img").attr("src",src);
 
 		seatMapEvent(data,this);
@@ -602,7 +602,13 @@
 	$('.toollist_li > a').bind('click',function(evt){
 		evt.stopPropagation();
 		var data = $(this).attr("data");
-		console.log("data-----",data)
+		
+		if(!data){
+			return;
+		}
+
+		console.log("data-----",data);
+		
 		if(!__longEvent){
 			$('.toollist_li').removeClass("on");
 			$(this).parent().addClass("on");
@@ -617,6 +623,12 @@
 
 
 	function seatMapEvent(data,ele){
+		__keydownMoveUp = false;
+		__keydownMoveDown = false;
+		__keydownMoveLeft = false;
+		__keydownMoveRight = false;
+		unDragMoveSeats();
+
 		switch(data){
 			case "nav-radio":
 				//单选
@@ -645,53 +657,139 @@
 			break;
 
 			case "nav-down":
-				setTimeout(function(){
-					$(ele).parent().removeClass("on");
-					$("#nav-selection").addClass("on");
-				},1000);
+				// setTimeout(function(){
+				// 	$(ele).parent().removeClass("on");
+				// 	$("#nav-selection").addClass("on");
+				// },1000);
 			break;
 
 			case "create-circle-down":
 			case "create-run-down":
-				setTimeout(function(){
-					$(ele).parent().removeClass("on");
-					$("#nav-selection").addClass("on");
-				},1000);
+				// setTimeout(function(){
+				// 	$(ele).parent().removeClass("on");
+				// 	$("#nav-selection").addClass("on");
+				// },1000);
 			break;
 
 			case "nav-add":
 				boxCreateSeats();
 			break;
 			
+			case "keydownmove":
+				__keydownMoveUp = true;
+				__keydownMoveDown = true;
+				__keydownMoveLeft = true;
+				__keydownMoveRight = true;
+			break;
 			case "dleftmovebtn":
+				__keydownMoveLeft = true;
 				leftMoveSeats();
 			break;
 			case "drightmovebtn":
+				__keydownMoveRight = true;
 				rightMoveSeats();
 			break;
 			case "dtopmovebtn":
+				__keydownMoveUp = true;
 				topMoveSeats();
 			break;
 			case "dbottommovebtn":
+				__keydownMoveDown = true;
 				bottomMoveSeats();
 			break;
 
-			// $("#nav-vertical-c").bind("click",xAvgSeats);
-			// $("#nav-horizontal-c").bind("click",yAvgSeats);
+			case "nav-vertical-c":
+				xAvgSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-horizontal-c":
+				yAvgSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
 
-			// $("#nav-align-center").bind("click",xCenterSeats);
-			// $("#nav-align-center-v").bind("click",yCenterSeats);
-			// $("#nav-align-left").bind("click",leftSeats);
-			// $("#nav-align-right").bind("click",rightSeats);
-			// $("#nav-align-up").bind("click",topSeats);
-			// $("#nav-align-down").bind("click",bottomSeats);
+			case "nav-align-center":
+				xCenterSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-align-center-v":
+				yCenterSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-align-left":
+				leftSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-align-right":
+				rightSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-align-up":
+				topSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-align-down":
+				bottomSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
 
-			// $("#nav-delete").bind("click",deleteSeats);
+			case "nav-delete":
+				deleteSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
 
-			// $("#nav-rollback").bind("click",resetSeats);
-			// $("#nav-forward").bind("click",revertSeats);
+			case "nav-forward":
+				revertSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+			case "nav-rollback":
+				resetSeats();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
 
-			// $("#nav-mark").bind("click",setRowNum);
+			case "nav-mark":
+				setRowNum();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+
+			case "nav-drag":
+				dragMoveSeats();
+			break;
 		}
 	}
 
@@ -903,8 +1001,6 @@ layui.config({
 			circleAndRunCreate(data);
 		});
 
-		
-
 		/*右侧菜单 设置行列弹框*/
 		$('#nav-down').on('click', function(){
 			layer.open({
@@ -978,6 +1074,111 @@ layui.config({
 			
 		});
 		
+
+		/*多边形绘制，椭圆绘制*/
+		$('#polygonbtn').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+			layer.open({
+				type: 2,
+				title: '设置多边形参数',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['500px', '260px'],
+				content: 'special_polygon_type.html',
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					// var typeid = +layero.find('iframe').contents().find("#select_typeid").val() || 0;
+					var edges = +layero.find('iframe').contents().find("#edges").val() || "";
+					var seat_nums = layero.find('iframe').contents().find("#seat_nums").val() || "";
+					
+					if(edges == "" || edges < 3){
+						layer.msg('请输入边数，必须大于3');
+						return false;
+					}
+					if(seat_nums == ""){
+						layer.msg('请输入座位数');
+						return false;
+					}
+					var condi = {};
+					condi.type = 0;
+					condi.edges = +edges;
+					condi.seat_nums = seat_nums.split(",");
+					condi.seat_nums = condi.seat_nums.map(function(n){
+						if(!+n){
+							layer.msg('座位数只能输入数字，且用,分割');
+							return false;
+						}
+						return +n;
+					});
+					getCustomSeats(condi);
+					layer.close(index);
+				}
+			});
+		});
+		$('#ovalbtn').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+			layer.open({
+				type: 2,
+				title: '设置椭圆参数',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['500px', '220px'],
+				content: 'special_oval_type.html',
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					// var typeid = +layero.find('iframe').contents().find("#select_typeid").val() || 0;
+					// var edges = +layero.find('iframe').contents().find("#edges").val() || "";
+					var seat_nums = layero.find('iframe').contents().find("#seatnum").val() || "";
+					
+					if(seat_nums == ""){
+						layer.msg('请输入座位数');
+						return false;
+					}
+					var condi = {};
+					condi.type = 1;
+					condi.edges = 1;
+					condi.seat_nums = [+seat_nums];
+					getCustomSeats(condi);
+					layer.close(index);
+				}
+			});
+		});
+		
+		function getCustomSeats(condi){
+			// type为0时多边形，type为1是椭圆形；
+			// edges是边数，多边形的话edges>2，椭圆形的话edges=1
+			// center_x和center_y可以不传;
+			// seat_nums是从里到外嵌套排列，每一层的座位数
+			var condi = condi;
+			console.log(condi,$);
+			layer.load(2);
+			$.ajax({
+				async: true,
+				type: "post",
+				data: JSON.stringify(condi),
+				contentType: 'application/json', 
+				url: "https://m.longjuli.com/v1/editor",
+				dataType: "json",
+				success: function(obj) {
+					console.log(obj);
+					if(obj && obj.seats){
+						bulidSeverPolygonContainer(obj);
+					}
+					layer.closeAll();
+				},
+				//失败的回调函数
+				error: function() {
+					console.log("error");
+					layer.closeAll();
+				}
+			});
+		}
+
+
 		$('#autocodebtn img').on('click', function(){
 			layer.open({
 				type: 2,

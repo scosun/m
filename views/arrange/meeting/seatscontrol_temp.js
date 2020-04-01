@@ -1,4 +1,9 @@
 
+
+var __keydownMoveUp = false;
+var __keydownMoveDown = false;
+var __keydownMoveLeft = false;
+var __keydownMoveRight = false;
 var __boxCreate = false;
 var __longEvent = false;
 var __maxWidth;
@@ -121,9 +126,16 @@ function boxCreateSeats(){
 	selectSeats();
 }
 
-function selectSeats(){
+function selectSeats(on){
 	getAllSeatsNode();
 	bindContainerEvent();
+
+	if($("#nav-selection").length > 0 && !on){
+		setTimeout(function(){
+			$('.toollist_li').removeClass("on");
+			$("#nav-selection").addClass("on");
+		},500);
+	}
 }
 
 
@@ -202,7 +214,8 @@ function dragMoveSeats(){
 function unDragMoveSeats(){
 	$("#movecontainerId").hide();
 	$("#movecontainerId").html('');
-	selectSeats();
+	
+	selectSeats(true);
 
 }
 function leftMoveSeats(){
@@ -236,6 +249,40 @@ function bottomMoveSeats(){
 		var top = parseFloat($(this).css("top"));
 		$(this).css("top",top+1+"px");
 	});
+}
+function keyDownMoveSeats(evt){
+	// console.log(evt.keyCode)
+	if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){
+		return;
+	}
+
+	var keycode = evt.keyCode;
+	switch(keycode){
+		case 38:
+			//上
+			if(__keydownMoveUp){
+				topMoveSeats();
+			}
+		break;
+		case 40:
+			//下
+			if(__keydownMoveDown){
+				bottomMoveSeats();
+			}
+		break;
+		case 37:
+			//左
+			if(__keydownMoveLeft){
+				leftMoveSeats();
+			}
+		break;
+		case 39:
+			//右
+			if(__keydownMoveRight){
+				rightMoveSeats();
+			}
+		break;
+	}
 }
 
 
@@ -889,6 +936,8 @@ function removeContainerEvent(){
 
 
 $(function(){
+	$(document).bind("keydown",keyDownMoveSeats);
+
 	$("#refreshbtn").bind("click",refreshContainer);
 
 	$("#nav-radio").bind("click",bindOneSeats);
@@ -961,6 +1010,34 @@ $(function(){
 
 
 
+
+function bulidSeverPolygonContainer(data){
+	var maxwidth = data.width/2 || 1000;
+	var maxheight = data.height/2 || 500;
+
+	$("#seatcontainer").width(maxwidth + 100);
+	$("#seatcontainer").height(maxheight + 150);
+
+	var seatw = 40;
+	var seath = 40;
+
+	//开始角度,默认3点方向,为0度
+	var startage = 270;
+	var seathtml = [];
+	var seats = data.seats || [];
+	for (var i = 0,len = seats.length; i < len; i++) {
+		// var ang = i * angleSpace - 270;
+		// if(ang == 0 || ang >= 180){
+		// 	ang = ang + 90;
+		// }else{
+		// 	ang = ang - 90;
+		// }
+		var seat = seats[i] || {};
+		seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '辛海涛' + '</div>');
+		
+	}
+	$("#seatcontainerId").html(seathtml.join(''));
+}
 
 
 
