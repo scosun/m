@@ -90,7 +90,7 @@
 		.layui-btn-primary {
 			border: 1px solid #ccc;
 			display: inline-block;
-			border-radius: 2px;
+			border-radius: 5px;/*改为5PX*/
 		}
 		.layui-btn-sm {
 			height: 22px;
@@ -132,15 +132,15 @@
 							<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
 							<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>人员模版下载</button>
 							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>
-						<!-- 右侧筛选条件 -->
+							<!-- 右侧筛选条件 -->
 						</div>
-							<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
-								<div class="layui-inline">
-									<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
-										   autocomplete="off">
-								</div>
-								<button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
+						<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+							<div class="layui-inline">
+								<input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
+									   autocomplete="off">
 							</div>
+							<button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
+						</div>
 						<!-- 右侧筛选条件 end-->
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
@@ -151,9 +151,9 @@
 						<!--                        <a class="layui-btn layui-btn-xs" lay-event="sendmail">发送短信</a>-->
 						<!--                        <a class="layui-btn layui-btn-xs" lay-event="sendmailrecord">短信发送记录</a>-->
 						<!--                        <a class="layui-btn layui-btn-xs" lay-event="smsreply">短信回复记录</a>-->
-
+						<!--更换图片和文字 css-->
 						<a class="layui-btn-primary layui-btn-sm" data-dropdown="#dropUser{{d.LAY_INDEX}}"
-						   no-shade="true" >更多操作<i class="layui-icon layui-icon-drop" style="font-size: 8px;margin-right: 0;"></i></a>
+						   no-shade="true" >更多<img style="width:10px;margin-left:5px;margin-bottom:2px" src="../../../images/drop-down.svg"></a>
 						<ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
 							<div class="dropdown-anchor"></div>
 							<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
@@ -183,7 +183,7 @@
 				admin = layui.admin,
 				upload = layui.upload,
 				$ = layui.jquery,
-			dropdown = 'dropdown';
+				dropdown = 'dropdown';
 		var url = "https://f.longjuli.com";
 		// var url = "http://127.0.0.1:8083";
 		var devices = {};

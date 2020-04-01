@@ -28,6 +28,10 @@
             background-size: 1.2rem 1.2rem;
             text-indent: -9999px;
             }
+            .layui-badge {
+                width:18px;
+                padding:0;
+            }
         </style>
         <link rel="stylesheet" type="text/css" href="../../../css/scosun.css" />
         <script src="../../../js/scosun.js" type="text/javascript" charset="utf-8"></script>
@@ -187,11 +191,11 @@
                             },
                             {
                                 field: 'name',
-                                title: '属性名',
+                                title: '属性名称',
                                 align: 'left',
                             }, {
                                 field: 'children_num',
-                                title: '子数量',
+                                title: '子属性',
                                 align: 'left',
 
                             },
@@ -285,14 +289,14 @@
                                     },
                                     {
                                         field: 'name',
-                                        title: '属性名',
+                                        title: '属性名称',
                                         align: 'left',
                                     }, {
-                                        field: 'children_num',
-                                        title: '子数量',
-                                        align: 'left',
+                                    field: 'children_num',
+                                    title: '子属性',
+                                    align: 'left',
 
-                                    },
+                                },
                                     {
                                         field: 'sign',
                                         title: '缩写标签',
@@ -301,8 +305,7 @@
                                             if (data.sign != "" && data.color != "") {
 
                                                 return "<span class='layui-badge' style='background-color: " +
-                                                    data.color + "';>" + data.sign +
-                                                    "</span>"
+                                                    data.color + "';>" + data.sign + "</span>"
 
                                             } else {
                                                 return '';
@@ -313,8 +316,8 @@
                                     },
                                     {
                                         width: 160,
-                                        // align: 'right',
-                                        // flxed: 'right',
+                                        //align: 'right',
+                                        //flxed: 'right',
                                         title: '操作',
                                         toolbar: '#test-table-operate-barDemo',
                                     }
@@ -373,14 +376,14 @@
                             },
                             {
                                 field: 'name',
-                                title: '属性名',
+                                title: '属性名称',
                                 align: 'left',
                             }, {
-                                field: 'children_num',
-                                title: '子数量',
-                                align: 'left',
+                            field: 'children_num',
+                            title: '子属性',
+                            align: 'left',
 
-                            },
+                        },
                             {
                                 field: 'sign',
                                 title: '缩写标签',
@@ -400,8 +403,8 @@
                             },
                             {
                                 width: 160,
-                                // align: 'right',
-                                // flxed: 'right',
+                                //align: 'right',
+                                //flxed: 'right',
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }
@@ -604,14 +607,14 @@
                                     },
                                     {
                                         field: 'name',
-                                        title: '属性名',
+                                        title: '属性名称',
                                         align: 'left',
                                     }, {
-                                        field: 'children_num',
-                                        title: '子数量',
-                                        align: 'left',
+                                    field: 'children_num',
+                                    title: '子属性',
+                                    align: 'left',
 
-                                    },
+                                },
                                     {
                                         field: 'sign',
                                         title: '缩写标签',
@@ -620,8 +623,7 @@
                                             if (data.sign != "" && data.color != "") {
 
                                                 return "<span class='layui-badge' style='background-color: " +
-                                                    data.color + "';>" + data.sign +
-                                                    "</span>"
+                                                    data.color + "';>" + data.sign + "</span>"
 
                                             } else {
                                                 return '';
@@ -632,8 +634,8 @@
                                     },
                                     {
                                         width: 160,
-                                        // align: 'right',
-                                        // flxed: 'right',
+                                        //align: 'right',
+                                        //flxed: 'right',
                                         title: '操作',
                                         toolbar: '#test-table-operate-barDemo',
                                     }
@@ -776,14 +778,14 @@
                                         },
                                         {
                                             field: 'name',
-                                            title: '属性名',
+                                            title: '属性名称',
                                             align: 'left',
                                         }, {
-                                            field: 'children_num',
-                                            title: '子数量',
-                                            align: 'left',
+                                        field: 'children_num',
+                                        title: '子属性',
+                                        align: 'left',
 
-                                        },
+                                    },
                                         {
                                             field: 'sign',
                                             title: '缩写标签',
@@ -792,8 +794,7 @@
                                                 if (data.sign != "" && data.color != "") {
 
                                                     return "<span class='layui-badge' style='background-color: " +
-                                                        data.color + "';>" + data.sign +
-                                                        "</span>"
+                                                        data.color + "';>" + data.sign + "</span>"
 
                                                 } else {
                                                     return '';
@@ -804,8 +805,8 @@
                                         },
                                         {
                                             width: 160,
-                                            // align: 'right',
-                                            // flxed: 'right',
+                                            //align: 'right',
+                                            //flxed: 'right',
                                             title: '操作',
                                             toolbar: '#test-table-operate-barDemo',
                                         }
@@ -870,18 +871,35 @@
                                         },
                                         {
                                             field: 'name',
-                                            title: '属性名',
+                                            title: '属性名称',
                                             align: 'left',
                                         }, {
-                                            field: 'children_num',
-                                            title: '子属性',
+                                        field: 'children_num',
+                                        title: '子属性',
+                                        align: 'left',
+
+                                    },
+                                        {
+                                            field: 'sign',
+                                            title: '缩写标签',
                                             align: 'left',
+                                            templet: function(data) {
+                                                if (data.sign != "" && data.color != "") {
+
+                                                    return "<span class='layui-badge' style='background-color: " +
+                                                        data.color + "';>" + data.sign + "</span>"
+
+                                                } else {
+                                                    return '';
+                                                }
+                                            },
+
 
                                         },
                                         {
                                             width: 160,
-                                            // align: 'right',
-                                            // flxed: 'right',
+                                            //align: 'right',
+                                            //flxed: 'right',
                                             title: '操作',
                                             toolbar: '#test-table-operate-barDemo',
                                         }
@@ -1043,14 +1061,14 @@
                                         },
                                         {
                                             field: 'name',
-                                            title: '属性名',
+                                            title: '属性名称',
                                             align: 'left',
                                         }, {
-                                            field: 'children_num',
-                                            title: '子数量',
-                                            align: 'left',
+                                        field: 'children_num',
+                                        title: '子属性',
+                                        align: 'left',
 
-                                        },
+                                    },
                                         {
                                             field: 'sign',
                                             title: '缩写标签',
@@ -1059,8 +1077,7 @@
                                                 if (data.sign != "" && data.color != "") {
 
                                                     return "<span class='layui-badge' style='background-color: " +
-                                                        data.color + "';>" + data.sign +
-                                                        "</span>"
+                                                        data.color + "';>" + data.sign + "</span>"
 
                                                 } else {
                                                     return '';
@@ -1071,8 +1088,8 @@
                                         },
                                         {
                                             width: 160,
-                                            // align: 'right',
-                                            // flxed: 'right',
+                                            //align: 'right',
+                                            //flxed: 'right',
                                             title: '操作',
                                             toolbar: '#test-table-operate-barDemo',
                                         }
@@ -1137,18 +1154,35 @@
                                         },
                                         {
                                             field: 'name',
-                                            title: '属性名',
+                                            title: '属性名称',
                                             align: 'left',
                                         }, {
-                                            field: 'children_num',
-                                            title: '子属性',
+                                        field: 'children_num',
+                                        title: '子属性',
+                                        align: 'left',
+
+                                    },
+                                        {
+                                            field: 'sign',
+                                            title: '缩写标签',
                                             align: 'left',
+                                            templet: function(data) {
+                                                if (data.sign != "" && data.color != "") {
+
+                                                    return "<span class='layui-badge' style='background-color: " +
+                                                        data.color + "';>" + data.sign + "</span>"
+
+                                                } else {
+                                                    return '';
+                                                }
+                                            },
+
 
                                         },
                                         {
                                             width: 160,
-                                            // align: 'right',
-                                            // flxed: 'right',
+                                            //align: 'right',
+                                            //flxed: 'right',
                                             title: '操作',
                                             toolbar: '#test-table-operate-barDemo',
                                         }
