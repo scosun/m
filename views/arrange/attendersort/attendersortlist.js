@@ -3,8 +3,13 @@ var indexs = 0;
 layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
-    index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'form', 'table','layedit', 'laydate', 'upload'], function () {
+    index: 'lib/index' ,//主入口模块
+    soulTable:'/sourtable/soulTable',
+    tableFilter:'/sourtable/tableFilter',
+    excel:'/sourtable/excel',
+    tableChild:'/sourtable/tableChild',
+    tableMerge:'/sourtable/tableMerge'
+}).use(['index', 'user', 'form', 'table','layedit', 'laydate', 'upload','soulTable'], function () {
     var a = {};
     var b = {};
     var $ = layui.$,
@@ -18,6 +23,7 @@ layui.config({
         layedit = layui.layedit,
         laydate = layui.laydate,
         datas = null,
+        soulTable = layui.soulTable,
         router = layui.router();
     element.render();
     //初次渲染表格
@@ -91,6 +97,15 @@ layui.config({
                 withCredentials: true
             },
            data:data.data,
+            rowDrag: {/*trigger: '.layui-icon-snowflake',*/ done: function(obj) {
+            // 完成时（松开时）触发
+            // 如果拖动前和拖动后无变化，则不会触发此方法
+            console.log(obj.row) // 当前行数据
+            console.log(obj.cache) // 改动后全表数据
+            console.log(obj.oldIndex) // 原来的数据索引
+            console.log(obj.newIndex) // 改动后数据索引
+        }}
+    ,totalRow: true,
             method: 'get',
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
@@ -152,7 +167,11 @@ layui.config({
                     "count": res.count, //解析数据长度
                     "data": res.data //解析数据列表
                 };
+
             },
+            done:function () {
+                soulTable.render(this)
+            }
         });
     }
 
