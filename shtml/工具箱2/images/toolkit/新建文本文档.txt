@@ -1,0 +1,62 @@
+the_radio  单选mr
+check_all 全选
+deselect_all 取消全选
+line_selected 行选中
+column_selected 列选中
+----------------
+box_to_choose  框选 MR
+cancel_box_to_choose 取消框选
+--------
+rectangular 矩形座区
+----------
+runway 跑道形会场
+circular 圆形座区 MR
+---------
+polygon 多边形座区 点击是弹框
+----------
+the_oval椭圆形座区
+------------
+快速绘制
+-----------
+displacement位移 mr
+right_moves右移
+left_moves左移
+down_moves下移
+up_moves上移
+------------
+vertical 垂直分布
+transverse  横向分布  mr
+------------
+left 左对齐 mr
+or_so 左右对齐
+right 右对齐
+up 上对齐
+up_down 上下对齐
+down 下对齐
+------------
+del 删除
+--------------
+prev_step上一步操作
+restore 恢复座区 mr
+------------
+copy_editor  文字编辑
+--------------
+drag_drop拖拽
+------------
+rotating 旋转
+------------
+radius_zooming 半径放缩
+
+
+
+
+
+
+
+
+
+
+
+
+
+

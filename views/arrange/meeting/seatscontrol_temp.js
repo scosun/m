@@ -23,11 +23,15 @@ function bindOneSeats(){
 	if(__longEvent){
 		return;
 	}
+	if(!selList.unbind){
+		return;
+	}
 
 	console.log("bindOneSeats------------");
 
 	removeContainerEvent();
 
+	
 	selList.unbind("click");
 	selList.bind("click",function(evt){
 		var sel = $(this);
@@ -1595,6 +1599,11 @@ function bindContainerEvent(){
 			countMaxWidth();
 			clearCompleteSeats();
 			selectSeats();
+
+			if($("#nav-selection").length > 0){
+				$('.toollist_li').removeClass("on");
+				$("#nav-selection").addClass("on");
+			}
 		}
 		__boxCreate = false;
 	});

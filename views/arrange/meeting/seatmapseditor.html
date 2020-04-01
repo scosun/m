@@ -93,65 +93,37 @@
 	</style>
 
 	<!-- /* dragDiv 拖动工具箱 3.25 */ -->
+<!-- /* dragDiv 拖动工具箱 3.25 */ -->
 <style type="text/css">
 	.clear{clear:both; height:0; width:100%;}
 	.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;}
 	.clearfix{zoom: 1; clear:both;}
-	#dragDiv{position: fixed;top:100px;right: 10px;z-index: 10000;width:92px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;
-		box-shadow:0 0 5px rgba(0,0,0,0.3);
-	}
+	#dragDiv{position: fixed;top:65px;right: 10px;z-index: 10000;width:92px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;box-shadow:0 0 5px rgba(0,0,0,0.3);}
 	#dragDiv .title{position:relative;height:24px; background-color: #ebebeb;}
 	#dragDiv .title h2{padding:0 10px;font-size:12px;height:24px;line-height:24px;border-bottom:1px solid #f6f6f6;}
 	#dragDiv .title div{position:absolute;height:24px;top:0;right:0;}
 	#dragDiv .title a{float:left;width:24px;height:24px;display:block;}
 	#dragDiv .title a img{margin-left:2px; margin-top:2px;width:20px;}
-	
-	
 	#dragDiv .toollist{width:80px;padding-top:10px;padding-left:10px;background:#f1f1f1;}
 	#dragDiv .toollist_li{float:left;position:relative;width:30px;height:30px;margin-right:10px;margin-bottom:10px;}
 	#dragDiv .toollist_li > a{ display: block;float:left; text-align: center;width:28px;height:28px;border:1px solid #f1f1f1;}
+	#dragDiv .toollist_li > a span{ display: none;}
 	#dragDiv .toollist_li img{width:20px;height:20px;margin-top:4px}
 	#dragDiv .toollist_li.has_child > a{background:url(../../../images/has_child.png) no-repeat right bottom;}
 	#dragDiv .toollist_li > a:hover,
 	#dragDiv .toollist_li.on > a,
 	#dragDiv .toollist_li.has_child > a:hover,
 	#dragDiv .toollist_li.has_child.on > a{border:1px solid #d3d3d3;background-color:#d8d8d8;}
-	
-	#dragDiv .toollist_li .child_cont{
-		position:absolute;
-		left:30px;
-		top:30px;
-		width: 40px;
-		background:#f1f1f1;
-		border:1px solid #f6f6f6;
-		border-radius:2px;
-		box-shadow: 0 0 8px rgba(0,0,0,0.2);
-		padding-top:5px;
-		padding-bottom:5px;
-		z-index: 10;
-	}
-	
-	#dragDiv .toollist_li .child_cont.leftSet{
-		left:-12px;
-	}
-	#dragDiv .toollist_li .child_cont.bottomSet{
-		left:30px;
-		top:auto;
-		bottom:30px;
-	}
-	#dragDiv .toollist_li .child_cont.leftbottomSet{
-		left:-12px;
-		top:auto;
-		bottom:30px;
-	}
-	
-	#dragDiv .child_cont_li{float:left;position:relative;width:30px;height:30px;margin-left:5px;margin-bottom:10px;}
+	#dragDiv .toollist_li .child_cont{position:absolute;left:30px;top:30px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;box-shadow: 0 0 8px rgba(0,0,0,0.2);padding-top:5px;padding-bottom:5px;z-index: 10;}
+	#dragDiv .toollist_li .child_cont.leftSet{right: 0;left: auto;}
+	#dragDiv .toollist_li .child_cont.bottomSet{left:30px;top:auto;bottom:30px;}
+	#dragDiv .toollist_li .child_cont.leftbottomSet{left: auto;right: 0;top: auto;bottom: 30px;}
+	#dragDiv .child_cont_li{float:left;position:relative;height:30px;margin-left:5px;margin-bottom:10px;}
 	#dragDiv .child_cont_li:last-child{margin-bottom:0;}
-	#dragDiv .child_cont_li > a{ display: block;float:left; text-align: center;width:28px;height:28px;border:1px solid #f1f1f1;}
-	#dragDiv .child_cont_li img{width:20px;height:20px;margin-top:4px}
+	#dragDiv .child_cont_li > a{ display: block;text-align: left;height:28px;line-height:28px;border:1px solid #f1f1f1;width: 105px;margin-right: 5px;font-family: tahoma,"microsoft yahei","\5FAE\8F6F\96C5\9ED1"!important;}
+	#dragDiv .child_cont_li img{width:20px;height:20px;margin-top: 0;margin-left: 5px;margin-right: 5px;}
 	#dragDiv .child_cont_li.on > a,
 	#dragDiv .child_cont_li > a:hover{border:1px solid #d3d3d3;background-color:#d8d8d8;}
-	
 	</style>
 </head>
 <body>
@@ -267,6 +239,7 @@
 		<!-- 右侧菜单 end-->
 	</header>
 	<!-- dragDiv 拖动工具箱 3.25 -->
+	<!--
 	<div id="dragDiv">
 		<div class="title">
 			<h2>工具箱</h2>
@@ -294,11 +267,7 @@
 			</div>
 			<div class="toollist_li ">
 				<a id="nav-add" href="javascript:;" alt="拖拽绘制" title="拖拽绘制"><img src="../../../images/drag.png"></a>
-				<!-- <div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="nav-down" href="javascript:;" alt="矩形绘制" title="矩形绘制"><img src="../../../images/drag.png"></a>
-					</div>
-				</div> -->
+				
 			</div>
 			<div class="toollist_li">
 				<a id="nav-selection" href="javascript:;" alt="框选" title="框选"><img src="../../../images/selection.png"></a>
@@ -389,8 +358,155 @@
 			
 		</div> 
 	</div>
+	-->
+	<!-- dragDiv 拖动工具箱 3.25 -->
+	<div id="dragDiv">
+		<div class="title">
+			<h2>工具箱</h2>
+			<div>
+				<a class="Jreduction" href="javascript:;" title="还原"><img src="../../../images/reduction.png"></a>
+			</div>
+		</div>
+		<div class="toollist clearfix">
+			<div class="toollist_li has_child">
+				<a data="nav-radio" href="javascript:;" alt="单选" title="单选"><img src="../../../images/toolkit/the_radio.svg"><span>单选</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a data="nav-radio" href="javascript:;" alt="单选" title="单选"><img src="../../../images/toolkit/the_radio.svg"><span>单选</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="selectall" href="javascript:;" alt="全选" title="全选"><img src="../../../images/toolkit/check_all.svg"><span>全选</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="unselectall" href="javascript:;" alt="取消全选" title="取消全选"><img src="../../../images/toolkit/deselect_all.svg"><span>取消全选</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="selectrow" href="javascript:;" alt="行选中" title="行选中"><img src="../../../images/toolkit/line_selected.svg"><span>行选中</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="selectcol" href="javascript:;" alt="列选中" title="列选中"><img src="../../../images/toolkit/column_selected.svg"><span>列选中</span></a>
+					</div>
+				</div>
+			</div>
+			<div id="nav-selection" class="toollist_li">
+				<a data="nav-selection" href="javascript:;" alt="框选" title="框选"><img src="../../../images/toolkit/box_to_choose.svg"><span>框选</span></a>
+				<!-- <div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a href="javascript:;" alt="框选" title="框选"><img src="../../../images/toolkit/box_to_choose.svg"><span>框选</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a href="javascript:;" alt="取消框选" title="取消框选"><img src="../../../images/toolkit/cancel_box_to_choose.svg"><span>取消框选</span></a>
+					</div>
+				</div> -->
+			</div>
+			<div class="toollist_li">
+				<a id="nav-down" data="nav-down" href="javascript:;" alt="矩形座区" title="矩形座区"><img src="../../../images/toolkit/rectangular.svg"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a id="create-circle-run" data="create-circle-down" href="javascript:;" alt="圆形座区" title="圆形座区"><img src="../../../images/toolkit/circular.svg"><span>圆形座区</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a id="create-run-down" data="create-run-down" href="javascript:;" alt="跑道形会场" title="跑道形会场"><img src="../../../images/toolkit/runway.svg"><span>跑道形会场</span></a>
+					</div>
+					<div class="child_cont_li on">
+						<a id="create-circle-down" data="create-circle-down" href="javascript:;" alt="圆形座区" title="圆形座区"><img src="../../../images/toolkit/circular.svg"><span>圆形座区</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a href="javascript:;" alt="多边形座区" title="多边形座区"><img src="../../../images/toolkit/polygon.svg"></a>
+			</div>
+			<div class="toollist_li">
+				<a href="javascript:;" alt="椭圆形座区" title="椭圆形座区"><img src="../../../images/toolkit/the_oval.svg"></a>
+			</div>
+			<div class="toollist_li">
+				<a data="nav-add" href="javascript:;" alt="快速绘制" title="快速绘制"><img src="../../../images/toolkit/pladd.png"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a data="keydownmove" href="javascript:;" alt="位移" title="位移"><img src="../../../images/toolkit/displacement.svg"><span>位移</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a data="keydownmove" href="javascript:;" alt="位移" title="位移"><img src="../../../images/toolkit/displacement.svg"><span>位移</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="drightmovebtn" href="javascript:;" alt="右移" title="右移"><img src="../../../images/toolkit/right_moves.svg"><span>右移</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="dleftmovebtn" href="javascript:;" alt="左移" title="左移"><img src="../../../images/toolkit/left_moves.svg"><span>左移</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="dbottommovebtn" href="javascript:;" alt="下移" title="下移"><img src="../../../images/toolkit/down_moves.svg"><span>下移</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="dtopmovebtn" href="javascript:;" alt="上移" title="上移"><img src="../../../images/toolkit/up_moves.svg"><span>上移</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li has_child">
+				<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/transverse.svg"><span>横向分布</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li">
+						<a data="nav-horizontal-c" href="javascript:;" alt="垂直分布" title="垂直分布"><img src="../../../images/toolkit/vertical.svg"><span>垂直分布</span></a>
+					</div>
+					<div class="child_cont_li on">
+						<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/transverse.svg"><span>横向分布</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li has_child">
+				<a data="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/toolkit/left.svg"><span>左对齐</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a data="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/toolkit/left.svg"><span>左对齐</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-align-center" href="javascript:;" alt="左右对齐" title="左右对齐"><img src="../../../images/toolkit/or_so.svg"><span>左右对齐</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-align-right" href="javascript:;" alt="右对齐" title="右对齐"><img src="../../../images/toolkit/right.svg"><span>右对齐</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-align-up" href="javascript:;" alt="上对齐" title="上对齐"><img src="../../../images/toolkit/up.svg"><span>上对齐</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-align-center-v" href="javascript:;" alt="上下对齐" title="上下对齐"><img src="../../../images/toolkit/up_down.svg"><span>上下对齐</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-align-down" href="javascript:;" alt="下对齐" title="下对齐"><img src="../../../images/toolkit/down.svg"><span>下对齐</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a data="nav-delete" href="javascript:;" alt="删除" title="删除"><img src="../../../images/toolkit/del.svg"></a>
+			</div>
+			<div class="toollist_li has_child">
+				<a data="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/toolkit/restore.svg"><span>恢复座区</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a data="nav-rollback" href="javascript:;" alt="恢复删除" title="恢复删除"><img src="../../../images/toolkit/prev_step.svg"><span>上一步操作</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/toolkit/restore.svg"><span>恢复座区</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="toollist_li">
+				<a data="nav-mark" href="javascript:;" alt="文字编辑" title="文字编辑"><img src="../../../images/toolkit/copy_editor.svg"></a>
+			</div>
+			<div class="toollist_li">
+				<a data="nav-drag" href="javascript:;" alt="拖拽" title="拖拽"><img src="../../../images/toolkit/drag_drop.svg"></a>
+			</div>
+			<!--
 
-
+			<div class="toollist_li">
+				<a href="javascript:;" alt="旋转" title="旋转"><img src="../../../images/toolkit/rotating.svg"></a>
+			</div>
+			<div class="toollist_li">
+				<a href="javascript:;" alt="半径放缩" title="半径放缩"><img src="../../../images/toolkit/radius_zooming.svg"></a>
+			</div>
+			-->
+		</div>
+	</div>
 
 	<div id="seatcontainer" class="seatcontainer"><div style="position:absolute;left:10px;top:65px;"><img style="height:20px;" src="../../../images/leftright-ts.svg"></div><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="mousecontainerId"></div><div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div><svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1"><line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/></svg><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
 </body>
@@ -465,33 +581,119 @@
 <script>
 	$(document).click(function(){
 		$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
-		$('.toollist .on').removeClass("on");
+		// $('.toollist .on').removeClass("on");
 	});
-	$(".child_cont_li").click(function(evt){
+	$(".child_cont_li > a").click(function(evt){
 		console.log("child_cont_li-----------click");
 		evt.stopPropagation();
 
 		$('.child_cont_li').removeClass("on");
-		 $(this).addClass("on");
-		//  $(this).siblings().removeClass("on");
-		// var cloneA= $(this).children().clone(true);
-		//alert(cloneA)
-		// $(this).parent().prev().remove();
-		// $(this).parent().before(cloneA);
+		$(this).parent().addClass("on");
+		
+		var src = $(this).find("img").attr("src");
+		var data = $(this).attr("data");
+		var title = $(this).attr("title");
+		$(this).parent().parent().prev().attr({"data":data,"title":title});
+		$(this).parent().parent().prev().find("img").attr("src",src);
+
+		seatMapEvent(data,this);
 	});
 
 	$('.toollist_li > a').bind('click',function(evt){
 		evt.stopPropagation();
+		var data = $(this).attr("data");
+		console.log("data-----",data)
 		if(!__longEvent){
 			$('.toollist_li').removeClass("on");
-			$(this).addClass("on");
+			$(this).parent().addClass("on");
 		}else{
 			setTimeout(function(){
 				__longEvent = false;
 			},500);
 		}
+		seatMapEvent(data,this);
 		return false;
 	});
+
+
+	function seatMapEvent(data,ele){
+		switch(data){
+			case "nav-radio":
+				//单选
+				bindOneSeats();
+			break;
+			case "selectall":
+				//全选
+				selectSeatAll();
+			break;
+			case "unselectall":
+				//取消全选
+				unSelectSeatAll();
+			break;
+			case "selectrow":
+				//行选中
+				selectSeatRow();
+			break;
+			case "selectcol":
+				//列选中
+				selectSeatCol();
+			break;
+
+			case "nav-selection":
+				console.log("nav-selection");
+				selectSeats();
+			break;
+
+			case "nav-down":
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+
+			case "create-circle-down":
+			case "create-run-down":
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+
+			case "nav-add":
+				boxCreateSeats();
+			break;
+			
+			case "dleftmovebtn":
+				leftMoveSeats();
+			break;
+			case "drightmovebtn":
+				rightMoveSeats();
+			break;
+			case "dtopmovebtn":
+				topMoveSeats();
+			break;
+			case "dbottommovebtn":
+				bottomMoveSeats();
+			break;
+
+			// $("#nav-vertical-c").bind("click",xAvgSeats);
+			// $("#nav-horizontal-c").bind("click",yAvgSeats);
+
+			// $("#nav-align-center").bind("click",xCenterSeats);
+			// $("#nav-align-center-v").bind("click",yCenterSeats);
+			// $("#nav-align-left").bind("click",leftSeats);
+			// $("#nav-align-right").bind("click",rightSeats);
+			// $("#nav-align-up").bind("click",topSeats);
+			// $("#nav-align-down").bind("click",bottomSeats);
+
+			// $("#nav-delete").bind("click",deleteSeats);
+
+			// $("#nav-rollback").bind("click",resetSeats);
+			// $("#nav-forward").bind("click",revertSeats);
+
+			// $("#nav-mark").bind("click",setRowNum);
+		}
+	}
 
 	var obj = $('.toollist_li.has_child');
 	for(let i = 0; i<obj.length; i++){
@@ -638,69 +840,70 @@ layui.config({
 			});
 		}
 
+		function circleAndRunCreate(data){
+			if(data == "create-circle-down"){
+				layer.open({
+					type: 2,
+					title: '设置座位数',
+					shadeClose: true, //弹出框之外的地方是否可以点击
+					offset: '10%',
+					area: ['500px', '210px'],
+					content: 'special_circle_type.html',
+					btn: ['确定', '取消'],
+					yes: function(index, layero) {
+						
+						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+						
+						if(seatnum <= 0 ){
+							layer.msg('座位数量输入错误');
+							return false;
+						}
+							
+						mouseCreateSeatMap(1,seatnum);
+						layer.close(index);
+					}
+				});
+			}else{
+				layer.open({
+					type: 2,
+					title: '设置座位数',
+					shadeClose: true, //弹出框之外的地方是否可以点击
+					offset: '10%',
+					area: ['500px', '280px'],
+					content: 'special_run_type.html',
+					btn: ['确定', '取消'],
+					yes: function(index, layero) {
+						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+						var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
 
-		/*环形绘制*/
-		$('#create-circle-down').on('click', function(){
+						
+						if(seatnum <= 0 ){
+							layer.msg('座位数量输入错误');
+							return false;
+						}
+							
+						if(centernum <= 0){
+							layer.msg('中间座位数输入错误');
+							return false;
+						}
+						// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+						mouseCreateSeatMap(2,seatnum,centernum);
+						layer.close(index);
+					}
+				});
+			}
+		}
+
+		/*环形绘制，跑道绘制*/
+		$('#create-circle-run,#create-circle-down,#create-run-down').on('click', function(){
 			if(__longEvent){
 				return;
 			}
-
-			layer.open({
-				type: 2,
-				title: '设置座位数',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '10%',
-				area: ['500px', '210px'],
-				content: 'special_circle_type.html',
-				btn: ['确定', '取消'],
-				yes: function(index, layero) {
-					
-					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-					
-					if(seatnum <= 0 ){
-						layer.msg('座位数量输入错误');
-						return false;
-					}
-						
-					mouseCreateSeatMap(1,seatnum);
-					layer.close(index);
-				}
-			});
-			
-		});
-		/*跑道绘制*/
-		$('#create-run-down').on('click', function(){
-			layer.open({
-				type: 2,
-				title: '设置座位数',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '10%',
-				area: ['500px', '280px'],
-				content: 'special_run_type.html',
-				btn: ['确定', '取消'],
-				yes: function(index, layero) {
-					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-					var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
-
-					
-					if(seatnum <= 0 ){
-						layer.msg('座位数量输入错误');
-						return false;
-					}
-						
-					if(centernum <= 0){
-						layer.msg('中间座位数输入错误');
-						return false;
-					}
-					// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-					mouseCreateSeatMap(2,seatnum,centernum);
-					layer.close(index);
-				}
-			});
-			
+			var data = $(this).attr("data");
+			circleAndRunCreate(data);
 		});
 
-
+		
 
 		/*右侧菜单 设置行列弹框*/
 		$('#nav-down').on('click', function(){
