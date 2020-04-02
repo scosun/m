@@ -1129,7 +1129,7 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 
 	var angleSpace = 360/seatnum;
 
-	__circleRow++;
+	__circleRow = __circleRow - 0 + 1;
 	var seathtml = [];
 	
 	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
@@ -1146,7 +1146,7 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-' + new Date().getTime() + '-c" >' + (i+1) + '</div>');
 		
 	}
 	// for (var j = 0; j <seatnum; j++) {
@@ -1195,8 +1195,8 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 	//每个座位的宽高,用来计算位置偏移
 	var seatw = 40;
 	var seath = 40;
-
-	__runRow++;
+	
+	__runRow = __runRow  - 0 + 1;
 	var seathtml = [];
 	
 	//先画跑道上下座位
@@ -1208,7 +1208,7 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 		var ang = 270 + ((aa-1)*180);
 		for(var bb = 0; bb < +centernum; bb++){
 			// seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
-			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
+			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-' + new Date().getTime() + '-r">' + (bb+1+(aa-1)*centernum) + '</div>');
 			// stop = stop + 50;
 			sleft = sleft + 50;
 		}
@@ -1237,7 +1237,7 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-' + new Date().getTime() + '-r">' + (i) + '</div>');
 		
 	}
 	var leftseats = seatnum/2 + 1;
@@ -1258,7 +1258,7 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-' + new Date().getTime() + '-r">' + (n) + '</div>');
 		
 	}
 	// for (var j = 0; j <seatnum; j++) {
@@ -1296,7 +1296,8 @@ function creatSeats(rownum,colnum,mleft,mtop,ism){
 
 
 function autoCode(ruleid){
-	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)");
+	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)[id$='s']");
+	// console.log(seled.length)
 	// seled.removeClass(seledClass);
 	
 	// var lefts = [];
@@ -1418,7 +1419,7 @@ function appendSeatsContainer(rownum,colnum,mleft,mtop){
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'">' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
 		sleft = mleft;
@@ -1449,7 +1450,7 @@ function bulidSeatsContainer(rownum,colnum,mleft,mtop,ism){
 
 	for(var j = 1; j <= +rownum; j++){
 		for(var i = 0; i < +colnum; i ++){
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-c">' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 			sleft = sleft + 50;
 		}
 		sleft = __sLeft;
