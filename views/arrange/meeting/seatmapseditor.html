@@ -125,8 +125,14 @@
 	#dragDiv .child_cont_li.on > a,
 	#dragDiv .child_cont_li > a:hover{border:1px solid #d3d3d3;background-color:#d8d8d8;}
 	</style>
+	<script type="text/javascript">  
+		function doNothing(){  
+			window.event.returnValue=false;  
+			return false;  
+		}
+	</script>
 </head>
-<body>
+<body oncontextmenu="doNothing()">
 	<header>
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图编辑器</cite></a>|
@@ -386,6 +392,9 @@
 					<div class="child_cont_li">
 						<a data="selectcol" href="javascript:;" alt="列选中" title="列选中"><img src="../../../images/toolkit/column_selected.svg"><span>列选中</span></a>
 					</div>
+					<div class="child_cont_li">
+						<a data="selectsame" href="javascript:;" alt="类别选中" title="类别选中"><img src="../../../images/toolkit/column_selected.svg"><span>类别选中</span></a>
+					</div>
 				</div>
 			</div>
 			<div id="nav-selection" class="toollist_li">
@@ -496,6 +505,13 @@
 			<div class="toollist_li">
 				<a data="nav-drag" href="javascript:;" alt="拖拽" title="拖拽"><img src="../../../images/toolkit/drag_drop.svg"></a>
 			</div>
+
+			<div class="toollist_li">
+				<a data="rightbtn" href="javascript:;" alt="右键菜单" title="右键菜单"><img src="../../../images/toolkit/copy_editor.svg"></a>
+			</div>
+			<div class="toollist_li">
+				<a data="add-height" href="javascript:;" alt="增加画布高度" title="增加画布高度"><img src="../../../images/toolkit/drag_drop.svg"></a>
+			</div>
 			<!--
 
 			<div class="toollist_li">
@@ -580,12 +596,18 @@
 <!-- /* 点击、长按事件 3.25*/ -->
 <script>
 	$(document).click(function(){
-		$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
+		if(!__longEvent){
+			$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
+		}else{
+			setTimeout(function(){
+				__longEvent = false;
+			},500);
+		}
 		// $('.toollist .on').removeClass("on");
 	});
 	$(".child_cont_li > a").click(function(evt){
 		console.log("child_cont_li-----------click");
-		evt.stopPropagation();
+		// evt.stopPropagation();
 
 		$('.child_cont_li').removeClass("on");
 		$(this).parent().addClass("on");
@@ -600,7 +622,8 @@
 	});
 
 	$('.toollist_li > a').bind('click',function(evt){
-		evt.stopPropagation();
+		// evt.stopPropagation();
+
 		var data = $(this).attr("data");
 		
 		if(!data){
@@ -618,10 +641,11 @@
 			},500);
 		}
 		seatMapEvent(data,this);
-		return false;
+		// return false;
 	});
 
 
+	var __activeRight = false;
 	function seatMapEvent(data,ele){
 		__keydownMoveUp = false;
 		__keydownMoveDown = false;
@@ -629,6 +653,11 @@
 		__keydownMoveRight = false;
 		unDragMoveSeats();
 
+		if(data != "rightbtn"){
+			__activeRight = false;
+			removeContextMenu();
+		}
+		
 		switch(data){
 			case "nav-radio":
 				//单选
@@ -649,6 +678,10 @@
 			case "selectcol":
 				//列选中
 				selectSeatCol();
+			break;
+			case "selectsame":
+				//类别选中
+				selectSameSeats();
 			break;
 
 			case "nav-selection":
@@ -789,6 +822,24 @@
 
 			case "nav-drag":
 				dragMoveSeats();
+			break;
+
+			case "add-height":
+				addSeatContainerHeight();
+				setTimeout(function(){
+					$(ele).parent().removeClass("on");
+					$("#nav-selection").addClass("on");
+				},1000);
+			break;
+
+			case "rightbtn":
+				if(__activeRight){
+					__activeRight = false;
+					removeContextMenu();
+				}else{
+					bindContextMenu();
+					__activeRight = true;
+				}
 			break;
 		}
 	}
@@ -945,19 +996,34 @@ layui.config({
 					title: '设置座位数',
 					shadeClose: true, //弹出框之外的地方是否可以点击
 					offset: '10%',
-					area: ['500px', '210px'],
+					area: ['500px', '400px'],
 					content: 'special_circle_type.html',
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
-						
+						var typeid = +layero.find('iframe').contents().find("#meet_typeid").val();
+						var select_ruleid = +layero.find('iframe').contents().find("#select_ruleid").val();
 						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-						
 						if(seatnum <= 0 ){
 							layer.msg('座位数量输入错误');
 							return false;
 						}
-							
-						mouseCreateSeatMap(1,seatnum);
+
+						if(typeid == 1){
+							mouseCreateSeatMap(1,seatnum,0,select_ruleid);
+						}else{
+							var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
+							var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
+							var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
+							if(ccx <= 0 || ccy <= 0){
+								layer.msg('圆心坐标输入错误');
+								return false;
+							}
+							if(r1 <= 0 ){
+								layer.msg('半径输入错误');
+								return false;
+							}
+							createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
+						}
 						layer.close(index);
 					}
 				});
@@ -967,14 +1033,14 @@ layui.config({
 					title: '设置座位数',
 					shadeClose: true, //弹出框之外的地方是否可以点击
 					offset: '10%',
-					area: ['500px', '280px'],
+					area: ['500px', '450px'],
 					content: 'special_run_type.html',
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
+						var typeid = +layero.find('iframe').contents().find("#meet_typeid").val();
+						var select_ruleid = +layero.find('iframe').contents().find("#select_ruleid").val();
 						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
 						var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
-
-						
 						if(seatnum <= 0 ){
 							layer.msg('座位数量输入错误');
 							return false;
@@ -984,8 +1050,23 @@ layui.config({
 							layer.msg('中间座位数输入错误');
 							return false;
 						}
-						// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-						mouseCreateSeatMap(2,seatnum,centernum);
+
+						if(typeid == 1){
+							mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
+						}else{
+							var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
+							var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
+							var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
+							if(ccx <= 0 || ccy <= 0){
+								layer.msg('圆心坐标输入错误');
+								return false;
+							}
+							if(r1 <= 0 ){
+								layer.msg('半径输入错误');
+								return false;
+							}
+							createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
+						}
 						layer.close(index);
 					}
 				});

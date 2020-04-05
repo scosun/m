@@ -15,6 +15,12 @@ var __sTop = 110;
 var __sLeft = 50;
 var colId = 0;
 
+
+function addSeatContainerHeight(){
+	var h = $("#seatcontainer").height() + 100;
+	$("#seatcontainer").height(h+'px');
+}
+
 function refreshContainer(){
 	__sTop = 110;
 	__sLeft = 50;
@@ -111,6 +117,20 @@ function selectSeatCol(){
 		});
 	}
 }
+function selectSameSeats(){
+	var seled = $("#seatcontainerId .seled");
+	var idtype = [];
+	seled.each(function(){
+		var id = this.id.split("-")[3];
+		if(idtype.indexOf(id) == -1){
+			idtype.push(id);
+		}
+	});
+	idtype.forEach(function(item){
+		var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id$='" + item + "']");
+		seled.addClass("seled");
+	});
+}
 function selectSeatAll(){
 	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	allseats.addClass("seled");
@@ -123,7 +143,7 @@ function unSelectSeatAll(){
 
 function boxCreateSeats(){
 	__boxCreate = true;
-	selectSeats();
+	selectSeats(true);
 }
 
 function selectSeats(on){
@@ -801,7 +821,13 @@ function completeSeats(){
 		var id = this.id;
 		var arr = id.split("-");
 		var nid = arr[0] + "-" + arr[1];
-		$(this).attr("id",nid);
+		var idtype = arr[3] || "";
+		if(idtype && idtype != "s"){
+			nid = nid + "-" + idtype;
+			$(this).attr("id",nid);
+		}else{
+			$(this).attr("id",nid);
+		}
 	})
 	var rownum = $("#seatcontainerId .rownumseats");
 	// console.log(seats,seats.html(),rownum,rownum.html())
@@ -976,8 +1002,8 @@ $(function(){
 
 	$("#completebtn").bind("click",completeSeats);
 
-
-
+	$("#rightbtn").bind("click",bindContextMenu);
+	$("#cancelrightbtn").bind("click",removeContextMenu);
 
 
 
@@ -991,8 +1017,8 @@ $(function(){
 
 	
 
-	$("#rightbtn").bind("click",bindContextMenu);
-	$("#cancelrightbtn").bind("click",removeContextMenu);
+	
+	
 	
 	$("#savelocalbtn").bind("click",saveLocalSeats);
 	$("#restorelocalbtn").bind("click",restoreLocalSeats);
@@ -1048,7 +1074,151 @@ function bulidSeverPolygonContainer(data){
 
 
 
-function mouseCreateSeatMap(mt,seatnum,centernum){
+function autoCircleCode(ruleid,seatids){
+	var rowid = 0;
+	var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id$='c']");
+	var oldids = [];
+	seled.each(function(){
+		if(seatids.indexOf(this.id) == -1){
+			var max = this.id.split('-')[0];
+			oldids.push(max);
+		}
+	});
+	oldids = oldids.sort(function(a,b){
+		return b - a;
+	});
+	rowid = +oldids[0] || 0;
+
+
+	//获取到这一组座位所有的id
+	// var seatids = seledgroup[ik];
+	//现在要分成上下两个部分
+	var up = [];
+	var down = [];
+	// debugger
+	seatids.forEach(function(id){
+		var ang = +$("#" + id).attr("ang");
+		// console.log(ang)
+		if(ang > 360 && ang < 540){
+			down.push(id);
+		}else{
+			up.push(id);
+		}
+	});
+	// console.log(up,down,seatids)
+
+	up.sort(function(a,b){
+		var la = $("#" + a).position().left;
+		var lb = $("#" + b).position().left;
+		return la - lb;
+	});
+
+	down.sort(function(a,b){
+		var la = $("#" + a).position().left;
+		var lb = $("#" + b).position().left;
+		return la - lb;
+	});
+	
+	var oae = oddAndEven(up.length);
+	var seatsnum = [];
+	if(ruleid == 1){
+		seatsnum = oae.odd.concat(oae.even.reverse());
+	}else if(ruleid == 2){
+		seatsnum = oae.even.concat(oae.odd.reverse());
+	}
+	up.forEach(function(oid,colid){
+		// var oid = col[ck];
+		$("#" + oid).html(seatsnum[colid]);
+		$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
+	});
+
+	var oae = oddAndEven(down.length);
+	var seatsnum = [];
+	if(ruleid == 1){
+		seatsnum = oae.odd.concat(oae.even.reverse());
+	}else if(ruleid == 2){
+		seatsnum = oae.even.concat(oae.odd.reverse());
+	}
+	down.forEach(function(oid,colid){
+		// var oid = col[ck];
+		$("#" + oid).html(seatsnum[colid]);
+		$("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
+	});
+}
+
+function autoRunCode(ruleid,seatids){
+	var rowid = 0;
+	var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id$='r']");
+	var oldids = [];
+	seled.each(function(){
+		if(seatids.indexOf(this.id) == -1){
+			var max = this.id.split('-')[0];
+			oldids.push(max);
+		}
+	});
+	oldids = oldids.sort(function(a,b){
+		return b - a;
+	});
+	rowid = +oldids[0] || 0;
+
+
+	//获取到这一组座位所有的id
+	// var seatids = seledgroup[ik];
+	//现在要分成上下两个部分
+	var up = [];
+	var down = [];
+	// debugger
+	seatids.forEach(function(id){
+		var ang = +$("#" + id).attr("ang");
+		// console.log(ang)
+		if(ang > 360 && ang < 540){
+			down.push(id);
+		}else{
+			up.push(id);
+		}
+	});
+	console.log(up,down,seatids)
+
+	up.sort(function(a,b){
+		var la = $("#" + a).position().left;
+		var lb = $("#" + b).position().left;
+		return la - lb;
+	});
+
+	down.sort(function(a,b){
+		var la = $("#" + a).position().left;
+		var lb = $("#" + b).position().left;
+		return la - lb;
+	});
+	
+	var oae = oddAndEven(up.length);
+	var seatsnum = [];
+	if(ruleid == 1){
+		seatsnum = oae.odd.concat(oae.even.reverse());
+	}else if(ruleid == 2){
+		seatsnum = oae.even.concat(oae.odd.reverse());
+	}
+	up.forEach(function(oid,colid){
+		// var oid = col[ck];
+		$("#" + oid).html(seatsnum[colid]);
+		$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
+	});
+
+	var oae = oddAndEven(down.length);
+	var seatsnum = [];
+	if(ruleid == 1){
+		seatsnum = oae.odd.concat(oae.even.reverse());
+	}else if(ruleid == 2){
+		seatsnum = oae.even.concat(oae.odd.reverse());
+	}
+	down.forEach(function(oid,colid){
+		// var oid = col[ck];
+		$("#" + oid).html(seatsnum[colid]);
+		$("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
+	});
+}
+
+function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 	removeContainerEvent();
 	$("#circlemousexyId").show();
 
@@ -1056,8 +1226,23 @@ function mouseCreateSeatMap(mt,seatnum,centernum){
 	$("#seatcontainer").bind({
 		dblclick:function(e){
 			removeContainerEvent();
+			
+			var ids = [];
+			var ruleid = 1;
+			var seled = $("#mousecontainerId .seatdiv:not(.rownumseats)");
+			seled.each(function(){
+				ids.push(this.id);
+			});
+			ruleid = ids[0].split('-')[0];
+
 			$("#seatcontainerId").append($("#mousecontainerId").html());
 			$("#mousecontainerId").html('');
+			
+			if(mt == 1){
+				autoCircleCode(ruleid,ids);
+			}else{
+				autoRunCode(ruleid,ids);
+			}
 
 			countMaxWidth();
 			// clearCompleteSeats();
@@ -1089,9 +1274,9 @@ function mouseCreateSeatMap(mt,seatnum,centernum){
 
 				// $("#seatcontainerId").html('');
 				if(mt == 1){
-					createCircleSeatMap(x1,y1,r1,seatnum,1);
+					createCircleSeatMap(x1,y1,r1,seatnum,ruleid,1);
 				}else{
-					createRunSeatMap(x1,y1,r1,seatnum,centernum,1);
+					createRunSeatMap(x1,y1,r1,seatnum,centernum,ruleid,1);
 				}
 				
 			}
@@ -1099,11 +1284,11 @@ function mouseCreateSeatMap(mt,seatnum,centernum){
 	});
 }
 
-var __circleRow = 0;
-function createCircleSeatMap(ccx,ccy,r1,seatnum,ism){
+// var __circleRow = 0;
+function createCircleSeatMap(ccx,ccy,r1,seatnum,ruleid,ism){
 	// countCircleMaxWidth(ccx,ccy,r1,seatnum);
 
-	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism);
+	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism);
 	
 	if(!ism){
 		countMaxWidth();
@@ -1113,7 +1298,7 @@ function createCircleSeatMap(ccx,ccy,r1,seatnum,ism){
 }
 
 
-function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
+function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
 	if(ism){
@@ -1129,11 +1314,14 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 
 	var angleSpace = 360/seatnum;
 
-	__circleRow = __circleRow - 0 + 1;
+	// __circleRow = __circleRow - 0 + 1;
 	var seathtml = [];
 	
 	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
+	
+	var ids = [];
+	var row = ruleid;
 	for (var i = 0; i < seatnum; i++) {
 		var sang = i * angleSpace + startage;
 		var x = ccx + (r1) * Math.cos((sang)/180 * Math.PI) - seatw/2;
@@ -1146,8 +1334,10 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-' + new Date().getTime() + '-c" >' + (i+1) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (row) + '-' + (i+1) + '-' + new Date().getTime() + '-c" >' + (i+1) + '</div>');
 		
+		//用来编号
+		ids.push(row + '-' + (i+1) + '-' + new Date().getTime() + '-c');
 	}
 	// for (var j = 0; j <seatnum; j++) {
 	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
@@ -1168,15 +1358,18 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ism){
 
 	if(!ism){
 		$("#seatcontainerId").append(seathtml.join(''));
+		autoCircleCode(ruleid,ids);
 	}else{
 		$("#mousecontainerId").html(seathtml.join(''));
 	}
+	
+	
 }
 
-var __runRow = 0;
-function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ism){
+// var __runRow = 0;
+function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ruleid,ism){
 
-	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism);
+	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ruleid,ism);
 	
 	if(!ism){
 		countMaxWidth();
@@ -1185,9 +1378,10 @@ function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ism){
 	}
 }
 
-function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
+function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ruleid,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
+	centernum = Math.ceil(centernum/2);
 	if(ism){
 		ccx = ccx - ((centernum-1)*50+20)/2;
 	}
@@ -1196,21 +1390,38 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 	var seatw = 40;
 	var seath = 40;
 	
-	__runRow = __runRow  - 0 + 1;
+	// __runRow = __runRow  - 0 + 1;
+
 	var seathtml = [];
 	
 	//先画跑道上下座位
 
-	var sleft = ccx - 20;
-	var stop = ccy - r1 - 20;
+	var sleft = Math.ceil(ccx - 20);
+	var stop = Math.ceil(ccy - r1 - 18);
 
+	var ids = [];
+	var row = ruleid;
+
+	var padding = 10;
+	// console.log(r1,centernum*50/2);
+	var r0 = centernum*50/2;
+	if(r1 > r0){
+		padding = padding + (Math.ceil(r1 - r0) / (centernum/2));
+		padding = Math.ceil(padding);
+
+		stop = stop + Math.ceil(padding/10);
+	}
+	// console.log(padding)
 	for(var aa = 1; aa <= 2; aa++){
 		var ang = 270 + ((aa-1)*180);
 		for(var bb = 0; bb < +centernum; bb++){
 			// seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-c">' + (bb+1+(aa-1)*centernum) + '</div>');
-			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (__runRow) + '-' + (bb+1+(aa-1)*centernum) + '-' + new Date().getTime() + '-r">' + (bb+1+(aa-1)*centernum) + '</div>');
+			seathtml.push('<div r="' + r1 + '" ang="' + ang + '" class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (row) + '-' + (bb+1+(aa-1)*centernum) + '-' + new Date().getTime() + '-r">' + (bb+1+(aa-1)*centernum) + '</div>');
 			// stop = stop + 50;
-			sleft = sleft + 50;
+			sleft = sleft + 40 + padding;
+
+			//用来编号
+			ids.push(row + '-' + (bb+1+(aa-1)*centernum) + '-' + new Date().getTime() + '-r');
 		}
 		sleft = ccx - 20;
 		stop = stop + r1*2;
@@ -1219,8 +1430,8 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 
 	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
-	var rightseats = seatnum/2 + 1;
-	var rightccx = ccx + (centernum - 1)*50;
+	var rightseats = Math.ceil(seatnum/2) + 1;
+	var rightccx = ccx + (centernum - 1)*(40+padding);
 	//每个座位所占的角度,按平均算
 	var angleSpace = 180/rightseats;
 	//开始角度,3点方向,为0度,270就是12点
@@ -1237,10 +1448,12 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-r">' + (i) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (i) + '-' + new Date().getTime() + '-r">' + (i) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (row) + '-' + (i) + '-' + new Date().getTime() + '_r-r">' + (i) + '</div>');
 		
+		//用来编号
+		ids.push(row + '-' + (i) + '-' + new Date().getTime() + '_r-r');
 	}
-	var leftseats = seatnum/2 + 1;
+	var leftseats = Math.ceil(seatnum/2) + 1;
 	var leftccx = ccx;
 	//每个座位所占的角度,按平均算
 	var angleSpace = 180/leftseats;
@@ -1258,8 +1471,10 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 			ang = ang - 90;
 		}
 		// seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-l">' + (n) + '辛海涛' + '</div>');
-		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__runRow) + '-' + (n) + '-' + new Date().getTime() + '-r">' + (n) + '</div>');
+		seathtml.push('<div r="' + r1 + '" circle="'+(rightccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (row) + '-' + (n) + '-' + new Date().getTime() + '_l-r">' + (n) + '</div>');
 		
+		//用来编号
+		ids.push(row + '-' + (n) + '-' + new Date().getTime() + '_l-r');
 	}
 	// for (var j = 0; j <seatnum; j++) {
 	// 	var x = ccx + (r1) * Math.cos((j * angleSpace + startage)/180 * Math.PI);// - seatw/2;
@@ -1278,6 +1493,8 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ism){
 	// }
 	if(!ism){
 		$("#seatcontainerId").append(seathtml.join(''));
+
+		autoRunCode(ruleid,ids);
 	}else{
 		$("#mousecontainerId").html(seathtml.join(''));
 	}
@@ -1343,7 +1560,7 @@ function autoCode(ruleid){
 		col.forEach(function(oid,colid){
 			// var oid = col[ck];
 			$("#" + oid).html(seatsnum[colid]);
-			$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-"+new Date().getTime());
+			$("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-"+new Date().getTime()+"-s");
 		});
 	});
 
@@ -1507,33 +1724,6 @@ function addSeatsRadius(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function oddAndEven(n){
 	//求偶奇数
 	var str1="",str2="",n1=0,n2=0;
@@ -1554,6 +1744,193 @@ function oddAndEven(n){
 	nums.even = str2.substr(0,str2.length-1).split(',');
 	return nums;
 }
+
+
+
+function bindContextMenu(){
+	removeContainerEvent();
+
+	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
+	for(var i = 0, len = filediv.length; i < len; i++){
+		var item = filediv[i];
+		bindMenu(item.id);
+	}
+}
+
+function removeContextMenu(){
+	selectSeats();
+
+	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
+	for(var i = 0, len = filediv.length; i < len; i++){
+		var item = filediv[i];
+		item.oncontextmenu = null;
+	}
+}
+var __currseatno;
+function bindMenu(seatno){
+	var menuJson = [
+		{
+			name:"编号",
+			id:"menu0",
+			seatno:seatno,
+			callback: function(seatno) {
+				var cid = $("[cid="+seatno+"]").attr("cid") || "";
+				if(cid){
+					seatno = $("[cid="+seatno+"]").attr("id");
+				}
+				__currseatno = seatno;
+
+				var idtypes = seatno.split("-")[3];
+
+				var newno = window.prompt("请输入编号X-Y");
+				var newno2 = newno + "-0-" + idtypes;
+				var reg = /^\d+\-\d+$/g;
+				if(newno){
+					if(reg.test(newno)){
+						if($("#"+newno).length == 0 && $("#"+newno2).length == 0){
+							var id = newno.split("-");
+							$("#"+seatno).attr("id",newno2);
+							if(!cid){
+								$("#"+newno2).attr("cid",seatno);
+							}
+							$("#"+newno2).text(id[1]);
+
+							console.log($("[cid=1-1]").length)
+						}else{
+							alert("编号已存在");
+						}
+					}else{
+						alert("编号输入不合法");
+					}
+				}
+			}
+		},
+		{
+			name:"编排",
+			id:"menu4",
+			seatno:seatno,
+			callback: function(seatno) {
+				var cid = $("[cid="+seatno+"]").attr("cid") || "";
+				if(cid){
+					seatno = $("[cid="+seatno+"]").attr("id");
+				}
+				__currseatno = seatno;
+				var newno = window.prompt("请输入排号");
+				if(newno){
+					$("#"+seatno).text(newno);
+					$("#"+seatno).addClass("rownumseats");
+				}
+			}
+		},
+		// {
+		// 	name:"改名",
+		// 	id:"menu1",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		console.log(this,seatno);
+		// 		__currseatno = seatno;
+		// 		var name = $("#"+seatno).text();
+		// 		var regnum = /^\d*$/;
+		// 		// && !regnum.test(name)
+		// 		if(name != "空座" ){
+		// 			// $("#username").val(name);
+		// 			var newname = window.prompt("请输入名字",name);
+		// 			$("#"+seatno).text(newname);
+		// 		}else{
+		// 			// $("#username").val('');
+		// 		}
+		// 	}
+		// },
+		// {
+		// 	name:"空座",
+		// 	id:"menu2",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		$("#"+seatno).html('空座');
+		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 	}
+		// },
+		// {
+		// 	name:"发送短信",
+		// 	id:"menu3",
+		// 	seatno:seatno,
+		// 	callback: function(seatno) {
+		// 		$("#"+seatno).html('空座');
+		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
+		// 	}
+		// }
+		// ,{
+		// 	name:"状态刷新",
+		// 	id:"menu-delete",
+		// 	callback: function() {
+		// 		alert("刷新");
+		// 	}
+		// }
+	];
+	
+	if($("#"+seatno).length > 0){
+		ContextMenu.bind("#"+seatno, menuJson);
+	}
+}
+
+
+
+/*********************以上会场编辑器************************* */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // $("div[id$=-1]")
 // 获取 id -1结尾的div
@@ -2080,132 +2457,6 @@ function containerMouseUp(evt){
 	// selList = null, 
 	_x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
 }
-
-
-function bindContextMenu(){
-	removeContainerEvent();
-
-	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
-	for(var i = 0, len = filediv.length; i < len; i++){
-		var item = filediv[i];
-		bindMenu(item.id);
-	}
-}
-
-function removeContextMenu(){
-	selectSeats();
-
-	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
-	for(var i = 0, len = filediv.length; i < len; i++){
-		var item = filediv[i];
-		item.oncontextmenu = null;
-	}
-}
-var currseatno;
-function bindMenu(seatno){
-	var menuJson = [
-		{
-			name:"编号",
-			id:"menu0",
-			seatno:seatno,
-			callback: function(seatno) {
-				var cid = $("[cid="+seatno+"]").attr("cid") || "";
-				if(cid){
-					seatno = $("[cid="+seatno+"]").attr("id");
-				}
-				currseatno = seatno;
-				var newno = window.prompt("请输入编号X-Y");
-				var reg = /^\d+\-\d+$/g;
-				if(newno){
-					if(reg.test(newno)){
-						if($("#"+newno).length == 0){
-							var id = newno.split("-");
-							$("#"+seatno).attr("id",newno);
-							if(!cid){
-								$("#"+newno).attr("cid",seatno);
-							}
-							$("#"+newno).text(id[1]);
-
-							console.log($("[cid=1-1]").length)
-						}else{
-							alert("编号已存在");
-						}
-					}else{
-						alert("编号输入不合法");
-					}
-				}
-			}
-		},
-		{
-			name:"编排",
-			id:"menu4",
-			seatno:seatno,
-			callback: function(seatno) {
-				var cid = $("[cid="+seatno+"]").attr("cid") || "";
-				if(cid){
-					seatno = $("[cid="+seatno+"]").attr("id");
-				}
-				currseatno = seatno;
-				var newno = window.prompt("请输入排号");
-				if(newno){
-					$("#"+seatno).text(newno);
-					$("#"+seatno).addClass("rownumseats");
-				}
-			}
-		},
-		// {
-		// 	name:"改名",
-		// 	id:"menu1",
-		// 	seatno:seatno,
-		// 	callback: function(seatno) {
-		// 		console.log(this,seatno);
-		// 		currseatno = seatno;
-		// 		var name = $("#"+seatno).text();
-		// 		var regnum = /^\d*$/;
-		// 		// && !regnum.test(name)
-		// 		if(name != "空座" ){
-		// 			// $("#username").val(name);
-		// 			var newname = window.prompt("请输入名字",name);
-		// 			$("#"+seatno).text(newname);
-		// 		}else{
-		// 			// $("#username").val('');
-		// 		}
-		// 	}
-		// },
-		// {
-		// 	name:"空座",
-		// 	id:"menu2",
-		// 	seatno:seatno,
-		// 	callback: function(seatno) {
-		// 		$("#"+seatno).html('空座');
-		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
-		// 	}
-		// },
-		// {
-		// 	name:"发送短信",
-		// 	id:"menu3",
-		// 	seatno:seatno,
-		// 	callback: function(seatno) {
-		// 		$("#"+seatno).html('空座');
-		// 		// $("#"+seatno).removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10");
-		// 	}
-		// }
-		// ,{
-		// 	name:"状态刷新",
-		// 	id:"menu-delete",
-		// 	callback: function() {
-		// 		alert("刷新");
-		// 	}
-		// }
-	];
-	
-	if($("#"+seatno).length > 0){
-		ContextMenu.bind("#"+seatno, menuJson);
-	}
-}
-
-
-
 
 
 

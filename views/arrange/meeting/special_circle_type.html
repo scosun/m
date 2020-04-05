@@ -12,15 +12,52 @@
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
 	
+	<div class="layui-form-item">
+		<label class="layui-form-label">绘制方式</label>
+        <div class="layui-input-block">
+            <select class="dialogRuleSelect" lay-skin="select" lay-filter="meetrule-form-select" id="meet_typeid">
+			    <option value="1">鼠标绘制</option>
+				<option value="2">参数绘制</option>
+            </select>
+        </div>
+	</div>
 
-	<div class="layui-form" id="meet2form">
+	<div class="layui-form-item">
+		<label class="layui-form-label">编号规则</label>
+        <div class="layui-input-block">
+            <select class="dialogRuleSelect" id="select_ruleid">
+                <option value="1">左单右双</option>
+				<option value="2">左双右单</option>
+            </select>
+        </div>
+	</div>
+	
+	<div class="layui-form" >
 		<div class="layui-form-item">
 			<label class="layui-form-label">环形座位数</label>
 			<div class="layui-input-block">
 				<input id="seatnum" type="text" name="name" lay-verify="required" placeholder="20" autocomplete="off" class="layui-input hyname">
 			</div>
 		</div>
-		<div><span style="font-size: 12px;color: #2b2b2b;margin-left: 112px;">输入环形座位数，点击确定之后，拖动鼠标绘制环形座区图。</span></div>
+		<div id="mousetip" ><span style="font-size: 12px;color: #2b2b2b;margin-left: 112px;">输入环形座位数，点击确定之后，拖动鼠标绘制环形座区图。</span></div>
+	</div>
+
+	<div class="layui-form" id="meet2form" style="display: none;">
+		<div class="layui-form-item" >
+			<label class="layui-form-label">圆心(x,y)</label>
+			<div class="layui-input-block" style="float: left;margin-left: 0px;">
+				<input id="ccx" type="text" name="name" lay-verify="required" placeholder="600" autocomplete="off" class="layui-input hyname">
+			</div>
+			<div class="layui-input-block" style="float: left;margin-left: 0px;">
+				<input id="ccy" type="text" name="name" lay-verify="required" placeholder="300" autocomplete="off" class="layui-input hyname">
+			</div>
+		</div>
+		<div class="layui-form-item" >
+			<label class="layui-form-label">半径</label>
+			<div class="layui-input-block">
+				<input id="r1" type="text" name="name" lay-verify="required" placeholder="200" autocomplete="off" class="layui-input hyname">
+			</div>
+		</div>
 	</div>
 
 	<!-- <div class="layui-form-item">
@@ -45,35 +82,48 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
+	
+		form.on('select(meetrule-form-select)', function(data){
+			var id = +data.value;
+			if(id == 1){
+				$("#meet2form").hide();
+				$("#mousetip").show();
+			}else{
+				$("#meet2form").show();
+				$("#mousetip").hide();
+			}
+		});
 
-	$('#seatnum').on('keydown', function (event) {
+	$('#seatnum,#r1').on('keydown', function (event) {
 		if (event.keyCode == 13) {
 			var layer = layui.layer;
-			// var ccx = +$("#ccx").val() || 0;
-			// var ccy = +$("#ccy").val() || 0;
-			// var r1 = +$("#r1").val() || 0;
-			var seatnum = +$("#seatnum").val() || 0;
-			// var centernum = $("#centernum").val() || "";
+			var typeid = +$("#meet_typeid").val();
+			var select_ruleid = +$("#select_ruleid").val();
 
-			// if(ccx <= 0 || ccy <= 0){
-			// 	layer.msg('圆心坐标输入错误');
-			// 	return false;
-			// }
-			// if(r1 <= 0 ){
-			// 	layer.msg('半径输入错误');
-			// 	return false;
-			// }
+			var seatnum = +$("#seatnum").val() || 0;
 			if(seatnum <= 0 ){
 				layer.msg('座位数量输入错误');
 				return false;
 			}
-			
-			var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-			parent.layer.close(index);		//关闭窗口
-			// window.parent.createCircleSeatMap(ccx,ccy,r1,seatnum);
-			window.parent.mouseCreateSeatMap(1,seatnum);
-			
+
+			if(typeid == 1){
+				window.parent.mouseCreateSeatMap(1,seatnum,0,select_ruleid);
+			}else{
+				var ccx = +$("#ccx").val() || 0;
+				var ccy = +$("#ccy").val() || 0;
+				var r1 = +$("#r1").val() || 0;
+				if(ccx <= 0 || ccy <= 0){
+					layer.msg('圆心坐标输入错误');
+					return false;
+				}
+				if(r1 <= 0 ){
+					layer.msg('半径输入错误');
+					return false;
+				}
+				window.parent.createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
+			}
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
 			return false
 		}
 	});
