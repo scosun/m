@@ -10,8 +10,14 @@
 		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
 		<script src="../../../js/scosun.js"></script>
 		<link rel="stylesheet" href="../../../css/seat.css" media="all">
+		<script type="text/javascript">  
+			function doNothing(){  
+				window.event.returnValue=false;  
+				return false;  
+			}
+		</script>
 	</head>
-	<body>
+	<body oncontextmenu="doNothing()">
 		<div class="layui-form-item">
 			<div class="layui-input-block">
 				<input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"

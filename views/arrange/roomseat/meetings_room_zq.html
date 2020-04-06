@@ -64,9 +64,14 @@
 			background: #ff000040;
 		}
 	</style>
+<script type="text/javascript">  
+    function doNothing(){  
+        window.event.returnValue=false;  
+        return false;  
+    }
+</script>
 </head>
-
-<body>
+<body oncontextmenu="doNothing()">
 
 	<header>
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
