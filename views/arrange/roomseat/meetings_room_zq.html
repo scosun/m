@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
 <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
 <link rel="stylesheet" href="../../../css/seat.css" media="all">
+<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
 <script src="../../../js/jquery-3.1.1.min.js"></script>
 <script src="/m/js/scosun.js"></script>
 	<link rel="stylesheet" href="../../arrange/meet/rule_zq.css" />
@@ -79,17 +82,17 @@
 		</span>
 		<!-- 右侧菜单 -->
 		<div class="btnbar-select" style="width:auto;margin-right: 50px;">
-			<div class="layui-form " style="width: 130px;float: left;">
+			<!-- <div class="layui-form " style="width: 130px;float: left;">
 				<select class="dialogRuleSelect" lay-filter="component-ruleselect" id="ruleselect">
 					<option value="1">桌牌详情</option>
 					<option value="2">编辑绑定</option>
 					<option value="3">解除绑定</option>
 				</select>
-			</div>
-			<span style="float: left;
+			</div> -->
+			<!-- <span style="float: left;
 			line-height: 36px;
 			margin: 0 5px;
-			font-size: 20px;">|</span>
+			font-size: 20px;">|</span> -->
 			<div class="layui-form " style="width: 130px;float: left;">
 				<select class="dialogRuleSelect" lay-filter="component-timeselect" id="ruleselect">
 					<option value="5">频率5秒</option>
@@ -188,7 +191,7 @@
 					var data = data.data || {};
 					macdata = data;
 					setSeatBindStatus(data);
-					bindOneSeats();
+					// bindOneSeats();
 				}
 			});
 		}
@@ -217,18 +220,24 @@
 			if(!chkseat.mac){
 				return;
 			}
-			$.ajax({
-				url: "https://f.longjuli.com/seatmac/delmacByroomid",
-				type: "GET",
-				async: true,
-				data: {
-					"roomid": roomid,
-					"seatid": chkseat.seatid
-				},
-				success: function() {
-					getFindByseatmac();
-				}
-			});
+			layer.confirm('确定解决绑定吗？', {
+				btn: ['确定', '取消']
+			}, function (index) {
+				$.ajax({
+					url: "https://f.longjuli.com/seatmac/delmacByroomid",
+					type: "GET",
+					async: true,
+					data: {
+						"roomid": roomid,
+						"seatid": chkseat.seatid
+					},
+					success: function() {
+						getFindByseatmac();
+					}
+				});
+				layer.close(index);
+			}.bind(this));
+			
 		}
 
 		
@@ -238,7 +247,9 @@
 			data.forEach(function(item){
 				var id = item.seatid;
 				$("#" + id).addClass("bindmac");
-			})
+			});
+
+			bindContextMenu();
 		}
 
 
@@ -293,6 +304,61 @@
 			}
 			
 		}
+
+
+		
+		function bindContextMenu(){
+			removeContainerEvent();
+
+			var filediv = $("#seatcontainer .bindmac");
+			for(var i = 0, len = filediv.length; i < len; i++){
+				var item = filediv[i];
+				bindMenu(item.id);
+			}
+		}
+
+		var currseatno;
+		function bindMenu(seatno){
+			var menuJson = [
+				{
+					name:"桌牌详情",
+					id:"menu1",
+					seatno:seatno,
+					callback: function(seatno) {
+						layer.msg("桌牌详情");
+					}
+				},
+				{
+					name:"编辑绑定",
+					id:"menu2",
+					seatno:seatno,
+					callback: function(seatno) {
+						chkseat = macdata.filter(function(item){
+							return item.seatid == seatno;
+						})[0] || {seatid:seatid};
+						editSeatMac();
+					}
+				},
+				{
+					name:"解除绑定",
+					id:"menu3",
+					seatno:seatno,
+					callback: function(seatno) {
+						chkseat = macdata.filter(function(item){
+							return item.seatid == seatno;
+						})[0] || {seatid:seatid};
+
+						deleteSeatMac();
+					}
+				}
+				
+			];
+			
+			if($("#"+seatno).length > 0){
+				ContextMenu.bind("#"+seatno, menuJson);
+			}
+		}
+
 
 		function startInterval(){
 			clearInterval(inter);
