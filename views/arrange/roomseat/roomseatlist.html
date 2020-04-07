@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
     <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
     <style type="text/css">
         .layui-btn {background-color: #666;}
@@ -45,7 +46,27 @@
                     <div class="layui-card-body">
                         <div>
                             <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-                                <button class="layui-btn layui-ds" data-type="add">新增</button>
+
+                                <!-- // 20.04.06 dh
+                                    <button class="layui-btn layui-ds" data-type="add">新增</button>
+                                -->
+                                <!-- // 20.04.06 dh 修改为以下-->
+                                <button class="gradient-block-diagonal" data-type="add">新建</button>
+                                <!-- // 20.04.06 dh 提示放这里-->    
+                                <div style="font-size: 15px;display:inline-block;vertical-align: middle;">
+                                    <img src="../../../images/help.svg"  style="margin-left: 5px;margin-right: 5px;width: 15px;height: 15px;padding-bottom: 5px"/>通过二维码绑定桌牌和座位小程序进行操作。
+                                    <div class="dropdown-menu dropdown-hover">
+                                        <a class="icon-btn">&nbsp;点击绑定 <i class="layui-icon layui-icon-drop"></i></a>
+                                        <div class="dropdown-menu-nav dropdown-bottom-right" style="width: 280px; height: 280px;padding:10px; margin:0 auto;">
+                                            <div class="dropdown-anchor"></div>
+                                            <!-- 下面是自定义内容 -->
+                                            <img src="../../../images/wechatapp.jpg" width="100%" height="100%" style="text-align:center">
+                                            <!-- //end.自定义内容结束 -->
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <!-- <button class="layui-btn" data-type="add">增加</button>
                                 <button class="layui-btn" data-type="dels">批量删除</button>
                                 <button class="layui-btn" data-type="allcheck">全选</button>
@@ -61,19 +82,7 @@
                             </div>
                             <!-- 右侧筛选条件 end-->
                         </div>
-                        <div class="" style="font-size: 15px"><img src="../../../images/help.svg"  style="margin-left: 5px;width: 15px;height: 15px;padding-bottom: 5px"/>&nbsp;&nbsp;&nbsp;通过二维码绑定桌牌和座位小程序进行操作。
-                            <div class="dropdown-menu dropdown-hover">
-                            <a class="icon-btn">
-                                &nbsp;点击绑定 <i class="layui-icon layui-icon-drop"></i></a>
-                            <div class="dropdown-menu-nav dropdown-bottom-right"
-                                 style="width: 280px; height: 280px;padding:10px; margin:0 auto;">
-                                <div class="dropdown-anchor"></div>
-                                <!-- 下面是自定义内容 -->
-                                <img src="../../../images/wechatapp.jpg"
-                                     width="100%" height="100%" style="text-align:center">
-                                <!-- //end.自定义内容结束 -->
-                            </div>
-                        </div></div>
+
                         <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
                         <script type="text/html" id="table-zone-list">
                             <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem">&#xe62d;</a>
@@ -514,6 +523,7 @@
                     ,
                     area: ['100%', '100%'],
                     scrollbar: false,
+                    offset: '-41px',
                     yes: function(index, layero) {
                     },
                     success: function(layero, index) {

@@ -99,8 +99,12 @@
                     admin = layui.admin,
                     $ = layui.jquery;
                 var url = "https://f.longjuli.com"
-                $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
-                $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')
+                // 20.04.06 dh 原来按钮
+                // $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
+                // $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')
+                // 20.04.06 dh 现在按钮
+                $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
+                $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="goback" id="goback">返回上一级<s></s></a>')
                 $.ajax({
                     async: false,
                     type: "get",
@@ -116,18 +120,17 @@
                             location.href = "user/login.html"
                         }
                         if (isEmptyObject(data) != 0) {
-                          
                             window.a = data
-                           
-                            
                             if ($.inArray("addatt", data) != -1) {
-                                $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
+                                // $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
+                                // 20.04.06 dh 修改按钮
+                                $('#buttongroup').before("<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>")
                             }
-                           
                             if ($.inArray("delatt", data) != -1) {
-                                $('#buttongroup').before('<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>');
+                                // $('#buttongroup').before('<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>');
+                                // 20.04.06 dh 修改按钮
+                                $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
                             }
-                
                         } else {
                 
                 

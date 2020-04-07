@@ -12,7 +12,28 @@
         <link rel="icon" type="image/png" sizes="16x16" href="../../images/favicon.ico">
         <link rel="stylesheet" type="text/css" href="../../css/scosun1.css" />
         <script src="../../js/scosun1.js" type="text/javascript" charset="utf-8"></script>
-
+        <style type="text/css">
+            /* .layui-btn-primary {
+                border: 1px solid #ffce00;
+            }
+            .layui-btn-primary:hover {
+                border-color: #ffce00;
+                color: #fff;
+            } */
+            .layui-btn-primary {
+                border: 1px solid #ffce00;
+                color: #000!important;
+            }
+            .layui-btn-primary:hover {
+                border-color: #ffce00;
+                color: #fff;
+            }
+            .layui-btn:hover {
+                opacity: .8;
+                filter: alpha(opacity=80);
+                color: #000;
+            }
+        </style>
     </head>
     <body>
 
@@ -78,7 +99,7 @@
                     router =
                     layui.router(),
                     search = router.search;
-                 var url = "https://f.longjuli.com"
+                var url = "https://f.longjuli.com"
                 // var url = "http://127.0.0.1:8083";
                 form.render();
                 $.ajax({

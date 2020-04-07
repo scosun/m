@@ -37,10 +37,10 @@
 <div class="layui-card-body" style="padding: 20px 20px 0 0;">
     <form class="layui-form" action="" lay-filter="component-form-group">
         <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>产品名称</label>
+            <label class="layui-form-label"><span>*</span>智能排序名:</label>
             <div class="layui-input-block">
-                <input type="text" name="productname" lay-verify="required" placeholder="请输入产品名称" autocomplete="off"
-                       id="productname" class="layui-input">
+                <input type="text" name="title" lay-verify="required" placeholder="模版名称" autocomplete="off"
+                       id="username" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item layui-layout-admin layui-hide">
@@ -51,6 +51,7 @@
                 </div>
             </div>
         </div>
+
     </form>
 </div>
 <script src="../../../layuiadmin/layui/layui.js"></script>
@@ -67,25 +68,16 @@
             upload = layui.upload,
             laydate = layui.laydate,
             form = layui.form;
-         var url = "https://f.longjuli.com"
+        var url = "https://f.longjuli.com"
         // var url = "http://127.0.0.1:8083"
-        var productKey = getUrlParam("productKey");
-        function getUrlParam(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-            if (r != null) return decodeURI(r[2]); return null; //返回参数值
-        }
-        console.log(productKey)
+        var uploadfile = null;
         form.on('submit(addsms)', function (data) {
-            var data = data.field;
-            console.log(data)
             $.ajax({
-                url: url + "/tablesignproduct/updateByPrimaryKeySelective",
+                url: url + "/sortattendee/add",
                 type: "post",
                 dataType: "json",
                 data: {
-                    productKey:productKey,
-                    productName:data.productname,
+                    name: data.field.title,
                 },
                 async: false,
                 xhrFields: {
@@ -93,7 +85,7 @@
                 },
                 success: function (data) {
                     if (data.code == 0) {
-                        parent.layer.msg("修改成功")
+                        parent.layer.msg("添加成功")
                         var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                         parent.layer.close(index);
                         parent.reloads();

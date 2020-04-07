@@ -129,6 +129,10 @@
                 <div class="layui-card-body">
                     <div>
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                            <!--// 20.04.06 dh 原来按钮
+                            <button class="layui-btn layui-ds" data-type="add" >添加</button> -->
+                            <button class="gradient-block-diagonal" data-type="add">新建</button>
+							
                         </div>
                         <!-- 右侧筛选条件 -->
                         <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
@@ -141,12 +145,11 @@
                         <!-- 右侧筛选条件 end-->
                     </div>
                     <table id="test-table-operate" lay-filter="test-table-operate"></table>
-                    <script type="text/html" id="table-zone-list">
-                        <a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size:1.4rem;">&#xe62d;</a>
-                    </script>
                     <script type="text/html" id="test-table-operate-barDemo">
-                        <a class="layui-btn layui-btn-xs" lay-event="edit">会议</a>
-                        <a class="layui-btn layui-btn-xs" lay-event="del">记录</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="sort">排序列表</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+
                     </script>
                 </div>
             </div>
@@ -173,11 +176,10 @@
         // #test-table-operate
         //渲染表格
         $('#group').append(
-            // 20.04.06 dh 下行有修改 
             // '<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
+            // 20.04.06 dh 现在按钮
             '<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>'
         )
-	
         function isEmptyObject(obj) {
 
             var jlength = 0;
@@ -200,7 +202,7 @@
             xhrFields: {
                 withCredentials: true
             },
-            url: url + "/roomtemplate/findAllBylayui", //数据接口
+            url: url + "/sortattendee/selectSelect", //数据接口
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
@@ -219,39 +221,19 @@
                     // },
                     {
                         field: 'name',
-                        title: '会议室',
+                        title: '名称',
                         align: 'left',
                     }, {
-                    field: 'meetingstate',
-                    title: '状态',
+                    field: 'modifytime',
+                    title: '更新时间',
                     align: 'left',
                 },
-                    {
-                        field: 'seatnum',
-                        title: '管理桌牌数量',
-                        align: 'left',
-                    },
-                    {
-                        field: 'meetingname',
-                        title: '当前会议',
-                        align: 'left',
-                    },
-                    {
-                        field: 'startmeetingtime',
-                        title: '启动会议时间',
-                        align: 'left',
-                    },
-                    {
-                        width: '8%',
-                        //align: 'center',
-                        title: '查看',
-                        toolbar: '#table-zone-list'
-                    },
+
                     {
                         title: '操作',
                         align: 'left',
                         toolbar: '#test-table-operate-barDemo',
-                        width: 120,
+                        width: '15%',
                     },
 
                 ]
@@ -278,10 +260,13 @@
                 // height: 'full-200',
                 //url: url + "/meeting/findAllBylayui", //数据接口
                 method: 'get',
+                where: {
+                    status: 0
+                },
                 xhrFields: {
                     withCredentials: true
                 },
-                url: url + "/roomtemplate/findAllBylayui", //数据接口
+                url: url + "/sortattendee/selectSelect", //数据接口
                 page: {
                     layout: ['prev', 'page', 'next', 'count', 'skip']
                 },
@@ -300,39 +285,19 @@
                         // },
                         {
                             field: 'name',
-                            title: '会议室',
+                            title: '名称',
                             align: 'left',
                         }, {
-                        field: 'meetingstate',
-                        title: '状态',
+                        field: 'modifytime',
+                        title: '更新时间',
                         align: 'left',
                     },
-                        {
-                            field: 'seatnum',
-                            title: '管理桌牌数量',
-                            align: 'left',
-                        },
-                        {
-                            field: 'meetingname',
-                            title: '当前会议',
-                            align: 'left',
-                        },
-                        {
-                            field: 'startmeetingtime',
-                            title: '启动会议时间',
-                            align: 'left',
-                        },
-                        {
-                            width: '8%',
-                            //align: 'center',
-                            title: '查看',
-                            toolbar: '#table-zone-list'
-                        },
+
                         {
                             title: '操作',
                             align: 'left',
                             toolbar: '#test-table-operate-barDemo',
-                            width: 120,
+                            width: '15%',
                         },
 
                     ]
@@ -397,17 +362,14 @@
         //监听工具条
         table.on('tool(test-table-operate)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'zonelist') {
-                if (data.presentmeeting == null) {
-                    return layer.msg('请选择当前要开通的会议')
-                }
+            if (obj.event === 'sort') {
                 layer.open({
                     type: 2,
                     // title: '会议室座区图',
-                    content: 'controlzone.html?id='+data.id
-                    // ,maxmin: true
+                    content: 'attender_sort_list.html?id='+data.id
+                    ,maxmin: true
                     ,
-                    area: ['100%', '106%'],
+                    area: ['100%', '100%'],
                     scrollbar: false,
                     shadeClose: false, //弹出框之外的地方是否可以点击
                     closeBtn: 1,
@@ -419,7 +381,7 @@
                 });
 
             }
-             else if (obj.event === 'edit') {
+            else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
                     //title: '收藏管理 (考生姓名：张无忌)',
@@ -431,7 +393,7 @@
                     closeBtn: 1,
                     //offset: '-43px',
                     //  content: $('#show-view'),
-                    content: 'controlseatmeeting.html?id=' + obj.data.id+"&meeting="+obj.data.presentmeeting,
+                    content: 'sortattendeeUpdate.html?id=' + obj.data.id,
                     success: function (layero, index) {
 
                     },
@@ -442,65 +404,36 @@
 
                 });
             } else if (obj.event === 'del') {
-                layer.open({
-                    type: 2,
-                    //title: '收藏管理 (考生姓名：张无忌)',
-                    title: '历史记录',
-                    maxmin: true,
-                    shadeClose: false, //弹出框之外的地方是否可以点击
-                    area: ['50%', '63%'],
-                    btn: ['刷新', '返回'],
-                    closeBtn: 1,
-                    //offset: '-43px',
-                    //  content: $('#show-view'),
-                    content: 'conrolrecord.html?id=' + obj.data.id,
-                    success: function (layero, index) {
-
-                    },
-                    yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#click");
-                        submit.click();
-                    }
-
-                });
-
-            } else if (obj.event === 'nosend') {
-                if (obj.data.issendmail != 1) {
-                    return layer.msg('当前未发送短信');
-                }
-                layer.confirm('确认要通知吗？', function (index) {
+                layer.confirm('真的删除吗？', function() {
                     $.ajax({
-                        async: false,
+                        url: url+"/sortattendee/delete",
                         type: "get",
-                        maxmin: true,
-                        url: url + "/smsstatistics/nosend",
-                        datatype: 'json',
                         data: {
-                            id: obj.data.id,
-                            sid: obj.data.meetingid
+                            "id": obj.data.id
                         },
                         xhrFields: {
                             withCredentials: true
                         },
-                        //成功的回调函数
-                        success: function (msg) {
-                            if (msg.code == 0) {
-                                layer.msg(msg.msg)
-                                // var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                                // layer.close(index);
+                        success: function(data) {
+                            if (data.code == "0") {
+                                layer.msg('成功删除', {
+                                    icon: 1
+                                })
                                 reloads();
                             } else {
-                                layer.msg(msg.msg)
+                                layer.msg(data.msg, {
+                                    icon: 5
+                                });
                             }
-
                         },
-                        error: function (error) {
-                            console.log(error)
-                        },
+                        error: function(error) {
+                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                icon: 5
+                            });
+                        }
                     })
-                    layer.close(index);
-
                 });
+
             }
 
         });
@@ -586,7 +519,7 @@
                         btn: ['保存', '返回'],
                         closeBtn: 1,
                         //offset: '-43px',
-                        content: 'flocknoticeadd.html',
+                        content: 'sortattendeeAdd.html',
                         success: function (layero, index) {
                             // var body = layui.layer.getChildFrame('body', index);
                             // var roomid;
@@ -649,7 +582,7 @@
                                     title: '操作',
                                     align: 'left',
                                     toolbar: '#test-table-operate-barDemo',
-                                    width: 120,
+                                    width: 140,
                                 },
 
                             ]

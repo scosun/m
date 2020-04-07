@@ -129,9 +129,13 @@
 				<div class="layui-card-body">
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-							<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
+							<!-- // 20.04.06 dh 修改为以下-->
+							<button class="gradient-block-diagonal" data-type="add" id='addmeeting'>新建</button>
+							<a class="layui-btn-a-grey" href="javascript:;" data-type="isAll" id='emptymeet'>下载<s></s></a>
+							<a class="layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
+							<!-- <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
 							<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>人员模版下载</button>
-							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>
+							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button> -->
 							<!-- 右侧筛选条件 -->
 						</div>
 						<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
