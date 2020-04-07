@@ -102,8 +102,15 @@ layui.config({
                     title: '模板名',
                     align: 'left',
                     
-                },{
-			width: 100,
+                },
+				{
+					field: 'seatnum',
+					title: '座位数',
+					align: 'left',
+
+				},
+				{
+					width: 100,
                     field: 'seatrule',
                     title: '座区规则',
                     align: 'left',

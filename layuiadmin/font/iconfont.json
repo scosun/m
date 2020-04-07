@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8589091",
+      "name": "控制台",
+      "font_class": "kongzhitai",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "11609773",
+      "name": "控制台",
+      "font_class": "kongzhitai1",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
       "icon_id": "13807080",
       "name": "编排规则",
       "font_class": "bianpaiguize",
@@ -51,22 +65,22 @@
       "icon_id": "13807086",
       "name": "人脸识别",
       "font_class": "renlianshibie",
-      "unicode": "e609",
-      "unicode_decimal": 58889
+      "unicode": "e60a",
+      "unicode_decimal": 58890
     },
     {
       "icon_id": "13807087",
       "name": "我的会场",
       "font_class": "wodehuichang",
-      "unicode": "e60a",
-      "unicode_decimal": 58890
+      "unicode": "e60b",
+      "unicode_decimal": 58891
     },
     {
       "icon_id": "13807088",
       "name": "短信通知",
       "font_class": "duanxintongzhi",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
+      "unicode": "e60c",
+      "unicode_decimal": 58892
     }
   ]
 }

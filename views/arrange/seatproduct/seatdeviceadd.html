@@ -37,23 +37,23 @@
 <div class="layui-card-body" style="padding: 20px 20px 0 0;">
     <form class="layui-form" action="" lay-filter="component-form-group">
         <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>设备的key</label>
+            <label class="layui-form-label">所属产品</label>
             <div class="layui-input-block">
-                <input type="text" name="iotid" lay-verify="required" placeholder="请输入产品的key" autocomplete="off"
-                       id="productkey" class="layui-input">
+                <input type="text" name="productName" lay-verify="required" autocomplete="off"
+                       id="productName" class="layui-input" disabled="disabled">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"><span>*</span>设备名称</label>
             <div class="layui-input-block">
-                <input type="text" name="devicename" lay-verify="required" placeholder="请输入产品名称" autocomplete="off"
+                <input type="text" name="devicename" lay-verify="required" placeholder="请输入设备名称" autocomplete="off"
                        id="devicename" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>待注册的设备设置备注名称</label>
+            <label class="layui-form-label">备注名称</label>
             <div class="layui-input-block">
-                <input type="text" name="nickname" lay-verify="required" placeholder="请输入产品名称" autocomplete="off"
+                <input type="text" name="nickname" lay-verify="required" placeholder="请输入备注名称" autocomplete="off"
                        id="nickname" class="layui-input">
             </div>
         </div>
@@ -79,7 +79,6 @@
         <!--                       id="categoryId" class="layui-input">-->
         <!--            </div>-->
         <!--        </div>-->
-        <
         <div class="layui-form-item layui-layout-admin layui-hide">
             <div class="layui-input-block">
                 <div style="position: absolute;right: 0px;bottom: 0px;">
@@ -111,9 +110,28 @@
             if (r != null) return decodeURI(r[2]); return null; //返回参数值
         }
         var url = "https://f.longjuli.com"
-        // var url = "http://127.0.0.1:8083"
+        //var url = "http://127.0.0.1:8083"
         console.log(productKey)
         var uploadfile = null;
+        $.ajax({
+            type: "get",
+            url: url + "/tablesignproduct/selectByPrimaryKey",
+            data: {"productkey":productKey},
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (res) {
+                //console.log(res);
+                $("#productName").val(res.data.productName);
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
         $.ajax({
             async: false,
             type: "get",
@@ -139,7 +157,7 @@
         })
         form.on('submit(addsms)', function (data) {
             var data = data.field;
-            data.iotid=== '' ? data.iotid = undefined:data.iotid = data.iotid
+            //data.iotid=== '' ? data.iotid = undefined:data.iotid = data.iotid
             data.devicename=== '' ? data.devicename = undefined:data.devicename = data.devicename;
             data.nickname=== '' ? data.nickname = undefined:data.nickname = data.nickname
             data.pincode=== '' ? data.pincode = undefined:data.pincode = data.pincode
@@ -157,7 +175,7 @@
                 dataType: "json",
                 data: {
                     productKey:productKey,
-                    iotId:data.iotid,
+                    //iotId:data.iotid,
                     deviceName:data.devicename,
                     pinCode:data.pincode,
                     devEui:data.deveui,
