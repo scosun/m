@@ -1,0 +1,93 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "23489",
+      "name": "圆形",
+      "font_class": "weibiaoti1fuzhi",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "4412076",
+      "name": "会议",
+      "font_class": "huiyi",
+      "unicode": "e83d",
+      "unicode_decimal": 59453
+    },
+    {
+      "icon_id": "5601645",
+      "name": "信封",
+      "font_class": "xinfeng",
+      "unicode": "e7cb",
+      "unicode_decimal": 59339
+    },
+    {
+      "icon_id": "6901453",
+      "name": "飞机 (1)",
+      "font_class": "feiji",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "7852962",
+      "name": "参会人",
+      "font_class": "canhuiren",
+      "unicode": "e750",
+      "unicode_decimal": 59216
+    },
+    {
+      "icon_id": "8289005",
+      "name": "闹钟",
+      "font_class": "naozhong",
+      "unicode": "e86d",
+      "unicode_decimal": 59501
+    },
+    {
+      "icon_id": "9798688",
+      "name": "门牌机",
+      "font_class": "menpaiji",
+      "unicode": "e524",
+      "unicode_decimal": 58660
+    },
+    {
+      "icon_id": "10024727",
+      "name": "我的会议",
+      "font_class": "my-meeting",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "10103779",
+      "name": "短信",
+      "font_class": "duanxin",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "12520656",
+      "name": "模板 (2)",
+      "font_class": "moban",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "13807083",
+      "name": "电子桌牌",
+      "font_class": "dianzizhuopai",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "13807087",
+      "name": "我的会场",
+      "font_class": "wodehuichang",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    }
+  ]
+}

@@ -5567,8 +5567,25 @@ body .layui-util-face .layui-layer-content {
         opacity: 0
     }
 }
-
-.layui-anim-fadeout {
+/* dh 20.04.05 修改*/
+/*.layui-anim-fadeout {
     -webkit-animation-name: layui-fadeout;
     animation-name: layui-fadeout
-    .layui-input:focus,}
+    .layui-input:focus,}*/
+.layui-anim-fadeout{
+    -webkit-animation-name:layui-fadeout;
+    animation-name:layui-fadeout
+}
+/* 列表页表格边框改为白色 dh 20.04.05 修改*/
+.layui-table td, .layui-table th, .layui-table-col-set, .layui-table-fixed-r, .layui-table-grid-down, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-total, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row] {
+    border-color: #fff;
+}
+/* 列表页翻页居右 dh 20.04.05 修改*/
+.layui-table-page {
+    padding: 7px 0 0;
+    text-align: right;
+}
+/* 首页 左侧菜单 更多透明度 dh 20.04.06 修改*/
+.layui-nav .layui-nav-more {
+    border-top-color: rgba(255, 255, 255, .2);
+}

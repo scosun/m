@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
     <link rel="stylesheet" href="../../../css/seat.css" media="all">
+    <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
     <script src="../../../js/jquery-3.1.1.min.js"></script>
     <script src="/m/js/scosun.js"></script>
     <link rel="stylesheet" href="../../arrange/meet/rule_zq.css" />
@@ -113,12 +116,12 @@
                 <a><span>桌牌控制</span></a>
                 <ul class="dropdown-menu-nav">
                     <li class="title">桌牌状态</li>
-                    <li><a>会议准备</a></li>
-                    <li><a>会议开始</a></li>
-                    <li><a>会议暂停</a></li>
-                    <li><a>会议恢复</a></li>
-                    <li><a>会议结束</a></li>
-                    <li><a>重新开始</a></li>
+                    <li class="title">会议准备</li>
+                    <li id="meetstart" ><a>会议开始</a></li>
+                    <li class="title">会议暂停</li>
+                    <li class="title">会议恢复</li>
+                    <li id="meetstop" ><a>会议结束</a></li>
+                    <li class="title">重新开始</li>
                 </ul>
             </div>
         </div>
@@ -204,142 +207,252 @@
                 var datas = data.data;
                 $("body").append(datas.code);
 
-                getFindByseatmac();
+
+                var seats = $("#seatcontainer .seatdiv");
+                seats.each(function(){
+                    var html = this.id;
+                    $(this).attr({"title":html,"alt":html});
+                    $(this).html('');
+                })
+
+                // getFindByseatmac();
             }
         });
 
 
-        var macdata = {};
-        var interTime = 20;
-        var inter = null;
-        var chkseat = {};
+        $("#meetstart").bind('click',function(){
+            layer.confirm('确定开始会议吗？', {
+				btn: ['确定', '取消']
+			}, function (index) {
+				StartMeetWebSocket();
+				layer.close(index);
+			}.bind(this));
+        })
+        $("#meetstop").bind('click',function(){
+            layer.confirm('确定结束会议吗？', {
+				btn: ['确定', '取消']
+			}, function (index) {
+				
+				layer.close(index);
+			}.bind(this));
+        })
 
-        function getFindByseatmac(){
-            $.ajax({
-                url: "https://f.longjuli.com/seatmac/findByseatmac",
-                type: "GET",
-                async: true,
-                data: {
-                    "roomid": roomid
-                },
-                success: function(data) {
-                    var data = data.data || {};
-                    macdata = data;
-                    setSeatBindStatus(data);
-                    bindOneSeats();
-                }
-            });
-        }
 
-        function setmacByroomid(mac){
-            $.ajax({
-                url: "https://f.longjuli.com/seatmac/setmacByroomid",
-                type: "POST",
-                async: true,
-                data: {
-                    "roomid": roomid,
-                    "seatid": chkseat.seatid,
-                    "mac":mac
-                },
-                success: function(res) {
-                    if(res.code == 0){
-                        getFindByseatmac();
-                    }else{
-                        layer.msg(res.msg || "修改mac失败");
-                    }
-
-                }
-            });
-        }
-        function deleteSeatMac(){
-            if(!chkseat.mac){
-                return;
+        function StartMeetWebSocket(){
+            if ("WebSocket" in window){
+               // 打开一个 web socket
+               var ws = new WebSocket("ws://m.longjuli.com:8083/cardWebSocket/shuxian");
+                
+               ws.onopen = function(){
+                  // Web Socket 已连接上，使用 send() 方法发送数据
+                  ws.send(roomid+"&startMeeting");
+                  console.log("数据发送中...");
+               };
+                
+               ws.onmessage = function (evt) { 
+                  var received_msg = evt.data || "";
+                  var obj = JSON.parse(received_msg);
+                  if(obj.code == 0){
+                      
+                  }
+                  console.log("数据已接收...",obj);
+               };
+                
+               ws.onclose = function() { 
+                  // 关闭 websocket
+                  console.log("链接关闭....");
+               };
+            }else{
+               // 浏览器不支持 WebSocket
+               alert("您的浏览器不支持 WebSocket!");
             }
-            $.ajax({
-                url: "https://f.longjuli.com/seatmac/delmacByroomid",
-                type: "GET",
-                async: true,
-                data: {
-                    "roomid": roomid,
-                    "seatid": chkseat.seatid
-                },
-                success: function() {
-                    getFindByseatmac();
-                }
-            });
+         }
+
+
+        // var macdata = {};
+        // var interTime = 20;
+        // var inter = null;
+        // var chkseat = {};
+
+        // function getFindByseatmac(){
+        //     $.ajax({
+        //         url: "https://f.longjuli.com/seatmac/findByseatmac",
+        //         type: "GET",
+        //         async: true,
+        //         data: {
+        //             "roomid": roomid
+        //         },
+        //         success: function(data) {
+        //             var data = data.data || {};
+        //             macdata = data;
+        //             setSeatBindStatus(data);
+        //             bindOneSeats();
+        //         }
+        //     });
+        // }
+
+        // function setmacByroomid(mac){
+        //     $.ajax({
+        //         url: "https://f.longjuli.com/seatmac/setmacByroomid",
+        //         type: "POST",
+        //         async: true,
+        //         data: {
+        //             "roomid": roomid,
+        //             "seatid": chkseat.seatid,
+        //             "mac":mac
+        //         },
+        //         success: function(res) {
+        //             if(res.code == 0){
+        //                 getFindByseatmac();
+        //             }else{
+        //                 layer.msg(res.msg || "修改mac失败");
+        //             }
+
+        //         }
+        //     });
+        // }
+        // function deleteSeatMac(){
+        //     if(!chkseat.mac){
+        //         return;
+        //     }
+        //     $.ajax({
+        //         url: "https://f.longjuli.com/seatmac/delmacByroomid",
+        //         type: "GET",
+        //         async: true,
+        //         data: {
+        //             "roomid": roomid,
+        //             "seatid": chkseat.seatid
+        //         },
+        //         success: function() {
+        //             getFindByseatmac();
+        //         }
+        //     });
+        // }
+
+
+
+        // function setSeatBindStatus(data){
+        //     $(".bindmac").removeClass("bindmac");
+        //     data.forEach(function(item){
+        //         var id = item.seatid;
+        //         $("#" + id).addClass("bindmac");
+        //     })
+        // }
+
+
+        // function bindOneSeats(){
+        //     // var selList = $("#seatcontainer .seatdiv:not(.rownumseats)");
+        //     var selList = $("#seatcontainer .bindmac");
+        //     chkseat = {};
+        //     selList.removeClass('seled');
+        //     selList.unbind("click");
+        //     selList.bind("click",function(evt){
+        //         var sel = $(this);
+        //         if (!sel.hasClass('seled')) {
+        //             selList.removeClass('seled');
+        //             sel.addClass('seled');
+        //             var seatid = sel.attr("id");
+        //             chkseat = macdata.filter(function(item){
+        //                 return item.seatid == seatid;
+        //             })[0] || {seatid:seatid};
+
+        //         } else {
+        //             sel.removeClass('seled');
+        //             chkseat = {};
+        //         }
+        //     })
+        // }
+
+
+        // function editSeatMac(){
+        //     if(!chkseat.seatid){
+        //         layer.msg("没有选中座位");
+        //     }else if(chkseat.mac){
+        //         layer.open({
+        //             type: 2,
+        //             title: '编辑绑定',
+        //             shadeClose: true, //弹出框之外的地方是否可以点击
+        //             offset: '10%',
+        //             area: ['420px', '180px'],
+        //             content: 'edit_mac.html',
+        //             btn: ['提交', '取消'],
+        //             yes: function(index, layero) {
+        //                 var mac = layero.find('iframe').contents().find("#mac").val() || "";
+        //                 if(mac && mac != chkseat.mac){
+        //                     setmacByroomid(mac);
+        //                 }
+
+        //                 layer.close(index);
+        //             },
+        //             success:function(layero) {
+        //                 layero.find('iframe').contents().find("#mac").val(chkseat.mac || "")
+        //             }
+        //         });
+        //     }
+
+        // }
+
+
+        function bindContextMenu(){
+			removeContainerEvent();
+
+			var filediv = $("#seatcontainer .bindmac");
+			for(var i = 0, len = filediv.length; i < len; i++){
+				var item = filediv[i];
+				bindMenu(item.id);
+			}
+		}
+
+		var currseatno;
+		function bindMenu(seatno){
+			var menuJson = [
+				{
+					name:"桌牌详情",
+					id:"menu1",
+					seatno:seatno,
+					callback: function(seatno) {
+						layer.msg("桌牌详情");
+					}
+				},
+				{
+					name:"编辑绑定",
+					id:"menu2",
+					seatno:seatno,
+					callback: function(seatno) {
+						chkseat = macdata.filter(function(item){
+							return item.seatid == seatno;
+						})[0] || {seatid:seatid};
+						editSeatMac();
+					}
+				},
+				{
+					name:"解除绑定",
+					id:"menu3",
+					seatno:seatno,
+					callback: function(seatno) {
+						chkseat = macdata.filter(function(item){
+							return item.seatid == seatno;
+						})[0] || {seatid:seatid};
+
+						deleteSeatMac();
+					}
+				}
+				
+			];
+			
+			if($("#"+seatno).length > 0){
+				ContextMenu.bind("#"+seatno, menuJson);
+			}
         }
+        
+        // function startInterval(){
+        //     clearInterval(inter);
+        //     inter = setInterval(function(){
+        //         getFindByseatmac();
+        //     },interTime * 1000);
+        // }
 
-
-
-        function setSeatBindStatus(data){
-            $(".bindmac").removeClass("bindmac");
-            data.forEach(function(item){
-                var id = item.seatid;
-                $("#" + id).addClass("bindmac");
-            })
-        }
-
-
-        function bindOneSeats(){
-            // var selList = $("#seatcontainer .seatdiv:not(.rownumseats)");
-            var selList = $("#seatcontainer .bindmac");
-            chkseat = {};
-            selList.removeClass('seled');
-            selList.unbind("click");
-            selList.bind("click",function(evt){
-                var sel = $(this);
-                if (!sel.hasClass('seled')) {
-                    selList.removeClass('seled');
-                    sel.addClass('seled');
-                    var seatid = sel.attr("id");
-                    chkseat = macdata.filter(function(item){
-                        return item.seatid == seatid;
-                    })[0] || {seatid:seatid};
-
-                } else {
-                    sel.removeClass('seled');
-                    chkseat = {};
-                }
-            })
-        }
-
-
-        function editSeatMac(){
-            if(!chkseat.seatid){
-                layer.msg("没有选中座位");
-            }else if(chkseat.mac){
-                layer.open({
-                    type: 2,
-                    title: '编辑绑定',
-                    shadeClose: true, //弹出框之外的地方是否可以点击
-                    offset: '10%',
-                    area: ['420px', '180px'],
-                    content: 'edit_mac.html',
-                    btn: ['提交', '取消'],
-                    yes: function(index, layero) {
-                        var mac = layero.find('iframe').contents().find("#mac").val() || "";
-                        if(mac && mac != chkseat.mac){
-                            setmacByroomid(mac);
-                        }
-
-                        layer.close(index);
-                    },
-                    success:function(layero) {
-                        layero.find('iframe').contents().find("#mac").val(chkseat.mac || "")
-                    }
-                });
-            }
-
-        }
-
-        function startInterval(){
-            clearInterval(inter);
-            inter = setInterval(function(){
-                getFindByseatmac();
-            },interTime * 1000);
-        }
-
-        startInterval();
+        // startInterval();
     });
 
 

@@ -77,6 +77,13 @@
                 </div>
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
+                    <!-- 控制台 // 20.04.06 dh 新加 -->
+                    <li data-name="component" class="layui-nav-item">
+                        <a lay-href="systemindex/systemindex.html" lay-tips="组件" lay-direction="4">
+                            <i class="layui-icon layui-icon-date"></i>
+                            <cite>控制台</cite>
+                        </a>
+                    </li>
                     <li data-name="home" class="layui-nav-item ">
                         <a href="javascript:;" lay-tips="主页" lay-direction="2">
                             <i class="layui-icon iconfont icon-wodehuiyi"></i>
@@ -97,7 +104,8 @@
                             <dd data-name="metingman"><a
                                     lay-href="arrange/rulezone/rulezone.html">会场座区设定</a></dd>
                             <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
-                            <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd>
+                            <!-- // 20.04.06 dh 去掉
+                                <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd> -->
                         </dl>
                         </dl>
                     </li>
@@ -112,7 +120,7 @@
 
                             <dd data-name="property" id="type"><a
                                     lay-href="arrange/typelist/typelist.html">属性列表</a></dd>
-                            <dd><a lay-href="arrange/attendersort/attender_sort_list.html">智能排序</a></dd>
+                            <dd><a lay-href="arrange/attendersort/sortattendee.html">智能排序</a></dd>
                         </dl>
                         </dl>
                     </li>

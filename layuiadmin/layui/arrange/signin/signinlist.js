@@ -14,7 +14,12 @@ layui.config({
     var devices = {};
     var arrangeList = [];
     window.flag = false
-    $('#group').append("<button class='layui-btn layui-ds' data-type='screening' id='screening'>筛选</button><button class='layui-btn layui-ds' data-type='detailedinfo' id='detailedinfo' style='position: relative;'>详细信息</button>")
+    $('#group').append(
+        // "<button class='layui-btn layui-ds' data-type='screening' id='screening'>筛选</button><button class='layui-btn layui-ds' data-type='detailedinfo' id='detailedinfo' style='position: relative;'>详细信息</button>"
+        '<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="screening" id="screening">筛选<s></s></a><a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="detailedinfo" id="detailedinfo">详细<s></s></a>'
+    )
+    
+    
     $.ajax({
         async: true,
         type: "get",

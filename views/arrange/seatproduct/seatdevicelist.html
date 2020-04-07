@@ -76,11 +76,17 @@
                         <div>
                             <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;"
                                  id="group">
+                                <!-- // 20.04.06 dh
                                 <button class='layui-btn layui-ds' data-type='add' id='addmeeting' data='增加'>新增</button>
                                 <button class="layui-btn" id="importb" data-type="getCheckData"data='导入设备'>ß导入</button>
                                 <button class='layui-btn layui-ds' data-type='download' id='emptymeet'>模版下载</button>
-<!--                                <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
-<!--                                <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
+                                -->
+                                <!-- // 20.04.06 dh 修改为以下-->
+                                <button class="gradient-block-diagonal" data-type="add" id='addmeeting'>新建</button>
+                                <a class="layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="importb">ß导入<s></s></a>
+                                <a class="layui-btn-a-grey" href="javascript:;" data-type="download" id='emptymeet'>模版下载<s></s></a>
+<!--                            <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
+<!--                            <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
                             </div>
 
                             <div class="layui-input-inline"

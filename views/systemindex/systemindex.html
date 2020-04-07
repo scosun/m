@@ -1,0 +1,580 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>系统主页</title>
+<link rel="stylesheet" href="font/iconfont.css">
+<link rel="stylesheet" href="../../layuiadmin/font/iconfont.css">
+<script src="../../js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="jquery.SuperSlide.2.1.3.js"></script>
+<style>
+html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {-webkit-text-size-adjust:none;}/*阻止转屏时字体变大*/
+html,body,div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,img,dd,dt,dl,ol{padding:0; margin:0; border:none;}
+img{padding:0; margin:0; vertical-align:top; border:none;}
+ul,li{list-style:none outside none; padding:0; margin:0;}
+a,button,input,span,textarea,div,li{-webkit-touch-callout:none;-webkit-tap-highlight-color:rgba(255,0,0,0);margin:0;padding:0;}
+a{text-decoration:none;}
+em{font-style:normal}
+i{display:inline-block;vertical-align: middle;}
+span{display:inline-block;vertical-align: inherit;}
+.clear{clear:both; height:0; width:100%;}
+.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0}
+.clearfix{zoom: 1; clear:both;}
+ul,li{list-style:none outside none; padding:0; margin:0;}
+html{
+    background-color: #f1f2f7;
+}
+.sysdiv_w100{width:100%}
+.sysdiv_w50{width:50%;float: left}
+.sysdiv_cont{
+    /*border:1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);*/
+    /*border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);*/
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0;
+    border: 0px solid transparent;
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+.sysdiv_cont_title {
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid #e8e8e8;
+    color: #333;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px;
+}
+.sysml5{margin-left:5px;}
+.sysmr5{margin-right:5px;}
+.sysml20{margin-left:20px;}
+.sysmr20{margin-right:20px;}
+.sysmb10{margin-bottom:10px;}
+.syslist li{
+    float: left;
+    width:25%;
+    text-align: center;
+    transition: All 0.2s ease-in-out;
+    -webkit-transition: All 0.2s ease-in-out;
+    -moz-transition: All 0.2s ease-in-out;
+    -o-transition: All 0.2s ease-in-out;
+}
+.syslist li .sysdiv_cont{
+    padding: 25px 0 30px;
+    position: relative;
+}
+.syslist li:hover{
+    transform: translate(0,-5px);
+    -webkit-transform: translate(0,-5px);
+    -moz-transform: translate(0,-5px);
+    -o-transform: translate(0,-5px);
+    -ms-transform: translate(0,-5px);
+}
+.syslist li p{
+    font-size: 14px;
+    color: #99abb4
+}
+.syslist li h3{
+    font-size: 18px;
+    color: #455a64
+}
+.syslist .iconfont{font-size: 36px;}
+.syslist .icon-my-meeting{
+    color:rgba(255,255,255,.9);
+}
+.syslist .icon-canhuiren{
+    font-size: 30px;
+    color:rgba(255,255,255,.9);
+    margin-top:5px;
+}
+.syslist .icon-moban{
+    color:rgba(255,255,255,.9);
+    margin-top:3px;
+}
+.syslist .icon-wodehuichang{
+    color:rgba(255,255,255,.9);
+    margin-top: 3px;
+    margin-left: 2px;
+}
+.syslist .icon-huiyi{
+    color:rgba(255,255,255,.9);
+    margin-left: 2px;
+    margin-top: 3px;
+}
+.syslist .icon-menpaiji{
+    color:rgba(255,255,255,.9);
+    margin-left: 3px;
+    margin-top: 4px;
+}
+.syslist .icon-dianzizhuopai{
+color:rgba(255,255,255,.9);
+    margin-top: 4px;
+    margin-left: 2px;
+}
+.syslist .icon-feiji{
+    color:rgba(255,255,255,.9);
+    margin-top: 4px;
+    margin-left: -4px;
+}
+.syslist .icon-duanxin{
+    color:rgba(255,255,255,.9);
+    margin-top: 6px;
+    margin-left: 2px;
+}
+.syslist .icon-xinfeng{
+color:rgba(255,255,255,.9);
+margin-top: 4px;
+    margin-left: 2px;
+}
+.syslist .icon-wodehuiyi{
+    color:rgba(255,255,255,.9);
+    margin-top: 3px;
+}
+.syslist .icon-bianpaiguize{
+    color:rgba(255,255,255,.9);
+   margin-top: 1px;
+    margin-left: -2px;
+}
+.syslist .icon-canhuirenyuan{
+    color:rgba(255,255,255,.9);
+    margin-top: 2px;
+    margin-left: 2px;
+}
+.syslist .icon-canhuibaodao{
+    color:rgba(255,255,255,.9);
+    margin-top: 3px;
+    margin-left: 2px;
+}
+.syslist .icon-duanxintongzhi{
+    color:rgba(255,255,255,.9);
+    margin-top: 2px;
+    margin-left: 2px;
+}  
+.sysdiv_cont_text{
+    padding:25px 0 0;
+    font-size: 14px;
+    color:#999;
+    text-align:center
+}
+.sysdiv_cont_text2{
+    padding:10px;
+    font-size: 12px;
+    color:#999;
+    text-align:left;
+    line-height:26px;
+}
+.sysdiv_cont_text2 p{
+    padding-left:40px;
+}
+.iconfont.icon-naozhong{
+    float: left;
+    color:#ff0000;
+    font-size: 36px;
+}
+.syslisttext_tit{
+    font-size: 14px;
+    color: #444;
+    font-weight: 400;
+    line-height:34px;
+}
+.syslisttext li{
+    border-bottom:1px dotted #e6e6e6;
+}
+.syslisttext li a{
+    display: block;
+    position:relative;
+    font-size: 12px;
+    color:#999;
+    text-align:left;
+    line-height:34px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 40px
+}
+.syslisttext li a:hover{
+    color:#fd5576;
+}
+.syslisttext li a span{
+    position:absolute;
+    top:0;
+    right: 0
+}
+.floatL .f1{
+    position: absolute;
+    left:20px;
+    top:12px;
+}
+.floatL .f2{
+    position: absolute;
+    left: 34px;
+    top: 31px;
+}
+.floatr{
+    float: left;padding-left:100px;
+    text-align: left;
+    padding-top:8px;
+    height: 45px
+}
+.icon-weibiaoti1fuzhi{
+    font-size: 66px!important
+}
+</style>
+</head>
+<body>
+<div class="sysdiv_w100 sysmb10" style="margin-top:20px">
+    <div class="sysdiv_cont sysml20 sysmr20">
+        <div class="sysdiv_cont_text2">
+            <span class="iconfont icon-naozhong"></span>
+            <p>
+            会议提醒：2020年4月2日（星期四）9：00，在龙奥大厦G0401会议室，召开全市领导干部会议。参会人数：572人
+            </p>
+        </div>
+    </div>
+</div>
+<div class="sysdiv_w100 clearfix sysmb10" style="margin-top:20px">
+    <div class="sysml20">
+        <ui class="syslist clearfix">
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#ed6f71"></span>
+                        <span class="f2 iconfont icon-my-meeting"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>我的会议</p>
+                        <h3>200</h3>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#4c9ae5"></span>
+                        <span class="f2 iconfont icon-canhuiren"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>参会人员</p>
+                        <h3>30，000</h3>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#30c5ab"></span>
+                        <span class="f2 iconfont icon-moban"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>会场模板</p>
+                        <h3>10</h3>
+                    </div>
+                </div>
+            </li>
+        </ui>
+    </div>
+</div>
+<div class="sysdiv_w100 clearfix sysmb10" style="margin-top:20px">
+    <div class="sysml20">
+        <ui class="syslist clearfix">
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#febb44"></span>
+                        <span class="f2 iconfont icon-wodehuichang"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>我的会场</p>
+                        <h3>10</h3>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5576"></span>
+                        <span class="f2 iconfont icon-huiyi"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>会议中</p>
+                        <h3>2</h3>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#1ca4fc"></span>
+                        <span class="f2 iconfont icon-menpaiji"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>门牌设备</p>
+                        <h3>10</h3>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#7f68f1"></span>
+                        <span class="f2 iconfont icon-dianzizhuopai"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>桌牌设备</p>
+                        <h3>1500</h3>
+                    </div>
+                </div>
+            </li>
+        </ui>
+    </div>
+</div>
+<div class="sysdiv_w100 clearfix sysmb10" style="margin-top:20px">
+    <div class="sysml20">
+        <ui class="syslist clearfix">
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5830"></span>
+                        <span class="f2 iconfont icon-feiji"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>通知</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#f7bb7a"></span>
+                        <span class="f2 iconfont icon-duanxin"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>提醒</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#2eb930"></span>
+                        <span class="f2 iconfont icon-xinfeng"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>回复</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#97e0e1"></span>
+                        <span class="f2 iconfont icon-xinfeng"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>待发</p>
+                    </div>
+                </div>
+            </li>
+            
+        </ui>
+    </div>
+</div> 
+<div class="sysdiv_w100 clearfix sysmb10" style="margin-top:20px">
+    <div class="clearfix sysml20">
+        <div style="float:left;width:50%">
+            <div class="sysdiv_cont" style="margin-right: 20px">
+                <div class="sysdiv_cont_title">
+                    发送记录
+                </div>
+                <div class="txtScroll-top" style="padding:10px 15px 10px">
+                    <div class="bd">
+                        <ul class="infoList syslisttext clearfix">
+                            <li>
+                                <h4 class="syslisttext_tit">2020-04-02</h4>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知2
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知会议通知会议通知会议通知
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知3
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <h4 class="syslisttext_tit">2020-04-06</h4>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知4
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知5
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="float:left;width:50%">
+            <div class="sysdiv_cont" style="margin-right: 20px">
+                <div class="sysdiv_cont_title">
+                    回复记录
+                </div>
+                <div class="txtScroll-top" style="padding:10px 15px 10px">
+                    <div class="bd">
+                        <ul class="infoList syslisttext clearfix">
+                            <li>
+                                <h4 class="syslisttext_tit">2020-04-02</h4>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知2
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知会议通知会议通知会议通知
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知3
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <h4 class="syslisttext_tit">2020-04-06</h4>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知4
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    11:00 向***等（90）发出会议通知5
+                                    <span class="r">详情</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sysdiv_w100 clearfix sysmb10" style="margin-top:20px">
+    <div class="sysml20">
+        <ui class="syslist clearfix">
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#ed6f71"></span>
+                        <span class="f2 iconfont icon-wodehuiyi"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>我的会议</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#febb44"></span>
+                        <span class="f2 iconfont icon-wodehuichang"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>我的会场</p>
+                    </div>
+                </div>
+            </li>
+            
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5576"></span>
+                        <span class="f2 iconfont icon-bianpaiguize"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>编排规则</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#4c9ae5"></span>
+                        <span class="f2 iconfont icon-canhuirenyuan"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>参会人员</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#7f68f1"></span>
+                        <span class="f2 iconfont icon-canhuibaodao"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>快速签到</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                    <div class="floatL">
+                        <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5830"></span>
+                        <span class="f2 iconfont icon-duanxintongzhi"></span>
+                    </div>
+                    <div class="floatr">
+                        <p>短信通知</p>
+                    </div>
+                </div>
+            </li>
+        </ui>
+    </div>
+</div> 
+<script type="text/javascript">
+jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:5});
+</script>
+</body>
+</html>

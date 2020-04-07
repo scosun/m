@@ -53,6 +53,14 @@
             .layui-input-block {
                 margin-left: 0
             }
+            .adjustbtn{
+                margin-top: 4px;
+                display: block;
+                width:20px;
+                height: 20px;
+                background:url(../../../images/rightbtn.png) no-repeat center center;
+                background-size: 20px 20px;
+            }
 
     </style>
 </head>
@@ -107,11 +115,29 @@
                                         </script>
                                         <!-- 调整 -->
                                         <script type="text/html" id="Adjust">
-                                            <img src="../../../images/rightbtn.png" class="layui-icon-snowflake"lay-event="Adjust" width="20">
+                                            <a lay-event="Adjust" class="adjustbtn"></a >
                                         </script>
                                     </div>
                                     <!-- tab2  默认排序 -->
-                                    <div class="layui-tab-item">默认排序</div>
+                                    <div class="layui-tab-item"> <div class="layui-tab-item layui-show">
+                                        <table class="layui-hide" id="defaultsort" lay-filter="defaultsort">
+                                        </table>
+                                        <!-- 详情 -->
+                                        <script type="text/html" id="defaultsortdetails">
+                                            <a class=" layui-icon " lay-event="details" style="font-size:1.4rem">&#xe60b;</a>
+                                        </script>
+                                        <!-- 不排序 -->
+                                        <script type="text/html" id="defaultsortnotorder">
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block">
+                                                    <input type="checkbox" name="close" lay-skin="switch" lay-text="">
+                                                    <!--<input type="checkbox" name="close" lay-skin="switch" lay-text="" checked="">-->
+                                                </div>
+                                            </div>
+                                        </script>
+                                        <!-- 调整 -->
+                                    </div>
+                                    </div>
                                     <!-- tab3  自定义排序 -->
                                     <div class="layui-tab-item">自定义排序</div>
                                 </div>
