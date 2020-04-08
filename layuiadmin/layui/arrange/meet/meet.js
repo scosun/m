@@ -93,7 +93,7 @@ layui.config({
                     align: 'left',
                 }, {
                     field: 'address',
-                    title: '会议地址',
+                    title: '会议地点',
                     align: 'left',
 
                 },
@@ -107,7 +107,7 @@ layui.config({
                 }
                 , {
                     field: 'meetingtime',
-                    title: '时间',
+                    title: '会议时间',
                     align: 'left',
 
                 },
@@ -174,7 +174,7 @@ layui.config({
                         align: 'left',
                     }, {
                     field: 'address',
-                    title: '会议地址',
+                    title: '会议地点',
                     align: 'left',
 
                 },
@@ -188,7 +188,7 @@ layui.config({
                     }
                     , {
                     field: 'meetingtime',
-                    title: '时间',
+                    title: '会议时间',
                     align: 'left',
 
                 },
@@ -283,9 +283,7 @@ layui.config({
         if (obj.event === 'detail') {
             layer.msg('ID：' + data.id + ' 的查看操作');
         } else if (obj.event === 'del') {
-            layer.confirm('真的删除行么', function(index) {
-                obj.del();
-
+            layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除会议操作,该会议删除后,已导入会议的参会人员、与编排规则的对应绑定关系设置将被一并删除,是否确认继续进行该操作?',{title:'温馨提示'}, function(index) {
                 $.ajax({
                     async: false,
                     type: "get",
@@ -449,7 +447,7 @@ layui.config({
                     return layer.msg("请选择会议后再批量删除")
                 }
                 //获取选中数目
-                layer.confirm('真的删除吗？', function() {
+                layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除会议操作,该会议删除后,已导入会议的参会人员、与编排规则的对应绑定关系设置将被一并删除,是否确认继续进行该操作?？',{title:'温馨提示'}, function() {
                     $.ajax({
                         async: false,
                         type: "post",
@@ -572,13 +570,13 @@ layui.config({
                                 title: '会议名称',
                                 align: 'left',
                             }, {
-                                field: 'address',
-                                title: '会议地址',
-                                align: 'left',
+                            field: 'address',
+                            title: '会议地点',
+                            align: 'left',
 
-                            },
+                        },
                             {
-                            
+
                                 //align: 'center',
                                 width: 80,
                                 flxed: '2',
@@ -586,11 +584,11 @@ layui.config({
                                 toolbar: '#rulezone',
                             }
                             , {
-                                field: 'meetingtime',
-                                title: '时间',
-                                align: 'left',
+                            field: 'meetingtime',
+                            title: '会议时间',
+                            align: 'left',
 
-                            },
+                        },
                             {
                                 width: 100,
                                 //align: 'right',

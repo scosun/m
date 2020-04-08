@@ -341,7 +341,7 @@ layui.config({
             add: function() {
                 layer.open({
                     type: 2,
-                    title: '添加编排规则',
+                    title: '规则_新建',
                     area: ['70%', '75%'],
                     btn: ['确定', '取消'],
                     maxmin: true,

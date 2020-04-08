@@ -240,7 +240,7 @@ layui.config({
 			var condi = {
 				"attribute_ids": [data.id]
 			};
-			layer.confirm('真的删除吗？', function() {
+			layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除对应绑定关系操作,执行删除操作后，与其相关联的座区自动编排数也将一并被删除,是否确认继续进行该操作？', {title:'温馨提示'},function() {
 				$.ajax({
 					url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
 					type: "POST",
@@ -311,7 +311,7 @@ layui.config({
 				var condi = {
 					"attribute_ids": arrangeList
 				};
-				layer.confirm('真的删除吗？', function() {
+				layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除对应绑定关系操作,执行删除操作后，与其相关联的座区自动编排数也将一并被删除,是否确认继续进行该操作？', {title:'温馨提示'},function() {
 					$.ajax({
 						url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
 						type: "POST",

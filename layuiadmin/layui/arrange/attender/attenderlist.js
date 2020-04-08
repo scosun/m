@@ -293,7 +293,7 @@ layui.config({
                 }
             });
         }  else if (obj.event === 'del') {
-            layer.confirm('真的删除吗？', function () {
+            layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除参会人员操作,执行删除操作后，与参会人员相关联座区自动编排数据也将一并被删除,是否确认继续进行该操作？？',{title:'温馨提示'}, function () {
                 $.ajax({
                     url: url + "/meetingcanhui/deleteMeetingCanHui",
                     type: "get",
@@ -605,7 +605,7 @@ layui.config({
             if (attenderList.length == 0) {
                 return layer.msg("请选择要删除的人员")
             }
-            layer.confirm('确定要批量删除吗?', function (index) {
+            layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除参会人员操作,执行删除操作后，与参会人员相关联座区自动编排数据也将一并被删除,是否确认继续进行该操作？？',{title:'温馨提示'}, function (index) {
 
                 $.ajax({
                     async: false,

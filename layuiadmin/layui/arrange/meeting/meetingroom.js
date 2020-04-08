@@ -294,7 +294,7 @@ layui.config({
 		if (obj.event === 'edit') {
 			layer.open({
 				type: 2,
-				title: '信息维护',
+				title: '编辑会场',
 				content: 'meeting_room_form.html',
 				maxmin: true,
 				area: ['60%', '80%'],
@@ -397,7 +397,7 @@ layui.config({
 				}
 			});
 		} else if (obj.event === 'del') {
-			layer.confirm('真的删除吗？', function() {
+			layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除会场操作,执行删除操作后，与会场相关联的编排规则、对应绑定关系、座区自动编排数据也将一并被删除，是否确认继续进行该操作？',{title:'温馨提示'}, function() {
 				$.ajax({
 					url: url+"/roomtemplate/deleteRoomtemplate",
 					type: "POST",
@@ -619,7 +619,7 @@ window.onkeyup = function(ev) {
            if ( roomList.length == 0 ) {
                return layer.msg("请选择会场后再批量删除")
            }
-           layer.confirm('真的删除吗？', function() {//获取选中数目
+           layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除会场操作,执行删除操作后，与会场相关联的编排规则、对应绑定关系、座区自动编排数据也将一并被删除，是否确认继续进行该操作？',{title:'温馨提示'}, function() {//获取选中数目
            $.ajax({
                    async: false,
                    type: "post",

@@ -9,7 +9,7 @@ layui.config({
     excel:'/sourtable/excel',
     tableChild:'/sourtable/tableChild',
     tableMerge:'/sourtable/tableMerge'
-}).use(['index', 'user', 'form', 'table','layedit', 'laydate', 'upload','soulTable'], function () {
+}).use(['index', 'user', 'form', 'table','layedit', 'laydate', 'upload','soulTable','laypage'], function () {
     var a = {};
     var b = {};
     var $ = layui.$,
@@ -20,15 +20,15 @@ layui.config({
         table = layui.table,
         layer = layui.layer,
          upload = layui.upload,
-        layedit = layui.layedit,
+        laypage = layui.laypage,
         laydate = layui.laydate,
         datas = null,
         soulTable = layui.soulTable,
         router = layui.router();
     element.render();
     //初次渲染表格
-    var url = "https://f.longjuli.com"
-    // var url="http://127.0.0.1:8083";
+    // var url = "https://f.longjuli.com"
+    var url="http://127.0.0.1:8083";
     var  id =  getUrlParam("id")
     console.log(id)
     var devices = {};
@@ -39,6 +39,7 @@ layui.config({
     $('#group').append('<button class="layui-btn layui-ds custom" data-type="custom" id="custom" data="自定义排序">自定义排序</button>')
     $('#group').append('<button class="layui-btn layui-ds exportb" data-type="exportb" id="exportb" data="导出">导出</button>')
     $('#group').append('<button class="layui-btn layui-ds importb" data-type="importb" id="importb" data="导入">导入</button>')
+    $('#group').append('<button class="layui-btn layui-ds download" data-type="download" id="download" data="下载模板">下载模版</button>')
     $('#group').append('<button class="layui-btn layui-ds saveb" data-type="saveb" id="saveb" data="保存">保存</button>')
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -56,7 +57,7 @@ layui.config({
 
     upload.render({
         elem: '#importb'
-        , url: url+'/attendersort/attendersort/'+id,
+        , url: url+'/attendeesort/attendeesort/'+id,
         // auto: false,
         exts:'xls|xlsx',
         //bindAction: '#btn99',
@@ -90,7 +91,210 @@ layui.config({
         };
         return jlength
     };
-    table.render({
+        function intelligentsorting(){
+        table.render({
+            elem: '#test-table-operate',
+            // height: 'full-200',
+            url: url + "/attendeesort/intelligentsorting", //数据接口
+            //    ,
+            where: {
+                id: id
+            },
+            toolbar: '<div><a class="layui-btn layui-btn-sm" lay-event="exportExcel">导出</a></div>',
+            xhrFields: {
+                withCredentials: true
+            },
+            rowDrag: {
+                trigger: '.adjustbtn', done: function (obj) {
+                    // 完成时（松开时）触发
+                    // 如果拖动前和拖动后无变化，则不会触发此方法
+                    console.log(obj.row) // 当前行数据
+                    console.log(obj.cache) // 改动后全表数据
+                    console.log(obj.oldIndex) // 原来的数据索引
+                    console.log(obj.newIndex) // 改动后数据索引
+                }
+            }
+            , totalRow: true,
+            method: 'get',
+            page: {
+                layout: ['prev', 'page', 'next', 'count', 'skip']
+            },
+            cols: [
+                [ //表头
+                    {
+                        type: 'checkbox',
+                        fixed: 'left'
+                    },
+                    {
+                        field: 'id',
+                        title: '序号',
+                        align: 'left',
+                        unresize: 'false',
+                        width: 80
+                    },
+                    {
+                        field: 'name',
+                        title: '姓名',
+                        align: 'leftleft',
+                    },
+                    {
+                        field: 'company',
+                        title: '单位',
+                        align: 'left',
+                    }, {
+                    field: 'duties',
+                    align: 'left',
+                    title: '职务'
+                },
+                    {
+                        title: '详情',
+                        toolbar: '#details',
+                    },
+                    {
+                        title: '不排序',
+                        toolbar: '#notorder',
+                    }
+                    ,
+                    {
+                        title: '调整',
+                        toolbar: '#Adjust',
+                    }
+                ]
+            ],
+
+            event: true,
+            page: false,
+            limit: 15,
+            skin: 'line',
+            even: true,
+            limits: [5, 10, 15],
+            parseData: function (res, curr, count) {
+                console.log(6666)
+                return {
+                    "code": res.code, //解析接口状态
+                    "count": res.count, //解析数据长度
+                    "data": res.attendees //解析数据列表
+                };
+
+            },
+            done: function () {
+                soulTable.render(this)
+            }
+        })
+    }
+    function page() {
+        var defaultsort =  table.render({
+            elem: '#defaultsort',
+            // height: 'full-200',
+            url: url+"/attendeesort/selectSelect", //数据接口
+            //    ,
+            where:{
+                sortattendeeid:id
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            rowDrag: {trigger: '.adjustbtn',done: function(obj) {
+                    // 完成时（松开时）触发
+                    // 如果拖动前和拖动后无变化，则不会触发此方法
+                    console.log(obj.row) // 当前行数据
+                    console.log(obj.cache) // 改动后全表数据
+                    console.log(obj.oldIndex) // 原来的数据索引
+                    console.log(obj.newIndex) // 改动后数据索引
+                }}
+            ,totalRow: true,
+            contextmenu: {
+                header: false, // false 禁用右键（组织浏览器的右键菜单）
+                body: false,
+                total: false
+            },
+            method: 'get',
+            page: {
+                layout: ['prev', 'page', 'next', 'count', 'skip'],
+                curr: 2
+            },
+            cols: [
+                [ //表头
+                    {
+                        type: 'checkbox',
+                        fixed: 'left'
+                    },
+                    {
+                        field: 'name',
+                        title: '姓名',
+                        align: 'leftleft',
+                    },
+                    {
+                        field: 'company',
+                        title: '单位',
+                        align: 'left',
+                    }, {
+                    field: 'duties',
+                    align: 'left',
+                    title: '职务'
+                },
+                    {
+                        title: '详情',
+                        toolbar: '#details',
+                    },
+                    {
+                        title: '不排序',
+                        toolbar: '#notorder',
+                    }
+                    ,
+                    {
+                        title: '调整',
+                        toolbar: '#Adjust',
+                        width: 165,
+                        contextmenu: {
+                            // 表头右键菜单配置
+
+                            // 表格内容右键菜单配置
+                            body: [
+                                {
+                                    name: '插入上一页',
+                                    click: function(obj) {
+                                        console.log(defaultsort.config.page.curr)
+                                        console.log(defaultsort.config.limit)
+                                        page();
+                                    }
+                                },
+                                {
+                                    name: '插入下一页',
+                                    click: function(obj) {
+                                        obj.update({author: obj.row.author + '+1'})
+                                    }
+                                }
+                            ],
+                            // 合计栏右键菜单配置
+                        }
+
+                    }
+                ]
+            ],
+
+            event: true,
+            page: true,
+            limit: 15,
+            skin: 'line',
+            even: true,
+            limits: [5, 10, 15],
+            parseData: function (res, curr, count) {
+                console.log(6666)
+                return {
+                    "code": res.code, //解析接口状态
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+
+            },
+            done:function (res,curr,count) {
+
+                soulTable.render(this)
+            }
+        });
+    }
+     var defaultsort =  table.render({
         elem: '#defaultsort',
         // height: 'full-200',
         url: url+"/attendeesort/selectSelect", //数据接口
@@ -110,6 +314,11 @@ layui.config({
                 console.log(obj.newIndex) // 改动后数据索引
             }}
         ,totalRow: true,
+        contextmenu: {
+            header: false, // false 禁用右键（组织浏览器的右键菜单）
+            body: false,
+            total: false
+        },
         method: 'get',
         page: {
             layout: ['prev', 'page', 'next', 'count', 'skip']
@@ -119,13 +328,6 @@ layui.config({
                 {
                     type: 'checkbox',
                     fixed: 'left'
-                },
-                {
-                    field: 'id',
-                    title: '序号',
-                    align: 'left',
-                    unresize: 'false',
-                    width: 80
                 },
                 {
                     field: 'name',
@@ -153,12 +355,36 @@ layui.config({
                 {
                     title: '调整',
                     toolbar: '#Adjust',
+                    width: 165,
+                    contextmenu: {
+                        // 表头右键菜单配置
+
+                        // 表格内容右键菜单配置
+                        body: [
+                            {
+                                name: '插入上一页',
+                                click: function(obj) {
+                                    console.log(defaultsort.config.page.curr)
+                                    console.log(defaultsort.config.limit)
+                                    page();
+                                }
+                            },
+                            {
+                                name: '插入下一页',
+                                click: function(obj) {
+                                    obj.update({author: obj.row.author + '+1'})
+                                }
+                            }
+                        ],
+                        // 合计栏右键菜单配置
+                    }
+
                 }
             ]
         ],
 
         event: true,
-        page: false,
+        page: true,
         limit: 15,
         skin: 'line',
         even: true,
@@ -168,11 +394,12 @@ layui.config({
             return {
                 "code": res.code, //解析接口状态
                 "count": res.count, //解析数据长度
-                "data": res.attendees //解析数据列表
+                "data": res.data //解析数据列表
             };
 
         },
-        done:function () {
+        done:function (res,curr,count) {
+
             soulTable.render(this)
         }
     });
@@ -264,12 +491,11 @@ layui.config({
     //     });
             table.render({
                 elem: '#test-table-operate',
-                contentType : "application/json",
                 // height: 'full-200',
-                url: "", //数据接口
+                url: url+"/attendeesort/selectSelect", //数据接口
                 //    ,
                 where:{
-                    attendees:data.data
+                    sortattendeeid:id
                 },
                 xhrFields: {
                     withCredentials: true
@@ -277,13 +503,13 @@ layui.config({
                 rowDrag: {trigger: '.adjustbtn',done: function(obj) {
                 // 完成时（松开时）触发
                 // 如果拖动前和拖动后无变化，则不会触发此方法
-                console.log(obj.row) // 当前行数据
-                console.log(obj.cache) // 改动后全表数据
-                console.log(obj.oldIndex) // 原来的数据索引
-                console.log(obj.newIndex) // 改动后数据索引
+                // console.log(obj.row) // 当前行数据
+                // console.log(obj.cache) // 改动后全表数据
+                // console.log(obj.oldIndex) // 原来的数据索引
+                // console.log(obj.newIndex) // 改动后数据索引
             }}
         ,totalRow: true,
-                method: 'post',
+                method: 'get',
                 page: {
                     layout: ['prev', 'page', 'next', 'count', 'skip']
                 },
@@ -337,12 +563,10 @@ layui.config({
                 even: true,
                 limits: [5, 10, 15],
                 parseData: function (res, curr, count) {
-                    console.log(6666)
-                    res = data
                     return {
-                        // "code": res.code, //解析接口状态
-                        // "count": res.count, //解析数据长度
-                        "data": res.attendees //解析数据列表
+                        "code": res.code, //解析接口状态
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
                     };
 
                 },
@@ -543,6 +767,9 @@ layui.config({
         },
         exportb:function(){
             console.log(JSON.parse(storage.getItem("data")));
+        },
+        download:function(){
+            window.location=url + "/attendeesort/download";
         },
         search: function () {
             if ($('#select-room').val() == '-1') {

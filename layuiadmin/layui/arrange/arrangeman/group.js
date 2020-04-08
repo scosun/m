@@ -10,7 +10,7 @@ layui.config({
         laydate = layui.laydate,
         form = layui.form;
     var url = "https://f.longjuli.com";
-    var url = "http://127.0.0.1:8083";
+    // var url = "http://127.0.0.1:8083";
     console.log()
 
     $.ajax({
