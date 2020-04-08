@@ -285,6 +285,10 @@
         }
         function StartMeetWebSocket(){
             if (meetWs){
+                $("#seatcontainer .seatdiv").html('');
+                $("#seatcontainer .seatdiv").removeClass("bindmac");
+                $("#seatcontainer .seatdiv").css("background","none");
+
                 // Web Socket 已连接上，使用 send() 方法发送数据
                 console.log("数据发送中...",roomid+"&startMeetingTest");
                 var msgid = layer.msg("设备启动中...")
@@ -398,7 +402,7 @@
         function setNameBySeatid(name,seatid){
             $.ajax({
                 url: "https://f.longjuli.com/tableSign/sendOneTableSign",
-                type: "POST",
+                type: "GET",
                 async: true,
                 data: {
                     "meetingid": roomid,
@@ -406,11 +410,14 @@
                     "msg":name
                 },
                 success: function(res) {
-                    // if(res.code == 0){
-                    //     getFindByseatmac();
-                    // }else{
-                    //     layer.msg(res.msg || "修改mac失败");
-                    // }
+                    if(res.code == 0){
+                        var obj = res.data || {};
+                        $("#" + obj.seatid).html(obj.name);
+                        $("#" + obj.seatid).css("background","#fff1ae");
+                        
+                    }else{
+                        layer.msg(res.msg || "修改mac失败");
+                    }
 
                 }
             });
