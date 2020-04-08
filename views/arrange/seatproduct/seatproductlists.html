@@ -98,8 +98,8 @@
                   <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
               -->
               <!-- // 20.04.06 dh 修改为以下-->
-              <button class="gradient-block-diagonal" data-type="add" id='addmeeting'>新建</button>
-              
+              <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+
             </div>
             <!-- 右侧筛选条件 -->
             <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
@@ -172,8 +172,8 @@
           },
           {
             field: 'productKey',
-            title: '产品key',
-            // width: '7%',
+            title: '产品ID',
+            width: '10%',
             //align: 'center',
             unresize: 'false',
           },
@@ -182,50 +182,50 @@
             title: '产品名字',
             align: 'left',
           },
-        //   {
-        //   field: 'nodeType',
-        //   title: '节点类型',
-        //   align: 'left',
-        //   templet: function(data) {
-        //     if (data.nodeType == 0) {
-        //       return '设备'
-        //     }
-        //     if (data.nodeType == 1) {
-        //       return '网关'
-        //     }
-        //   },
-        // },
-        //   {
-        //     field: 'aliyunCommodityCode',
-        //     title: '产品版本类型',
-        //     align: 'left',
-        //     templet: function(data) {
-        //       if (data.aliyunCommodityCode == 'iothub_senior') {
-        //         return '使用物模型'
-        //       }
-        //       if (data.aliyunCommodityCode == 'iothub') {
-        //         return '不使用物模型'
-        //       }
-        //     },
-        //   },
-        //   {
-        //     field: 'dataFormat',
-        //     title: '产品数据格式',
-        //     align: 'left',
-        //     templet: function(data) {
-        //       if (data.dataFormat == 0) {
-        //         return '透传/自定义格式'
-        //       }
-        //       if (data.dataFormat == 1) {
-        //         return 'Alink协议'
-        //       }
-        //     },
-        //   },
-        //   {
-        //     field: 'categoryId',
-        //     title: '设备类型',
-        //     align: 'left',
-        //   },
+          {
+            field: 'nodeType',
+            title: '节点类型',
+            align: 'left',
+            templet: function(data) {
+              if (data.nodeType == 0) {
+                return '设备'
+              }
+              if (data.nodeType == 1) {
+                return '网关'
+              }
+            },
+          },
+          //   {
+          //     field: 'aliyunCommodityCode',
+          //     title: '产品版本类型',
+          //     align: 'left',
+          //     templet: function(data) {
+          //       if (data.aliyunCommodityCode == 'iothub_senior') {
+          //         return '使用物模型'
+          //       }
+          //       if (data.aliyunCommodityCode == 'iothub') {
+          //         return '不使用物模型'
+          //       }
+          //     },
+          //   },
+          {
+            field: 'dataFormat',
+            title: '产品数据格式',
+            align: 'left',
+            templet: function(data) {
+              if (data.dataFormat == 0) {
+                return '透传/自定义格式'
+              }
+              if (data.dataFormat == 1) {
+                return 'Alink协议'
+              }
+            },
+          },
+          //   {
+          //     field: 'categoryId',
+          //     title: '设备类型',
+          //     align: 'left',
+          //   },
           // {
           //   field: 'description',
           //   title: '描述信息',
@@ -236,11 +236,28 @@
           //   title: '设备接入网关的协议类型',
           //   align: 'left',
           // },
-          // {
-          //   field: 'netType',
-          //   title: '连网方式',
-          //   align: 'left',
-          // },
+          {
+            field: 'netType',
+            title: '连网方式',
+            align: 'left',
+            templet: function(data) {
+              if (data.netType == "WIFI") {
+                return 'WiFi'
+              }
+              if (data.netType == "CELLULAR") {
+                return '蜂窝网'
+              }
+              if (data.netType == "ETHERNET") {
+                return '以太网'
+              }
+              if (data.netType == "LORA") {
+                return 'LoRaWAN'
+              }
+              if (data.netType == "OTHER") {
+                return '其他'
+              }
+            },
+          },
           // {
           //   field: 'authType',
           //   title: '设备接入物联网平台认证方式',
@@ -263,19 +280,43 @@
           //   align: 'left',
           // },
           {
-            field: 'devicecount',
+            field: 'deviceCount',
             title: '设备数量',
             align: 'left',
           },
           {
-            field: 'gmtcreate',
+            field: 'gmtCreate',
             title: '创建时间',
             align: 'left',
+            templet: function(data) {
+              console.log(data.gmtCreate);
+              var date = new Date();
+              if(data.gmtCreate.length > 10){
+                date.setTime(data.gmtCreate);
+              }else{
+                date.setTime(data.gmtCreate * 1000);
+              }
+              var Y = date.getFullYear() + '-';
+              var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+              var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+              var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+              var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+              var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+              return Y+M+D+h+m+s;
+            }
           },
           {
-            field: 'productstatus',
+            field: 'productStatus',
             title: '产品状态',
             align: 'left',
+            templet: function(data) {
+              if (data.productStatus == 'DEVELOPMENT_STATUS') {
+                return '开发中'
+              }
+              if (data.productStatus == 'RELEASE_STATUS') {
+                return '产品已发布'
+              }
+            }
           },
           // {
           //   field: 'joinPermissionId',
@@ -335,7 +376,7 @@
             {
               field: 'productKey',
               title: '产品key',
-              width: '7%',
+              width: '10%',
               //align: 'center',
               unresize: 'false',
             },
@@ -344,19 +385,19 @@
               title: '产品名字',
               align: 'left',
             },
-            //   {
-            //   field: 'nodeType',
-            //   title: '节点类型',
-            //   align: 'left',
-            //   templet: function(data) {
-            //     if (data.nodeType == 0) {
-            //       return '设备'
-            //     }
-            //     if (data.nodeType == 1) {
-            //       return '网关'
-            //     }
-            //   },
-            // },
+            {
+              field: 'nodeType',
+              title: '节点类型',
+              align: 'left',
+              templet: function(data) {
+                if (data.nodeType == 0) {
+                  return '设备'
+                }
+                if (data.nodeType == 1) {
+                  return '网关'
+                }
+              },
+            },
             //   {
             //     field: 'aliyunCommodityCode',
             //     title: '产品版本类型',
@@ -370,19 +411,19 @@
             //       }
             //     },
             //   },
-            //   {
-            //     field: 'dataFormat',
-            //     title: '产品数据格式',
-            //     align: 'left',
-            //     templet: function(data) {
-            //       if (data.dataFormat == 0) {
-            //         return '透传/自定义格式'
-            //       }
-            //       if (data.dataFormat == 1) {
-            //         return 'Alink协议'
-            //       }
-            //     },
-            //   },
+            {
+              field: 'dataFormat',
+              title: '产品数据格式',
+              align: 'left',
+              templet: function(data) {
+                if (data.dataFormat == 0) {
+                  return '透传/自定义格式'
+                }
+                if (data.dataFormat == 1) {
+                  return 'Alink协议'
+                }
+              },
+            },
             //   {
             //     field: 'categoryId',
             //     title: '设备类型',
@@ -398,11 +439,28 @@
             //   title: '设备接入网关的协议类型',
             //   align: 'left',
             // },
-            // {
-            //   field: 'netType',
-            //   title: '连网方式',
-            //   align: 'left',
-            // },
+            {
+              field: 'netType',
+              title: '连网方式',
+              align: 'left',
+              templet: function(data) {
+                if (data.netType == "WIFI") {
+                  return 'WiFi'
+                }
+                if (data.netType == "CELLULAR") {
+                  return '蜂窝网'
+                }
+                if (data.netType == "ETHERNET") {
+                  return '以太网'
+                }
+                if (data.netType == "LORA") {
+                  return 'LoRaWAN'
+                }
+                if (data.netType == "OTHER") {
+                  return '其他'
+                }
+              },
+            },
             // {
             //   field: 'authType',
             //   title: '设备接入物联网平台认证方式',
@@ -425,19 +483,43 @@
             //   align: 'left',
             // },
             {
-              field: 'devicecount',
+              field: 'deviceCount',
               title: '设备数量',
               align: 'left',
             },
             {
-              field: 'gmtcreate',
+              field: 'gmtCreate',
               title: '创建时间',
               align: 'left',
+              templet: function(data) {
+                console.log(data.gmtCreate);
+                var date = new Date();
+                if(data.gmtCreate.length > 10){
+                  date.setTime(data.gmtCreate);
+                }else{
+                  date.setTime(data.gmtCreate * 1000);
+                }
+                var Y = date.getFullYear() + '-';
+                var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+                var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+                var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+                var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+                return Y+M+D+h+m+s;
+              }
             },
             {
-              field: 'productstatus',
+              field: 'productStatus',
               title: '产品状态',
               align: 'left',
+              templet: function(data) {
+                if (data.productStatus == 'DEVELOPMENT_STATUS') {
+                  return '开发中'
+                }
+                if (data.productStatus == 'RELEASE_STATUS') {
+                  return '产品已发布'
+                }
+              }
             },
             // {
             //   field: 'joinPermissionId',
@@ -709,7 +791,7 @@
               },
               search: function () {
                 var search = undefined
-                        $('#demoReload').val() === ''?search = undefined:search = $('#demoReload').val()
+                $('#demoReload').val() === ''?search = undefined:search = $('#demoReload').val()
                 table.render({
                   elem: '#test-table-operate',
                   // height: 'full-200',
@@ -734,8 +816,8 @@
                       },
                       {
                         field: 'productKey',
-                        title: '产品key',
-                        width: '7%',
+                        title: '产品ID',
+                        width: '10%',
                         //align: 'center',
                         unresize: 'false',
                       },
@@ -744,19 +826,19 @@
                         title: '产品名字',
                         align: 'left',
                       },
-                      //   {
-                      //   field: 'nodeType',
-                      //   title: '节点类型',
-                      //   align: 'left',
-                      //   templet: function(data) {
-                      //     if (data.nodeType == 0) {
-                      //       return '设备'
-                      //     }
-                      //     if (data.nodeType == 1) {
-                      //       return '网关'
-                      //     }
-                      //   },
-                      // },
+                      {
+                        field: 'nodeType',
+                        title: '节点类型',
+                        align: 'left',
+                        templet: function(data) {
+                          if (data.nodeType == 0) {
+                            return '设备'
+                          }
+                          if (data.nodeType == 1) {
+                            return '网关'
+                          }
+                        },
+                      },
                       //   {
                       //     field: 'aliyunCommodityCode',
                       //     title: '产品版本类型',
@@ -770,19 +852,19 @@
                       //       }
                       //     },
                       //   },
-                      //   {
-                      //     field: 'dataFormat',
-                      //     title: '产品数据格式',
-                      //     align: 'left',
-                      //     templet: function(data) {
-                      //       if (data.dataFormat == 0) {
-                      //         return '透传/自定义格式'
-                      //       }
-                      //       if (data.dataFormat == 1) {
-                      //         return 'Alink协议'
-                      //       }
-                      //     },
-                      //   },
+                      {
+                        field: 'dataFormat',
+                        title: '产品数据格式',
+                        align: 'left',
+                        templet: function(data) {
+                          if (data.dataFormat == 0) {
+                            return '透传/自定义格式'
+                          }
+                          if (data.dataFormat == 1) {
+                            return 'Alink协议'
+                          }
+                        },
+                      },
                       //   {
                       //     field: 'categoryId',
                       //     title: '设备类型',
@@ -799,10 +881,28 @@
                       //   align: 'left',
                       // },
                       // {
-                      //   field: 'netType',
-                      //   title: '连网方式',
-                      //   align: 'left',
-                      // },
+                      {
+                        field: 'netType',
+                        title: '连网方式',
+                        align: 'left',
+                        templet: function(data) {
+                          if (data.netType == "WIFI") {
+                            return 'WiFi'
+                          }
+                          if (data.netType == "CELLULAR") {
+                            return '蜂窝网'
+                          }
+                          if (data.netType == "ETHERNET") {
+                            return '以太网'
+                          }
+                          if (data.netType == "LORA") {
+                            return 'LoRaWAN'
+                          }
+                          if (data.netType == "OTHER") {
+                            return '其他'
+                          }
+                        },
+                      },
                       // {
                       //   field: 'authType',
                       //   title: '设备接入物联网平台认证方式',
@@ -825,19 +925,42 @@
                       //   align: 'left',
                       // },
                       {
-                        field: 'devicecount',
+                        field: 'deviceCount',
                         title: '设备数量',
                         align: 'left',
                       },
                       {
-                        field: 'gmtcreate',
+                        field: 'gmtCreate',
                         title: '创建时间',
                         align: 'left',
+                        templet: function(data) {
+                          var date = new Date();
+                          if(data.gmtCreate.length > 10){
+                            date.setTime(data.gmtCreate);
+                          }else{
+                            date.setTime(data.gmtCreate * 1000);
+                          }
+                          var Y = date.getFullYear() + '-';
+                          var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                          var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+                          var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+                          var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+                          var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+                          return Y+M+D+h+m+s;
+                        }
                       },
                       {
-                        field: 'productstatus',
+                        field: 'productStatus',
                         title: '产品状态',
                         align: 'left',
+                        templet: function(data) {
+                          if (data.productStatus == 'DEVELOPMENT_STATUS') {
+                            return '开发中'
+                          }
+                          if (data.productStatus == 'RELEASE_STATUS') {
+                            return '产品已发布'
+                          }
+                        }
                       },
                       // {
                       //   field: 'joinPermissionId',

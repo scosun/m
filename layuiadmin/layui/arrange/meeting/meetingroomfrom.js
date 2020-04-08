@@ -31,6 +31,7 @@ layui.config({
     }
 
     var url="https://f.longjuli.com"
+    // var url="http://127.0.0.1:8083"
 
     function editSeatMap(){
         $.ajax({

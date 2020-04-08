@@ -12,6 +12,7 @@
     <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
     <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
     <script src="../../../js/scosun.js"></script>
     <style type="text/css">
         .layui-btn {
@@ -131,7 +132,7 @@
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
                             <!--// 20.04.06 dh 原来按钮
                             <button class="layui-btn layui-ds" data-type="add" >添加</button> -->
-                            <button class="gradient-block-diagonal" data-type="add">新建</button>
+                            <button class="gradient-block-diagonal layui-ds" data-type="add">新建</button>
 							
                         </div>
                         <!-- 右侧筛选条件 -->
@@ -178,7 +179,7 @@
         $('#group').append(
             // '<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
             // 20.04.06 dh 现在按钮
-            '<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>'
+            '<a class="layui-ds layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>'
         )
         function isEmptyObject(obj) {
 

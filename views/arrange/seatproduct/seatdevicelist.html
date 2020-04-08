@@ -82,11 +82,11 @@
                                 <button class='layui-btn layui-ds' data-type='download' id='emptymeet'>模版下载</button>
                                 -->
                                 <!-- // 20.04.06 dh 修改为以下-->
-                                <button class="gradient-block-diagonal" data-type="add" id='addmeeting'>新建</button>
-                                <a class="layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="importb">ß导入<s></s></a>
-                                <a class="layui-btn-a-grey" href="javascript:;" data-type="download" id='emptymeet'>模版下载<s></s></a>
-<!--                            <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
-<!--                            <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
+                                <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+                                <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckData" id="importb">导入<s></s></a>
+                                <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="download" id='emptymeet'>模版下载<s></s></a>
+                                <!--                            <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
+                                <!--                            <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
                             </div>
 
                             <div class="layui-input-inline"
@@ -133,7 +133,7 @@
 
 
 <script type="text/html" id="table-content-list">
-<!--   <a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>-->
+    <!--   <a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>-->
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
 </script>
 <script src="../../../layuiadmin/layui/layui.js"></script>
@@ -156,12 +156,12 @@
             table = layui.table,
             layer = layui.layer,
             upload = layui.upload
-            datas = null,
+        datas = null,
             router = layui.router();
         element.render();
         //初次渲染表格
         var url = "https://f.longjuli.com"
-            // var url="http://127.0.0.1:8083";
+        //    var url="http://127.0.0.1:8083";
         var devices = {};
         var attenderList = [];
         upload.render({
@@ -301,43 +301,113 @@
                         // },
                         {
                             field: 'deviceName',
-                            title: '设备名称',
+                            title: 'DeviceName',
                             align: 'leftleft',
                         },
+                        /* {
+                            field: 'nickname',
+                            // width: '25%',
+                            title: '备注名称',
+                            align: 'left',
+                        }, */
                         {
-                        field: 'deviceStatus',
-                        align: 'left',
-                        title: '设备状态',
-                        templet: function(data) {
-                            if (data.deviceStatus == 'ONLINE') {
-                                return '在线'
-                            }
-                            if (data.deviceStatus == 'OFFLINE') {
-                                return '离线'
-                            }
-                            if (data.deviceStatus == 'UNACTIVE') {
-                                return '未激活'
-                            }
-                            if (data.deviceStatus == 'UNACTIVE') {
-                                return '设备已禁用'
-                            }
-                            if (data.deviceStatus == undefined) {
-                                return ''
+                            field: 'productkey',
+                            align: 'left',
+                            title: '所属产品',
+                            templet: function(data) {
+                                var productName = "";
+                                $.ajax({
+                                    async: false,
+                                    type: "get",
+                                    url: url + "/tablesignproduct/selectByPrimaryKey",
+                                    data:{"productkey":data.productKey},
+                                    dataType: "json",
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    //成功的回调函数
+                                    success: function (date) {
+                                        productName = date.data.productName;
+                                    },
+                                    //失败的回调函数
+                                    error: function () {
+                                        console.log("error")
+                                    }
+                                })
+                                return productName;
                             }
                         },
-                    },
                         {
-                            field: 'productKey',
+                            field: 'deviceStatus',
                             align: 'left',
-                            title: '绑定产品',
-
+                            title: '设备状态',
+                            templet: function(data) {
+                                if (data.deviceStatus == 'ONLINE') {
+                                    return '在线'
+                                }
+                                if (data.deviceStatus == 'OFFLINE') {
+                                    return '离线'
+                                }
+                                if (data.deviceStatus == 'UNACTIVE') {
+                                    return '未激活'
+                                }
+                                if (data.deviceStatus == 'UNACTIVE') {
+                                    return '设备已禁用'
+                                }
+                                if (data.deviceStatus == undefined) {
+                                    return ''
+                                }
+                            },
                         },
-
                         {
-                            field: 'GmtCreate',
-                            title: '更新时间',
+                            field: 'gmtCreate',
+                            title: '设备创建时间',
                             align: 'left',
-
+                            templet: function(data) {
+                                var date = new Date(data.gmtCreate);
+                                var Y = date.getFullYear() + '-';
+                                var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                                var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+                                var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+                                var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+                                var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+                                return Y+M+D+h+m+s;
+                            }
+                        },
+                        {
+                            field: 'state',
+                            title: '会议状态',
+                            align: 'left',
+                            templet: function(data) {
+                                if (data.state == 0) {
+                                    return '未发送'
+                                }
+                                if (data.state == 1) {
+                                    return '开始会议'
+                                }
+                                if (data.state == -1) {
+                                    return '开始会议失败'
+                                }
+                                if (data.state == 2) {
+                                    return '结束会议'
+                                }
+                                if (data.state == -2) {
+                                    return '结束会议失败'
+                                }
+                            },
+                        },
+                        {
+                            field: 'bindingState',
+                            title: '绑定平台状态',
+                            align: 'left',
+                            templet: function(data) {
+                                if (data.bindingState == 0) {
+                                    return '未绑定平台'
+                                }
+                                if (data.bindingState == '1') {
+                                    return '绑定平台'
+                                }
+                            },
                         },
                         {
                             width: 140,
@@ -468,7 +538,7 @@
                     title: '<p style="">新增设备</p>',
                     content: 'seatdeviceadd.html?productKey='+$('#select-room').val(),
                     maxmin: true,
-                    area: ['60%', '80%'],
+                    area: ['60%', '60%'],
                     btn: ['确定', '取消'],
                     yes: function (index, layero) {
                         var submit = layero.find('iframe').contents().find("#click");
@@ -507,54 +577,119 @@
                                 type: 'checkbox',
                                 fixed: 'left'
                             },
-                            {
+                            /* {
                                 field: 'iotId',
                                 title: 'ID',
                                 align: 'left',
                                 unresize: 'false',
                                 width: 80
-                            },
+                            }, */
                             {
                                 field: 'deviceName',
-                                title: '姓名',
+                                title: 'DeviceName',
                                 align: 'leftleft',
                             },
-                            {
+                            /* {
                                 field: 'nickname',
                                 // width: '25%',
                                 title: '备注名称',
                                 align: 'left',
-                            }, {
-                            field: 'deviceStatus',
-                            align: 'left',
-                            title: '设备状态',
-                            templet: function(data) {
-                                if (data.deviceStatus == 'ONLINE') {
-                                    return '在线'
-                                }
-                                if (data.deviceStatus == 'OFFLINE') {
-                                    return '离线'
-                                }
-                                if (data.deviceStatus == 'UNACTIVE') {
-                                    return '未激活'
-                                }
-                                if (data.deviceStatus == 'UNACTIVE') {
-                                    return '设备已禁用'
+                            }, */
+                            {
+                                field: 'productkey',
+                                align: 'left',
+                                title: '所属产品',
+                                templet: function(data) {
+                                    var productName = "";
+                                    $.ajax({
+                                        async: false,
+                                        type: "get",
+                                        url: url + "/tablesignproduct/selectByPrimaryKey",
+                                        data:{"productkey":data.productKey},
+                                        dataType: "json",
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        //成功的回调函数
+                                        success: function (date) {
+                                            productName = date.data.productName;
+                                        },
+                                        //失败的回调函数
+                                        error: function () {
+                                            console.log("error")
+                                        }
+                                    })
+                                    return productName;
                                 }
                             },
-                        },
                             {
-                                field: 'ProductKey',
+                                field: 'deviceStatus',
                                 align: 'left',
-                                title: '绑定设备',
-
+                                title: '设备状态',
+                                templet: function(data) {
+                                    if (data.deviceStatus == 'ONLINE') {
+                                        return '在线'
+                                    }
+                                    if (data.deviceStatus == 'OFFLINE') {
+                                        return '离线'
+                                    }
+                                    if (data.deviceStatus == 'UNACTIVE') {
+                                        return '未激活'
+                                    }
+                                    if (data.deviceStatus == 'UNACTIVE') {
+                                        return '设备已禁用'
+                                    }
+                                },
                             },
-
                             {
-                                field: 'GmtCreate',
-                                title: '更新时间',
+                                field: 'gmtCreate',
+                                title: '设备创建时间',
                                 align: 'left',
-
+                                templet: function(data) {
+                                    var date = new Date(data.gmtCreate);
+                                    var Y = date.getFullYear() + '-';
+                                    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                                    var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+                                    var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+                                    var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+                                    var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+                                    return Y+M+D+h+m+s;
+                                }
+                            },
+                            {
+                                field: 'state',
+                                title: '会议状态',
+                                align: 'left',
+                                templet: function(data) {
+                                    if (data.state == 0) {
+                                        return '未发送'
+                                    }
+                                    if (data.state == 1) {
+                                        return '开始会议'
+                                    }
+                                    if (data.state == -1) {
+                                        return '开始会议失败'
+                                    }
+                                    if (data.state == 2) {
+                                        return '结束会议'
+                                    }
+                                    if (data.state == -2) {
+                                        return '结束会议失败'
+                                    }
+                                },
+                            },
+                            {
+                                field: 'bindingState',
+                                title: '绑定平台状态',
+                                align: 'left',
+                                templet: function(data) {
+                                    if (data.bindingState == 0) {
+                                        return '未绑定平台'
+                                    }
+                                    if (data.bindingState == '1') {
+                                        return '绑定平台'
+                                    }
+                                },
                             },
                             {
                                 width: 140,
