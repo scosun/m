@@ -167,7 +167,7 @@ layui.config({
             limit: 15,
             skin: 'line',
             even: true,
-            limits: [5, 10, 15],
+            limits: [15, 30, 50],
             parseData: function (res, curr, count) {
                 console.log(6666)
                 return {
@@ -182,7 +182,7 @@ layui.config({
             }
         })
     }
-    function page() {
+    function page(curr,limit) {
         var defaultsort =  table.render({
             elem: '#defaultsort',
             // height: 'full-200',
@@ -210,8 +210,10 @@ layui.config({
             },
             method: 'get',
             page: {
-                layout: ['prev', 'page', 'next', 'count', 'skip'],
-                curr: 2
+                curr: curr,
+                limit:limit
+                // layout: ['prev', 'page', 'next', 'count', 'skip'],
+
             },
             cols: [
                 [ //表头
@@ -252,17 +254,26 @@ layui.config({
                             // 表格内容右键菜单配置
                             body: [
                                 {
-                                    name: '插入上一页',
+                                    name: '移动到上一页',
                                     click: function(obj) {
-                                        console.log(defaultsort.config.page.curr)
-                                        console.log(defaultsort.config.limit)
-                                        page();
+                                        if (defaultsort.config.page.curr == 1){
+                                            return layer.msg("当前已是第一页")
+                                        }
+                                        page(defaultsort.config.page.curr-1,defaultsort.config.limit);
                                     }
                                 },
                                 {
-                                    name: '插入下一页',
+                                    name: '移动到下一页',
                                     click: function(obj) {
-                                        obj.update({author: obj.row.author + '+1'})
+                                        if (defaultsort.config.page.pages == defaultsort.config.page.curr){
+                                            // console.log(defaultsort.config.page.pages)
+                                            // console.log(defaultsort.config.page.curr)
+                                            return layer.msg("当前已是第一页")
+                                        }
+
+                                        page(defaultsort.config.page.curr+1,defaultsort.config.limit);
+                                        console.log(defaultsort.config)
+
                                     }
                                 }
                             ],
@@ -274,11 +285,10 @@ layui.config({
             ],
 
             event: true,
-            page: true,
             limit: 15,
             skin: 'line',
             even: true,
-            limits: [5, 10, 15],
+            limits: [15, 30, 50],
             parseData: function (res, curr, count) {
                 console.log(6666)
                 return {
@@ -321,7 +331,7 @@ layui.config({
         },
         method: 'get',
         page: {
-            layout: ['prev', 'page', 'next', 'count', 'skip']
+            // layout: ['prev', 'page', 'next', 'count', 'skip']
         },
         cols: [
             [ //表头
@@ -362,17 +372,24 @@ layui.config({
                         // 表格内容右键菜单配置
                         body: [
                             {
-                                name: '插入上一页',
+                                name: '移动到上一页',
                                 click: function(obj) {
-                                    console.log(defaultsort.config.page.curr)
-                                    console.log(defaultsort.config.limit)
-                                    page();
+                                    console.log(defaultsort.config);
+                                    if (defaultsort.config.page.curr == 1){
+                                        return layer.msg("当前已是第一页")
+                                    }
+                                    page(defaultsort.config.page.curr -1,defaultsort.config.limit);
                                 }
                             },
                             {
-                                name: '插入下一页',
+                                name: '移动到下一页',
                                 click: function(obj) {
-                                    obj.update({author: obj.row.author + '+1'})
+                                    if (defaultsort.config.page.pages == defaultsort.config.page.curr){
+                                        return layer.msg("当前已是最后一页")
+                                    }
+                                    // console.log(defaultsort.config)
+                                    // obj.update({author: obj.row.author + '+1'})
+                                    page(defaultsort.config.page.curr+1,defaultsort.config.limit);
                                 }
                             }
                         ],
@@ -388,7 +405,7 @@ layui.config({
         limit: 15,
         skin: 'line',
         even: true,
-        limits: [5, 10, 15],
+         limits: [15, 30, 50],
         parseData: function (res, curr, count) {
             console.log(6666)
             return {
