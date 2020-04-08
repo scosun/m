@@ -15,9 +15,9 @@
 
 	<div class="layui-form" id="meet1form">
 		<div class="layui-form-item">
-			<label class="layui-form-label">mac地址</label>
+			<label class="layui-form-label">姓名</label>
 			<div class="layui-input-block">
-				<input id="mac" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
+				<input id="name" type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input hyname">
 			</div>
 		</div>
 	</div>
@@ -40,21 +40,21 @@ layui.config({
 		router = layui.router();
 		
 
-		// $('#mac').on('keydown', function (event) {
+		// $('#name').on('keydown', function (event) {
 		// 	if (event.keyCode == 13) {
 		// 		var layer = layui.layer;
-		// 		var mac = $("#mac").val() || "";
-		// 		if(mac){
+		// 		var name = $("#name").val() || "";
+		// 		if(name){
 		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
         //        		parent.layer.close(index);		//关闭窗口
 		// 			// window.parent.creatSeats(rownum,colnum);
 		// 		}else{
-		// 			layer.msg('mac输入错误');
+		// 			layer.msg('姓名输入错误');
 		// 		}
 		// 		return false
 		// 	}
 		// });
-		
+
 		
 })
 </script>
