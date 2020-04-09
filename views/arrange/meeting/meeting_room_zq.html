@@ -43,7 +43,9 @@
 			var str = uri.substr(1);
 			window.roomid = str.substring(str.indexOf("=")+1,str.length);
 			// console.log(roomid)
-			
+
+				layer.load(2);
+				
 				$.ajax({
 					url: url+"/roomtemplate/findByIdTemplatecode",
 					type: "post",
@@ -55,7 +57,12 @@
 						var datas = data.data
 						console.log(datas)
 						$("body").html(datas.templatecode);
+						layer.closeAll();
+					},
+					error:function(){
+						layer.closeAll();
 					}
+					
 				})
 		 })
 	</script>
