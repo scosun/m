@@ -289,6 +289,8 @@
                window.roomid = +GetQueryString("roomid");
                window.meetingid = +GetQueryString("meetingid");
 		/*右侧菜单HOVER显示提示文字 end*/
+
+		layer.load(2);
 		$.ajax({
 			    url: url+"/roomtemplate/findByroomtemplate",
 			    type: "get",
@@ -304,7 +306,11 @@
 			        var datas = data.data
 			        console.log()
 			        $("body").append(data.data[0].templatecode);
-			    }
+					layer.closeAll();
+				},
+				error:function(){
+					layer.closeAll();
+				}
 			})
 			var active = {
        		

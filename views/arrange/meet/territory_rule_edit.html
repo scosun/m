@@ -216,6 +216,7 @@
             }
         })
         //绘制座区图方法
+        layer.load(2);
         $.ajax({
             url: url+"/roomtemplate/findByroomtemplate",
             type: "get",
@@ -231,6 +232,10 @@
                 $("body").append(data.data[0].templatecode);
                 selectSeats();
                 queryAllSeatStatus(roomid, ruleid);
+                layer.closeAll();
+            },
+            error:function(){
+                layer.closeAll();
             }
         });
         //规则列表方法方法

@@ -144,6 +144,7 @@
 		console.log(meetingid)
 			   
 		/*右侧菜单HOVER显示提示文字 end*/
+		layer.load(2);
 		$.ajax({
 			    url: url+"/roomtemplate/findByIdTemplatecode",
 			    type: "post",
@@ -168,7 +169,11 @@
 
 					// importSeatsData(condi);
 					queryAllSeatStatus();
-			    }
+					layer.closeAll();
+				},
+				error:function(){
+					layer.closeAll();
+				}
 			})
 			$.ajax({
 			    url: url+"/meeting/findByMeeting",
