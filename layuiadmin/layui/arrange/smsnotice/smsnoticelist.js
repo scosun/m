@@ -283,7 +283,7 @@ layui.config({
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['60%', '80%'],
                 maxmin: true,
-                btn: ['保存', '返回'],
+                btn: ['确认', '取消'],
                 closeBtn: 1,
                 //offset: '-43px',
                 content: 'smsnoticebyMeetingadd.html?meetingid=' + obj.data.meetingid+"&id="+obj.data.id,
@@ -343,7 +343,7 @@ layui.config({
                 maxmin: true,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
-                btn: ['保存', '返回'],
+                btn: ['确认', '取消'],
                 closeBtn: 1,
                 //offset: '-43px',
                 //  content: $('#show-view'),
@@ -549,7 +549,7 @@ layui.config({
                     maxmin: true,
                     shadeClose: false, //弹出框之外的地方是否可以点击
                     area: ['100%', '100%'],
-                    btn: ['保存', '返回'],
+                    btn: ['确认', '取消'],
                     closeBtn: 1,
                     //offset: '-43px',
                     content: 'smsnoticelist_add.html',

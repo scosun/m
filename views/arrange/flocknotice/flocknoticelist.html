@@ -130,9 +130,9 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 							<!-- // 20.04.06 dh 修改为以下-->
-							<button class="gradient-block-diagonal" data-type="add" id='addmeeting'>新建</button>
-							<a class="layui-btn-a-grey" href="javascript:;" data-type="isAll" id='emptymeet'>下载<s></s></a>
-							<a class="layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
+							<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+							<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="isAll" id='emptymeet'>下载<s></s></a>
+							<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
 							<!-- <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
 							<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>人员模版下载</button>
 							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button> -->
@@ -412,7 +412,7 @@
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['60%', '80%'],
 					maxmin: true,
-					btn: ['保存', '返回'],
+					btn: ['确定', '取消'],
 					closeBtn: 1,
 					//offset: '-43px',
 					content: 'flockmeeting.html?id=' + obj.data.id + "&random=" + obj.data.random,
@@ -431,7 +431,7 @@
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['40%', '45%'],
 					maxmin: true,
-					btn: ['上传', '返回'],
+					btn: ['上传', '取消'],
 					closeBtn: 1,
 					//offset: '-43px',
 					//  content: $('#show-view'),
@@ -529,7 +529,7 @@
 					maxmin: true,
 					shadeClose: false, //弹出框之外的地方是否可以点击
 					area: ['75%', '85%'],
-					btn: ['保存', '返回'],
+					btn: ['确认', '取消'],
 					closeBtn: 1,
 					//offset: '-43px',
 					//  content: $('#show-view'),
@@ -703,7 +703,7 @@
 							maxmin: true,
 							shadeClose: false, //弹出框之外的地方是否可以点击
 							area: ['75%', '85%'],
-							btn: ['保存', '返回'],
+							btn: ['确认', '取消'],
 							closeBtn: 1,
 							//offset: '-43px',
 							content: 'flocknoticeadd.html',

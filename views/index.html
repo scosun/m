@@ -79,10 +79,13 @@
                     lay-filter="layadmin-system-side-menu">
                     <!-- 控制台 // 20.04.06 dh 新加 -->
                     <li data-name="component" class="layui-nav-item">
-                        <a lay-href="systemindex/systemindex.html" lay-tips="控制台" lay-direction="2">
+                        <a href="javascript:;" lay-tips="我的会议" lay-direction="2">
                             <i class="layui-icon iconfont icon-kongzhitai"></i>
                             <cite>控制台</cite>
                         </a>
+                        <dl class="layui-nav-child">
+                            <dd><a lay-href="systemindex/systemindex.html">首页</a></dd>
+                        </dl>
                     </li>
                     <li data-name="home" class="layui-nav-item ">
                         <a href="javascript:;" lay-tips="我的会议" lay-direction="2">
@@ -299,7 +302,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="arrange/meet/meet.html" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe src="systemindex/systemindex.html" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
 

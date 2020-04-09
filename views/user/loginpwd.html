@@ -85,7 +85,7 @@
         </div>
 
         <script src="../../layuiadmin/layui/layui.js"></script>
-
+        <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
         <script>
             layui.config({
                 base: '../../layuiadmin/', //静态资源所在路径
@@ -184,7 +184,8 @@
                             "username": obj.field.username,
                             "password": obj.field.password,
                             "vcode": obj.field.vercode,
-                            "remember": flag
+                            "remember": flag,
+                            "ip":returnCitySN["cip"]
                         },
                         xhrFields: {
                             withCredentials: true

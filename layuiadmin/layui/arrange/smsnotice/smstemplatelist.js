@@ -307,7 +307,7 @@ layui.config({
                 title: '新建通知模版',
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 maxmin: true,
-                btn: ['保存', '返回'],
+                btn: ['确认', '取消'],
                 area: ['60%', '60%'],
                 content: 'smstemplate_update.html?id='+data.smsTemplateId,
                 success: function(layero, index) {
@@ -435,7 +435,7 @@ layui.config({
                     title: '新建通知模版',
                     area: ['60%', '60%'],
                     maxmin: true,
-                    btn: ['保存', '返回'],
+                    btn: ['确认', '取消'],
                     content: 'smstemplate_add.html',
                     yes: function(index, layero) {
                         var submit = layero.find('iframe').contents().find("#click");

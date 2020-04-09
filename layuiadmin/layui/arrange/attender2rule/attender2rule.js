@@ -195,7 +195,7 @@ layui.config({
 				offset: '10%',
 				area: ['60%', '80%'],
 				content: 'attender2rule_update.html#/id='+_id,
-				btn: ['保存', '取消'],
+				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var body = layer.getChildFrame('body', index);
 					var programmename = body.find('#programmename').val() || "";
@@ -341,7 +341,7 @@ layui.config({
 					maxmin: true,
 					area: ['60%', '80%'],
 					content: 'attender2rule_new.html',
-					btn: ['保存', '取消'],
+					btn: ['确定', '取消'],
 					yes: function(index, layero) {
 						var body = layer.getChildFrame('body', index);
 						var programmename = body.find('#programmename').val() || "";

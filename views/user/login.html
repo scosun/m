@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-
+        <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
         <script src="../../layuiadmin/layui/layui.js"></script>
         <script>
             layui.config({
@@ -96,7 +96,7 @@
                     search = router.search;
                       var url="https://f.longjuli.com"
                 // var url = "http://127.0.0.1:8083";
-                   
+
                 $.ajax({
                     async: true,
                     type: "get",
@@ -140,7 +140,8 @@
                         data: {
                             "cell": obj.field.cellphone,
                             "vcode": obj.field.vercode,
-                           "remember": flag
+                           "remember": flag,
+                            "ip":returnCitySN["cip"]
                         },
                         xhrFields: {
                             withCredentials: true

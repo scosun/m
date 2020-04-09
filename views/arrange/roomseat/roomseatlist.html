@@ -51,7 +51,7 @@
                                     <button class="layui-btn layui-ds" data-type="add">新增</button>
                                 -->
                                 <!-- // 20.04.06 dh 修改为以下-->
-                                <button class="gradient-block-diagonal" data-type="add">新建</button>
+                                <button class="gradient-block-diagonal layui-ds" data-type="add">新建</button>
                                 <!-- // 20.04.06 dh 提示放这里-->    
                                 <div style="font-size: 15px;display:inline-block;vertical-align: middle;">
                                     <img src="../../../images/help.svg"  style="margin-left: 5px;margin-right: 5px;width: 15px;height: 15px;padding-bottom: 5px"/>通过二维码绑定桌牌和座位小程序进行操作。
@@ -394,7 +394,7 @@
                     shadeClose: false, //弹出框之外的地方是否可以点击
                     area: ['60%', '70%'],
                     maxmin: true,
-                    btn: ['保存', '返回'],
+                    btn: ['确定', '取消'],
                     closeBtn: 1,
                     //offset: '-43px',
                     content: 'roomseatadd.html',
@@ -506,7 +506,7 @@
                     content: 'roomseatupdate.html?id='+obj.data.id+'&seattype='+obj.data.seattype+'&communicationtype='+obj.data.communicationtype+'&roomid='+obj.data.roomid,
                     maxmin: true,
                     area: ['500px', '340px'],
-                    btn: ['提交', '取消'],
+                    btn: ['确定', '取消'],
                     yes: function(index, layero) {
                         var submit = layero.find('iframe').contents().find("#click");
                         submit.click();

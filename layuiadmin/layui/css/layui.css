@@ -5589,3 +5589,19 @@ body .layui-util-face .layui-layer-content {
 .layui-nav .layui-nav-more {
     border-top-color: rgba(255, 255, 255, .2);
 }
+.layui-form-select dl dd.layui-this {
+    background-color: #f2f2f2;
+    color: #000;
+}
+.layui-form-checked, .layui-form-checked:hover {
+    border-color:#ffce00;
+}
+.layui-form-checked[lay-skin=primary] i {
+    border-color: #ffce00 !important;
+    background-color: #ffce00;
+    color: #fff;
+}
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #d2d2d2;
+    color: #fff;
+}
