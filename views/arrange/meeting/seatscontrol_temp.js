@@ -925,9 +925,9 @@ function countMaxWidth(issave){
 	var height = tops[tops.length - 1];
 
 	__maxWidth = width + 150;
-	if(issave){
+	// if(issave){
 		$("#seatcontainer").width(width + 150);
-	}
+	// }
 	$("#seatcontainer").height(height + 250);
 }
 function isLocked(el){
@@ -1758,7 +1758,7 @@ function bindContextMenu(){
 }
 
 function removeContextMenu(){
-	selectSeats();
+	selectSeats(true);
 
 	var filediv = $("#" + seatcontainerId).find("."+seatNodeClass);
 	for(var i = 0, len = filediv.length; i < len; i++){
@@ -2351,6 +2351,13 @@ function containerMouseMove(evt){
 		if(Math.abs(_x - startX) < 10 && Math.abs(_y - startY) < 10){
 			return;
 		}
+		
+		// if($("#nav-selection").length > 0){
+		// 	setTimeout(function(){
+		// 		$('.toollist_li').removeClass("on");
+		// 		$("#nav-selection").addClass("on");
+		// 	},500);
+		// }
 
 		// ---------------- 关键算法 ---------------------  
 		// var _l = selDiv.offsetLeft+_sleft, _t = selDiv.offsetTop+_stop;
