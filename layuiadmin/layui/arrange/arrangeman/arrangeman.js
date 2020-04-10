@@ -376,36 +376,40 @@ layui.config({
 
             },
             getCheckLength: function() { //获取选中数目
-                $.ajax({
-                    async: false,
-                    type: "post",
-                    url: url + "/ruletemplate/batchRemove",
-                    dataType: "json",
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    //成功的回调函数
-                    data: {
-                        "ruleid": arrangeList.join(",")
+                layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除规则列表操作，是否继续进行该操作？',{title:'温馨提示'}, function () {
+                    $.ajax({
+                        async: false,
+                        type: "post",
+                        url: url + "/ruletemplate/batchRemove",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        //成功的回调函数
+                        data: {
+                            "ruleid": arrangeList.join(",")
 
-                    },
-                    success: function(msg) {
-                        if (msg.code == 0) {
-                            layer.msg("删除成功");
-                            reloads(); // 父页面刷新
+                        },
+                        success: function(msg) {
+                            if (msg.code == 0) {
+                                layer.msg("删除成功");
+                                reloads(); // 父页面刷新
 
-                        } else {
-                            layer.msg(msg.msg);
+                            } else {
+                                layer.msg(msg.msg);
 
 
+                            }
+
+                        },
+                        //失败的回调函数
+                        error: function() {
+                            console.log("error")
                         }
+                    })
 
-                    },
-                    //失败的回调函数
-                    error: function() {
-                        console.log("error")
-                    }
-                })
+                });
+
             },
             isAll: function() {
                 layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function(index) {

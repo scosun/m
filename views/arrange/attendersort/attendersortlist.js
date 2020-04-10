@@ -78,7 +78,9 @@ layui.config({
         //     });
         // },
          done: function (res) {
-             ajaxs()
+            if (res.code == 0){
+                window.location.reload();
+            }
         }
     });
 

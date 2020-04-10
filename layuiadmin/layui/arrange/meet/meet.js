@@ -45,12 +45,12 @@ layui.config({
                     // 20.04.06 dh 下行有修改 
                     $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
                 }
+
         },
         error: function(error) {
             console.log(error)
         },
     })
-
     function isEmptyObject(obj) {
 
         var jlength = 0;
@@ -539,6 +539,9 @@ layui.config({
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
                 });
 
+            },
+            reloads:function(){
+                location.reload();
             },
             search: function() {
                 table.render({

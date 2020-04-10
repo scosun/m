@@ -159,6 +159,7 @@
 
         //全局变量编排规则id
         var url = "https://f.longjuli.com"
+        // var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var str = uri.substr(1);
         window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
@@ -255,6 +256,7 @@
                         ]
                     ],
                     skin: 'line', //表格风格
+                    even:true,
                     page: false, //是否显示分页
                     limits: [5, 10, 15], //显示
                     limit: 15 //每页默认显示的数量
@@ -380,6 +382,7 @@
                             ]
                         ],
                         skin: 'line', //表格风格
+                        even:true,
                         page: false, //是否显示分页
                         limits: [5, 10, 15], //显示
                         limit: 15 //每页默认显示的数量
@@ -413,7 +416,8 @@
                         dataType: "json",
                         //成功的回调函数
                         data: {
-                            "id": obj.data.id
+                            "id": obj.data.id,
+                            "ruletemplateid":ruleid
                         },
                         success: function(msg) {
                             if (msg.code == '0') {
@@ -450,7 +454,7 @@
                         console.log(ruleselect)
                         console.log(isincrement)
                         var oldruleid = obj.data.ruleid;
-                        updateSeatRule(rulename,obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
+                        updateSeatRule(rulename,obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid,ruleid)
                         layer.close(index);
                     },
                     success: function(layero, index) {
@@ -683,7 +687,7 @@
             });
         }
 
-        function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid) {
+        function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid,ruletemplateid) {
             var rulez = JSON.parse(rule);
             var data = {};
             data.rule = rulez; //JSON.stringify(rule);
@@ -703,7 +707,8 @@
                     "rulezone": rule,
                     "rulename": rulename,
                     "isincrement": isincrement,
-                    "ruleid": ruleid
+                    "ruleid": ruleid,
+                    "ruletemplateid":ruletemplateid
                 },
                 dataType: 'json',
                 success: function(data) {
