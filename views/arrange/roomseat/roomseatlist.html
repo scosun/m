@@ -78,7 +78,7 @@
                                     <input class="layui-input" name="id" placeholder="关键字模糊搜索" id="demoReload"
                                            autocomplete="off">
                                 </div>
-                                <button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
+                                <button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
                             </div>
                             <!-- 右侧筛选条件 end-->
                         </div>
@@ -200,6 +200,17 @@
                 // layer.close(index);    //返回数据关闭loading
             },
         });
+        window.onkeyup = function(ev) {
+            var key = ev.keyCode || ev.which;
+            if (key == 27) { //按下Escape
+                layer.closeAll('iframe'); //关闭所有的iframe层
+
+            }
+            if (key == 13) { //按下Escape
+                $('#search').click();
+
+            }
+        }
         window.reloads = function(){
             table.render({
                 elem: '#test-table-operate',
@@ -423,60 +434,62 @@
                     xhrFields: {
                         withCredentials: true
                     },
-                    url: url + "/smsstatistics/selectSearch", //数据接口
+                    url: url + "/roomseat/Search", //数据接口
                     page: {
                         layout: ['prev', 'page', 'next', 'count', 'skip']
                     },
 
                     cols: [
-                        [ //表头
-                            {
-                                type: 'checkbox',
-                                fixed: 'left'
-                            },
-                            // {
+                        [{
+                            type: 'checkbox',
+                            fixed: 'left'
+                        },
+                            //     {
                             //     field: 'id',
+                            //     width: '15%',
                             //     title: 'ID',
-                            //     width: 60,
-                            //     //align: 'center',
-                            //     unresize: 'false',
+                            //     sort: true
                             // },
                             {
-                                field: 'title',
-                                title: '通知标题',
-                                align: 'left',
+                                field: 'roomname',
+                                title: '会议室名称',
+                                //align: "center"
                             }, {
-                            field: 'succeednotice',
-                            title: '成功通知',
-                            align: 'left',
-                        },
-                            {
-                                field: 'canhui',
-                                title: '确认参会',
-                                align: 'left',
-                            },
-                            {
-                                field: 'leave',
-                                title: '确认请假',
-                                align: 'left',
-                            },
-                            {
-                                field: 'noreply',
-                                title: '未反馈',
-                                align: 'left',
-                            },
-                            {
-                                field: 'nosend',
-                                title: '发送失败',
-                                align: 'left',
-                            },
-                            {
-                                title: '操作',
-                                align: 'left',
-                                toolbar: '#test-table-operate-barDemo',
-                                width:440,
-                            },
-
+                            field: 'seatnum',
+                            width: '10%',
+                            title: '座位数量',
+                        }, {
+                            field: 'seattype',
+                            width: '20%',
+                            title: '席签型号',
+                            templet: function(data) {
+                                if (data.seattype == 0){
+                                    return '阿里E-ink桌牌'
+                                }else  if (data.seattype == 1){
+                                    return '龙居里E-ink桌牌'
+                                }else  if (data.seattype == 2){
+                                    return '龙居里LCD桌牌'
+                                }
+                            }
+                        }, {
+                            field: 'seattype',
+                            width: '10%',
+                            title: '绑定数量'
+                        }, {
+                            field: 'communicationtype',
+                            width: '10%',
+                            title: '通讯方式'
+                        },{
+                            width: '8%',
+                            //align: 'center',
+                            title: '查看',
+                            toolbar: '#table-zone-list'
+                        },{
+                            width: 140,
+                            //align: 'center',
+                            title: '操作',
+                            toolbar: '#table-content-list'
+                        }
                         ]
                     ],
                     event: true,

@@ -195,10 +195,14 @@ layui.config({
 
     }
 
-    window.onkeyup = function (ev) {
+    window.onkeyup = function(ev) {
         var key = ev.keyCode || ev.which;
         if (key == 27) { //按下Escape
             layer.closeAll('iframe'); //关闭所有的iframe层
+
+        }
+        if (key == 13) { //按下Escape
+            $('#search').click();
 
         }
     }

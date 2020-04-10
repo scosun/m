@@ -34,7 +34,7 @@
 								<div class="layui-inline">
 									<input class="layui-input" name="id" id="demoReload" autocomplete="off">
 								</div>
-								<button class="layui-btn layui-ds btnsearch" data-type="search">搜索</button>
+								<button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
 							</div>
 						</div>
 						<!-- <div class="layui-row">
@@ -102,6 +102,17 @@
 			};
 			return jlength
 		};
+		window.onkeyup = function(ev) {
+			var key = ev.keyCode || ev.which;
+			if (key == 27) { //按下Escape
+				layer.closeAll('iframe'); //关闭所有的iframe层
+
+			}
+			if (key == 13) { //按下Escape
+				$('#search').click();
+
+			}
+		}
 		table.render({
 			elem: '#test-table-operate',
 			// height: 'full-200',

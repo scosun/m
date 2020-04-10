@@ -93,7 +93,7 @@
                                  style="margin-bottom:10px;margin-left:10px;width: 25%">
                                 <form class="layui-form" action="">
                                     <select name="interest" lay-skin="select" lay-filter="component-form-select"
-                                            id="select-room">
+                                            id="devices">
                                         <option value="-1">选择产品</option>
                                         <option value="" id="select_meets"></option>
                                     </select>
@@ -435,11 +435,14 @@
                 },
             });
         }
-
-        window.onkeyup = function (ev) {
+        window.onkeyup = function(ev) {
             var key = ev.keyCode || ev.which;
             if (key == 27) { //按下Escape
                 layer.closeAll('iframe'); //关闭所有的iframe层
+
+            }
+            if (key == 13) { //按下Escape
+                $('#btnsearch').click();
 
             }
         }
@@ -553,6 +556,9 @@
 
             },
             search: function () {
+                if ($('#devices').val() == -1){
+                    return layer.msg("请选择产品")
+                }
                 var search = undefined
                 $('#demoReload').val() === ''?search = undefined:search = $('#demoReload').val()
                 table.render({
@@ -562,6 +568,7 @@
                     ,
                     where: {
                         "deviceName": search,
+                        "productKey":$('#devices').val()
                     },
 
                     method: 'get',

@@ -27,8 +27,8 @@ layui.config({
         router = layui.router();
     element.render();
     //初次渲染表格
-    // var url = "https://f.longjuli.com"
-    var url="http://127.0.0.1:8083";
+    var url = "https://f.longjuli.com"
+    // var url="http://127.0.0.1:8083";
     var  id =  getUrlParam("id")
     console.log(id)
     var devices = {};
@@ -91,97 +91,242 @@ layui.config({
         };
         return jlength
     };
-        function intelligentsorting(){
-        table.render({
-            elem: '#test-table-operate',
-            // height: 'full-200',
-            url: url + "/attendeesort/intelligentsorting", //数据接口
-            //    ,
-            where: {
-                id: id
-            },
-            toolbar: '<div><a class="layui-btn layui-btn-sm" lay-event="exportExcel">导出</a></div>',
-            xhrFields: {
-                withCredentials: true
-            },
-            rowDrag: {
-                trigger: '.adjustbtn', done: function (obj) {
-                    // 完成时（松开时）触发
-                    // 如果拖动前和拖动后无变化，则不会触发此方法
-                    console.log(obj.row) // 当前行数据
-                    console.log(obj.cache) // 改动后全表数据
-                    console.log(obj.oldIndex) // 原来的数据索引
-                    console.log(obj.newIndex) // 改动后数据索引
-                }
-            }
-            , totalRow: true,
-            method: 'get',
-            page: {
-                layout: ['prev', 'page', 'next', 'count', 'skip']
-            },
-            cols: [
-                [ //表头
-                    {
-                        type: 'checkbox',
-                        fixed: 'left'
-                    },
-                    {
-                        field: 'id',
-                        title: '序号',
-                        align: 'left',
-                        unresize: 'false',
-                        width: 80
-                    },
-                    {
-                        field: 'name',
-                        title: '姓名',
-                        align: 'leftleft',
-                    },
-                    {
-                        field: 'company',
-                        title: '单位',
-                        align: 'left',
-                    }, {
-                    field: 'duties',
-                    align: 'left',
-                    title: '职务'
+        function intelligentsorting(curr,limit){
+            var autosort =  table.render({
+                elem: '#autosort',
+                // height: 'full-200',
+                url: url+"/attendeesort/selectiveByauto", //数据接口
+                //    ,
+                where:{
+                    sortattendeeid:id
                 },
-                    {
-                        title: '详情',
-                        toolbar: '#details',
+                xhrFields: {
+                    withCredentials: true
+                },
+                rowDrag: {trigger: '.adjustbtn',done: function(obj) {
+                        // 完成时（松开时）触发
+                        // 如果拖动前和拖动后无变化，则不会触发此方法
+                        console.log(obj.row) // 当前行数据
+                        console.log(obj.cache) // 改动后全表数据
+                        console.log(obj.oldIndex) // 原来的数据索引
+                        console.log(obj.newIndex) // 改动后数据索引
+                    }}
+                ,totalRow: true,
+                contextmenu: {
+                    header: false, // false 禁用右键（组织浏览器的右键菜单）
+                    body: false,
+                    total: false
+                },
+                method: 'get',
+                page: {
+                    curr: curr,
+                    limit:limit
+                    // layout: ['prev', 'page', 'next', 'count', 'skip'],
+
+                },
+                cols: [
+                    [ //表头
+                        {
+                            type: 'checkbox',
+                            fixed: 'left'
+                        },
+                        {
+                            field: 'name',
+                            title: '姓名',
+                            align: 'leftleft',
+                        },
+                        {
+                            field: 'company',
+                            title: '单位',
+                            align: 'left',
+                        }, {
+                        field: 'duties',
+                        align: 'left',
+                        title: '职务'
                     },
-                    {
-                        title: '不排序',
-                        toolbar: '#notorder',
-                    }
-                    ,
-                    {
-                        title: '调整',
-                        toolbar: '#Adjust',
-                    }
-                ]
-            ],
+                        {
+                            title: '详情',
+                            toolbar: '#details',
+                        },
+                        {
+                            title: '不排序',
+                            toolbar: '#notorder',
+                        }
+                        ,
+                        {
+                            title: '调整',
+                            toolbar: '#Adjust',
+                            width: 165,
+                            contextmenu: {
+                                // 表头右键菜单配置
 
-            event: true,
-            page: false,
-            limit: 15,
-            skin: 'line',
-            even: true,
-            limits: [15, 30, 50],
-            parseData: function (res, curr, count) {
-                console.log(6666)
-                return {
-                    "code": res.code, //解析接口状态
-                    "count": res.count, //解析数据长度
-                    "data": res.attendees //解析数据列表
-                };
+                                // 表格内容右键菜单配置
+                                body: [
+                                    {
+                                        name: '移动到上一页',
+                                        click: function(obj) {
+                                            console.log(defaultsort.config);
+                                            if (autosort.config.page.curr == 1){
+                                                return layer.msg("当前已是第一页")
+                                            }
+                                            intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+                                        }
+                                    },
+                                    {
+                                        name: '移动到下一页',
+                                        click: function(obj) {
+                                            if (autosort.config.page.pages == autosort.config.page.curr){
+                                                return layer.msg("当前已是最后一页")
+                                            }
+                                            // console.log(defaultsort.config)
+                                            // obj.update({author: obj.row.author + '+1'})
+                                            intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                        }
+                                    }
+                                ],
+                                // 合计栏右键菜单配置
+                            }
 
-            },
-            done: function () {
-                soulTable.render(this)
-            }
-        })
+                        }
+                    ]
+                ],
+
+                event: true,
+                limit: 15,
+                skin: 'line',
+                even: true,
+                limits: [15, 30, 50],
+                parseData: function (res, curr, count) {
+                    console.log(6666)
+                    return {
+                        "code": res.code, //解析接口状态
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+
+                },
+                done:function (res,curr,count) {
+
+                    soulTable.render(this)
+                }
+            });
     }
+    var autosort =  table.render({
+        elem: '#autosort',
+        // height: 'full-200',
+        url: url+"/attendeesort/selectiveByauto", //数据接口
+        //    ,
+        where:{
+            sortattendeeid:id
+        },
+        xhrFields: {
+            withCredentials: true
+        },
+        rowDrag: {trigger: '.adjustbtn',done: function(obj) {
+                // 完成时（松开时）触发
+                // 如果拖动前和拖动后无变化，则不会触发此方法
+                console.log(obj.row) // 当前行数据
+                console.log(obj.cache) // 改动后全表数据
+                console.log(obj.oldIndex) // 原来的数据索引
+                console.log(obj.newIndex) // 改动后数据索引
+            }}
+        ,totalRow: true,
+        contextmenu: {
+            header: false, // false 禁用右键（组织浏览器的右键菜单）
+            body: false,
+            total: false
+        },
+        method: 'get',
+        page: {
+            // layout: ['prev', 'page', 'next', 'count', 'skip']
+        },
+        cols: [
+            [ //表头
+                {
+                    type: 'checkbox',
+                    fixed: 'left'
+                },
+                {
+                    field: 'name',
+                    title: '姓名',
+                    align: 'leftleft',
+                },
+                {
+                    field: 'company',
+                    title: '单位',
+                    align: 'left',
+                }, {
+                field: 'duties',
+                align: 'left',
+                title: '职务'
+            },
+                {
+                    title: '详情',
+                    toolbar: '#details',
+                },
+                {
+                    title: '不排序',
+                    toolbar: '#notorder',
+                }
+                ,
+                {
+                    title: '调整',
+                    toolbar: '#Adjust',
+                    width: 165,
+                    contextmenu: {
+                        // 表头右键菜单配置
+
+                        // 表格内容右键菜单配置
+                        body: [
+                            {
+                                name: '移动到上一页',
+                                click: function(obj) {
+                                    console.log(defaultsort.config);
+                                    if (autosort.config.page.curr == 1){
+                                        return layer.msg("当前已是第一页")
+                                    }
+                                    intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+                                }
+                            },
+                            {
+                                name: '移动到下一页',
+                                click: function(obj) {
+                                    if (autosort.config.page.pages == autosort.config.page.curr){
+                                        return layer.msg("当前已是最后一页")
+                                    }
+                                    // console.log(defaultsort.config)
+                                    // obj.update({author: obj.row.author + '+1'})
+                                    intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                }
+                            }
+                        ],
+                        // 合计栏右键菜单配置
+                    }
+
+                }
+            ]
+        ],
+
+        event: true,
+        page: true,
+        limit: 15,
+        skin: 'line',
+        even: true,
+        limits: [15, 30, 50],
+        parseData: function (res, curr, count) {
+            console.log(6666)
+            return {
+                "code": res.code, //解析接口状态
+                "count": res.count, //解析数据长度
+                "data": res.data //解析数据列表
+            };
+
+        },
+        done:function (res,curr,count) {
+
+            soulTable.render(this)
+        }
+    });
     function page(curr,limit) {
         var defaultsort =  table.render({
             elem: '#defaultsort',
@@ -268,7 +413,7 @@ layui.config({
                                         if (defaultsort.config.page.pages == defaultsort.config.page.curr){
                                             // console.log(defaultsort.config.page.pages)
                                             // console.log(defaultsort.config.page.curr)
-                                            return layer.msg("当前已是第一页")
+                                            return layer.msg("当前已是最后一页")
                                         }
 
                                         page(defaultsort.config.page.curr+1,defaultsort.config.limit);
@@ -788,90 +933,24 @@ layui.config({
         download:function(){
             window.location=url + "/attendeesort/download";
         },
-        search: function () {
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选中会议后再搜索")
-            }
-            table.render({
-                elem: '#test-table-operate',
-                // height: 'full-200',
-                url: url + "/meetingcanhui/selectSeatch" //数据接口
-                    ,
-                where: {
-                    "name": $('#demoReload').val(),
-                    "meetingId": $('#select-room').val(),
+        Intelligent: function () {
+            $.ajax({
+                type: "get",
+                url: url+"/attendeesort/autosort",
+                data: {
+                    "id":id
                 },
+                success: function(data){
+                    // console.log(data)
+                    // $("#myDiv").html('<h2>'+data+'</h2>');
+                    if(data.code == 0){
+                        layer.msg("智能排序成功");
 
-                method: 'get',
-                xhrFields: {
-                    withCredentials: true
-                },
-                page: {
-                    layout: ['prev', 'page', 'next', 'count', 'skip']
-                },
-                cols: [
-                    [ //表头
-                        {
-                            type: 'checkbox',
-                            fixed: 'left'
-                        },
-                        {
-                            field: 'id',
-                            title: '序号',
-                            align: 'left',
-                            unresize: 'false',
-                            width: 80
-                        },
-                        {
-                            field: 'name',
-                            title: '姓名',
-                            align: 'leftleft',
-                        },
-                        {
-                            field: 'duties',
-                            title: '单位',
-                            align: 'left',
-                        },
-                        {
-                            field: 'duty',
-                            align: 'left',
-                            title: '职务'
-                        },
-                        {
-                            title: '详情',
-                            toolbar: '#details',
-                        },
-                        {
-                            title: '不排序',
-                            toolbar: '#notorder',
-                        }
-                        ,
-                        {
-                            title: '调整',
-                            toolbar: '#Adjust',
-                        }
-                    ]
-                ],
-
-
-                event: true,
-                page: true,
-                limit: 15,
-                skin: 'line',
-                even: true,
-                limits: [5, 10, 15],
-                done: function (res, curr, count) {
-                    table_data = res.data;
-
-                    layer.closeAll('loading');
-                    attenderList.length = 0;
-                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
-                    // layer.close(index);    //返回数据关闭loading
-                },
-
-
-
-
+                        intelligentsorting(1,15);
+                    }else{
+                        layer.msg("智能排序失败");
+                    }
+                }
             });
 
         },

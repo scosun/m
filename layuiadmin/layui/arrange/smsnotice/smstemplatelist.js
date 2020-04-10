@@ -230,6 +230,10 @@ layui.config({
             layer.closeAll('iframe'); //关闭所有的iframe层
 
         }
+        if (key == 13) { //按下Escape
+            $('#search').click();
+
+        }
     }
 
     //监听表格复选框选择

@@ -94,12 +94,12 @@ layui.config({
                 // },
                 {
                     field: 'name',
-                    title: '会议室名称',
+                    title: '会场名称',
                     align: 'left',
                 },
                 {
                     field: 'templatefilename',
-                    title: '模板名',
+                    title: 'Word模板名',
                     align: 'left',
                     
                 },
@@ -112,7 +112,7 @@ layui.config({
 				{
 					width: 100,
                     field: 'seatrule',
-                    title: '座区规则',
+                    title: '左右编号',
                     align: 'left',
                     templet: function(data) {
                     	if (data.seatrule == 0) {
@@ -129,9 +129,9 @@ layui.config({
                 }, 
                 {
 			// field: '1',\
-			width: 60,
                 	align: 'left',
-                	title: '查看',
+                	title: '座区图',
+					width:'7%',
                     toolbar: '#table-zone-list'
                 },{
                     field: 'modifytime',
@@ -178,65 +178,72 @@ layui.config({
                 withCredentials: true
             },
             cols: [
-		[ //表头
-		{
-			type: 'checkbox',
-			fixed: 'left'
-		},
-		    // {
-			// field: 'id',
-			// title: 'ID',
-			// align: 'left',
-			// unresize: 'false',
-			// width:'7%'
-		    // },
-		    {
-			field: 'name',
-			title: '会议室名称',
-			align: 'left',
-		    },
-		    {
-			field: 'templatefilename',
-			title: '模板名',
-			align: 'left',
-			
-		    },{
-			    width: 100,
-			field: 'seatrule',
-			title: '座区规则',
-			align: 'left',
-			templet: function(data) {
-				if (data.seatrule == 0) {
-					return '左双右单'
-				}
-				if (data.seatrule == 1) {
-					return '左单右双'
-				}
-				if (data.seatrule == undefined) {
-					return ''
-				}
-			},
-	
-		    }, 
-		    {
-			    // field: '1',\
-			    width: 60,
-			    align: 'left',
-			    title: '查看',
-			toolbar: '#table-zone-list'
-		    },{
-			field: 'modifytime',
-			title: '更新时间',
-			align: 'left',
-	
-		    }, 
-		    {
-			width: 100,
-			align: 'left',
-			title: '操作',
-			toolbar: '#table-content-list',
-		    }
-		]
+				[ //表头
+					{
+						type: 'checkbox',
+						fixed: 'left'
+					},
+					// {
+					//     field: 'id',
+					//     title: 'ID',
+					//     align: 'left',
+					//     unresize: 'false',
+					//     width:'7%'
+					// },
+					{
+						field: 'name',
+						title: '会场名称',
+						align: 'left',
+					},
+					{
+						field: 'templatefilename',
+						title: 'Word模板名',
+						align: 'left',
+
+					},
+					{
+						field: 'seatnum',
+						title: '座位数',
+						align: 'left',
+
+					},
+					{
+						width: 100,
+						field: 'seatrule',
+						title: '左右编号',
+						align: 'left',
+						templet: function(data) {
+							if (data.seatrule == 0) {
+								return '左双右单'
+							}
+							if (data.seatrule == 1) {
+								return '左单右双'
+							}
+							if (data.seatrule == undefined) {
+								return ''
+							}
+						},
+
+					},
+					{
+						// field: '1',\
+						align: 'left',
+						title: '座区图',
+						width:'7%',
+						toolbar: '#table-zone-list'
+					},{
+					field: 'modifytime',
+					title: '更新时间',
+					align: 'left',
+
+				},
+					{
+						width: 100,
+						align: 'left',
+						title: '操作',
+						toolbar: '#table-content-list',
+					}
+				]
 	    ],
 	
 	    event: true,
@@ -444,11 +451,15 @@ layui.config({
 			});
 		}
 	})
-window.onkeyup = function(ev) {
+	window.onkeyup = function(ev) {
 		var key = ev.keyCode || ev.which;
 		if (key == 27) { //按下Escape
 			layer.closeAll('iframe'); //关闭所有的iframe层
-	
+
+		}
+		if (key == 13) { //按下Escape
+			$('#search').click();
+
 		}
 	}
 	//弹出层区
@@ -528,65 +539,72 @@ window.onkeyup = function(ev) {
 		         layout: ['prev', 'page', 'next', 'count', 'skip']
 		     },
 		     cols: [
-			[ //表头
-			{
-				type: 'checkbox',
-				fixed: 'left'
-			},
-			    // {
-				// field: 'id',
-				// title: 'ID',
-				// align: 'left',
-				// unresize: 'false',
-				// width:'7%'
-			    // },
-			    {
-				field: 'name',
-				title: '会议室名称',
-				align: 'left',
-			    },
-			    {
-				field: 'templatefilename',
-				title: '模板名',
-				align: 'left',
-				
-			    },{
-				    width: 100,
-				field: 'seatrule',
-				title: '座区规则',
-				align: 'left',
-				templet: function(data) {
-					if (data.seatrule == 0) {
-						return '左双右单'
-					}
-					if (data.seatrule == 1) {
-						return '左单右双'
-					}
-					if (data.seatrule == undefined) {
-						return ''
-					}
-				},
-		
-			    }, 
-			    {
-				    // field: '1',\
-				    width: 60,
-				    align: 'left',
-				    title: '查看',
-				toolbar: '#table-zone-list'
-			    },{
-				field: 'modifytime',
-				title: '更新时间',
-				align: 'left',
-		
-			    }, 
-			    {
-				width: 100,
-				align: 'left',
-				title: '操作',
-				toolbar: '#table-content-list',
-			    }
-			]
+				 [ //表头
+					 {
+						 type: 'checkbox',
+						 fixed: 'left'
+					 },
+					 // {
+					 //     field: 'id',
+					 //     title: 'ID',
+					 //     align: 'left',
+					 //     unresize: 'false',
+					 //     width:'7%'
+					 // },
+					 {
+						 field: 'name',
+						 title: '会场名称',
+						 align: 'left',
+					 },
+					 {
+						 field: 'templatefilename',
+						 title: 'Word模板名',
+						 align: 'left',
+
+					 },
+					 {
+						 field: 'seatnum',
+						 title: '座位数',
+						 align: 'left',
+
+					 },
+					 {
+						 width: 100,
+						 field: 'seatrule',
+						 title: '左右编号',
+						 align: 'left',
+						 templet: function(data) {
+							 if (data.seatrule == 0) {
+								 return '左双右单'
+							 }
+							 if (data.seatrule == 1) {
+								 return '左单右双'
+							 }
+							 if (data.seatrule == undefined) {
+								 return ''
+							 }
+						 },
+
+					 },
+					 {
+						 // field: '1',\
+						 align: 'left',
+						 title: '座区图',
+						 width:'7%',
+						 toolbar: '#table-zone-list'
+					 },{
+					 field: 'modifytime',
+					 title: '更新时间',
+					 align: 'left',
+
+				 },
+					 {
+						 width: 100,
+						 align: 'left',
+						 title: '操作',
+						 toolbar: '#table-content-list',
+					 }
+				 ]
 		    ],
 		
 		    event: true,
