@@ -104,7 +104,7 @@
 
 
 <footer>
-    <table id="zonetable" lay-filter="zonetable" style="margin-top: -0.6125rem;"></table>
+    <table id="zonetable" lay-filter="zonetable" style="margin-top: -0.6125rem; width: 100%"></table>
     <input type="text" name="roomid" id="roomid" style="display: none;">
 
     <input type="text" name="ruleid" id="ruleid" style="display: none;">
@@ -115,6 +115,9 @@
     <a  title="修改选区" lay-event="editxq" style="margin-left: 5px;"><i class="fas fa-object-group" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
     <a  title="删除规则" lay-event="del" style="margin-left: 5px;"><i class="fas fa-trash-alt" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
 
+</script>
+<script type="text/html" id="xuhao">
+    {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script defer src="https://use.fontawesome.com/releases/v5.10.2/js/all.js" integrity="sha384-QMu+Y+eu45Nfr9fmFOlw8EqjiUreChmoQ7k7C1pFNO8hEbGv9yzsszTmz+RzwyCh"
         crossorigin="anonymous"></script>
@@ -224,10 +227,7 @@
                                 width: '18%',
                                 // align: "center",
                                 sort: true,
-                                templet: function(data) {
-                                    i++;
-                                    return i;
-                                },
+                                templet: xuhao,
 
 
                             },

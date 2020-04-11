@@ -23,7 +23,7 @@
             background-color: white;
         }
 
-        body {
+        body{
             background-color: white;
         }
 
@@ -108,6 +108,9 @@
     <a  title="修改座区" lay-event="editxq" style="margin-left: 5px;"><i class="fas fa-object-group" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
     <a  title="删除座区" lay-event="del" style="margin-left: 5px;"><i class="fas fa-trash-alt" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
 
+</script>
+<script type="text/html" id="xuhao">
+    {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script defer src="https://use.fontawesome.com/releases/v5.10.2/js/all.js" integrity="sha384-QMu+Y+eu45Nfr9fmFOlw8EqjiUreChmoQ7k7C1pFNO8hEbGv9yzsszTmz+RzwyCh"
         crossorigin="anonymous"></script>
@@ -233,10 +236,7 @@
 
                                 //align: "center",
                                 sort: true,
-                                templet: function(data) {
-                                    i++;
-                                    return i;
-                                },
+                                templet: xuhao
                             },
                             {
                                 field: 'modifytime',
