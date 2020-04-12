@@ -395,6 +395,7 @@ layui.config({
 				parent.layer.close(index); //再执行关闭 
 			}
 		};
+
 	$('.test-table-operate-btn .layui-btn,.test-table-reload-btn .layui-btn').on('click', function() {
 		var type = $(this).data('type');
 		active[type] ? active[type].call(this) : '';
