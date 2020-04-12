@@ -199,6 +199,23 @@ html {
 
 }
 
+.assistBtn{
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom:10px
+}
+.fengeline{
+    color:#a5a5a5;
+    vertical-align: middle;
+    margin-right:10px
+}
+.assistBtn .layui-icon{
+    vertical-align: middle;
+    margin-right:10px;
+    cursor: pointer;
+}
+
+
 
 
 

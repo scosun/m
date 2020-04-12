@@ -57,6 +57,9 @@
         .sysml20{margin-left:20px;}
         .sysmr20{margin-right:20px;}
         .sysmb10{margin-bottom:10px;}
+        .syslist.minisyslist li {
+            width: 20%;
+        }
         .syslist li{
             float: left;
             width: 16.6%;
@@ -497,7 +500,7 @@
     <div class="sysml20">
         <ui class="syslist clearfix">
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#ed6f71"></span>
                         <span class="f2 iconfont icon-wodehuiyi"></span>
@@ -508,7 +511,7 @@
                 </div>
             </li>
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#febb44"></span>
                         <span class="f2 iconfont icon-wodehuichang"></span>
@@ -520,7 +523,7 @@
             </li>
 
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5576"></span>
                         <span class="f2 iconfont icon-bianpaiguize"></span>
@@ -531,7 +534,7 @@
                 </div>
             </li>
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#4c9ae5"></span>
                         <span class="f2 iconfont icon-canhuirenyuan"></span>
@@ -542,7 +545,7 @@
                 </div>
             </li>
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#7f68f1"></span>
                         <span class="f2 iconfont icon-canhuibaodao"></span>
@@ -553,7 +556,7 @@
                 </div>
             </li>
             <li>
-                <div class="sysdiv_cont clearfix" style="margin-right: 20px;margin-bottom:20px">
+                <div class="sysdiv_cont clearfix" style="margin-right: 20px;">
                     <div class="floatL">
                         <span class="f1 iconfont icon-weibiaoti1fuzhi" style="color:#fd5830"></span>
                         <span class="f2 iconfont icon-duanxintongzhi"></span>
@@ -567,6 +570,20 @@
     </div>
 </div>
 <script type="text/javascript">
+    /*-----------兼容小屏12.26--------------*/
+    function winWresize(element){
+        var winWidth=$(window).width();
+        if (winWidth <= 1160) {
+            $('.syslist').addClass("minisyslist")
+        }else{
+            $('.syslist').removeClass("minisyslist")
+        }
+    }
+    winWresize();
+    //浏览器窗口调整大小
+    $(window).resize(function () {
+        winWresize();
+    });
     jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:5});
 </script>
 </body>

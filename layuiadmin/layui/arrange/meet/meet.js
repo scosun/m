@@ -16,6 +16,9 @@ layui.config({
 
     // 20.04.06 dh 下行有修改 
     $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
+    $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
+    
+
     $.ajax({
         async: false,
         type: "get",
@@ -445,6 +448,9 @@ layui.config({
                 })
 
 
+            },
+            refresh:function(){
+                    location.reload();
             },
             //批量删除
             getCheckLength: function() {

@@ -2546,7 +2546,10 @@ function copyText(text) {
 }
 
 
-
+$('.toollist_li img').on('mousedown',function (e) {
+	// console.log("")
+    e.preventDefault()
+})
 
 
 

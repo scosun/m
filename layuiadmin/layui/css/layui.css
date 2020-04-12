@@ -5584,6 +5584,7 @@ body .layui-util-face .layui-layer-content {
 .layui-table-page {
     padding: 7px 0 0;
     text-align: right;
+    border-top: 2px solid #efefef;
 }
 /* 首页 左侧菜单 更多透明度 dh 20.04.06 修改*/
 .layui-nav .layui-nav-more {

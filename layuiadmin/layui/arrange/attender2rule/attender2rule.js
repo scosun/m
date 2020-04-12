@@ -307,7 +307,12 @@ layui.config({
                 $(".layui-form-checkbox").each(function() {
                     $(this).click();
                 });
-            },
+			},
+			refresh: function(){
+				// console.log("========");
+				// alert("----");
+					location.reload();
+			},
 			dels: function() {
 				if(arrangeList.length == 0){
 					return;
@@ -395,7 +400,7 @@ layui.config({
 				parent.layer.close(index); //再执行关闭 
 			}
 		};
-	$('.test-table-operate-btn .layui-btn,.test-table-reload-btn .layui-btn').on('click', function() {
+	$('.test-table-operate-btn .layui-btn,.test-table-operate-btn .layui-ds,.test-table-reload-btn .layui-allcheck').on('click', function() {
 		var type = $(this).data('type');
 		active[type] ? active[type].call(this) : '';
 	});

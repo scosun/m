@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
         <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+        <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
         <style type="text/css">
             .layui-btn {
                 background-color: #666;
@@ -104,7 +105,12 @@
                 // $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')
                 // 20.04.06 dh 现在按钮
                 $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
-                $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="goback" id="goback">返回上一级<s></s></a>')
+                // $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="goback" id="goback">返回上一级<s></s></a>')
+                //返回上一级 改为下一行
+                $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds iconfont icon-wodehuiyi" data-type="goback" id="goback"></i></div>')
+    
+
+
                 $.ajax({
                     async: false,
                     type: "get",
