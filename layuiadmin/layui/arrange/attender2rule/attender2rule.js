@@ -310,7 +310,6 @@ layui.config({
 			},
 			refresh: function(){
 				// console.log("========");
-				alert("----");
 					location.reload();
 			},
 			dels: function() {
