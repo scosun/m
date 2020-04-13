@@ -27,8 +27,8 @@ layui.config({
         router = layui.router();
     element.render();
     //初次渲染表格
-    var url = "https://f.longjuli.com"
-    // var url="http://127.0.0.1:8083";
+    // var url = "https://f.longjuli.com"
+    var url="http://127.0.0.1:8083";
     var  id =  getUrlParam("id")
     console.log(id)
     var devices = {};
@@ -344,10 +344,11 @@ layui.config({
             rowDrag: {trigger: '.adjustbtn',done: function(obj) {
                     // 完成时（松开时）触发
                     // 如果拖动前和拖动后无变化，则不会触发此方法
-                    console.log(obj.row) // 当前行数据
-                    console.log(obj.cache) // 改动后全表数据
-                    console.log(obj.oldIndex) // 原来的数据索引
-                    console.log(obj.newIndex) // 改动后数据索引
+                    // console.log(obj.row) // 当前行数据
+                    // console.log(obj.cache) // 改动后全表数据
+                    // console.log(obj.oldIndex) // 原来的数据索引
+                    // console.log(obj.newIndex) // 改动后数据索引
+                    console.log(defaultsort.config.limit*(defaultsort.config.page.curr-1)+obj.newIndex)
                 }}
             ,totalRow: true,
             contextmenu: {
@@ -469,6 +470,40 @@ layui.config({
                 console.log(obj.cache) // 改动后全表数据
                 console.log(obj.oldIndex) // 原来的数据索引
                 console.log(obj.newIndex) // 改动后数据索引
+                console.log(defaultsort.config) // 改动后数据索引
+                console.log(obj.row.id)
+                var rankid = defaultsort.config.limit*(defaultsort.config.page.curr-1)+obj.newIndex
+                $.ajax({
+                    url: url + "/attendeesort/defaultdragsort",
+                    type: "get",
+                    data: {
+
+                        "sortid": id,
+                        "attendeeid": obj.row.id,
+                        "rankid":rankid
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        if (data.code == "0") {
+                            page(defaultsort.config.page.curr,defaultsort.config.limit);
+                        } else {
+                            layer.msg('拖动失败，请稍后再试', {
+                                icon: 5
+                            });
+                            page(defaultsort.config.page.curr,defaultsort.config.limit);
+                        }
+
+                    },
+                    error: function (error) {
+
+                        layer.msg('删除失败，服务器错误请稍后再试', {
+                            icon: 5
+                        });
+                    }
+
+                })
             }}
         ,totalRow: true,
         contextmenu: {
