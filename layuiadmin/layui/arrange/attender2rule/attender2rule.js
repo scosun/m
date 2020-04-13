@@ -310,7 +310,6 @@ layui.config({
 			},
 			refresh: function(){
 				// console.log("========");
-				// alert("----");
 					location.reload();
 			},
 			dels: function() {
@@ -400,7 +399,7 @@ layui.config({
 				parent.layer.close(index); //再执行关闭 
 			}
 		};
-	$('.test-table-operate-btn .layui-btn,.test-table-operate-btn .layui-ds,.test-table-reload-btn .layui-allcheck').on('click', function() {
+	$('.layui-icon-refresh-3,.icon-wodehuiyi,.test-table-operate-btn .layui-btn,.test-table-operate-btn .layui-ds,.test-table-reload-btn .layui-allcheck').on('click', function() {
 		var type = $(this).data('type');
 		active[type] ? active[type].call(this) : '';
 	});
