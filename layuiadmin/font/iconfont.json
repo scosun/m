@@ -1,10 +1,38 @@
 {
-  "id": "",
-  "name": "",
+  "id": "1750217",
+  "name": "longjuli",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "8806439",
+      "name": "无内容",
+      "font_class": "wuneirong",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "14015648",
+      "name": "无内容",
+      "font_class": "lsh-empty_content",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "3256837",
+      "name": "返回上一步",
+      "font_class": "fanhuishangyibu",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "5979942",
+      "name": "返回上一步-01",
+      "font_class": "fanhuishangyibu-",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
     {
       "icon_id": "8589091",
       "name": "控制台",

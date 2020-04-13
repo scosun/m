@@ -10,6 +10,7 @@
     <script src="../../../web.contextmenu/web.contextmenu.js"></script>
     <script src="../../../js/jquery-3.1.1.min.js"></script>
     <script src="../../../js/jquery.jqprint-0.3.js"></script>
+    <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
     <!-- <script src="seatscontrol_drag.js"></script> -->
     <style type="text/css">
         header {
@@ -69,6 +70,10 @@
         .layui-btn {background-color: #666;}
         .layui-btn-danger {background-color: #FF5722;}
         .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+
+        
+
+
     </style>
 </head>
 <body>
@@ -107,7 +112,6 @@
     <a  title="修改名称" lay-event="edit" style="margin-left: 5px;"><i class="fas fa-sliders-h" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
     <a  title="修改座区" lay-event="editxq" style="margin-left: 5px;"><i class="fas fa-object-group" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
     <a  title="删除座区" lay-event="del" style="margin-left: 5px;"><i class="fas fa-trash-alt" style="font-size: 1rem; color: lightslategrey;"></i>  </a>
-
 </script>
 <script type="text/html" id="xuhao">
     {{d.LAY_TABLE_INDEX+1}}
@@ -116,6 +120,9 @@
         crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9"
       crossorigin="anonymous">
+
+      <div class="noData noData2"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>
+
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
@@ -922,12 +929,10 @@
         // 		isaddrule = true;
         // 	}
         // }
-
-
-
-
-
-
+        //重置layui 无数据情况
+        var noData ='<i class="layui-icon layui-ds iconfont icon-wuneirong"></i>当前没有任何记录</<i>'
+        $(".layui-none").addClass('noData').removeClass('layui-none').html(noData);
+        
         function GetQueryString(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
