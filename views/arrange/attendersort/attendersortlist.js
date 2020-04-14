@@ -324,6 +324,8 @@ layui.config({
             withCredentials: true
         },
         rowDrag: {
+            //soulTable.js扩展参数，已勾选id对象，记得删除勾选的时候要remove，保证一致性
+            autosortList:autosortList,
             trigger: '.adjustbtn', done: function (obj) {
                 if (autosortList.size!=0&&!autosortList.has(obj.row.id)){
                     var rankid = autosort.config.limit * (autosort.config.page.curr - 1) + obj.newIndex
@@ -521,6 +523,11 @@ layui.config({
     });
 
     table.on('checkbox(autosort)', function (obj) {
+        
+        //把id 附加到tr上面 做判断选中使用;chenxy add
+        $(obj.tr[0]).attr("id",obj.data.id);
+        //end
+
         if (!obj.checked && obj.type == 'all') {
             var data = layui.table.cache['autosort']
             $.each(data, function (idx, con) {
