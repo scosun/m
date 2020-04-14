@@ -236,6 +236,21 @@
                                 title: '递增补规则',
 
                                 width: '18%',
+                                templet:function (data) {
+                                    if(data.isincrement == 0){
+                                        return "上增下补"
+                                    }
+                                    if(data.isincrement == 1){
+                                        return "上增下不补"
+                                    }
+                                    if(data.isincrement == 2){
+                                        return "上不增下补"
+                                    }
+                                    if(data.isincrement == 3){
+                                        return "上不增下不补"
+                                    }
+
+                                }
                                 //align: "center"
 
 
@@ -335,7 +350,7 @@
                                 field: 'seatsnum',
                                 title: '座位数量',
                                 width: '15%',
-                                align: "center"
+                                //align: "center"
 
                             }, {
                                 field: 'rulename',
@@ -348,12 +363,9 @@
                                     field: 'ordernum',
                                     title: '规则排序',
                                     width: '18%',
-                                    //align: "center",
+                                    // align: "center",
                                     sort: true,
-                                    templet: function(data) {
-                                        i++;
-                                        return i;
-                                    },
+                                    templet: xuhao,
 
 
                                 },
@@ -362,6 +374,21 @@
                                     title: '递增补规则',
 
                                     width: '18%',
+                                    templet:function (data) {
+                                        if(data.isincrement == 0){
+                                            return "上增下补"
+                                        }
+                                        if(data.isincrement == 1){
+                                            return "上增下不补"
+                                        }
+                                        if(data.isincrement == 2){
+                                            return "上不增下补"
+                                        }
+                                        if(data.isincrement == 3){
+                                            return "上不增下不补"
+                                        }
+
+                                    }
                                     //align: "center"
 
 
@@ -370,7 +397,7 @@
                                 title: '更新时间',
                                 width: '12%',
                                 sort: true,
-                                //align: "center"
+                                // align: "center"
 
                             }, {
                                 width: 120,

@@ -70,8 +70,7 @@
         .layui-btn {background-color: #666;}
         .layui-btn-danger {background-color: #FF5722;}
         .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
-
-        
+        .hint{margin-left:20px;font-size: 14px}
 
 
     </style>
@@ -94,12 +93,15 @@
             </a> -->
 		</span>
     <span class="layui-right-nav">
-			<i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设定"><img src="../../../images/set_rules.svg"></i>
+			<i id="nav-Setuptheg" data-type="add" class="layui-ds" data="会场片区设定"><img src="../../../images/set_rules.svg"></i>
 			<i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
 			<i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
 			<i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
 			<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
 		</span>
+    <span class="hint">
+        设置完成后即保存成功
+    </span>
     <!-- 右侧菜单 end-->
 </header>
 <footer>
@@ -121,7 +123,7 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9"
       crossorigin="anonymous">
 
-      <div class="noData noData2"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>
+      <div class="noData noData2 layui-hide" id="noData"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>
 
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
@@ -288,12 +290,17 @@
             },
             success: function(data) {
                 var datas = data.data;
-                $("body").append(datas.templatecode);
+                if(datas.templatecode !=null){
+                    $("body").append(datas.templatecode);
 
-                selectSeats();
+                    selectSeats();
 
-                queryAllSeatStatus(roomid, ruleid);
-                layer.closeAll();
+                    queryAllSeatStatus(roomid, ruleid);
+                    layer.closeAll();
+                }else{
+                    $("#noData").removeClass("layui-hide")
+                }
+
             },
             error:function(){
                 layer.closeAll();
@@ -454,7 +461,7 @@
                 console.log("table--edit---",obj.data)
                 layer.open({
                     type: 2,
-                    title: '<p style="">座区设置</p>',
+                    title: '<p style="">会场片区设置</p>',
                     content: 'rule_form.html',
                     area: ['50%', '40%'],
                     btn: ['确定', '取消'],
@@ -524,7 +531,7 @@
             add: function() {
                 layer.open({
                     type: 2,
-                    title: '<p style="">座区设置</p>',
+                    title: '<p style="">会场片区设置</p>',
                     content: 'rule_form.html'
                     // ,maxmin: true
                     ,

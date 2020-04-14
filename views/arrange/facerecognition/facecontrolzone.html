@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+    <link rel="stylesheet" href="../../../css/seat.css" media="all">
+    <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+
+	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
+    <script src="../../../js/jquery-3.1.1.min.js"></script>
+    <script src="/m/js/scosun.js"></script>
+    <link rel="stylesheet" href="../../arrange/meet/rule_zq.css" />
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+    <style type="text/css">
+        header {
+            box-shadow: 0px 0px 5px gray;
+            height: 3.5rem;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            z-index: 9999;
+            background-color: white;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        /*右侧菜单*/
+        .layui-right-nav {
+            position: absolute;
+            right: 5px;
+            top: 0;
+            height: 3.5rem;
+            line-height: 3.5rem;
+            background-color: #fff;
+        }
+
+        .layui-right-nav i {
+            display: block;
+            height: 20px;
+            width: 20px;
+            float: left;
+            margin-top: 18px;
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        .layui-right-nav i img {
+            width: 100%;
+            display: block;
+        }
+
+        .btnbar-select{
+            display: inline-block;
+            width: 112px;
+            float: right;
+            margin-right: 450px;
+            margin-top: 9px;
+        }
+
+        .bindmac{
+            background: #ff000040;
+        }
+    </style>
+<script type="text/javascript">  
+    function doNothing(){  
+        window.event.returnValue=false;  
+        return false;  
+    }
+</script>
+</head>
+<body oncontextmenu="doNothing()">
+
+<header>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a><cite> &nbsp; &nbsp; &nbsp; 座区图</cite></a>
+		</span>
+    <!-- 右侧菜单 -->
+    <div class="btnbar-select" style="width:auto;margin-right: 50px;">
+        <span style="float: left;
+			line-height: 36px;
+			margin: 0 5px;
+			font-size: 20px;">|</span>
+        <div class="layui-form " style="width: 70px;margin-top: 10px;padding-left:10px;float: left;">
+            <div class="dropdown-menu dropdown-hover">
+                <a><span style="padding-left: 15px"> 投票</span></a>
+                <ul class="dropdown-menu-nav">
+                    <li class="title">投票功能</li>
+                    <li><a>投票模版</a></li>
+                    <li><a>发起投票</a></li>
+                    <li><a>回收投票</a></li>
+                    <li><a>投票统计</a></li>
+                </ul>
+            </div>
+        </div>
+        <span style="float: left;
+			line-height: 36px;
+			margin: 0 5px;
+			font-size: 20px;">|</span>
+        <div class="layui-form " style="width: 70px;margin-top: 10px;padding-left:10px;float: left;">
+            <div class="dropdown-menu dropdown-hover">
+                <a><span style="padding-left: 15px">短信</span></a>
+                <ul class="dropdown-menu-nav">
+                    <li class="title">短信功能</li>
+                    <li><a>发短信</a></li>
+                    <li><a>确认回收</a></li>
+                </ul>
+            </div>
+        </div>
+        <span style="float: left;
+			line-height: 36px;
+			margin: 0 5px;
+			font-size: 20px;">|</span>
+        <div class="layui-form " style="width: 70px;margin-top: 10px;margin-left:10px;float: left;">
+            <div class="dropdown-menu dropdown-hover">
+                <a><span>桌牌控制</span></a>
+                <ul class="dropdown-menu-nav">
+                    <li class="title">桌牌状态</li>
+                    <li class="title">会议准备</li>
+                    <li id="meetstart" ><a>会议开始</a></li>
+                    <li class="title">会议暂停</li>
+                    <li class="title">会议恢复</li>
+                    <li id="meetstop" ><a>会议结束</a></li>
+                    <li class="title">重新开始</li>
+                </ul>
+            </div>
+        </div>
+        <span style="float: left;
+			line-height: 36px;
+			margin: 0 5px;
+			font-size: 20px;">|</span>
+        <div class="layui-form " style="width: 130px;float: left;">
+            <select class="dialogRuleSelect" lay-filter="component-timeselect" id="ruleselect">
+                <option value="20">频率20秒</option>
+                <option value="30">频率30秒</option>
+                <option value="60">频率60秒</option>
+            </select>
+        </div>
+        <span style="float: left;
+			line-height: 36px;
+			margin: 0 5px;
+			font-size: 20px;">|</span>
+
+        <a onclick="asd()" style="float: left;line-height: 36px;" href="javascript:;"><cite>刷新</cite></a>
+    </div>
+    <span class="layui-right-nav" >
+			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		</span>
+    <!-- 右侧菜单 end-->
+</header>
+
+<div class="layui-form-item" style="display: none;">
+    <div class="layui-input-block">
+        <input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+               id="roomid" style="display: none;">
+    </div>
+</div>
+
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+
+
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        dropdown: '/dropdown/dropdown'
+    }).use(['index', 'user', 'table','dropdown'], function() {
+        var $ = layui.$,
+            form = layui.form,
+            element = layui.element,
+            table = layui.table,
+            layer = layui.layer,
+            router = layui.router(),
+            dropdown = 'dropdown';
+        var uri = window.location.search;
+        var roomid = uri.substr(4);
+
+        form.on('select(component-ruleselect)', function(data){
+            var id = +data.value;
+            if(id==1){
+
+            }else if(id == 2){
+                editSeatMac();
+            }else{
+                deleteSeatMac();
+            }
+        });
+        form.on('select(component-timeselect)', function(data){
+            interTime = +data.value;
+            startInterval();
+        });
+
+        $.ajax({
+            url: "https://www.longjuli.com/ajax",
+            type: "POST",
+            async: true,
+            data: {
+                "a": "s",
+                "t": "seatzone",
+                "c": roomid
+            },
+            success: function(data) {
+                var datas = data.data;
+                $("body").append(datas.code);
+
+
+                var seats = $("#seatcontainer .seatdiv");
+                seats.each(function(){
+                    var html = this.id;
+                    $(this).attr({"title":html,"alt":html});
+                    $(this).html('');
+                })
+
+                createMeetWebSocket();
+                // getFindByseatmac();
+            }
+        });
+
+
+        $("#meetstart").bind('click',function(){
+            layer.confirm('确定开始会议吗？', {
+				btn: ['确定', '取消']
+			}, function (index) {
+				StartMeetWebSocket();
+				layer.close(index);
+			}.bind(this));
+        });
+        $("#meetstop").bind('click',function(){
+            layer.confirm('确定结束会议吗？', {
+				btn: ['确定', '取消']
+			}, function (index) {
+				StopMeetWebSocket();
+				layer.close(index);
+			}.bind(this));
+        });
+
+        function changeSeatStatus(obj){
+            $("#" + obj.seatid).html(obj.name);
+            $("#" + obj.seatid).addClass("bindmac");
+            // 0：未发送；1：开始会议发送成功；-1：开始会议发送失败；2：结束会议成功; -2:结束会议失败
+            var meetingState = +obj.meetingState;
+            var changeType = +obj.changeType;
+
+            var mcolors = ["#ffcbcc","#d7ffca","#d1e9ff","#fff1d9"];
+            var ccolors = ["#e2e1ff","#fff1ae"];
+            switch(meetingState){
+                case 1:
+                    $("#" + obj.seatid).css("background",mcolors[0]);
+                break;
+                case -1:
+                    $("#" + obj.seatid).css("background",mcolors[1]);
+                break;
+                case 2:
+                    $("#" + obj.seatid).css("background",mcolors[2]);
+                break;
+                case -2:
+                    $("#" + obj.seatid).css("background",mcolors[3]);
+                break;
+            }
+
+            bindContextMenu();
+        }
+
+        var meetWs = null;
+        function createMeetWebSocket(){
+            if ("WebSocket" in window){
+                // 打开一个 web socket
+                var ws = new WebSocket("ws://m.longjuli.com:8083/cardWebSocket/shuxian");
+                ws.onopen = function(){
+                    meetWs = ws;
+                }
+            }else{
+               // 浏览器不支持 WebSocket
+               alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+        function StartMeetWebSocket(){
+            if (meetWs){
+                $("#seatcontainer .seatdiv").html('');
+                $("#seatcontainer .seatdiv").removeClass("bindmac");
+                $("#seatcontainer .seatdiv").css("background","none");
+
+                // Web Socket 已连接上，使用 send() 方法发送数据
+                console.log("数据发送中...",roomid+"&startMeetingTest");
+                var msgid = layer.msg("设备启动中...")
+                meetWs.send(roomid+"&startMeetingTest");
+                
+                meetWs.onmessage = function (evt) { 
+                    var received_msg = evt.data || "";
+
+                    console.log("数据已接收...",received_msg);
+                    try{
+                        layer.close(msgid);
+                        var obj = JSON.parse(received_msg);
+                        changeSeatStatus(obj.data);
+                    }catch(ex){
+                    }
+                };
+                
+            }else{
+               // 浏览器不支持 WebSocket
+               alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+
+        function StopMeetWebSocket(){
+            if (meetWs){
+                var msgid = layer.msg("设备关闭中...")
+                meetWs.send(roomid+"&endMeetingTest");
+            }else{
+               // 浏览器不支持 WebSocket
+               alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+
+        // var chkseat = {};
+        // var macdata = {};
+        // var interTime = 20;
+        // var inter = null;
+        
+
+        // function getFindByseatmac(){
+        //     $.ajax({
+        //         url: "https://f.longjuli.com/seatmac/findByseatmac",
+        //         type: "GET",
+        //         async: true,
+        //         data: {
+        //             "roomid": roomid
+        //         },
+        //         success: function(data) {
+        //             var data = data.data || {};
+        //             macdata = data;
+        //             setSeatBindStatus(data);
+        //             bindOneSeats();
+        //         }
+        //     });
+        // }
+
+        
+        // function deleteSeatMac(){
+        //     if(!chkseat.mac){
+        //         return;
+        //     }
+        //     $.ajax({
+        //         url: "https://f.longjuli.com/seatmac/delmacByroomid",
+        //         type: "GET",
+        //         async: true,
+        //         data: {
+        //             "roomid": roomid,
+        //             "seatid": chkseat.seatid
+        //         },
+        //         success: function() {
+        //             getFindByseatmac();
+        //         }
+        //     });
+        // }
+
+
+
+        // function setSeatBindStatus(data){
+        //     $(".bindmac").removeClass("bindmac");
+        //     data.forEach(function(item){
+        //         var id = item.seatid;
+        //         $("#" + id).addClass("bindmac");
+        //     })
+        // }
+
+
+        // function bindOneSeats(){
+        //     // var selList = $("#seatcontainer .seatdiv:not(.rownumseats)");
+        //     var selList = $("#seatcontainer .bindmac");
+        //     chkseat = {};
+        //     selList.removeClass('seled');
+        //     selList.unbind("click");
+        //     selList.bind("click",function(evt){
+        //         var sel = $(this);
+        //         if (!sel.hasClass('seled')) {
+        //             selList.removeClass('seled');
+        //             sel.addClass('seled');
+        //             var seatid = sel.attr("id");
+        //             chkseat = macdata.filter(function(item){
+        //                 return item.seatid == seatid;
+        //             })[0] || {seatid:seatid};
+
+        //         } else {
+        //             sel.removeClass('seled');
+        //             chkseat = {};
+        //         }
+        //     })
+        // }
+        
+        // https://f.longjuli.com/seatmac/delmacByroomid
+        function setNameBySeatid(name,seatid){
+            $.ajax({
+                url: "https://f.longjuli.com/tableSign/sendOneTableSign",
+                type: "GET",
+                async: true,
+                data: {
+                    "meetingid": roomid,
+                    "seatid": seatid,
+                    "msg":name
+                },
+                success: function(res) {
+                    if(res.code == 0){
+                        var obj = res.data || {};
+                        $("#" + obj.seatid).html(obj.name);
+                        $("#" + obj.seatid).css("background","#fff1ae");
+                        
+                    }else{
+                        layer.msg(res.msg || "修改mac失败");
+                    }
+
+                }
+            });
+        }
+
+        function editSeatMac(seatid){
+                layer.open({
+                    type: 2,
+                    title: '编辑姓名',
+                    shadeClose: true, //弹出框之外的地方是否可以点击
+                    offset: '10%',
+                    area: ['420px', '180px'],
+                    content: 'controleditname.html',
+                    btn: ['提交', '取消'],
+                    yes: function(index, layero) {
+                        var name = layero.find('iframe').contents().find("#name").val() || "";
+
+                        var oname = $("#" + seatid).html();
+                        if(name && name != oname){
+                            setNameBySeatid(name,seatid);
+                            // console.log("oname----",name)
+                        }
+
+                        layer.close(index);
+                    },
+                    success:function(layero) {
+                        var name = $("#" + seatid).html();
+                        layero.find('iframe').contents().find("#name").val(name);
+                    }
+                });
+
+        }
+
+
+        function bindContextMenu(){
+			removeContainerEvent();
+
+			var filediv = $("#seatcontainer .bindmac");
+			for(var i = 0, len = filediv.length; i < len; i++){
+				var item = filediv[i];
+				bindMenu(item.id);
+			}
+		}
+
+		var currseatno;
+		function bindMenu(seatno){
+			var menuJson = [
+				{
+					name:"修改名字",
+					id:"menu1",
+					seatno:seatno,
+					callback: function(seatno) {
+						editSeatMac(seatno);
+					}
+				},
+				{
+					name:"重新发送",
+					id:"menu2",
+					seatno:seatno,
+					callback: function(seatno) {
+                        layer.msg("重新发送")
+						// chkseat = macdata.filter(function(item){
+						// 	return item.seatid == seatno;
+						// })[0] || {seatid:seatid};
+						// editSeatMac();
+					}
+				},
+				// {
+				// 	name:"解除绑定",
+				// 	id:"menu3",
+				// 	seatno:seatno,
+				// 	callback: function(seatno) {
+				// 		chkseat = macdata.filter(function(item){
+				// 			return item.seatid == seatno;
+				// 		})[0] || {seatid:seatid};
+
+				// 		deleteSeatMac();
+				// 	}
+				// }
+				
+			];
+			
+			if($("#"+seatno).length > 0){
+				ContextMenu.bind("#"+seatno, menuJson);
+			}
+        }
+        
+        // function startInterval(){
+        //     clearInterval(inter);
+        //     inter = setInterval(function(){
+        //         getFindByseatmac();
+        //     },interTime * 1000);
+        // }
+
+        // startInterval();
+    });
+
+
+    var $ = layui.$,
+        active = {
+            close: function() {
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+                // parent.reloads()
+            }
+        };
+
+    $('.layui-right-nav i').on('click', function() {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+    function asd() {
+        location.reload();
+    }
+
+</script>
+
+</html>

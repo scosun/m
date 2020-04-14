@@ -108,10 +108,42 @@ layui.config({
                 rowDrag: {trigger: '.adjustbtn',done: function(obj) {
                         // 完成时（松开时）触发
                         // 如果拖动前和拖动后无变化，则不会触发此方法
-                        console.log(obj.row) // 当前行数据
-                        console.log(obj.cache) // 改动后全表数据
-                        console.log(obj.oldIndex) // 原来的数据索引
-                        console.log(obj.newIndex) // 改动后数据索引
+                        // console.log(obj.row) // 当前行数据
+                        // console.log(obj.cache) // 改动后全表数据
+                        // console.log(obj.oldIndex) // 原来的数据索引
+                        // console.log(obj.newIndex) // 改动后数据索引
+                        var rankid = autosort.config.limit*(autosort.config.page.curr-1)+obj.newIndex
+                        $.ajax({
+                            url: url + "/attendeesort/autodragsort",
+                            type: "get",
+                            data: {
+
+                                "sortid": id,
+                                "attendeeid": obj.row.id,
+                                "rankid":rankid
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            success: function (data) {
+                                if (data.code == "0") {
+                                    intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                } else {
+                                    layer.msg('拖动失败，请稍后再试', {
+                                        icon: 5
+                                    });
+                                    intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                }
+
+                            },
+                            error: function (error) {
+
+                                layer.msg('删除失败，服务器错误请稍后再试', {
+                                    icon: 5
+                                });
+                            }
+
+                        })
                     }}
                 ,totalRow: true,
                 contextmenu: {
@@ -167,11 +199,44 @@ layui.config({
                                     {
                                         name: '移动到上一页',
                                         click: function(obj) {
+                                            console.log(obj);
                                             console.log(defaultsort.config);
                                             if (autosort.config.page.curr == 1){
                                                 return layer.msg("当前已是第一页")
                                             }
-                                            intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+
+                                            var rankid = autosort.config.limit*(autosort.config.page.curr -2)
+                                            $.ajax({
+                                                url: url + "/attendeesort/autodragsort",
+                                                type: "get",
+                                                data: {
+
+                                                    "sortid": id,
+                                                    "attendeeid": obj.row.id,
+                                                    "rankid":rankid
+                                                },
+                                                xhrFields: {
+                                                    withCredentials: true
+                                                },
+                                                success: function (data) {
+                                                    if (data.code == "0") {
+                                                        intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+                                                    } else {
+                                                        layer.msg('拖动失败，请稍后再试', {
+                                                            icon: 5
+                                                        });
+                                                        intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                                    }
+
+                                                },
+                                                error: function (error) {
+
+                                                    layer.msg('删除失败，服务器错误请稍后再试', {
+                                                        icon: 5
+                                                    });
+                                                }
+
+                                            })
                                         }
                                     },
                                     {
@@ -180,9 +245,39 @@ layui.config({
                                             if (autosort.config.page.pages == autosort.config.page.curr){
                                                 return layer.msg("当前已是最后一页")
                                             }
-                                            // console.log(defaultsort.config)
-                                            // obj.update({author: obj.row.author + '+1'})
-                                            intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                            var rankid = autosort.config.limit*(autosort.config.page.curr)
+                                            $.ajax({
+                                                url: url + "/attendeesort/autodragsort",
+                                                type: "get",
+                                                data: {
+
+                                                    "sortid": id,
+                                                    "attendeeid": obj.row.id,
+                                                    "rankid":rankid
+                                                },
+                                                xhrFields: {
+                                                    withCredentials: true
+                                                },
+                                                success: function (data) {
+                                                    if (data.code == "0") {
+                                                        intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                                    } else {
+                                                        layer.msg('拖动失败，请稍后再试', {
+                                                            icon: 5
+                                                        });
+                                                        intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                                    }
+
+                                                },
+                                                error: function (error) {
+
+                                                    layer.msg('删除失败，服务器错误请稍后再试', {
+                                                        icon: 5
+                                                    });
+                                                }
+
+                                            })
+
                                         }
                                     }
                                 ],
@@ -225,12 +320,38 @@ layui.config({
             withCredentials: true
         },
         rowDrag: {trigger: '.adjustbtn',done: function(obj) {
-                // 完成时（松开时）触发
-                // 如果拖动前和拖动后无变化，则不会触发此方法
-                console.log(obj.row) // 当前行数据
-                console.log(obj.cache) // 改动后全表数据
-                console.log(obj.oldIndex) // 原来的数据索引
-                console.log(obj.newIndex) // 改动后数据索引
+                var rankid = autosort.config.limit*(autosort.config.page.curr-1)+obj.newIndex
+                $.ajax({
+                    url: url + "/attendeesort/autodragsort",
+                    type: "get",
+                    data: {
+
+                        "sortid": id,
+                        "attendeeid": obj.row.id,
+                        "rankid":rankid
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        if (data.code == "0") {
+                            intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                        } else {
+                            layer.msg('拖动失败，请稍后再试', {
+                                icon: 5
+                            });
+                            intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                        }
+
+                    },
+                    error: function (error) {
+
+                        layer.msg('删除失败，服务器错误请稍后再试', {
+                            icon: 5
+                        });
+                    }
+
+                })
             }}
         ,totalRow: true,
         contextmenu: {
@@ -283,11 +404,43 @@ layui.config({
                             {
                                 name: '移动到上一页',
                                 click: function(obj) {
-                                    console.log(defaultsort.config);
+                                    console.log(obj);
                                     if (autosort.config.page.curr == 1){
                                         return layer.msg("当前已是第一页")
                                     }
-                                    intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+                                    var rankid = autosort.config.limit*(autosort.config.page.curr -2)
+                                    $.ajax({
+                                        url: url + "/attendeesort/autodragsort",
+                                        type: "get",
+                                        data: {
+
+                                            "sortid": id,
+                                            "attendeeid": obj.row.id,
+                                            "rankid":rankid
+                                        },
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        success: function (data) {
+                                            if (data.code == "0") {
+                                                intelligentsorting(autosort.config.page.curr -1,autosort.config.limit);
+                                            } else {
+                                                layer.msg('拖动失败，请稍后再试', {
+                                                    icon: 5
+                                                });
+                                                intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                            }
+
+                                        },
+                                        error: function (error) {
+
+                                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                                icon: 5
+                                            });
+                                        }
+
+                                    })
+
                                 }
                             },
                             {
@@ -296,9 +449,38 @@ layui.config({
                                     if (autosort.config.page.pages == autosort.config.page.curr){
                                         return layer.msg("当前已是最后一页")
                                     }
-                                    // console.log(defaultsort.config)
-                                    // obj.update({author: obj.row.author + '+1'})
-                                    intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                    var rankid = autosort.config.limit*(autosort.config.page.curr)
+                                    $.ajax({
+                                        url: url + "/attendeesort/autodragsort",
+                                        type: "get",
+                                        data: {
+
+                                            "sortid": id,
+                                            "attendeeid": obj.row.id,
+                                            "rankid":rankid
+                                        },
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        success: function (data) {
+                                            if (data.code == "0") {
+                                                intelligentsorting(autosort.config.page.curr+1,autosort.config.limit);
+                                            } else {
+                                                layer.msg('拖动失败，请稍后再试', {
+                                                    icon: 5
+                                                });
+                                                intelligentsorting(autosort.config.page.curr,autosort.config.limit);
+                                            }
+
+                                        },
+                                        error: function (error) {
+
+                                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                                icon: 5
+                                            });
+                                        }
+
+                                    })
                                 }
                             }
                         ],
@@ -333,7 +515,7 @@ layui.config({
         var defaultsort =  table.render({
             elem: '#defaultsort',
             // height: 'full-200',
-            url: url+"/attendeesort/selectSelect", //数据接口
+            url: url+"/attendeesort/selectiveBydefault", //数据接口
             //    ,
             where:{
                 sortattendeeid:id
@@ -344,10 +526,42 @@ layui.config({
             rowDrag: {trigger: '.adjustbtn',done: function(obj) {
                     // 完成时（松开时）触发
                     // 如果拖动前和拖动后无变化，则不会触发此方法
-                    console.log(obj.row) // 当前行数据
-                    console.log(obj.cache) // 改动后全表数据
-                    console.log(obj.oldIndex) // 原来的数据索引
-                    console.log(obj.newIndex) // 改动后数据索引
+                    // console.log(obj.row) // 当前行数据
+                    // console.log(obj.cache) // 改动后全表数据
+                    // console.log(obj.oldIndex) // 原来的数据索引
+                    // console.log(obj.newIndex) // 改动后数据索引
+                    var rankid = defaultsort.config.limit*(defaultsort.config.page.curr-1)+obj.newIndex
+                    $.ajax({
+                        url: url + "/attendeesort/defaultdragsort",
+                        type: "get",
+                        data: {
+
+                            "sortid": id,
+                            "attendeeid": obj.row.id,
+                            "rankid":rankid
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.code == "0") {
+                                page(defaultsort.config.page.curr,defaultsort.config.limit);
+                            } else {
+                                layer.msg('拖动失败，请稍后再试', {
+                                    icon: 5
+                                });
+                                page(defaultsort.config.page.curr,defaultsort.config.limit);
+                            }
+
+                        },
+                        error: function (error) {
+
+                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                icon: 5
+                            });
+                        }
+
+                    })
                 }}
             ,totalRow: true,
             contextmenu: {
@@ -406,7 +620,39 @@ layui.config({
                                         if (defaultsort.config.page.curr == 1){
                                             return layer.msg("当前已是第一页")
                                         }
-                                        page(defaultsort.config.page.curr-1,defaultsort.config.limit);
+                                        var rankid = defaultsort.config.limit*(defaultsort.config.page.curr -2)
+                                        $.ajax({
+                                            url: url + "/attendeesort/defaultdragsort",
+                                            type: "get",
+                                            data: {
+
+                                                "sortid": id,
+                                                "attendeeid": obj.row.id,
+                                                "rankid":rankid
+                                            },
+                                            xhrFields: {
+                                                withCredentials: true
+                                            },
+                                            success: function (data) {
+                                                if (data.code == "0") {
+                                                    page(defaultsort.config.page.curr-1,defaultsort.config.limit);
+                                                } else {
+                                                    layer.msg('拖动失败，请稍后再试', {
+                                                        icon: 5
+                                                    });
+                                                    page(defaultsort.config.page.curr,defaultsort.config.limit);
+                                                }
+
+                                            },
+                                            error: function (error) {
+
+                                                layer.msg('删除失败，服务器错误请稍后再试', {
+                                                    icon: 5
+                                                });
+                                            }
+
+                                        })
+
                                     }
                                 },
                                 {
@@ -418,8 +664,38 @@ layui.config({
                                             return layer.msg("当前已是最后一页")
                                         }
 
-                                        page(defaultsort.config.page.curr+1,defaultsort.config.limit);
-                                        console.log(defaultsort.config)
+                                        var rankid = defaultsort.config.limit*(defaultsort.config.page.curr)
+                                        $.ajax({
+                                            url: url + "/attendeesort/defaultdragsort",
+                                            type: "get",
+                                            data: {
+
+                                                "sortid": id,
+                                                "attendeeid": obj.row.id,
+                                                "rankid":rankid
+                                            },
+                                            xhrFields: {
+                                                withCredentials: true
+                                            },
+                                            success: function (data) {
+                                                if (data.code == "0") {
+                                                    page(defaultsort.config.page.curr+1,defaultsort.config.limit);
+                                                } else {
+                                                    layer.msg('拖动失败，请稍后再试', {
+                                                        icon: 5
+                                                    });
+                                                    page(defaultsort.config.page.curr,defaultsort.config.limit);
+                                                }
+
+                                            },
+                                            error: function (error) {
+
+                                                layer.msg('删除失败，服务器错误请稍后再试', {
+                                                    icon: 5
+                                                });
+                                            }
+
+                                        })
 
                                     }
                                 }
@@ -454,7 +730,7 @@ layui.config({
      var defaultsort =  table.render({
         elem: '#defaultsort',
         // height: 'full-200',
-        url: url+"/attendeesort/selectSelect", //数据接口
+        url: url+"/attendeesort/selectiveBydefault", //数据接口
         //    ,
         where:{
             sortattendeeid:id
@@ -469,6 +745,40 @@ layui.config({
                 console.log(obj.cache) // 改动后全表数据
                 console.log(obj.oldIndex) // 原来的数据索引
                 console.log(obj.newIndex) // 改动后数据索引
+                console.log(defaultsort.config) // 改动后数据索引
+                console.log(obj.row.id)
+                var rankid = defaultsort.config.limit*(defaultsort.config.page.curr-1)+obj.newIndex
+                $.ajax({
+                    url: url + "/attendeesort/defaultdragsort",
+                    type: "get",
+                    data: {
+
+                        "sortid": id,
+                        "attendeeid": obj.row.id,
+                        "rankid":rankid
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        if (data.code == "0") {
+                            page(defaultsort.config.page.curr,defaultsort.config.limit);
+                        } else {
+                            layer.msg('拖动失败，请稍后再试', {
+                                icon: 5
+                            });
+                            page(defaultsort.config.page.curr,defaultsort.config.limit);
+                        }
+
+                    },
+                    error: function (error) {
+
+                        layer.msg('删除失败，服务器错误请稍后再试', {
+                            icon: 5
+                        });
+                    }
+
+                })
             }}
         ,totalRow: true,
         contextmenu: {
@@ -525,7 +835,38 @@ layui.config({
                                     if (defaultsort.config.page.curr == 1){
                                         return layer.msg("当前已是第一页")
                                     }
-                                    page(defaultsort.config.page.curr -1,defaultsort.config.limit);
+                                    var rankid = defaultsort.config.limit*(defaultsort.config.page.curr -2)
+                                    $.ajax({
+                                        url: url + "/attendeesort/defaultdragsort",
+                                        type: "get",
+                                        data: {
+
+                                            "sortid": id,
+                                            "attendeeid": obj.row.id,
+                                            "rankid":rankid
+                                        },
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        success: function (data) {
+                                            if (data.code == "0") {
+                                                page(defaultsort.config.page.curr-1,defaultsort.config.limit);
+                                            } else {
+                                                layer.msg('拖动失败，请稍后再试', {
+                                                    icon: 5
+                                                });
+                                                page(defaultsort.config.page.curr,defaultsort.config.limit);
+                                            }
+
+                                        },
+                                        error: function (error) {
+
+                                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                                icon: 5
+                                            });
+                                        }
+
+                                    })
                                 }
                             },
                             {
@@ -534,9 +875,39 @@ layui.config({
                                     if (defaultsort.config.page.pages == defaultsort.config.page.curr){
                                         return layer.msg("当前已是最后一页")
                                     }
-                                    // console.log(defaultsort.config)
-                                    // obj.update({author: obj.row.author + '+1'})
-                                    page(defaultsort.config.page.curr+1,defaultsort.config.limit);
+                                    var rankid = defaultsort.config.limit*(defaultsort.config.page.curr)
+                                    $.ajax({
+                                        url: url + "/attendeesort/defaultdragsort",
+                                        type: "get",
+                                        data: {
+
+                                            "sortid": id,
+                                            "attendeeid": obj.row.id,
+                                            "rankid":rankid
+                                        },
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        success: function (data) {
+                                            if (data.code == "0") {
+                                                page(defaultsort.config.page.curr+1,defaultsort.config.limit);
+                                            } else {
+                                                layer.msg('拖动失败，请稍后再试', {
+                                                    icon: 5
+                                                });
+                                                page(defaultsort.config.page.curr,defaultsort.config.limit);
+                                            }
+
+                                        },
+                                        error: function (error) {
+
+                                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                                icon: 5
+                                            });
+                                        }
+
+                                    })
+
                                 }
                             }
                         ],
