@@ -222,7 +222,27 @@ html {
     margin-top: -3px;
 }
 
+/* 首页左侧图标修改 */
+.layui-side-menu .layui-nav .layui-nav-item .layui-icon {
+    margin-top: -20px;
+}
+.iconfont.icon-wodehuichang{
+    font-size: 15px;
+    margin-left:1px
+}
 
+.iconfont.icon-bianpaiguize{
+    font-size: 14px;
+    margin-left:-1px
+}
+.iconfont.icon-duanxintongzhi{
+    font-size: 18px;
+    margin-left:-1px
+}
 
+.iconfont.icon-xitongguanli{
+    font-size: 20px;
+    margin-left:-2px
+}
 
 

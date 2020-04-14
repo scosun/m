@@ -48,6 +48,12 @@
 		.layui-btn+.layui-btn {
 			margin-left: 5px;
 		}
+		.mr5{margin-right: 5px;}
+
+		/* 修改全屏弹框标题背景为原来灰色 在弹框的父页面加*/
+		.layui-layer-title {
+            background-color: #f8f8f8!important;
+        }
 	</style>
 	<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -77,7 +83,7 @@
 										<a class=" layui-icon " lay-event="zonelist" id="zonelist" style="font-size: 1.5625rem;">&#xe62d;</a>
 									</script>
 								<script type="text/html" id="table-content-list">
-									<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>{{#  if($.inArray("delrole", a) != -1){ }}<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>{{#  } }}
+									<a class="layui-btn layui-btn-xs layui-dd mr5" lay-event="edit" data-type="edit" id="edit">编辑</a>{{#  if($.inArray("delrole", a) != -1){ }}<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>{{#  } }}
 								</script>
 							</div>
 						</div>
@@ -260,7 +266,7 @@
 				if (obj.event === "edit") {
 					layer.open({
 						type: 2,
-						title: '<p style="">修改管理组</p>',
+						title: '<p style="background:#f8f8f8;color:#333">修改管理组</p>',
 						content: 'roleupdate.html',
 						// maxmin: true,
 						area: ['100%', '100%'],

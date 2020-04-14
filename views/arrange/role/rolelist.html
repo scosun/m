@@ -130,17 +130,21 @@
                         <center>
                             <div class="layui-form-item layui-layout-admin">
                                 <div class="layui-input-block">
-                                    <div class="layui-footer" style="left: 0;">
-                                        <button class="layui-btn" lay-submit="submit" lay-filter="component-form-demo1"
+                                    <div class="layui-footer" style="left: 0;padding: 0 10px 10px;background-color: #fff;">
+                                        <div class="layui-layer-btn" style="padding:10px">
+                                            <!-- <button class="layui-layer-btn0" lay-submit="submit" lay-filter="component-form-demo1"
                                             id="sub">提交</button>
-                                        <button type="button" class="layui-btn layui-btn-primary"
-                                            onclick="reloadwin()">重置</button>
+                                            <button type="button" class="layui-layer-btn1 layui-btn-primary"
+                                            onclick="reloadwin()">重置</button> -->
+                                            <a class="layui-layer-btn0" lay-submit="submit" lay-filter="component-form-demo1"
+                                            id="sub">保存</a>
+                                            <a class="layui-layer-btn1" class="layui-layer-btn1 layui-btn-primary"
+                                            onclick="reloadwin()">返回</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </center>
-
-
                 </form>
             </div>
         </div>

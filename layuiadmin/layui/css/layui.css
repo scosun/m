@@ -5600,6 +5600,7 @@ body .layui-util-face .layui-layer-content {
 .layui-form-checked[lay-skin=primary] i {
     border-color: #ffce00 !important;
     background-color: #ffce00;
+    /*color: #000;复选框 里对勾黑色*/
     color: #fff;
 }
 .layui-form-checkbox[lay-skin=primary]:hover i {
@@ -5623,4 +5624,12 @@ body .layui-util-face .layui-layer-content {
     height: 190px;
     background-color: #ffffff;
     z-index: 9999;
+}
+
+.layui-form-checked i, .layui-form-checked:hover i {
+    color: #ffce00;
+}
+.layui-form-checked span, .layui-form-checked:hover span {
+    background-color: #ffce00;
+    color: #333
 }
