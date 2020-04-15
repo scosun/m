@@ -33,10 +33,12 @@
         <div class="layui-row grid-demo grid-demo-bg1">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding: 8px 15px 4px;">
+                    <div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding:10px 15px 0;">
 						<span class="layui-breadcrumb">
-							<a><cite>控制管理列表</cite></a>
-							<a onclick="asd()" href="javascript:;"><cite>刷新</cite></a>
+                            <a><cite>控制管理列表</cite></a>
+                            <!-- <a  href="javascript:;" onclick="asd()"><cite>刷新</cite></a> -->
+                            <div class="assistBtn" style="margin-left:10px"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+							<!-- <a href="javascript:;"><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh" ></i></a> -->
 						</span>
                     </div>
                 </div>
@@ -530,13 +532,14 @@
             } else if (obj.event === 'bindingList') {
                 layer.open({
                     type: 2,
-                    title: '绑定列表',
+                    title: false,
                     content: 'seatmaclist.html?roomid='+obj.data.roomid
-                    ,maxmin: true
+                    // ,maxmin: true
                     ,
                     area: ['100%', '100%'],
                     scrollbar: false,
-                    offset: '-41px',
+                    closeBtn:false,
+                    offset: '0',
                     yes: function(index, layero) {
                     },
                     success: function(layero, index) {
