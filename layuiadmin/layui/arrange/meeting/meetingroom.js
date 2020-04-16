@@ -441,6 +441,8 @@ layui.config({
 					,maxmin: true
 					,
 				area: ['100%', '100%'],
+				skin: 'layer-ext-greytitle',//添加自定义样式
+
 				scrollbar: false,
 				yes: function(index, layero) {
 				},

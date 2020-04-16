@@ -5633,3 +5633,10 @@ body .layui-util-face .layui-layer-content {
     background-color: #ffce00;
     color: #333
 }
+
+
+.layui-btn-primary:hover {
+    border-color:#c9c9c9;
+    background: #f2f2f2;
+    color: #000;
+}

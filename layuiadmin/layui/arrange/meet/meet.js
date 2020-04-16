@@ -407,12 +407,13 @@ layui.config({
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '  ',
+                title: false,
                 shadeClose: false, //弹出框之外的地方是否可以点击
-                area: ['100%', '106%'],
+                area: ['100%', '100%'],
                 closeBtn: 1,
-                maxmin: true,
-                offset: '-43px',
+                // maxmin: true,
+                closeBtn:false,
+                offset: '0',
                 content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
                 success: function(layero, index) {
                 

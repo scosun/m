@@ -204,7 +204,7 @@ html {
     vertical-align: middle;
     margin-bottom:10px
 }
-.fengeline{
+.fengeline,.fengeline_hui{
     color:#a5a5a5;
     vertical-align: middle;
     margin-right:10px
@@ -213,6 +213,7 @@ html {
     vertical-align: middle;
     margin-right:10px;
     cursor: pointer;
+    color: #666;
 }
 
 
