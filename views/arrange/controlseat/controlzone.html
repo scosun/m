@@ -199,6 +199,8 @@
             startInterval();
         });
 
+        layer.load(2);
+
         $.ajax({
             url: "https://www.longjuli.com/ajax",
             type: "POST",
@@ -220,6 +222,7 @@
                     $(this).html('');
                 })
 
+                layer.closeAll();
                 createMeetWebSocket();
                 // getFindByseatmac();
             }
