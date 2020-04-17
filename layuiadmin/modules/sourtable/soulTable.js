@@ -424,6 +424,7 @@ layui.define(["table", "tableFilter", "tableChild", "tableMerge"], function(expo
 
                 if (autosortList.size!=0){
                     var id = $(e.currentTarget).parent().parent().parent().attr("id");
+                    console.log($(e.currentTarget).parent().attr("value"))
                     if(!autosortList.has(+id)){
                         // console.log(id,autosortList)
                         return;

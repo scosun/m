@@ -121,7 +121,13 @@
                                         </script>
                                         <!-- 调整 -->
                                         <script type="text/html" id="Adjust">
-                                            <a lay-event="Adjust" class="adjustbtn"></a >
+                                            {{# if(autosortList.size!=0 && autosortList.has(d.id)){ console.log(d.id)}}
+                                            <a lay-event="Adjust"  class="adjustbtn" id="{{d.id}}" value ="{{d.id}}" ></a >
+                                            {{# }else if(autosortList.size == 0) { }}
+                                            <a lay-event="Adjust" class="adjustbtn" id="{{d.id}}" value ="{{d.id}}"  ></a >
+                                            {{# }else if(autosortList.size!=0 && autosortList.has(d.id)) { }}
+                                            <a lay-event="Adjust" class="adjustbtn"  value ="{{d.id}}" id="{{d.id}}" ></a >
+                                            {{# }}}
                                         </script>
                                     </div>
                                     <!-- tab2  默认排序 -->

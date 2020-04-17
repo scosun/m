@@ -31,7 +31,7 @@ layui.config({
     // var url="http://127.0.0.1:8083";
     var id = getUrlParam("id")
     console.log(id)
-    var autosortList = new Set()
+     window.autosortList = new Set()
     layer.msg("点击导入，导入excel模板之后，才有人员信息");
     $('#group').append('<button class="layui-btn layui-ds Intelligent" data-type="Intelligent" id="Intelligent" data="智能排序">智能排序</button>')
     $('#group').append('<button class="layui-btn layui-ds attribute" data-type="attribute" id="attribute" data="排序属性">排序属性</button>')
@@ -110,8 +110,9 @@ layui.config({
                 withCredentials: true
             },
             rowDrag: {
+                autosortList:autosortList,
                 trigger: '.adjustbtn', done: function (obj) {
-                    if (autosortList.size!=0&&!autosortList.has(obj.row.id)){
+                    if (autosortList.size==0&&!autosortList.has(obj.row.id)){
                         var rankid = autosort.config.limit * (autosort.config.page.curr - 1) + obj.newIndex
                         $.ajax({
                             url: url + "/attendeesort/autodragsort",
@@ -144,8 +145,41 @@ layui.config({
                             }
 
                         })
-                    }else {}
+                    }else {
+                        var rankid = autosort.config.limit * (autosort.config.page.curr - 1) + obj.newIndex
+                        var checkbox = Array.from(autosortList);
+                        $.ajax({
+                            url: url + "/attendeesort/autodragmultisort",
+                            type: "get",
+                            data: {
+                                "sortid": id,
+                                "attendeeids":checkbox.join(","),
+                                "rankid": rankid,
+                                "dragattendeeid":obj.row.id
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            success: function (data) {
+                                if (data.code == "0") {
+                                    intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                } else {
+                                    layer.msg('拖动失败，请稍后再试', {
+                                        icon: 5
+                                    });
+                                    intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                }
 
+                            },
+                            error: function (error) {
+
+                                layer.msg('删除失败，服务器错误请稍后再试', {
+                                    icon: 5
+                                });
+                            }
+
+                        })
+                    }
                 }
             }
             , totalRow: true,
@@ -232,7 +266,7 @@ layui.config({
                                                 }
 
                                             },
-                                            error: function (error) {
+                                             error: function (error) {
 
                                                 layer.msg('删除失败，服务器错误请稍后再试', {
                                                     icon: 5
@@ -297,7 +331,13 @@ layui.config({
             even: true,
             limits: [15, 30, 50],
             parseData: function (res, curr, count) {
-                console.log(6666)
+                for (var i in res.data) {
+
+                    if (autosortList.has(res.data[i].id)) {
+                        //如果set集合中有的话，给rows添加check属性选中
+                        res.data[i]["LAY_CHECKED"] = true;
+                    }
+                }
                 return {
                     "code": res.code, //解析接口状态
                     "count": res.count, //解析数据长度
@@ -306,8 +346,9 @@ layui.config({
 
             },
             done: function (res, curr, count) {
-
+                console.log(autosort.config)
                 soulTable.render(this)
+
             }
         });
     }
@@ -327,7 +368,7 @@ layui.config({
             //soulTable.js扩展参数，已勾选id对象，记得删除勾选的时候要remove，保证一致性
             autosortList:autosortList,
             trigger: '.adjustbtn', done: function (obj) {
-                if (autosortList.size!=0&&!autosortList.has(obj.row.id)){
+                if (autosortList.size==0&&!autosortList.has(obj.row.id)){
                     var rankid = autosort.config.limit * (autosort.config.page.curr - 1) + obj.newIndex
                     $.ajax({
                         url: url + "/attendeesort/autodragsort",
@@ -360,7 +401,41 @@ layui.config({
                         }
 
                     })
-                }else {}
+                }else {
+                    var rankid = autosort.config.limit * (autosort.config.page.curr - 1) + obj.newIndex
+                    var checkbox = Array.from(autosortList);
+                    $.ajax({
+                        url: url + "/attendeesort/autodragmultisort",
+                        type: "get",
+                        data: {
+                            "sortid": id,
+                            "attendeeids":checkbox.join(","),
+                            "rankid": rankid,
+                            "dragattendeeid":obj.row.id
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.code == "0") {
+                                intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                            } else {
+                                layer.msg('拖动失败，请稍后再试', {
+                                    icon: 5
+                                });
+                                intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                            }
+
+                        },
+                        error: function (error) {
+
+                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                icon: 5
+                            });
+                        }
+
+                    })
+                }
             }
         }
         , totalRow: true,
@@ -508,7 +583,13 @@ layui.config({
         even: true,
         limits: [15, 30, 50],
         parseData: function (res, curr, count) {
-            console.log(6666)
+            for (var i in res.data) {
+
+                if (autosortList.has(res.data[i].id)) {
+                    //如果set集合中有的话，给rows添加check属性选中
+                    res.data[i]["LAY_CHECKED"] = true;
+                }
+            }
             return {
                 "code": res.code, //解析接口状态
                 "count": res.count, //解析数据长度
@@ -523,9 +604,11 @@ layui.config({
     });
 
     table.on('checkbox(autosort)', function (obj) {
-        
+        console.log()
         //把id 附加到tr上面 做判断选中使用;chenxy add
-        $(obj.tr[0]).attr("id",obj.data.id);
+        // $(obj.tr[0]).attr("id",obj.data.id);
+
+        console.log()
         //end
 
         if (!obj.checked && obj.type == 'all') {
