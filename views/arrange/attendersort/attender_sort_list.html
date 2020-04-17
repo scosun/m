@@ -63,9 +63,13 @@
                 margin-top: 4px;
                 display: block;
                 width:20px;
+                opacity:0.5;
                 height: 20px;
                 background:url(../../../images/rightbtn.png) no-repeat center center;
                 background-size: 20px 20px;
+            }
+            .opacitys{
+                opacity:1;
             }
 
     </style>
@@ -122,11 +126,20 @@
                                         <!-- 调整 -->
                                         <script type="text/html" id="Adjust">
                                             {{# if(autosortList.size!=0 && autosortList.has(d.id)){ console.log(d.id)}}
-                                            <a lay-event="Adjust"  class="adjustbtn" id="{{d.id}}" value ="{{d.id}}" ></a >
+                                            <a lay-event="Adjust"  class="adjustbtn opacitys" id="a{{d.id}}" value ="{{d.id}}" ></a >
                                             {{# }else if(autosortList.size == 0) { }}
-                                            <a lay-event="Adjust" class="adjustbtn" id="{{d.id}}" value ="{{d.id}}"  ></a >
-                                            {{# }else if(autosortList.size!=0 && autosortList.has(d.id)) { }}
-                                            <a lay-event="Adjust" class="adjustbtn"  value ="{{d.id}}" id="{{d.id}}" ></a >
+                                            <a lay-event="Adjust" class="adjustbtn" id="a{{d.id}}" value =""  ></a >
+                                            {{# }else if(autosortList.size!=0 && !autosortList.has(d.id)) { }}
+                                            <a lay-event="Adjust" class="adjustbtn" value ="" id="a{{d.id}}" ></a >
+                                            {{# }}}
+                                        </script>
+                                        <script type="text/html" id="defultsort">
+                                            {{# if(defaultsortList.size!=0 && defaultsortList.has(d.id)){ }}
+                                            <a lay-event="Adjust"  class="adjustbtn opacitys" id="d{{d.id}}" value ="{{d.id}}" ></a >
+                                            {{# }else if(defaultsortList.size == 0) { }}
+                                            <a lay-event="Adjust" class="adjustbtn" id="d{{d.id}}" value =""  ></a >
+                                            {{# }else if(defaultsortList.size!=0 && !defaultsortList.has(d.id)) { }}
+                                            <a lay-event="Adjust" class="adjustbtn" value ="" id="d{{d.id}}" ></a >
                                             {{# }}}
                                         </script>
                                     </div>

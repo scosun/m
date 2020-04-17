@@ -32,6 +32,8 @@ layui.config({
     var id = getUrlParam("id")
     console.log(id)
      window.autosortList = new Set()
+     window.defaultsortList= new Set()
+    window.customList= new Set()
     layer.msg("点击导入，导入excel模板之后，才有人员信息");
     $('#group').append('<button class="layui-btn layui-ds Intelligent" data-type="Intelligent" id="Intelligent" data="智能排序">智能排序</button>')
     $('#group').append('<button class="layui-btn layui-ds attribute" data-type="attribute" id="attribute" data="排序属性">排序属性</button>')
@@ -162,7 +164,20 @@ layui.config({
                             },
                             success: function (data) {
                                 if (data.code == "0") {
-                                    intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                    layer.confirm('是否要继续拖动?', {icon: 3, title:'提示',btn:['继续拖动','取消拖动'],
+                                        yes:function(index){
+                                            intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                            layer.close(index);
+                                        },
+                                        cancel: function(index){
+                                            autosortList = new Set()
+                                            intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                        },
+                                        btn2: function(index){
+                                            autosortList = new Set()
+                                            intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                        }
+                                    }, );
                                 } else {
                                     layer.msg('拖动失败，请稍后再试', {
                                         icon: 5
@@ -418,7 +433,21 @@ layui.config({
                         },
                         success: function (data) {
                             if (data.code == "0") {
-                                intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                layer.confirm('是否要继续拖动?', {icon: 3, title:'提示',btn:['继续拖动','取消拖动'],
+                                    yes:function(index){
+                                        layer.close(index);
+                                        intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                    },
+                                    cancel: function(index){
+                                        autosortList = new Set()
+                                        intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                    },
+                                    btn2: function(index){
+                                        autosortList = new Set()
+                                        intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                    }
+                                }, );
+
                             } else {
                                 layer.msg('拖动失败，请稍后再试', {
                                     icon: 5
@@ -606,7 +635,7 @@ layui.config({
     table.on('checkbox(autosort)', function (obj) {
         console.log()
         //把id 附加到tr上面 做判断选中使用;chenxy add
-        // $(obj.tr[0]).attr("id",obj.data.id);
+        // $("#"+obj.data.id).attr("value",obj.data.id);
 
         console.log()
         //end
@@ -615,22 +644,26 @@ layui.config({
             var data = layui.table.cache['autosort']
             $.each(data, function (idx, con) {
                 autosortList.delete(con.id)
+                $("#a"+con.id).attr("value","").removeClass("opacitys");
+
             });
 
         }
         if (obj.checked && obj.type == 'all') {
 
             $.each(table.checkStatus('autosort').data, function (idx, con) {
-                obj.removeClass("adjustbtn")
                 autosortList.add(con.id);
+                $("#a"+con.id).attr("value",con.id).addClass("opacitys");
             });
         }
         if (obj.checked && obj.type == 'one') {
             autosortList.add(obj.data.id);
+            $("#a"+obj.data.id).attr("value",obj.data.id).addClass("opacitys");
         }
         if (!obj.checked && obj.type == 'one') {
 
             autosortList.delete(obj.data.id)
+            $("#a"+obj.data.id).attr("value","").removeClass("opacitys");
         }
         console.log(autosortList)
         // if(obj.checked){
@@ -656,45 +689,93 @@ layui.config({
                 withCredentials: true
             },
             rowDrag: {
+                autosortList:defaultsortList,
                 trigger: '.adjustbtn', done: function (obj) {
-                    // 完成时（松开时）触发
-                    // 如果拖动前和拖动后无变化，则不会触发此方法
-                    // console.log(obj.row) // 当前行数据
-                    // console.log(obj.cache) // 改动后全表数据
-                    // console.log(obj.oldIndex) // 原来的数据索引
-                    // console.log(obj.newIndex) // 改动后数据索引
-                    var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
-                    $.ajax({
-                        url: url + "/attendeesort/defaultdragsort",
-                        type: "get",
-                        data: {
 
-                            "sortid": id,
-                            "attendeeid": obj.row.id,
-                            "rankid": rankid
-                        },
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function (data) {
-                            if (data.code == "0") {
-                                page(defaultsort.config.page.curr, defaultsort.config.limit);
-                            } else {
-                                layer.msg('拖动失败，请稍后再试', {
+                    if (defaultsortList.size==0&&!defaultsortList.has(obj.row.id)){
+                        var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
+                        $.ajax({
+                            url: url + "/attendeesort/defaultdragsort",
+                            type: "get",
+                            data: {
+
+                                "sortid": id,
+                                "attendeeid": obj.row.id,
+                                "rankid": rankid
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            success: function (data) {
+                                if (data.code == "0") {
+                                    page(defaultsort.config.page.curr, defaultsort.config.limit);
+                                } else {
+                                    layer.msg('拖动失败，请稍后再试', {
+                                        icon: 5
+                                    });
+                                    page(defaultsort.config.page.curr, defaultsort.config.limit);
+                                }
+
+                            },
+                            error: function (error) {
+
+                                layer.msg('删除失败，服务器错误请稍后再试', {
                                     icon: 5
                                 });
-                                page(defaultsort.config.page.curr, defaultsort.config.limit);
                             }
 
-                        },
-                        error: function (error) {
+                        })
 
-                            layer.msg('删除失败，服务器错误请稍后再试', {
-                                icon: 5
-                            });
-                        }
+                    }else{
+                        var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
+                        var checkbox = Array.from(defaultsortList);
+                        $.ajax({
+                            url: url + "/attendeesort/defaultdragmultisort",
+                            type: "get",
+                            data: {
+                                "sortid": id,
+                                "attendeeids":checkbox.join(","),
+                                "rankid": rankid,
+                                "dragattendeeid":obj.row.id
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            success: function (data) {
+                                if (data.code == "0") {
+                                    layer.confirm('是否要继续拖动?', {icon: 3, title:'提示',btn:['继续拖动','取消拖动'],
+                                        yes:function(index){
+                                            layer.close(index);
+                                            page(autosort.config.page.curr, autosort.config.limit);
+                                        },
+                                        cancel: function(index){
+                                            defaultsortList = new Set()
+                                            page(autosort.config.page.curr, autosort.config.limit);
+                                        },
+                                        btn2: function(index){
+                                            defaultsortList = new Set()
+                                            page(autosort.config.page.curr, autosort.config.limit);
+                                        }
+                                    }, );
 
-                    })
+                                } else {
+                                    layer.msg('拖动失败，请稍后再试', {
+                                        icon: 5
+                                    });
+                                    page(autosort.config.page.curr, autosort.config.limit);
+                                }
+
+                            },
+                            error: function (error) {
+
+                                layer.msg('删除失败，服务器错误请稍后再试', {
+                                    icon: 5
+                                });
+                            }
+
+                        })
+                    }
+
                 }
             }
             , totalRow: true,
@@ -741,7 +822,7 @@ layui.config({
                     ,
                     {
                         title: '调整',
-                        toolbar: '#Adjust',
+                        toolbar: '#defultsort   ',
                         width: 165,
                         contextmenu: {
                             // 表头右键菜单配置
@@ -769,6 +850,7 @@ layui.config({
                                             },
                                             success: function (data) {
                                                 if (data.code == "0") {
+
                                                     page(defaultsort.config.page.curr - 1, defaultsort.config.limit);
                                                 } else {
                                                     layer.msg('拖动失败，请稍后再试', {
@@ -847,7 +929,13 @@ layui.config({
             even: true,
             limits: [15, 30, 50],
             parseData: function (res, curr, count) {
-                console.log(6666)
+                for (var i in res.data) {
+
+                    if (defaultsortList.has(res.data[i].id)) {
+                        //如果set集合中有的话，给rows添加check属性选中
+                        res.data[i]["LAY_CHECKED"] = true;
+                    }
+                }
                 return {
                     "code": res.code, //解析接口状态
                     "count": res.count, //解析数据长度
@@ -874,47 +962,93 @@ layui.config({
             withCredentials: true
         },
         rowDrag: {
+            autosortList:defaultsortList,
             trigger: '.adjustbtn', done: function (obj) {
-                // 完成时（松开时）触发
-                // 如果拖动前和拖动后无变化，则不会触发此方法
-                console.log(obj.row) // 当前行数据
-                console.log(obj.cache) // 改动后全表数据
-                console.log(obj.oldIndex) // 原来的数据索引
-                console.log(obj.newIndex) // 改动后数据索引
-                console.log(defaultsort.config) // 改动后数据索引
-                console.log(obj.row.id)
-                var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
-                $.ajax({
-                    url: url + "/attendeesort/defaultdragsort",
-                    type: "get",
-                    data: {
 
-                        "sortid": id,
-                        "attendeeid": obj.row.id,
-                        "rankid": rankid
-                    },
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (data) {
-                        if (data.code == "0") {
-                            page(defaultsort.config.page.curr, defaultsort.config.limit);
-                        } else {
-                            layer.msg('拖动失败，请稍后再试', {
+                if (defaultsortList.size==0&&!defaultsortList.has(obj.row.id)){
+                    var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
+                    $.ajax({
+                        url: url + "/attendeesort/defaultdragsort",
+                        type: "get",
+                        data: {
+
+                            "sortid": id,
+                            "attendeeid": obj.row.id,
+                            "rankid": rankid
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.code == "0") {
+                                page(defaultsort.config.page.curr, defaultsort.config.limit);
+                            } else {
+                                layer.msg('拖动失败，请稍后再试', {
+                                    icon: 5
+                                });
+                                page(defaultsort.config.page.curr, defaultsort.config.limit);
+                            }
+
+                        },
+                        error: function (error) {
+
+                            layer.msg('删除失败，服务器错误请稍后再试', {
                                 icon: 5
                             });
-                            page(defaultsort.config.page.curr, defaultsort.config.limit);
                         }
 
-                    },
-                    error: function (error) {
+                    })
 
-                        layer.msg('删除失败，服务器错误请稍后再试', {
-                            icon: 5
-                        });
-                    }
+                }else{
+                    var rankid = defaultsort.config.limit * (defaultsort.config.page.curr - 1) + obj.newIndex
+                    var checkbox = Array.from(defaultsortList);
+                    $.ajax({
+                        url: url + "/attendeesort/defaultdragmultisort",
+                        type: "get",
+                        data: {
+                            "sortid": id,
+                            "attendeeids":checkbox.join(","),
+                            "rankid": rankid,
+                            "dragattendeeid":obj.row.id
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (data) {
+                            if (data.code == "0") {
+                                layer.confirm('是否要继续拖动?', {icon: 3, title:'提示',btn:['继续拖动','取消拖动'],
+                                    yes:function(index){
+                                        layer.close(index);
+                                        page(autosort.config.page.curr, autosort.config.limit);
+                                    },
+                                    cancel: function(index){
+                                        defaultsortList = new Set()
+                                        page(autosort.config.page.curr, autosort.config.limit);
+                                    },
+                                    btn2: function(index){
+                                        defaultsortList = new Set()
+                                        page(autosort.config.page.curr, autosort.config.limit);
+                                    }
+                                }, );
 
-                })
+                            } else {
+                                layer.msg('拖动失败，请稍后再试', {
+                                    icon: 5
+                                });
+                                page(autosort.config.page.curr, autosort.config.limit);
+                            }
+
+                        },
+                        error: function (error) {
+
+                            layer.msg('删除失败，服务器错误请稍后再试', {
+                                icon: 5
+                            });
+                        }
+
+                    })
+                }
+
             }
         }
         , totalRow: true,
@@ -958,7 +1092,7 @@ layui.config({
                 ,
                 {
                     title: '调整',
-                    toolbar: '#Adjust',
+                    toolbar: '#defultsort',
                     width: 165,
                     contextmenu: {
                         // 表头右键菜单配置
@@ -1062,7 +1196,13 @@ layui.config({
         even: true,
         limits: [15, 30, 50],
         parseData: function (res, curr, count) {
-            console.log(6666)
+            for (var i in res.data) {
+
+                if (defaultsortList.has(res.data[i].id)) {
+                    //如果set集合中有的话，给rows添加check属性选中
+                    res.data[i]["LAY_CHECKED"] = true;
+                }
+            }
             return {
                 "code": res.code, //解析接口状态
                 "count": res.count, //解析数据长度
@@ -1075,180 +1215,42 @@ layui.config({
             soulTable.render(this)
         }
     });
-    window.ajaxs = function (data) {
-        //     table.render({
-        //         elem: '#test-table-operate',
-        //         // height: 'full-200',
-        //         //url: url + "/meetingcanhui/findMeetingCanHuiBylayui" //数据接口
-        //         //    ,
-        //         xhrFields: {
-        //             withCredentials: true
-        //         },
-        //        data:data.data,
-        //         rowDrag: {trigger: '.adjustbtn',done: function(obj) {
-        //         // 完成时（松开时）触发
-        //         // 如果拖动前和拖动后无变化，则不会触发此方法
-        //         console.log(obj.row) // 当前行数据
-        //         console.log(obj.cache) // 改动后全表数据
-        //         console.log(obj.oldIndex) // 原来的数据索引
-        //         console.log(obj.newIndex) // 改动后数据索引
-        //     }}
-        // ,totalRow: true,
-        //         method: 'get',
-        //         page: {
-        //             layout: ['prev', 'page', 'next', 'count', 'skip']
-        //         },
-        //         cols: [
-        //             [ //表头
-        //                 {
-        //                     type: 'checkbox',
-        //                     fixed: 'left'
-        //                 },
-        //                 {
-        //                     field: 'id',
-        //                     title: '序号',
-        //                     align: 'left',
-        //                     unresize: 'false',
-        //                     width: 80
-        //                 },
-        //                 {
-        //                     field: 'name',
-        //                     title: '姓名',
-        //                     align: 'leftleft',
-        //                 },
-        //                 {
-        //                     field: 'company',
-        //                     title: '单位',
-        //                     align: 'left',
-        //                 }, {
-        //                     field: 'duties',
-        //                     align: 'left',
-        //                     title: '职务'
-        //                 },
-        //                 {
-        //                     title: '详情',
-        //                     toolbar: '#details',
-        //                 },
-        //                 {
-        //                     title: '不排序',
-        //                     toolbar: '#notorder',
-        //                 }
-        //                 ,
-        //                 {
-        //                     title: '调整',
-        //                     toolbar: '#Adjust',
-        //                 }
-        //             ]
-        //         ],
-        //
-        //         event: true,
-        //         page: true,
-        //         limit: 15,
-        //         skin: 'line',
-        //         even: true,
-        //         limits: [5, 10, 15],
-        //         parseData: function (res, curr, count) {
-        //             console.log(6666)
-        //             res = data
-        //             return {
-        //                 "code": res.code, //解析接口状态
-        //                 "count": res.count, //解析数据长度
-        //                 "data": res.data //解析数据列表
-        //             };
-        //
-        //         },
-        //         done:function () {
-        //             soulTable.render(this)
-        //         }
-        //     });
-        table.render({
-            elem: '#test-table-operate',
-            // height: 'full-200',
-            url: url + "/attendeesort/selectSelect", //数据接口
-            //    ,
-            where: {
-                sortattendeeid: id
-            },
-            xhrFields: {
-                withCredentials: true
-            },
-            rowDrag: {
-                trigger: '.adjustbtn', done: function (obj) {
-                    // 完成时（松开时）触发
-                    // 如果拖动前和拖动后无变化，则不会触发此方法
-                    // console.log(obj.row) // 当前行数据
-                    // console.log(obj.cache) // 改动后全表数据
-                    // console.log(obj.oldIndex) // 原来的数据索引
-                    // console.log(obj.newIndex) // 改动后数据索引
-                }
-            }
-            , totalRow: true,
-            method: 'get',
-            page: {
-                layout: ['prev', 'page', 'next', 'count', 'skip']
-            },
-            cols: [
-                [ //表头
-                    {
-                        type: 'checkbox',
-                        fixed: 'left'
-                    },
-                    {
-                        field: 'id',
-                        title: '序号',
-                        align: 'left',
-                        unresize: 'false',
-                        width: 80
-                    },
-                    {
-                        field: 'name',
-                        title: '姓名',
-                        align: 'leftleft',
-                    },
-                    {
-                        field: 'company',
-                        title: '单位',
-                        align: 'left',
-                    }, {
-                    field: 'duties',
-                    align: 'left',
-                    title: '职务'
-                },
-                    {
-                        title: '详情',
-                        toolbar: '#details',
-                    },
-                    {
-                        title: '不排序',
-                        toolbar: '#notorder',
-                    }
-                    ,
-                    {
-                        title: '调整',
-                        toolbar: '#Adjust',
-                    }
-                ]
-            ],
+    table.on('checkbox(defaultsort)', function (obj) {
 
-            event: true,
-            page: false,
-            limit: 15,
-            skin: 'line',
-            even: true,
-            limits: [5, 10, 15],
-            parseData: function (res, curr, count) {
-                return {
-                    "code": res.code, //解析接口状态
-                    "count": res.count, //解析数据长度
-                    "data": res.data //解析数据列表
-                };
+        if (!obj.checked && obj.type == 'all') {
+            var data = layui.table.cache['defaultsort']
+            $.each(data, function (idx, con) {
+                defaultsortList.delete(con.id)
+                $("#d"+con.id).attr("value","").removeClass("opacitys");
 
-            },
-            done: function () {
-                soulTable.render(this)
-            }
-        });
-    }
+            });
+
+        }
+        if (obj.checked && obj.type == 'all') {
+
+            $.each(table.checkStatus('defaultsort').data, function (idx, con) {
+                defaultsortList.add(con.id);
+                $("#d"+con.id).attr("value",con.id).addClass("opacitys");
+            });
+        }
+        if (obj.checked && obj.type == 'one') {
+            defaultsortList.add(obj.data.id);
+            $("#d"+obj.data.id).attr("value",obj.data.id).addClass("opacitys");
+        }
+        if (!obj.checked && obj.type == 'one') {
+
+            defaultsortList.delete(obj.data.id)
+            $("#d"+obj.data.id).attr("value","").removeClass("opacitys");
+        }
+        console.log("d"+defaultsortList)
+        // if(obj.checked){
+
+        // 			  	}else{
+
+        // }
+
+
+    });
 
     window.onkeyup = function (ev) {
         var key = ev.keyCode || ev.which;
@@ -1260,302 +1262,9 @@ layui.config({
 
     //监听选中的复选框
     table.on('tool(test-table-operate)', function (obj) {
-        var age = obj.data;
-        console.log(age);
-        if (obj.event === 'edit') {
-            layer.open({
-                type: 2,
-                title: '信息维护',
-                content: 'attender_upform.html',
-                // maxmin: true,
-                area: ['60%', '80%'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-                    var submit = layero.find('iframe').contents().find("#upclick");
-                    submit.click();
-                },
-                success: function (layero, index) {
-                    var body = layer.getChildFrame('body', index);
-                    if (age.isconvenor == "1") {
-                        body.find('#convenornum_list').show();
-                    }
-                    body.find('#name').val(age.name)
-                    body.find('#meetingid').val(age.meetingid)
-                    body.find('#company').val(age.company)
-                    body.find('#duties').val(age.duties)
-                    body.find('#phone1').val(age.phone1)
-                    body.find('#sexid').val(age.sexid)
-                    body.find('#phone2').val(age.phone2)
-                    body.find('#groupid').val(age.groupid)
-                    body.find('#partyid').val(age.partyid)
-                    body.find('#differentid').val(age.differentid)
-                    body.find('#isconvenor').val(age.isconvenor)
-                    body.find('#specialid').val(age.specialid)
-                    body.find('#contacts').val(age.contacts)
-                    body.find('#contactsphone').val(age.contactsPhone)
-                    body.find('#contacts').val(age.contacts)
-                    body.find('#cardid').val(age.cardId)
-                    body.find('#convenornum').val(age.convenornum)
-                    body.find('#isconvenor_list').val(age.isconvenor)
-                    body.find('#specialid').val(age.specialid)
-                    var a = indexs + "";
-                    body.find('#meetingid').val(indexs)
-                    body.find('#id').val(age.id)
-                    if (age.imageUrl != null) {
-                        var html = '<img src="' + url + "/upload" + age.imageUrl + '" style="width: 130px; height: 150px;" />';
-                        body.find('#test-upload-image').append(html);
-                    }
-                }
-            });
-        } else if (obj.event === 'del') {
-            layer.confirm('真的删除吗？', function () {
-                $.ajax({
-                    url: url + "/meetingcanhui/deleteMeetingCanHui",
-                    type: "get",
-                    data: {
-
-                        "id": age.id,
-                        "url": age.imageUrl
-                    },
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (data) {
-                        if (data.code == "0") {
-                            layer.msg('成功删除', {
-                                icon: 1
-                            })
-                            ajaxs(age.meetingId);
-
-
-                        } else {
-                            layer.msg('删除失败，请稍后再试', {
-                                icon: 5
-                            });
-                        }
-
-                    },
-                    error: function (error) {
-
-                        layer.msg('删除失败，服务器错误请稍后再试', {
-                            icon: 5
-                        });
-                    }
-
-                })
-
-            });
-        } else if (obj.event === 'jia') {
-            layer.open({
-                type: 2,
-                title: '人员请假',
-                content: 'attender_leave.html',
-                area: ['45%', '40%'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-                    var body = layer.getChildFrame('body', index);
-                    $.ajax({
-                        url: url + "/meetingcanhui/updateMeetingCanHui",
-                        type: "post",
-                        data: {
-
-                            "id": age.id,
-                            "isleave": body.find('#status').val()
-                        },
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function (data) {
-                            if (data.code == "0") {
-                                layer.msg('修改成功', {
-                                    icon: 1
-                                })
-                                layer.close(index);
-                                ajaxs(age.meetingId);
-
-
-                            } else {
-                                layer.msg('删除失败，请稍后再试', {
-                                    icon: 5
-                                });
-                            }
-
-                        },
-                        error: function (error) {
-
-                            layer.msg('删除失败，服务器错误请稍后再试', {
-                                icon: 5
-                            });
-                        }
-
-                    })
-
-
-                },
-                success: function (layero, index) {
-                    var body = layer.getChildFrame('body', index);
-                    body.find('#status').val(age.isleave);
-
-                }
-
-
-            })
-        }
 
 
     })
-
-    //弹出层区
-    var active = {
-        //排序属性
-        attribute: function () {
-            layer.open({
-                type: 2,
-                title: '<p style="">排序属性</p>',
-                content: 'attribute_pop.html',
-                // maxmin: true,
-                area: ['60%', '80%'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-                },
-                success: function (layero, index) {
-                }
-            });
-
-        },
-        custom: function () {
-            layer.open({
-                type: 2,
-                title: '<p style="">自定义排序</p>',
-                content: 'custom_pop.html',
-                maxmin: true,
-                area: ['60%', '80%'],
-                btn: ['确定', '取消'],
-                yes: function (index, layero) {
-
-                },
-                success: function (layero, index) {
-                }
-            })
-        },
-        exportb: function () {
-            console.log(JSON.parse(storage.getItem("data")));
-        },
-        download: function () {
-            window.location = url + "/attendeesort/download";
-        },
-        Intelligent: function () {
-            $.ajax({
-                type: "get",
-                url: url + "/attendeesort/autosort",
-                data: {
-                    "id": id
-                },
-                success: function (data) {
-                    // console.log(data)
-                    // $("#myDiv").html('<h2>'+data+'</h2>');
-                    if (data.code == 0) {
-                        layer.msg("智能排序成功");
-
-                        intelligentsorting(1, 15);
-                    } else {
-                        layer.msg("智能排序失败");
-                    }
-                }
-            });
-
-        },
-        getCheckData: function () { //获取选中数据
-
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选择会议后再添加人员")
-            }
-            var cb = $(".layui-form-checkbox");
-            $(".layui-form-checkbox").each(function () {
-
-                $(this).click();
-
-            })
-
-
-        },
-        getCheckLength: function () { //获取选中数目
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选择会议后再删除人员")
-            }
-            if (attenderList.length == 0) {
-                return layer.msg("请选择要删除的人员")
-            }
-            layer.confirm('确定要批量删除吗?', function (index) {
-
-                $.ajax({
-                    async: false,
-                    type: "post",
-                    url: url + "/meetingcanhui/batchRemove",
-                    dataType: "json",
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    //成功的回调函数
-                    data: {
-                        "meetingcanhuiid": attenderList.join(",")
-
-                    },
-                    success: function (msg) {
-                        if (msg.code == 0) {
-                            layer.msg("删除成功");
-                            ajaxs($('#select-room').val()); // 父页面刷新
-
-                        } else {
-                            layer.msg(msg.msg);
-
-
-                        }
-
-                    },
-                    //失败的回调函数
-                    error: function () {
-                        console.log("error")
-                    }
-                })
-            })
-        },
-        isAll: function () { //验证是否全选
-            layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function (index) {
-                $.ajax({
-                    async: false,
-                    type: "get",
-                    url: url + "/meetingcanhui/empty",
-                    dataType: "json",
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    //成功的回调函数
-                    data: {},
-                    success: function (msg) {
-                        if (msg.code == 0) {
-                            layer.msg("清空成功");
-                            reloads(); // 父页面刷新
-
-                        } else {
-                            layer.msg(msg.msg);
-
-
-                        }
-
-                    },
-                    //失败的回调函数
-                    error: function () {
-                        console.log("error")
-                    }
-                })
-                layer.close(index);
-            });
-
-        },
-
-
-    }
     //弹出层选项区
 
     $('.layui-ds').on('click', function () {
