@@ -373,15 +373,14 @@
             if (obj.event === 'sort') {
                 layer.open({
                     type: 2,
-                    // title: '会议室座区图',
-                    content: 'attender_sort_list.html?id='+data.id
-                    ,maxmin: true
-                    ,
+                    title: false,
+                    content: 'attender_sort_list.html?id='+data.id,
+                    // maxmin: true,
                     area: ['100%', '100%'],
                     scrollbar: false,
                     shadeClose: false, //弹出框之外的地方是否可以点击
-                    closeBtn: 1,
-                    offset: '-43px',
+                    closeBtn:false,
+                    offset: '0',
                     yes: function(index, layero) {
                     },
                     success: function(layero, index) {

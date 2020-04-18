@@ -9,7 +9,8 @@
 <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
 <link rel="stylesheet" href="../../../css/seat.css" media="all">
 <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
-
+<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
 	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
 <script src="../../../js/jquery-3.1.1.min.js"></script>
 <script src="/m/js/scosun.js"></script>
@@ -93,19 +94,20 @@
 			line-height: 36px;
 			margin: 0 5px;
 			font-size: 20px;">|</span> -->
-			<div class="layui-form " style="width: 130px;float: left;">
+			<div class="layui-form " style="width: 100px;float: left;">
 				<select class="dialogRuleSelect" lay-filter="component-timeselect" id="ruleselect">
 					<option value="5">频率5秒</option>
 					<option value="10">频率10秒</option>
 					<option value="20">频率20秒</option>
 				</select>
 			</div>
-			<span style="float: left;
+			<!-- <span style="float: left;
 			line-height: 36px;
 			margin: 0 5px;
-			font-size: 20px;">|</span>
-
-			<a onclick="asd()" style="float: left;line-height: 36px;" href="javascript:;"><cite>刷新</cite></a>
+			font-size: 20px;">|</span> -->
+			<div class="assistBtn" style="margin-left:10px;margin-top:10px">
+				<i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+			<!-- <a onclick="asd()" style="float: left;line-height: 36px;" href="javascript:;"><cite>刷新</cite></a> -->
 		</div>
 		<span class="layui-right-nav" >
 			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
