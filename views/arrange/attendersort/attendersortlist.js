@@ -130,7 +130,8 @@ layui.config({
                             },
                             success: function (data) {
                                 if (data.code == "0") {
-                                    intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                    //理论上 服务器保存成功，单条就不用刷页面了
+                                    // intelligentsorting(autosort.config.page.curr, autosort.config.limit);
                                 } else {
                                     layer.msg('拖动失败，请稍后再试', {
                                         icon: 5
@@ -399,7 +400,8 @@ layui.config({
                         },
                         success: function (data) {
                             if (data.code == "0") {
-                                intelligentsorting(autosort.config.page.curr, autosort.config.limit);
+                                //理论上 服务器保存成功，单条就不用刷页面了
+                                // intelligentsorting(autosort.config.page.curr, autosort.config.limit);
                             } else {
                                 layer.msg('拖动失败，请稍后再试', {
                                     icon: 5

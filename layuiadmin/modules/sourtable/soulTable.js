@@ -608,6 +608,14 @@ layui.define(["table", "tableFilter", "tableChild", "tableMerge"], function(expo
                 for (var c in o)
                     !function(i) {
                         o[i].box.find(o[i].tag).on("contextmenu", function(e) {
+                            //chenxy 如果有选中值 屏蔽右键
+                            var autosortList = h.rowDrag.autosortList || [];
+                            if (autosortList.size!=0){
+                                e.stopPropagation()
+                                return false;
+                            }
+                            //end
+
                             $("#soul-table-contextmenu-wrapper").remove(),
                             $("body").append('<div id="soul-table-contextmenu-wrapper"></div>'),
                             $("#soul-table-contextmenu-wrapper").on("click", function(e) {
