@@ -128,6 +128,17 @@
                         </dl>
                     </li>
                     <li data-name="component" class="layui-nav-item ">
+                        <a href="javascript:;" lay-tips="智能排序" lay-direction="2">
+                            <i class="layui-icon iconfont icon-canhuirenyuan"></i>
+                            <cite>智能排序</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a lay-href="arrange/attendersort/sortattendee.html">排序列表</a></dd>
+                            <dd><a lay-href="arrange/attendersort/sortattendee.html">用户字典</a></dd>
+                        </dl>
+                        </dl>
+                    </li>
+                    <li data-name="component" class="layui-nav-item ">
                         <a href="javascript:;" lay-tips="编排规则" lay-direction="2">
                             <i class="layui-icon iconfont icon-bianpaiguize"></i>
                             <cite>编排规则</cite>
@@ -316,8 +327,8 @@
 
 <script src="../layuiadmin/layui/layui.js"></script>
 <script>
-    var url = "https://f.longjuli.com"
-    // var url = "http://127.0.0.1:8083"
+    // var url = "https://f.longjuli.com"
+    var url = "http://127.0.0.1:8083"
     $.ajax({
         async: false,
         type: "get",
