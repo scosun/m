@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../../../css/seat.css" media="all">
     <script src="../../../js/scosun.js"></script>
     <script src="../../../js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
     <style type="text/css">
         header {
             box-shadow: 0px 0px 5px gray;
@@ -77,7 +79,8 @@
 <header>
             <span class="layui-breadcrumb" style="line-height: 3.5rem;">
                 <a><cite> &nbsp; &nbsp; &nbsp; 进行规则的修改</cite></a>
-                <a onclick="asd()" href="javascript:;"><cite>&nbsp;刷新</cite></a>
+                <div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+                <!-- <a onclick="asd()" href="javascript:;"><cite>&nbsp;刷新</cite></a> -->
 
                 <!-- <a>
                     <cite>
@@ -123,6 +126,7 @@
         crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9"
       crossorigin="anonymous">
+      <div class="noData noData2 layui-hide" id="noData"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script src="../../../js/seatscontrol_drag.js"></script>
@@ -205,7 +209,7 @@
                                 event: 'seeDetail',
                                 style: 'cursor: pointer;',
                                 templet: function(data) {
-                                    return "<div style='height:22px;width:60px;background-color: " +
+                                    return "<div style='height:22px;width:60px;margin-top:3px;background-color: " +
                                         data.bgcolor + "'></div>"
                                 }
                             }, {
@@ -297,10 +301,19 @@
             },
             success: function(data) {
                 var datas = data.data;
-                $("body").append(data.data.templatecode);
-                selectSeats();
-                queryAllSeatStatus(roomid, ruleid);
-                layer.closeAll();
+                // $("body").append(data.data.templatecode);
+                // selectSeats();
+                // queryAllSeatStatus(roomid, ruleid);
+                // layer.closeAll();
+                if(datas.templatecode !=null){
+                    $("body").append(datas.templatecode);
+                    selectSeats();
+                    queryAllSeatStatus(roomid, ruleid);
+                    layer.closeAll();
+                }else{
+                    $("#noData").removeClass("layui-hide")
+                }
+
             },
             error:function(){
                 layer.closeAll();
@@ -343,7 +356,7 @@
                                     event: 'seeDetail',
                                     style: 'cursor: pointer;',
                                     templet: function(data) {
-                                        return "<div style='height:22px;width:60px;background-color: " +
+                                        return "<div style='height:22px;width:60px;margin-top:3px;background-color: " +
                                             data.bgcolor + "'></div>"
                                     }
                                 }, {
@@ -834,6 +847,9 @@
 
 
     })
+    //重置layui 无数据情况
+    var noData ='<i class="layui-icon layui-ds iconfont icon-wuneirong"></i>当前没有任何记录</<i>'
+    $(".layui-none").addClass('noData').removeClass('layui-none').html(noData);
 
     function asd() {
         location.reload();

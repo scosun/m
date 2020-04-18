@@ -75,6 +75,10 @@
       background-size: 1.2rem 1.2rem;
       text-indent: -9999px;
     }
+    /* 修改全屏弹框标题背景为原来灰色 在弹框的父页面加 部分弹框为灰色背景的，弹框设置中添加自定义CLASS skin: 'layer-ext-greytitle'*/
+			.layer-ext-greytitle .layui-layer-title {
+				background-color: #f8f8f8!important;
+			}
   </style>
 
 </head>
@@ -616,7 +620,7 @@
           title: '选择人员',
           maxmin: true,
           shadeClose: false, //弹出框之外的地方是否可以点击
-          area: ['100%', '100%'],
+          area: ['40%', '40%'],
           btn: ['确定', '取消'],
           closeBtn: 1,
           //offset: '-43px',
@@ -773,11 +777,13 @@
                   type: 2,
                   //title: '收藏管理 (考生姓名：张无忌)',
                   title: '新建短信通知',
-                  maxmin: true,
+                  // maxmin: true,
                   shadeClose: false, //弹出框之外的地方是否可以点击
                   area: ['100%', '100%'],
                   btn: ['确定', '取消'],
                   closeBtn: 1,
+                  move:false,
+                  skin: 'layer-ext-greytitle',//添加自定义样式
                   //offset: '-43px',
                   content: 'seatproiductadd.html',
                   success: function (layero, index) {

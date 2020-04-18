@@ -322,12 +322,13 @@ layui.config({
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
-                title: '  ',
+                title: false,
                 shadeClose: false,
-                maxmin: true,//弹出框之外的地方是否可以点击
-                area: ['100%', '106%'],
-                closeBtn: 1,
-                offset: '-43px',
+                // maxmin: true,//弹出框之外的地方是否可以点击
+                area: ['100%', '100%'],
+                // closeBtn: 1,
+                closeBtn:false,
+                offset: '0',
                 content: 'territory_rules.html?ruleid=' + data.id + '&roomid=' + data.roomid,
                 success: function(layero, index) {
                     // var body = layui.layer.getChildFrame('body', index);

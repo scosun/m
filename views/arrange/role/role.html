@@ -271,6 +271,7 @@
 						// maxmin: true,
 						area: ['100%', '100%'],
 						btn: ['保存', '返回'],
+						move:false,
 						yes: function (index, layero) {
 								var submit = layero.find('iframe').contents().find("#click");
 								submit.click();
@@ -294,6 +295,7 @@
 						content: 'rolelist.html',
 						// maxmin: true,
 						area: ['100%', '100%'],
+						move:false,
 
 						yes: function (index, layero) {
 							var body = layer.getChildFrame('body', index);
