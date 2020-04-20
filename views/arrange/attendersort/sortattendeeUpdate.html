@@ -63,12 +63,13 @@
     }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
         var $ = layui.$,
             admin = layui.admin,
+            setter = layui.setter,
             element = layui.element,
             layer = layui.layer,
             upload = layui.upload,
             laydate = layui.laydate,
             form = layui.form;
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         // var url = "http://127.0.0.1:8083"
         var uploadfile = null;
         var id  = getUrlParam("id");

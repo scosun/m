@@ -66,10 +66,10 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'form'], function(){
         var $ = layui.$
-            ,form = layui.form
-            ,router = layui.router();
-        var url = "https://f.longjuli.com";
-        // var url="http://127.0.0.1:8083"
+            ,form = layui.form,
+            setter = layui.setter,
+            router = layui.router();
+        var url = setter.baseUrl;
         var name = getUrlParam("name");
         var meeting = getUrlParam("meeting");
         var  ruleid = getUrlParam("ruleid");

@@ -67,13 +67,14 @@
             element = layui.element,
             layer = layui.layer,
             upload = layui.upload,
+            setter = layui.setter,
             laydate = layui.laydate,
             form = layui.form;
         var uri = window.location.search;
         var roomid = uri.substring(uri.indexOf("=")+1,uri.indexOf("&"));
         var meeting = uri.substring(uri.lastIndexOf("=")+1)
 
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         // var url = "http://127.0.0.1:8083"
         var uploadfile = null;
         $.ajax({

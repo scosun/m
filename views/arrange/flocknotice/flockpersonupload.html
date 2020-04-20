@@ -45,8 +45,8 @@
             var $ = layui.$
                 , upload = layui.upload
                 , form = layui.form,
-                tree = layui.tree
-            var url = "https://f.longjuli.com"
+                setter = layui.setter;
+            var url = setter.baseUrl;
             // var url = "http://127.0.0.1:8083"
             var uri = window.location.search;
             var sid = uri.substr(4)

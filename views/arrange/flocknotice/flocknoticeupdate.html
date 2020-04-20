@@ -62,13 +62,9 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
         var $ = layui.$,
-            admin = layui.admin,
-            element = layui.element,
-            layer = layui.layer,
-            upload = layui.upload,
-            laydate = layui.laydate,
+            setter = layui.setter,
             form = layui.form;
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         // var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var fid= uri.substr(4);

@@ -6,9 +6,9 @@
         var $ = layui.$
             ,upload = layui.upload
             ,form = layui.form,
+            setter = layui.setter,
             tree = layui.tree
-        var url="https://f.longjuli.com"
-        // var url = "http://127.0.0.1:8083"
+            var url = setter.baseUrl;
          var uploadfile =null;
         var attributes = [];
         //监听提交

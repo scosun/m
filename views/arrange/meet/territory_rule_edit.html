@@ -93,11 +93,12 @@
             element = layui.element,
             table = layui.table,
             layer = layui.layer,
+            setter = layui.setter,
             router = layui.router();
         //全局变量编排规则id
 
         //全局变量会议室规则id
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         window.ruleid = getUrlParam("ruleids");
         console.log(getUrlParam("ruleids"));
         window.roomid = getUrlParam("roomid");

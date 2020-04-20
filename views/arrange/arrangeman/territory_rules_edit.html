@@ -98,12 +98,13 @@
 				form = layui.form,
 				element = layui.element,
 				table = layui.table,
+				setter = layui.setter,
 				layer = layui.layer,
 				router = layui.router();
 			//全局变量编排规则id
 		
 			//全局变量会议室规则id
-            var url = "https://f.longjuli.com"
+			var url = setter.baseUrl;
 			var uri = window.location.search;
 			var str = uri.substr(1);
 			window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));

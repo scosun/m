@@ -1,145 +1,154 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>人员详情</title>
-		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-		<style type="text/css">
-			.layui-form-label{
-				width: 120px;
-			}
-			.layui-input-block {
-				margin-left: 150px;
-			}
-			.layui-tree-emptyText {
-				text-align: left;
-				color: #999;
-				padding-top: 8px;
-			}
-		</style>
-	</head>
-	<body>
-	<div style="padding: 20px 20px 0 0;">  
-		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
-			<div class="layui-form-item">
-				<label class="layui-form-label">人员证件编号</label>
-				<div class="layui-input-block">
-					<input type="text" name="cardid" lay-verify="required" autocomplete="off" id="cardid"
-					 class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">姓名</label>
-				<div class="layui-input-block">
-					<input type="text" name="author" lay-verify="required"  autocomplete="off" id="name" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">性别</label>
-				<div class="layui-input-block">
-					<select name="sexid" id="sexid">
-						<option value="">请选择性别</option>
-						<option value="1" selected="selected">男</option>
-						<option value="2">女</option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">单位</label>
-				<div class="layui-input-block">
-					<input type="text" name="company" lay-verify="required" autocomplete="off" id="company"
-					 class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">职务</label>
-				<div class="layui-input-block">
-					<input type="text" name="duties" lay-verify="required" autocomplete="off" id="duties"
-					 class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">手机号</label>
-				<div class="layui-input-block">
-					<input type="text" name="phone" lay-verify="required" autocomplete="off" id="phone1"
-					 class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">座位片区</label>
-				<div class="layui-input-block">
-					<input type="text" name="seatarea" autocomplete="off" id="seatarea" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">座位号</label>
-				<div class="layui-input-block">
-					<input type="text" name="seatid" autocomplete="off" id="seatid"
-					 class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item" style="position: relative;">
-				<label class="layui-form-label">证件照片</label>
-				<div class="layui-card-body" style="position: absolute;left: 135px;">
-					<div id="test-upload-image" style="float: left;margin-bottom:10px;margin-right:10px"></div>
-				</div>
-			</div>
+<head>
+    <meta charset="utf-8">
+    <title>人员详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-form-label {
+            width: 120px;
+        }
+
+        .layui-input-block {
+            margin-left: 150px;
+        }
+
+        .layui-tree-emptyText {
+            text-align: left;
+            color: #999;
+            padding-top: 8px;
+        }
+    </style>
+</head>
+<body>
+<div style="padding: 20px 20px 0 0;">
+    <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
+        <div class="layui-form-item">
+            <label class="layui-form-label">人员证件编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="cardid" lay-verify="required" autocomplete="off" id="cardid"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="author" lay-verify="required" autocomplete="off" id="name" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <select name="sexid" id="sexid">
+                    <option value="">请选择性别</option>
+                    <option value="1" selected="selected">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单位</label>
+            <div class="layui-input-block">
+                <input type="text" name="company" lay-verify="required" autocomplete="off" id="company"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职务</label>
+            <div class="layui-input-block">
+                <input type="text" name="duties" lay-verify="required" autocomplete="off" id="duties"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-block">
+                <input type="text" name="phone" lay-verify="required" autocomplete="off" id="phone1"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">座位片区</label>
+            <div class="layui-input-block">
+                <input type="text" name="seatarea" autocomplete="off" id="seatarea" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">座位号</label>
+            <div class="layui-input-block">
+                <input type="text" name="seatid" autocomplete="off" id="seatid"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="position: relative;">
+            <label class="layui-form-label">证件照片</label>
+            <div class="layui-card-body" style="position: absolute;left: 135px;">
+                <div id="test-upload-image" style="float: left;margin-bottom:10px;margin-right:10px"></div>
+            </div>
+        </div>
 
 
-			<div class="layui-form-item" style="display: none;">
-				<div class="layui-input-block">
-					<input type="text" name="" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
-						id="meetingid" style="display: none;">
-				</div>
-			</div>
-			<div class="layui-form-item layui-hide">
-				<div class="layui-input-block">
-					<input type="text" name="id" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
-						id="id" style="display: none;">
-				</div>
-			</div>
-			<div class="layui-form-item layui-layout-admin layui-hide">
-				<div class="layui-input-block">
-				<div style="position: absolute;right: 0px;bottom: 0px;">
-					<!-- <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
-					<button class="layui-btn" lay-submit="" lay-filter="updatameeting" id="upclick">修改</button>
-					<button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
-				</div>
-				</div>
-			</div>
-			
-		</div>
-	</div>
-		<script src="../../../layuiadmin/layui/layui.js"></script>
-		<script type="text/javascript" charset="utf-8">
-			layui.config({
-			    base: '../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-			    index: 'lib/index' //主入口模块
-			}).use(['index', 'form','tree'], function(){
-			    var $ = layui.$
-			        ,form = layui.form,
-			        tree = layui.tree
-			    var url="https://f.longjuli.com"
-				  /* var url = "http://127.0.0.1:8083"; */
-			    
-			    var data;
-			    var id = getUrlParam("id");
-			    function getUrlParam(name) {
-			        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-			        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-			        if (r != null) return decodeURI(r[2]); return null; //返回参数值
-			    }
-			    console.log(id)
-				
-				$("input").attr("disabled","disabled");
-				$("#sexid").attr("disabled","disabled");
-				form.render('select');
+        <div class="layui-form-item" style="display: none;">
+            <div class="layui-input-block">
+                <input type="text" name="" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input"
+                       id="meetingid" style="display: none;">
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <div class="layui-input-block">
+                <input type="text" name="id" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input"
+                       id="id" style="display: none;">
+            </div>
+        </div>
+        <div class="layui-form-item layui-layout-admin layui-hide">
+            <div class="layui-input-block">
+                <div style="position: absolute;right: 0px;bottom: 0px;">
+                    <!-- <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="click">增加</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="updatameeting" id="upclick">修改</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+                </div>
+            </div>
+        </div>
 
-			});
-		</script>
-	</body>
+    </div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript" charset="utf-8">
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'tree'], function () {
+        var $ = layui.$
+            , form = layui.form,
+            setter = layui.setter,
+            tree = layui.tree
+        var url = setter.baseUrl;
+        /* var url = "http://127.0.0.1:8083"; */
+
+        var data;
+        var id = getUrlParam("id");
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return decodeURI(r[2]);
+            return null; //返回参数值
+        }
+
+        console.log(id)
+
+        $("input").attr("disabled", "disabled");
+        $("#sexid").attr("disabled", "disabled");
+        form.render('select');
+
+    });
+</script>
+</body>
 </html>

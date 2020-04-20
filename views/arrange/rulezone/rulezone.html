@@ -88,15 +88,11 @@
 		var roomList = [];
 		var $ = layui.$,
 				setter = layui.setter,
-				admin = layui.admin,
-				form = layui.form,
 				element = layui.element,
 				table = layui.table,
-				layer = layui.layer,
-				datas = null,
-				router = layui.router();
+				layer = layui.layer;
 		element.render();
-		var url="https://f.longjuli.com"
+		var url = setter.baseUrl;
 		// var url="http://127.0.0.1:8083";
 		function isEmptyObject(obj) {
 

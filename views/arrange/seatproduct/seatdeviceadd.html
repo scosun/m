@@ -97,11 +97,7 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
         var $ = layui.$,
-            admin = layui.admin,
-            element = layui.element,
-            layer = layui.layer,
-            upload = layui.upload,
-            laydate = layui.laydate,
+            setter = layui.setter,
             form = layui.form;
         var productKey = getUrlParam("productKey");
         function getUrlParam(name) {
@@ -109,7 +105,7 @@
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return decodeURI(r[2]); return null; //返回参数值
         }
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         //var url = "http://127.0.0.1:8083"
         console.log(productKey)
         var uploadfile = null;

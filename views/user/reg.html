@@ -98,16 +98,16 @@
 			base: '../../layuiadmin/' //静态资源所在路径
 			}).extend({
 			index: 'lib/index' //主入口模块
-			}).use(['index', 'user'], function() {
+			}).use(['index', 'user','setter'], function() {
 				var $ = layui.$,
 					setter = layui.setter,
 					admin = layui.admin,
 					form = layui.form,
 					layer = layui.layer,
 					router = layui.router();
-
+				var url= setter.baseUrl;
 				form.render();
-                var url="https://f.longjuli.com"
+
 
 				//提交
 				form.on('submit(LAY-user-reg-submit)', function(obj) {

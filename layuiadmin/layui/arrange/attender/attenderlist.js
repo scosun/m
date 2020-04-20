@@ -19,8 +19,7 @@ layui.config({
         router = layui.router();
     element.render();
     //初次渲染表格
-    var url = "https://f.longjuli.com"
-    //     var url="http://127.0.0.1:8083";
+    var url = setter.baseUrl;
     var devices = {};
     var attenderList = [];
     layer.msg("上方下拉框选择会议后自动加载相关人员");

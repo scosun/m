@@ -33,10 +33,10 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'form', 'upload', 'tree'], function () {
         var $ = layui.$
-            , upload = layui.upload
-            , form = layui.form,
+            , setter = layui.setter,
+             form = layui.form,
             tree = layui.tree
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         var uploadfile = null;
         var attributes = [];
             var data;

@@ -184,11 +184,10 @@
 		dropdown: '/dropdown/dropdown'
 	}).use(['index', 'table', 'jquery', 'upload','dropdown'], function () {
 		var table = layui.table,
-				admin = layui.admin,
-				upload = layui.upload,
+				setter = layui.setter,
 				$ = layui.jquery,
 				dropdown = 'dropdown';
-		var url = "https://f.longjuli.com";
+		var url = setter.baseUrl;
 		// var url = "http://127.0.0.1:8083";
 		var devices = {};
 		var deviceList = [];

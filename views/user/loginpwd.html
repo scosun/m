@@ -90,17 +90,17 @@
             layui.config({
                 base: '../../layuiadmin/', //静态资源所在路径
             }).extend({
-                index: 'lib/index' //主入口模块
-            }).use(['index', 'user'], function() {
+                index: 'lib/index', //主入口模块
+            }).use(['index', 'user','setter'], function() {
                 var $ = layui.$,
-                    csetter = layui.setter,
+                    setter = layui.setter,
                     admin = layui.admin,
                     form = layui.form,
                     router =
                     layui.router(),
                     search = router.search;
-                var url = "https://f.longjuli.com"
-                // var url = "http://127.0.0.1:8083";
+                var url = setter.baseUrl;
+                var imageid  = undefined;
                 form.render();
                 $.ajax({
                     async: true,
@@ -134,7 +134,8 @@
                     },
                     success: function(msg) {
                         var data = msg.data;
-                        $("#LAY-user-get-vercode").attr("src", data)
+                        imageid = data.imgcode;
+                        $("#LAY-user-get-vercode").attr("src", data.image)
                     },
                     error: function() {
                         console.log("error")
@@ -151,7 +152,9 @@
                         },
                         success: function(msg) {
                             var data = msg.data;
-                            $("#LAY-user-get-vercode").attr("src", data)
+                            imageid = data.imgcode;
+                            $("#LAY-user-get-vercode").attr("src", data.image)
+
                         },
                         error: function() {
                             console.log("error")
@@ -185,6 +188,7 @@
                             "password": obj.field.password,
                             "vcode": obj.field.vercode,
                             "remember": flag,
+                            "cid":imageid,
                             "ip":returnCitySN["cip"]
                         },
                         xhrFields: {

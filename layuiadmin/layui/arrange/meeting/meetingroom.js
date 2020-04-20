@@ -17,7 +17,7 @@ layui.config({
 		datas = null,
 		router = layui.router();
 	element.render();
-    var url="https://f.longjuli.com"
+	var url = setter.baseUrl;
 	// var url="http://127.0.0.1:8083"
 
 	// 20.04.06 dh 下行有修改 

@@ -5,11 +5,11 @@ layui.config({
     dropdown: '/dropdown/dropdown'
 }).use(['index', 'table', 'jquery','dropdown'], function () {
     var table = layui.table,
-        admin = layui.admin,
+        setter = layui.setter,
         $ = layui.jquery,
         dropdown = 'dropdown';
     // dropdown = layui.dropdown;
-    var url = "https://f.longjuli.com";
+    var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];

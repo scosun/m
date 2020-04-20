@@ -137,11 +137,9 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'user', 'table'], function() {
         var $ = layui.$,
-            form = layui.form,
-            element = layui.element,
+            setter = layui.setter,
             table = layui.table,
-            layer = layui.layer,
-            router = layui.router();
+            layer = layui.layer;
         //全局变量编排规则id
 
         //全局变量会议室规则id
@@ -176,7 +174,7 @@
             "#8A2BE2",
             "#FF4500"
         ];
-        var url = "https://f.longjuli.com";
+        var url = setter.baseUrl;
         //    var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var str = uri.substr(1);

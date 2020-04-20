@@ -6,10 +6,11 @@ layui.config({
     var $ = layui.$,
         admin = layui.admin,
         element = layui.element,
+        setter = layui.setter,
         layer = layui.layer,
         laydate = layui.laydate,
         form = layui.form;
-    var url = "https://f.longjuli.com";
+    var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
     console.log()
 

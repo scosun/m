@@ -97,9 +97,9 @@
                 index: 'lib/index' //主入口模块
             }).use(['index', 'table', 'jquery'], function() {
                 var table = layui.table,
-                    admin = layui.admin,
+                    setter = layui.setter,
                     $ = layui.jquery;
-                var url = "https://f.longjuli.com"
+                var url = setter.baseUrl;
                 // 20.04.06 dh 原来按钮
                 // $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
                 // $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')

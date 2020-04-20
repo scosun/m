@@ -80,13 +80,11 @@
             index: 'lib/index' //主入口模块
         }).use(['index', 'form', 'laydate', 'element', 'table'], function () {
             var $ = layui.$,
-                admin = layui.admin,
-                element = layui.element,
+                setter = layui.setter,
                 layer = layui.layer,
-                laydate = layui.laydate,
                 form = layui.form,
                 table = layui.table;
-            var url = "https://f.longjuli.com"
+            var url = setter.baseUrl;
             // var url = "http://127.0.0.1:8083"
             var devices = {};
             var deviceList = [];

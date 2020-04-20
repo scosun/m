@@ -69,13 +69,12 @@
                   		index: 'lib/index' //主入口模块
                   	}).use(['index', 'form', 'laydate','colorpicker'], function() {
                   		var $ = layui.$,
-                  			admin = layui.admin,
-                  			element = layui.element,
+                            setter = layui.setter,
                   			layer = layui.layer,
                   			laydate = layui.laydate,
                   			form = layui.form,
                             colorpicker= layui.colorpicker;
-                           var url="https://f.longjuli.com"
+                            var url = setter.baseUrl;
                             colorpicker.render({
                                elem: '#test-form'
                                ,color: '#1c97f5'

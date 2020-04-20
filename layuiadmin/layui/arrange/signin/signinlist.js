@@ -6,10 +6,11 @@ layui.config({
     var table = layui.table,
         admin = layui.admin,
         form = layui.form,
+        setter = layui.setter,
         $ = layui.jquery;
 
     // #test-table-operate
-    var url = "https://f.longjuli.com"
+    var url = setter.baseUrl;
     //  var url = "http://127.0.0.1:8083"
     var devices = {};
     var arrangeList = [];

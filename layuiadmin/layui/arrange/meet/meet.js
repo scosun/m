@@ -5,9 +5,10 @@ layui.config({
 }).use(['index', 'table', 'jquery',], function() {
     var table = layui.table,
         admin = layui.admin,
+        setter = layui.setter,
         router = layui.router(),
         $ = layui.jquery;
-    var url = "https://f.longjuli.com";
+    var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];

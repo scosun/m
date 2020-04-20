@@ -66,9 +66,10 @@
             element = layui.element,
             layer = layui.layer,
             upload = layui.upload,
+            setter = layui.setter,
             laydate = layui.laydate,
             form = layui.form;
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         // var url = "http://127.0.0.1:8083"
         var uploadfile = null;
         form.on('submit(addsms)', function (data) {

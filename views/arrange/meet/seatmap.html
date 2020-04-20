@@ -121,6 +121,7 @@
 			form = layui.form,
 			element = layui.element,
 			table = layui.table,
+			setter = layui.setter,
 			layer = layui.layer,
 			router = layui.router();
 		/*右侧菜单HOVER显示提示文字*/
@@ -136,16 +137,13 @@
 				subtips = layer.tips(_data, '#' + _id, { tips: [3, '#666'], time: 30000 });
 			}
 		});
-		var url = 'https://f.longjuli.com';
-		// var url="http://127.0.0.1:8083";
+		var url = setter.baseUrl;
 		var uri = window.location.search;
-		console.log(uri)
         var str = uri.substr(1);
         window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
 		window.meetingid=str.substring(str.lastIndexOf("=")+1)
 		window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
 		window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
-		console.log(meetingid)
 			   
 		/*右侧菜单HOVER显示提示文字 end*/
 		layer.load(2);
@@ -162,7 +160,6 @@
 			    },
 			    success: function(data) {
 			        var datas = data.data
-					console.log()
 					$("body").append(datas.templatecode);
 					
 					selectSeats();

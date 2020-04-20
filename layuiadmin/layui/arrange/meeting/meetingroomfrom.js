@@ -2,19 +2,23 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'form'], function(){
+}).use(['index', 'form'], function () {
     var $ = layui.$
-        ,form = layui.form
-        ,router = layui.router();
+        , form = layui.form,
+        setter = layui.setter,
+        router = layui.router();
     console.log(router.search.id)
+    var url = setter.baseUrl;
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]); return null; //返回参数值
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
     }
+
     console.log(getUrlParam("add"))
     //监听提交
-    form.on('submit(component-form-select)', function(data){
+    form.on('submit(component-form-select)', function (data) {
         var field = data.field; //获取提交的字段
         var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 
@@ -25,17 +29,15 @@ layui.config({
     });
 
     var editid = +$("#editid").val();
-    if(editid){
+    if (editid) {
         //编辑
         $("#seatmapbtn").text("编辑座区图");
     }
 
-    var url="https://f.longjuli.com"
-    // var url="http://127.0.0.1:8083"
 
-    function editSeatMap(){
+    function editSeatMap() {
         $.ajax({
-            url: url+"/roomtemplate/findByIdTemplatecode",
+            url: url + "/roomtemplate/findByIdTemplatecode",
             type: "POST",
             data: {
                 "id": editid
@@ -43,11 +45,11 @@ layui.config({
             xhrFields: {
                 withCredentials: true
             },
-            success: function(data) {
-                console.log("---findByIdTemplatecode----",data)
+            success: function (data) {
+                console.log("---findByIdTemplatecode----", data)
                 if (data.code == "0") {
                     var templatecode = data.data.templatecode;
-                    sessionStorage.setItem("_seatscomplete",templatecode);
+                    sessionStorage.setItem("_seatscomplete", templatecode);
                     // var topLayui = parent === self ? layui : top.layui;
                     // topLayui.index.openTabsPage("arrange/meeting/seatmapseditor.html", "会场编辑器");
 
@@ -58,9 +60,9 @@ layui.config({
                         maxmin: true,
                         area: ['100%', '100%'],
                         scrollbar: false,
-                        yes: function(index, layero) {
+                        yes: function (index, layero) {
                         },
-                        success: function(layero, index) {
+                        success: function (layero, index) {
                             var body = layer.getChildFrame('body', index);
                         }
                     });
@@ -71,19 +73,19 @@ layui.config({
                     });
                 }
             },
-            error: function(error) {
-                
+            error: function (error) {
+
             }
         });
     }
 
-    $("#seatmapbtn").bind("click",function(){
-        if(editid){
+    $("#seatmapbtn").bind("click", function () {
+        if (editid) {
             //编辑
             editSeatMap();
-        }else{
+        } else {
             //新增
-            sessionStorage.setItem("_seatscomplete","");
+            sessionStorage.setItem("_seatscomplete", "");
             parent.layer.open({
                 type: 2,
                 title: '座区图',
@@ -91,9 +93,9 @@ layui.config({
                 maxmin: true,
                 area: ['100%', '100%'],
                 scrollbar: false,
-                yes: function(index, layero) {
+                yes: function (index, layero) {
                 },
-                success: function(layero, index) {
+                success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                 }
             });

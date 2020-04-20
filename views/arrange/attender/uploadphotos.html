@@ -49,9 +49,9 @@ layui.config({
 	var $ = layui.$,
 		upload = layui.upload,
 		form = layui.form,
+		setter = layui.setter,
 		router = layui.router();
-		var url="https://f.longjuli.com"
-		// var url = "http://127.0.0.1:8083";
+		var url = setter.baseUrl;
 	  //多文件列表示例
 	  var demoListView = $('#demoList')
 		,uploadListIns = upload.render({

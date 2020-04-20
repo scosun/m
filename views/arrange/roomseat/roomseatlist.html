@@ -112,16 +112,12 @@
     }).use(['index', 'user', 'table','dropdown'], function() {
         var $ = layui.$,
             setter = layui.setter,
-            admin = layui.admin,
-            form = layui.form,
-            element = layui.element,
             table = layui.table,
             layer = layui.layer,
-            datas = null,
             dropdown = 'dropdown',
             router = layui.router();
         // var url = "http://127.0.0.1:8083"
-        var url = "https://f.longjuli.com"
+        var url = setter.baseUrl;
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',

@@ -8,10 +8,10 @@ layui.config({
         element = layui.element,
         layer = layui.layer,
         laydate = layui.laydate,
+        setter = layui.setter,
         router = layui.router(),
         form = layui.form;
-    var url="https://f.longjuli.com";
-    // var url="http://127.0.0.1:8083";
+    var url = setter.baseUrl;
     var day2 = new Date();
     day2.setTime(day2.getTime());
     var hour = day2.getHours(); //得到小时

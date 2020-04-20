@@ -156,16 +156,10 @@
 			}).use(['index', 'user', 'table', 'tree', 'util', 'laydate'], function () {
 				var $ = layui.$,
 					form = layui.form,
-					element = layui.element,
-					table = layui.table,
-					layer = layui.layer,
-					tree = layui.tree,
-					laydate = layui.laydate,
-					util = layui.util,
-					router = layui.router();
+						setter = layui.setter;
 				
 				// var url = "http://127.0.0.1:8083"
-				var url = "https://f.longjuli.com"
+				var url = setter.baseUrl;
 				var uri = window.location.search;
 				var str = uri.substr(4);
 				var personid = str.substring(0, str.indexOf("&"));

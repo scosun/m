@@ -27,7 +27,7 @@ layui.config({
         router = layui.router();
     element.render();
     //初次渲染表格
-    var url = "https://f.longjuli.com"
+    var url = setter.baseUrl;
     // var url="http://127.0.0.1:8083";
     var id = getUrlParam("id")
     console.log(id)

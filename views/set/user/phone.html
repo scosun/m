@@ -67,8 +67,9 @@
                 index: 'lib/index' //主入口模块
             }).use(['index', 'set','user'], function() {
                 var $ = layui.$,
+                    setter = layui.setter,
                     form = layui.form;
-                var url = "https://f.longjuli.com"
+                var url = setter.baseUrl;
                 $.ajax({
                     async: true,
                     type: "get",
