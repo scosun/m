@@ -238,40 +238,43 @@ function unDragMoveSeats(){
 	selectSeats(true);
 
 }
-function leftMoveSeats(){
+function leftMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left-1+"px");
+		$(this).css("left",left-px+"px");
 	});
 }
-function rightMoveSeats(){
+function rightMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left+1+"px");
+		$(this).css("left",left+px+"px");
 	});
 }
-function topMoveSeats(){
+function topMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top-1+"px");
+		$(this).css("top",top-px+"px");
 	});
 }
-function bottomMoveSeats(){
+function bottomMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top+1+"px");
+		$(this).css("top",top+px+"px");
 	});
 }
 function keyDownMoveSeats(evt){
-	// console.log(evt.keyCode)
 	if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){
 		return;
 	}
@@ -281,25 +284,41 @@ function keyDownMoveSeats(evt){
 		case 38:
 			//上
 			if(__keydownMoveUp){
-				topMoveSeats();
+				if(evt.shiftKey){
+					topMoveSeats(10);
+				}else{
+					topMoveSeats(1);
+				}
 			}
 		break;
 		case 40:
 			//下
 			if(__keydownMoveDown){
-				bottomMoveSeats();
+				if(evt.shiftKey){
+					bottomMoveSeats(10);
+				}else{
+					bottomMoveSeats(1);
+				}
 			}
 		break;
 		case 37:
 			//左
 			if(__keydownMoveLeft){
-				leftMoveSeats();
+				if(evt.shiftKey){
+					leftMoveSeats(10);
+				}else{
+					leftMoveSeats(1);
+				}
 			}
 		break;
 		case 39:
 			//右
 			if(__keydownMoveRight){
-				rightMoveSeats();
+				if(evt.shiftKey){
+					rightMoveSeats(10);
+				}else{
+					rightMoveSeats(1);
+				}
 			}
 		break;
 	}

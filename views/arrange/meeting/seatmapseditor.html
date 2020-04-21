@@ -6,8 +6,10 @@
 	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 	<link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
 	<link rel="stylesheet" href="../../../css/seat.css" media="all">
+	<link rel="stylesheet" href="JSRuler/ruler.css" />
 	<script src="../../../web.contextmenu/web.contextmenu.js" ></script>
-	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<script src="jquery-1.7.1.js"></script>
+	<!-- <script src="../../../js/jquery-3.1.1.min.js"></script> -->
 	<style type="text/css">
 		header {
 			box-shadow: 0px 0px 5px gray;
@@ -98,7 +100,7 @@
 	.clear{clear:both; height:0; width:100%;}
 	.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;}
 	.clearfix{zoom: 1; clear:both;}
-	#dragDiv{position: fixed;top:65px;right: 10px;z-index: 10000;width:92px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;box-shadow:0 0 5px rgba(0,0,0,0.3);}
+	#dragDiv{position: fixed;top:100px;right: 10px;z-index: 10000;width:92px;background:#f1f1f1;border:1px solid #f6f6f6;border-radius:2px;box-shadow:0 0 5px rgba(0,0,0,0.3);}
 	#dragDiv .title{position:relative;height:24px; background-color: #ebebeb;}
 	#dragDiv .title h2{padding:0 10px;font-size:12px;height:24px;line-height:24px;border-bottom:1px solid #f6f6f6;}
 	#dragDiv .title div{position:absolute;height:24px;top:0;right:0;}
@@ -124,6 +126,18 @@
 	#dragDiv .child_cont_li img{width:20px;height:20px;margin-top: 0;margin-left: 5px;margin-right: 5px;}
 	#dragDiv .child_cont_li.on > a,
 	#dragDiv .child_cont_li > a:hover{border:1px solid #d3d3d3;background-color:#d8d8d8;}
+	
+	
+		#rulerOuter {
+            width : 2000px;
+            height : 2000px;
+            position: relative;
+        }
+
+        #rulerInner {
+            width: 2000px;
+            height: 2000px;
+        }
 	</style>
 	<script type="text/javascript">  
 		function doNothing(){  
@@ -133,238 +147,17 @@
 	</script>
 </head>
 <body oncontextmenu="doNothing()">
-	<header>
+	<header style="position: relative;">
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图编辑器</cite></a>|
 			<a><cite id="refreshbtn" style="cursor: pointer;"><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
 		</span>
-		<!-- 右侧菜单
-		<span class="layui-right-nav">
-			<ul class="layui-nav layui-bg-cyan">
-				<li class="layui-nav-item">
-					<a href="javascript:;">设置</a>
-					<dl class="layui-nav-child">
-						<dd id="savelocalbtn"><a href="javascript:void(0);"><img src="../../../images/savelocalbtn.png">临时保存</a></dd>
-						<dd id="restorelocalbtn"><a href="javascript:void(0);"><img src="../../../images/restorelocalbtn.png">恢复数据</a></dd>
-						<dd id="autocodebtn"><a href="javascript:void(0);"><img src="../../../images/savelocalbtn.png">自动编排</a></dd>
-						<dd id="completebtn"><a href="javascript:void(0);"><img src="../../../images/completebtn.png">完成复制</a></dd>
-					</dl>
-				</li>
-				
-				<li class="layui-nav-item">
-					<a href="javascript:;">新建</a>
-					<dl class="layui-nav-child">
-						<dd id="nav-down"><a href="javascript:void(0);"><img src="../../../images/pladd.png">参数绘制</a></dd>
-						<dd id="nav-add"><a href="javascript:void(0);"><img src="../../../images/add.png">拖拽绘制</a></dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item">
-					<a href="javascript:;">选择</a>
-					<dl class="layui-nav-child">
-						<dd id="nav-radio"><a href="javascript:void(0);"><img src="../../../images/radio.png">单选</a></dd>
-						<dd id="nav-selection"><a href="javascript:void(0);"><img src="../../../images/selection.png">框选</a></dd>
-						<dd id="selectrow"><a href="javascript:void(0);"><img src="../../../images/selection.png">选中全部行</a></dd>
-						<dd id="selectcol"><a href="javascript:void(0);"><img src="../../../images/selection.png">选中全部列</a></dd>
-						<dd id="selectall"><a href="javascript:void(0);"><img src="../../../images/selection.png">全选</a></dd>
-						<dd id="unselectall"><a href="javascript:void(0);"><img src="../../../images/selection.png">取消全选</a></dd>
-					</dl>
-				</li>
-				
-				<li class="layui-nav-item">
-					<a href="javascript:;">删除</a>
-					<dl class="layui-nav-child">
-						<dd id="nav-delete"><a href="javascript:void(0);"><img src="../../../images/delete.png">删除</a></dd>
-						<dd id="nav-rollback"><a href="javascript:void(0);"><img src="../../../images/rollback.png">恢复删除</a></dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item">
-					<a href="javascript:;">标注</a>
-					<dl class="layui-nav-child">
-						<dd id="nav-mark"><a href="javascript:void(0);"><img src="../../../images/mark.png">标注</a></dd>
-						<dd id="nav-forward"><a href="javascript:void(0);"><img src="../../../images/forward.png">恢复座区</a></dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item">
-					<a href="javascript:;">右键</a>
-					<dl class="layui-nav-child">
-						<dd id="rightbtn"><a href="javascript:void(0);"><img src="../../../images/rightbtn.png">开启右键</a></dd>
-						<dd id="cancelrightbtn"><a href="javascript:void(0);"><img src="../../../images/cancelrightbtn.png">取消右键</a></dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item">
-					<a href="javascript:;">对齐</a>
-					<dl class="layui-nav-child">
-						<dd id="nav-align-up"><a href="javascript:void(0);"><img src="../../../images/align-up.png">上对齐</a></dd>
-						<dd id="nav-align-down"><a href="javascript:void(0);"><img src="../../../images/align-down.png">下对齐</a></dd>
-						<dd id="nav-align-center-v"><a href="javascript:void(0);"><img src="../../../images/align-center-v.png">上下居中</a></dd>
-						<dd id="nav-align-left"><a href="javascript:void(0);"><img src="../../../images/align-left.png">左对齐</a></dd>
-						<dd id="nav-align-center"><a href="javascript:void(0);"><img src="../../../images/align-center.png">左右居中</a></dd>
-						<dd id="nav-align-right"><a href="javascript:void(0);"><img src="../../../images/align-right.png">右对齐</a></dd>
-						<dd id="nav-vertical-c"><a href="javascript:void(0);"><img src="../../../images/vertical-distribution-center.png">水平分布</a></dd>
-						<dd id="nav-horizontal-c"><a href="javascript:void(0);"><img src="../../../images/horizontal-distribution-center.png">垂直分布</a></dd>
-					</dl>
-				</li>
-					
-				<li class="layui-nav-item">
-					<a href="javascript:;">移动</a>
-					<dl class="layui-nav-child">
-						<dd id="dleftmovebtn"><a href="javascript:void(0);"><img src="../../../images/dleftmovebtn.png">左移座区</a></dd>
-						<dd id="drightmovebtn"><a href="javascript:void(0);"><img src="../../../images/drightmovebtn.png">右移座区</a></dd>
-						<dd id="dtopmovebtn"><a href="javascript:void(0);"><img src="../../../images/dtopmovebtn.png">上移座区</a></dd>
-						<dd id="dbottommovebtn"><a href="javascript:void(0);"><img src="../../../images/dbottommovebtn.png">下移座区</a></dd>
-						<dd id="nav-drag"><a href="javascript:void(0);"><img src="../../../images/drag.png">拖拽移动</a></dd>
-						<dd id="canceldragbtn"><a href="javascript:void(0);"><img src="../../../images/drag.png">取消拖拽</a></dd>
-					</dl>
-				</li>
-				
-				<li class="layui-nav-item">
-					<a href="javascript:;">半径</a>
-					<dl class="layui-nav-child layui-nav-last-child">
-						<dd id="addradiusbtn"><a href="javascript:void(0);"><img src="../../../images/rightbtn.png">增大半径</a></dd>
-						<dd id="reduceradiusbtn"><a href="javascript:void(0);"><img src="../../../images/cancelrightbtn.png">缩小半径</a></dd>
-					</dl>
-				</li>
-			</ul>
-		</span>
-		 -->
-		
-		<!-- 右侧菜单 end-->
-
-		<!-- 右侧菜单 -->
 		<span class="layui-right-nav">
 			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/completebtn.png"></i>
 			<i id="completebtn" data="保存座区图数据"><img src="../../../images/savelocalbtn.png"></i>
-			<!-- <i id="savelocalbtn" data="临时保存"><img src="../../../images/savelocalbtn.png"></i>
-			<i id="restorelocalbtn" data="恢复数据"><img src="../../../images/restorelocalbtn.png"></i> -->
-			
 		</span>
-		<!-- 右侧菜单 end-->
 	</header>
-	<!-- dragDiv 拖动工具箱 3.25 -->
-	<!--
-	<div id="dragDiv">
-		<div class="title">
-			<h2>工具箱</h2>
-			<div>
-				<a class="Jreduction" href="javascript:;" title="还原"><img src="../../../images/reduction.png"></a>
-			</div>
-		</div>
-		<div class="toollist clearfix">
-			<div class="toollist_li has_child">
-				<a id="nav-radio" href="javascript:;" alt="单选" title="单选" class="testB"><img src="../../../images/radio.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="selectrow" href="javascript:;" alt="选中全部行" title="选中全部行" class="testA"><img src="../../../images/drag.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="selectcol" href="javascript:;" alt="选中全部列" title="选中全部列" class="testB"><img src="../../../images/radio.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="selectall" href="javascript:;" alt="全选" title="全选" class="testC"><img src="../../../images/selection.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="unselectall" href="javascript:;" alt="取消全选" title="取消全选" class="testD"><img src="../../../images/re-election.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li ">
-				<a id="nav-add" href="javascript:;" alt="拖拽绘制" title="拖拽绘制"><img src="../../../images/drag.png"></a>
-				
-			</div>
-			<div class="toollist_li">
-				<a id="nav-selection" href="javascript:;" alt="框选" title="框选"><img src="../../../images/selection.png"></a>
-			</div>
-			<div class="toollist_li has_child">
-				<a id="create-circle-down" href="javascript:;" alt="环形绘制" title="环形绘制"><img src="../../../images/pladd.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="create-run-down" href="javascript:;" alt="跑道绘制" title="跑道绘制"><img src="../../../images/radio.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li">
-				<a href="javascript:;" alt="多边形绘制" title="多边形绘制"><img src="../../../images/re-election.png"></a>
-			</div>
-			<div class="toollist_li ">
-				<a href="javascript:;" alt="椭圆绘制" title="椭圆绘制"><img src="../../../images/rightbtn.png"></a>
-
-			</div>
-			<div class="toollist_li">
-				<a id="nav-down" href="javascript:;" alt="矩形绘制" title="矩形绘制"><img src="../../../images/vacancy.png"></a>
-			</div>
-			<div class="toollist_li has_child">
-				<a id="nav-drag" href="javascript:;" alt="拖拽移动" title="拖拽移动"><img src="../../../images/parallelism.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="canceldragbtn" href="javascript:;" alt="取消拖拽" title="取消拖拽"><img src="../../../images/drag.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="dtopmovebtn" href="javascript:;" alt="上移座区" title="上移座区"><img src="../../../images/radio.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="dbottommovebtn" href="javascript:;" alt="下移座区" title="下移座区"><img src="../../../images/selection.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="dleftmovebtn" href="javascript:;" alt="左移座区" title="左移座区"><img src="../../../images/re-election.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="drightmovebtn" href="javascript:;" alt="右移座区" title="右移座区"><img src="../../../images/re-election.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li has_child">
-				<a id="nav-vertical-c" href="javascript:;" alt="水平分布" title="水平分布"><img src="../../../images/re-election.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="nav-horizontal-c" href="javascript:;" alt="垂直分布" title="垂直分布"><img src="../../../images/drag.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li has_child">
-				<a id="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/rightbtn.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="nav-align-right" href="javascript:;" alt="右对齐" title="右对齐"><img src="../../../images/drag.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="nav-align-center" href="javascript:;" alt="左右居中" title="左右居中"><img src="../../../images/radio.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="nav-align-up" href="javascript:;" alt="上对齐" title="上对齐"><img src="../../../images/selection.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="nav-align-down" href="javascript:;" alt="下对齐" title="下对齐"><img src="../../../images/re-election.png"></a>
-					</div>
-					<div class="child_cont_li">
-						<a id="nav-align-center-v" href="javascript:;" alt="上下居中" title="上下居中"><img src="../../../images/re-election.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li">
-				<a id="nav-delete" href="javascript:;" alt="删除" title="删除"><img src="../../../images/vacancy.png"></a>
-			</div>
-			<div class="toollist_li has_child">
-				<a id="nav-rollback" href="javascript:;" alt="恢复删除" title="恢复删除"><img src="../../../images/parallelism.png"></a>
-				<div class="child_cont" style="display: none;">
-					<div class="child_cont_li">
-						<a id="nav-forward" href="javascript:;" alt="恢复座区" title="恢复座区"><img src="../../../images/drag.png"></a>
-					</div>
-				</div>
-			</div>
-			<div class="toollist_li">
-				<a id="nav-mark" href="javascript:;" alt="标注" title="标注"><img src="../../../images/vacancy.png"></a>
-			</div>
-			<div class="toollist_li has_child">
-				<a href="javascript:;" alt="111" title="拖拽匹配"><img src="../../../images/parallelism.png"></a>
-			</div>
-			
-		</div> 
-	</div>
-	-->
+	
 	<!-- dragDiv 拖动工具箱 3.25 -->
 	<div id="dragDiv">
 		<div class="title">
@@ -528,9 +321,37 @@
 		</div>
 	</div>
 
-	<div id="seatcontainer" class="seatcontainer" ><div style="position:absolute;left:10px;top:65px;"><img style="height:20px;" src="../../../images/leftright-ts.svg"></div><div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div><div id="seatcontainerId"></div><div id="mousecontainerId"></div><div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div><svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1"><line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/></svg><div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div><div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div><div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div><div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div></div>
+
+	<div id="rulerOuter">
+		<div id="seatcontainer" class="seatcontainer" style="width: 2000px; height: 2000px;">
+			<div style="position:absolute;left:10px;top:15px;">
+				<img style="height:20px;" src="../../../images/leftright-ts.svg">
+			</div>
+			<div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div>
+			<div id="seatcontainerId"></div>
+			<div id="mousecontainerId"></div>
+			<div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>
+			
+
+			<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div>
+			<div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div>
+			<div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div>
+			<div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div>
+			<div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div>
+		
+		</div>
+		<div style="width: 100%;height: 100%;">
+			<svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1">
+				<line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/>
+			</svg>
+		</div>
+	</div>
+	
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="JSRuler/jquery.event.drag-2.2.js"></script>
+<script src="JSRuler/jquery.event.drop-2.2.js"></script>
+<script src="JSRuler/ruler.js"></script>
 <script src="seatscontrol_temp.js"></script>
 
 <!-- /* dragDiv 拖动工具箱 3.25*/ -->
@@ -986,6 +807,10 @@
 	}
 
 	
+
+	$(function(){
+		new Ruler().wrap('seatcontainer');
+	});
 </script>
 
 <script type="text/javascript">
