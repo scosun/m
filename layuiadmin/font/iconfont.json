@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4495591",
+      "name": "智能排序",
+      "font_class": "zhinengpaixu",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "6761971",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
       "icon_id": "8806439",
       "name": "无内容",
       "font_class": "wuneirong",
