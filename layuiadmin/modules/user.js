@@ -3,6 +3,7 @@ layui.define("form", function(e) {
 	var s = layui.$,
 		t = (layui.layer, layui.laytpl, layui.setter, layui.view, layui.admin),
 		i = layui.form,
+		b = layui.setter
 		a = s("body");
 	i.verify({
 		nickname: function(e, s) {
@@ -15,7 +16,7 @@ layui.define("form", function(e) {
 		elemPhone: "#LAY-user-login-cellphone",
 		elemVercode: "#LAY-user-login-vercode",
 		ajax: {
-			url: "https://f.longjuli.com/code/getsmscode",
+			url: b.smsUrl+"/code/getsmscode",
 			type:'post',
 			xhrFields: {
 				withCredentials: true

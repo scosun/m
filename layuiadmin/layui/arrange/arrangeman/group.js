@@ -124,8 +124,8 @@ layui.config({
                 area: ['100%', '106%'],
                 closeBtn: 1,
                 offset: '-43px',
-                content: 'territory_rules_edit.html?ruleid=' + msg.data.id + '&roomid=' + msg.data
-                    .roomid,
+                content: 'territory_rules_add.html?ruleid=' + msg.data.id + '&roomid=' + msg.data
+                    .roomid+"&name="+msg.data.name,
                 success: function(layero, index) {
                     // var body = window.parent.layer.getChildFrame('body', index);
                     // console.log(body)
@@ -137,83 +137,6 @@ layui.config({
 
         }
 
-
-        return false;
-    });
-    form.on('submit(component-form-demo2)', function(data) {
-
-
-        // var rowname = $("#select-room").find("option[value='"+data.field.interest+"']").text();
-        var ruletype = 0;
-        if (data.field.close == "on") {
-            ruletype = 1;
-        }
-
-        var openid = 0;
-        var ruleid;
-        var roomid;
-      
-        $.ajax({
-            async: false,
-            type: "post",
-            url: url + "/ruletemplate/addruletemplate",
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            },
-            //成功的回调函数
-            data: {
-                "name": data.field.user,
-                "roomid": data.field.meeting,
-                "roomname": $("#select-room option:selected").text()
-            },
-            success: function(msg) {
-                if (msg.code == '0') {
-                    var data = msg.state;
-                    var index = parent.layer.getFrameIndex(window.name); 
-                    parent.reloads()//先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭
-                    console.log(msg);
-                    open(msg);
-                } else {
-
-                }
-
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
-
-        function open(msg) {
-            console.log(msg)
-            parent.layer.open({
-                type: 2,
-                //title: '收藏管理 (考生姓名：张无忌)',
-                title: '  ',
-                shadeClose: false, //弹出框之外的地方是否可以点击
-                area: ['100%', '106%'],
-                closeBtn: 1,
-                offset: '-43px',
-                content: '../arrangeman/territory_rules_edit.html?ruleid=' + msg.data.id +
-                    '&roomid=' + msg.data.roomid,
-                success: function(layero, index) {
-                    // var body = window.parent.layer.getChildFrame('body', index);
-                    // console.log(body)
-                    // parent.$("#ruleid").val(msg.ruleid);
-                    // parent.$("#roomid").val(msg.roomid);
-                    // body.find("#roomid").val(msg.roomid);
-                },
-               
-            })
-
-        }
-
-
-        // if(openid == 1) {
-        // 	  
-        // }
 
         return false;
     });

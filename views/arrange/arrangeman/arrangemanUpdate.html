@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编排规则修改表单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
+    <form class="layui-form" action="" lay-filter="component-form-group">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">规则名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input username">
+            </div>
+        </div>
+
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">会议室名称</label>
+            <div class="layui-input-block">
+                <select name="meeting" lay-verify="required" id="select-room">
+                    <option value="" id="select_meet"></option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <input type="text" name=""  autocomplete="off"  id="meetingid"  class="layui-input ">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-layout-admin layui-hide">
+            <div class="layui-input-block">
+                <div class="layui-footer" style="position: absolute;right: 0px;bottom: 0px;">
+                    <button class="layui-btn" lay-submit="" lay-filter="component-form-demo1" id="ruleclick">确定</button></button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate'], function() {
+        var $ = layui.$,
+            admin = layui.admin,
+            element = layui.element,
+            setter = layui.setter,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        var url = setter.baseUrl;
+        var roomid = getUrlParam("roomid");
+        var ruleid = getUrlParam("ruleid");
+        var name = getUrlParam("name");
+        $("#name").val(name)
+        console.log()
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);//匹配目标参数
+            if (r != null) return decodeURI(r[2]);
+            return null; //返回参数值
+        }
+            $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/roomtemplate/findAll",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            data: {},
+            success: function(msg) {
+
+                var data = msg.data;
+                $.each(data, function(idx, con) {
+
+                    $("#select_meet").after("<option value=" + con.id + ">" + con.name +
+                        "</option>");
+                    $('#select-room').val(roomid)
+                })
+
+
+
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        })
+        window.reloads = function(){
+            parent.reloads()
+        }
+
+        form.render(null, 'component-form-group');
+
+        laydate.render({
+            elem: '#LAY-component-form-group-date'
+        });
+
+
+
+        /* 监听指定开关 */
+        form.on('switch(component-form-switchTest)', function(data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+
+
+        /* 监听提交 */
+        form.on('submit(component-form-demo1)', function(data) {
+
+
+            // var rowname = $("#select-room").find("option[value='"+data.field.interest+"']").text();
+            var ruletype = 0;
+            if (data.field.close == "on") {
+                ruletype = 1;
+            }
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url + "/ruletemplate/updateruletemplate",
+                dataType: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                //成功的回调函数
+                data: {
+                    "name": data.field.name,
+                    "stauts": ruletype,
+                    "roomid": data.field.meeting,
+                    "roomname": $("#select-room option:selected").text(),
+                    "id": ruleid
+                },
+                success: function(msg) {
+                    if (msg.code == '0') {
+                        var data = msg.state;
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                        parent.reloads();
+                    } else {
+
+                    }
+
+                },
+                //失败的回调函数
+                error: function() {
+                    console.log("error")
+                }
+            })
+
+
+
+            return false;
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

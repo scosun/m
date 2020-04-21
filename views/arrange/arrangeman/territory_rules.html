@@ -78,7 +78,7 @@
 
 <header>
             <span class="layui-breadcrumb" style="line-height: 3.5rem;">
-                <a><cite> &nbsp; &nbsp; &nbsp; 进行规则的修改</cite></a>
+                <a style="margin-left: 10px"><cite id="rulename"></cite></a>
                 <div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
                 <!-- <a onclick="asd()" href="javascript:;"><cite>&nbsp;刷新</cite></a> -->
 
@@ -164,15 +164,19 @@
             }
         });
 
-
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);//匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }
         //全局变量编排规则id
         var url = setter.baseUrl;
-        var uri = window.location.search;
-        var str = uri.substr(1);
-        window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
-        window.roomid=str.substring(str.lastIndexOf("=")+1)
-        console.log(ruleid);
-        console.log(roomid);
+        window.ruleid = getUrlParam("ruleid");
+        window.roomid=getUrlParam("roomid")
+        console.log(getUrlParam("name"))
+        $('#rulename').text(getUrlParam("name"))
+
+
 
         //规则列表表格调用方法
         $.ajax({

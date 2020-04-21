@@ -123,7 +123,7 @@ layui.config({
                 area: ['100%', '106%'],
                 closeBtn: 1,
                 offset: '-43px',
-                content: 'territory_rules_edit.html?ruleid=' + msg.data.id + '&roomid=' + msg.data
+                content: 'territory_rules_add.html?ruleid=' + msg.data.id + '&roomid=' + msg.data
                     .roomid,
                 success: function(layero, index) {
                     // var body = window.parent.layer.getChildFrame('body', index);
@@ -196,7 +196,7 @@ layui.config({
                 area: ['100%', '106%'],
                 closeBtn: 1,
                 offset: '-43px',
-                content: '../arrangeman/territory_rules_edit.html?ruleid=' + msg.data.id +
+                content: '../arrangeman/territory_rules_add.html?ruleid=' + msg.data.id +
                     '&roomid=' + msg.data.roomid,
                 success: function(layero, index) {
                     // var body = window.parent.layer.getChildFrame('body', index);
