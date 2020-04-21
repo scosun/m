@@ -43,70 +43,10 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       'echartsTheme' //echarts 主题
     ]
     
-    //主题配置
-    ,theme: {
-      //内置主题配色方案
-      color: [{
-        // main: '#20222A' //主题色
-        main: '#20222A'
-        ,selected: '#ffce00' //选中色
-        ,alias: 'default' //默认别名
-      },{
-        main: '#03152A'
-        ,selected: '#3B91FF'  
-        ,alias: 'dark-blue' //藏蓝
-      },{
-        main: '#2E241B'
-        ,selected: '#A48566'
-        ,alias: 'coffee' //咖啡
-      },{
-        main: '#50314F'
-        ,selected: '#7A4D7B'
-        ,alias: 'purple-red' //紫红
-      },{
-        main: '#344058'
-        ,logo: '#1E9FFF'
-        ,selected: '#1E9FFF'
-        ,alias: 'ocean' //海洋
-      },{
-        main: '#3A3D49'
-        ,logo: '#2F9688'
-        ,selected: '#5FB878'
-        ,alias: 'green' //墨绿
-      },{
-        main: '#20222A'
-        ,logo: '#F78400'
-        ,selected: '#F78400'
-        ,alias: 'red' //橙色
-      },{
-        main: '#28333E'
-        ,logo: '#AA3130'
-        ,selected: '#AA3130'
-        ,alias: 'fashion-red' //时尚红
-      },{
-        main: '#24262F'
-        ,logo: '#3A3D49'
-        ,selected: '#009688'
-        ,alias: 'classic-black' //经典黑
-      },{
-        logo: '#226A62'
-        ,header: '#2F9688'
-        ,alias: 'green-header' //墨绿头
-      },{
-        main: '#344058'
-        ,logo: '#0085E8'
-        ,selected: '#1E9FFF'
-        ,header: '#1E9FFF'
-        ,alias: 'ocean-header' //海洋头
-      },{
-        header: '#393D49'
-        ,alias: 'classic-black-header' //经典黑头
-      }]
-      
-      //初始的颜色索引，对应上面的配色方案数组索引
-      //如果本地已经有主题色记录，则以本地记录为优先，除非请求本地数据（localStorage）
-      ,initColorIndex: 0
-    }
+    //全局配置url
     ,baseUrl:'https://f.longjuli.com'
+    // ,baseUrl:'http://127.0.0.1:8083'
+    //验证码的url
+    ,smsUrl:'https://f.longjuli.com'
   });
 });
