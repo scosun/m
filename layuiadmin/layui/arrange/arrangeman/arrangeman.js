@@ -101,6 +101,12 @@ layui.config({
                     align: 'left',
                 },
                 {
+                    //align: 'right',
+                    //flxed: 'right',
+                    title: '编排设定',
+                    toolbar: '#table-zone-list',
+                },
+                {
                     field: 'modifytime',
                     title: '更新时间',
                     align: 'left',
@@ -175,22 +181,10 @@ layui.config({
                     align: 'left',
                 },
                     {
-                        field: 'stauts',
-                        title: '会议规则',
-                        align: 'left',
-                        width:80,
-                        templet: function(data) {
-                            if (data.stauts == 0) {
-                                return '标准规则'
-                            }
-                            if (data.stauts == 1) {
-                                return '快速规则'
-                            }
-                            if (data.stauts == undefined) {
-                                return ''
-                            }
-                        },
-
+                        //align: 'right',
+                        //flxed: 'right',
+                        title: '编排设定',
+                        toolbar: '#table-zone-list',
                     },
                     {
                         field: 'modifytime',
@@ -286,8 +280,8 @@ layui.config({
             /**
              * @param {Object} index
              * 编排规则的借口提供之后需要接入删除
-             */   
-            layer.confirm('真的删除行么', function(index) {
+             */
+            layer.confirm('真的删除行么', function (index) {
                 $.ajax({
                     async: false,
                     type: "get",
@@ -300,7 +294,7 @@ layui.config({
                     data: {
                         "id": data.id
                     },
-                    success: function(msg) {
+                    success: function (msg) {
 
                         if (msg.code == '0') {
                             layer.msg("删除成功");
@@ -312,13 +306,13 @@ layui.config({
 
                     },
                     //失败的回调函数
-                    error: function() {
+                    error: function () {
                         console.log("error")
                     }
                 })
                 layer.close(index);
             });
-        } else if (obj.event === 'edit') {
+        } else if (obj.event === 'zonelist') {
 
             layer.open({
                 type: 2,
@@ -328,10 +322,10 @@ layui.config({
                 // maxmin: true,//弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
                 // closeBtn: 1,
-                closeBtn:false,
+                closeBtn: false,
                 offset: '0',
-                content: 'territory_rules.html?ruleid=' + data.id + '&roomid=' + data.roomid,
-                success: function(layero, index) {
+                content: 'territory_rules.html?ruleid=' + data.id + '&roomid=' + data.roomid + "&name=" + data.name,
+                success: function (layero, index) {
                     // var body = layui.layer.getChildFrame('body', index);
                     // var roomid;
                     // // 取到弹出层里的元素，并把编辑的内容放进去
@@ -339,9 +333,23 @@ layui.config({
                     // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
-        }
-    });
+        } else if (obj.event === 'edit') {
 
+            layer.open({
+                type: 2,
+                title: '规则_编辑',
+                area: ['70%', '75%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'arrangemanUpdate.html?ruleid=' + data.id + '&roomid=' + data.roomid + "&name=" + data.name,
+                yes: function (index, layero) {
+                    var submit = layero.find('iframe').contents().find("#ruleclick");
+                    submit.click();
+
+                }
+            });
+        }
+    })
     var $ = layui.$,
         active = {
             add: function() {
@@ -477,45 +485,33 @@ layui.config({
                             //     title: 'ID',
                             //     //align: 'center',
                             //     unresize: 'false',
-                            //     width: '7%'
+                            //     width:80,
                             // },
                             {
                                 field: 'name',
                                 title: '编排规则名称',
-                                //align: 'center',
+                                align: 'left',
                             }, {
-                                field: 'roomname',
-                                title: '会议室名称',
-                                //align: 'center',
-                            },
+                            field: 'roomname',
+                            title: '会议室名称',
+                            align: 'left',
+                        },
                             {
-                                field: 'stauts',
-                                title: '会议规则',
-                                width: '15%',
-                                //align: "center",
-                                templet: function(data) {
-                                    if (data.stauts == 0) {
-                                        return '标准规则'
-                                    }
-                                    if (data.stauts == 1) {
-                                        return '快速规则'
-                                    }
-                                    if (data.stauts == undefined) {
-                                        return ''
-                                    }
-                                },
-
+                                //align: 'right',
+                                //flxed: 'right',
+                                title: '编排设定',
+                                toolbar: '#table-zone-list',
                             },
                             {
                                 field: 'modifytime',
                                 title: '更新时间',
-                                //align: 'center',
+                                align: 'left',
 
                             },
                             {
                                 width: 100,
-                                // align: 'right',
-                                // flxed: 'right',
+                                //align: 'right',
+                                //flxed: 'right',
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }
