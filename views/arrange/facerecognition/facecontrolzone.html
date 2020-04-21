@@ -14,6 +14,8 @@
     <script src="/m/js/scosun.js"></script>
     <link rel="stylesheet" href="../../arrange/meet/rule_zq.css" />
     <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
     <style type="text/css">
         header {
             box-shadow: 0px 0px 5px gray;
@@ -66,6 +68,56 @@
         .bindmac{
             background: #ff000040;
         }
+        #seatcontainer{
+            background-color: #fff;
+        }
+
+        /*重置下拉菜单样式*/
+        .layui-nav {
+            display:inline-block;
+            vertical-align: top;
+            background-color: #fff;
+            padding: 0;
+        }
+        .layui-nav .layui-nav-item {
+            line-height: 56px;
+        }
+        .layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
+            color: #333;
+        }
+        .layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+            background-color: transparent;
+        }
+        .layui-nav .layui-nav-more {
+            border-top-color: rgba(0, 0, 0, .2);
+        }
+        .layui-nav .layui-nav-mored, .layui-nav-itemed>a .layui-nav-more {
+            margin-top: -9px;
+            border-style: dashed dashed solid;
+            border-color: transparent transparent rgba(0, 0, 0, .2);
+        }
+        .layui-nav-child {
+            top: 55px;
+        }
+        .layui-nav-child dd p{
+            padding: 0 20px;
+            color: #999;
+        }
+        .timetips{
+            display: inline-block;
+            font-size: 12px;
+            margin-left: 10px;
+            position: absolute;
+            right: 0;
+            top: 68px;
+        }
+        .timetips span{
+            margin-right: 10px;
+            color: #111;
+        }
+        .timetips span.red{
+            color: #ff0000;
+        }
     </style>
 <script type="text/javascript">  
     function doNothing(){  
@@ -77,11 +129,67 @@
 <body oncontextmenu="doNothing()">
 
 <header>
-		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
-			<a><cite> &nbsp; &nbsp; &nbsp; 座区图</cite></a>
-		</span>
+    <!-- <span class="layui-breadcrumb" style="line-height: 3.5rem;">
+        <a><cite> &nbsp; &nbsp; &nbsp; 座区图</cite></a>
+    </span> -->
+    <span class="layui-breadcrumb" style="line-height: 3.5rem;">
+        <a><cite> &nbsp; &nbsp; &nbsp; 座区图</cite></a>
+        <div class="assistBtn" style="margin-left:10px">
+            <span class="fengeline_hui">/</span>
+            <i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i><!--刷新-->
+            <i class="layui-icon layui-ds iconfont icon-fanhuishangyibu" data-type="close"></i><!--返回上一层-->
+        </div>
+    </span>
+    <div class="timetips">会议开始时间：<span>2020/04/05/09:00:00</span>已进行：<span class="red">01:00:09</span>预计结束时间：<span>11:00:00</span></div>
+
     <!-- 右侧菜单 -->
-    <div class="btnbar-select" style="width:auto;margin-right: 50px;">
+    <div style="float: right;">
+        <ul class="layui-nav">
+            <li class="layui-nav-item layui-this">
+                <a href="javascript:;">投票</a>
+                <dl class="layui-nav-child">
+                    <dd><p>投票功能</p></dd>
+                    <dd><a href="">投票模版</a></dd>
+                    <dd><a href="">发起投票</a></dd>
+                    <dd><a href="">回收投票</a></dd>
+                    <dd><a href="">投票统计</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-this">
+                <a href="javascript:;">短信</a>
+                <dl class="layui-nav-child">
+                    <dd><p>短信功能</p></dd>
+                    <dd><a href="">发短信</a></dd>
+                    <dd><a href="">确认回收</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-this">
+                <a href="javascript:;">桌牌控制</a>
+                <dl class="layui-nav-child">
+                    <dd><p>桌牌状态</p></dd>
+                    <dd><p>会议准备</p></dd>
+                    <dd id="meetstart"><a href="">会议开始</a></dd>
+                    <dd><p>会议暂停</p></dd>
+                    <dd><p>会议恢复</p></dd>
+                    <dd id="meetstop"><a href="">会议结束</a></dd>
+                    <dd><p>重新开始</p></dd>
+                </dl>
+            </li>
+        </ul>
+        <div class="btnbar-select" style="margin-right:35px;margin-left: 10px;">
+            <div class="layui-form " style="width: 100px;float: left;">
+                <select class="dialogRuleSelect" lay-filter="component-timeselect" id="ruleselect">
+                    <option value="20">频率20秒</option>
+                    <option value="30">频率30秒</option>
+                    <option value="60">频率60秒</option>
+                </select>
+            </div>
+            <!-- <a onclick="asd()" style="float: left;line-height: 36px;" href="javascript:;"><cite>刷新</cite></a> -->
+        </div>
+    </div>
+
+
+    <!-- <div class="btnbar-select" style="width:auto;margin-right: 50px;">
         <span style="float: left;
 			line-height: 36px;
 			margin: 0 5px;
@@ -147,10 +255,10 @@
 			font-size: 20px;">|</span>
 
         <a onclick="asd()" style="float: left;line-height: 36px;" href="javascript:;"><cite>刷新</cite></a>
-    </div>
+    </div> -->
     <span class="layui-right-nav" >
-			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
-		</span>
+        <i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+    </span>
     <!-- 右侧菜单 end-->
 </header>
 

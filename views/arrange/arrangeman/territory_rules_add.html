@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="../../../css/seat.css" media="all">
 		<script src="../../../js/scosun.js"></script>
 		<script src="../../../js/jquery-3.1.1.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+		<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
 		<style type="text/css">
 			header {
 				box-shadow: 0px 0px 5px gray;
@@ -38,6 +40,28 @@
 			.layui-btn {background-color: #666;}
 			.layui-btn-danger {background-color: #FF5722;}
 			.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+			/*右侧菜单*/
+			.layui-right-nav {
+				position: absolute;
+				right: 5px;
+				top: 0;
+				height: 3.5rem;
+				line-height: 3.5rem;
+				background-color: #fff;
+			}
+			.layui-right-nav i {
+				display: block;
+				height: 20px;
+				width: 20px;
+				float: left;
+				margin-top: 18px;
+				padding-left: 7px;
+				padding-right: 7px;
+			}
+			.layui-right-nav i img {
+				width: 100%;
+				display: block;
+			}
 		</style>
 	<script type="text/javascript">  
 		function doNothing(){  
@@ -51,21 +75,26 @@
 		<header>
 			<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 				<a style="margin-left: 10px"><cite id="rulename"></cite></a>
-				<a onclick="asd()"><cite><i class="layui-icon layui-icon-refresh-3" style="color: gray;"></i> &nbsp; 刷新 </cite></a>
-
-				<a>
+				<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+				<!-- <a>
 					<cite>
 						<div class="layui-btn-group">
 							<button type="button" class="layui-btn layui-ds" data-type="add">规则设置</button>
 							<button type="button" class="layui-btn layui-ds" data-type="reseled">重选座区</button>
 							<button type="button" class="layui-btn layui-ds" data-type="hidden" id="hidden">关闭规则列表</button>
-							<button type="button" class="layui-btn layui-ds" data-type="close">关闭</button>
+							<button type="button" class="layui-btn layui-ds" data-type="close">关闭</button> -->
 							<!-- <button type="button" class="layui-btn layui-ds" data-type="close">取消</button> -->
-						</div>
+						<!-- </div>
 					</cite>
-				</a>
-
+				</a> -->
 			</span>
+			<span class="layui-right-nav">
+                <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设置"><img src="../../../images/set_rules.svg"></i>
+                <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
+                <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
+                <i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
+                <i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+            </span>
 		</header>
 
 
@@ -482,6 +511,23 @@
 						inde = true;
 					} else if (inde) {
 						$('#hidden').text("开启规则列表")
+						$('footer').hide();
+						inde = false;
+					}
+				},
+				hidden: function() {
+					if (!inde) {
+						setTimeout(function(){
+							$('#nav-showlistg').hide();
+							$('#nav-Closedlistg').show();
+						}, 100);
+						$('footer').show();
+						inde = true;
+					} else {
+						setTimeout(function(){
+							$('#nav-showlistg').show();
+							$('#nav-Closedlistg').hide();
+						}, 100);
 						$('footer').hide();
 						inde = false;
 					}
