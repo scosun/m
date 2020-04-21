@@ -46,6 +46,13 @@
 		background-size: 1.2rem 1.2rem;
 		text-indent: -9999px;
 	}
+
+	.layui-table-header .layui-table tr th:nth-child(1) .layui-table-cell {
+		padding: 0 10px 0 15px;
+	}
+	.layui-table-body .layui-table tr td:nth-child(1) .layui-table-cell {
+		padding: 0 10px 0 15px;
+	}
 </style>
 
 <style>
@@ -59,63 +66,69 @@
 	</style>
 </head>
 <body>
-<div class="layui-card layadmin-header">
+<!-- <div class="layui-card layadmin-header">
 	<div class="layui-breadcrumb" lay-filter="breadcrumb">
 		<a lay-href="">主页</a>
 		<a><cite>组件</cite></a>
 		<a><cite>数据表格</cite></a>
 		<a><cite>数据操作</cite></a>
 	</div>
-</div>
-<div class="layui-fluid">
-	<div class="layui-row layui-col-space15">
-		<div class="layui-col-md12">
-			<div class="layui-card">
-				<div class="layui-card-body">
-					<div>
-						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-							<!-- <button class='layui-btn layui-ds' data-type='download' id='download'>导出</button> -->
-							<!-- // 20.04.06 dh 修改为以下-->
-							<a class="layui-btn-a-grey" href="javascript:;" data-type="alldownloadcheck" id='download'>导出<s></s></a>
-						</div>
-						<!-- 右侧筛选条件 -->
-						<div class="layui-input-inline"
-							style="margin-bottom:10px;margin-left:20px;width: 25%">
-							<form class="layui-form" action="">
-							<select name="interest" lay-skin="select" lay-filter="component-form-select"
-								id="select-room">
-								<option value="-1">选择会议</option>
-								<option value="" id="select_meets"></option>
-							</select>
-							</form>
-						</div>
-						<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
-							<div class="layui-inline">
-							<input class="layui-input"  id="searchinput"name="id" placeholder="请输入关键字" id="demoReload"
-								autocomplete="off">
+</div> -->
+<div class="layui-fluid" style="padding:3px 0">
+	<div class="layui-col-md12">
+		<div class="layui-row grid-demo grid-demo-bg1">
+			<div class="layui-col-md12">
+				<div class="layui-card">
+						<div class="layui-card-body">
+							<div>
+								<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+									<!-- <button class='layui-btn layui-ds' data-type='download' id='download'>导出</button> -->
+									<!-- // 20.04.06 dh 修改为以下-->
+									<a class="layui-btn-a-grey" href="javascript:;" data-type="alldownloadcheck" id='download'>导出<s></s></a>
+								</div>
+								<!-- 右侧筛选条件 -->
+								<div class="layui-input-inline"
+									style="margin-bottom:10px;margin-left:20px;width: 25%">
+									<form class="layui-form" action="">
+									<select name="interest" lay-skin="select" lay-filter="component-form-select"
+										id="select-room">
+										<option value="-1">选择会议</option>
+										<option value="" id="select_meets"></option>
+									</select>
+									</form>
+								</div>
+								<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+									<div class="layui-inline">
+									<input class="layui-input"  id="searchinput"name="id" placeholder="请输入关键字" id="demoReload"
+										autocomplete="off">
+									</div>
+									
+									<button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+								</div>
+								<!-- 右侧筛选条件 end-->
 							</div>
-							
-							<button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+							<div>
+								<table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+							</div>
+							<!-- <table id="test-table-operate" lay-filter="test-table-operate"></table> -->
+							<script type="text/html" id="test-table-operate-state">
+								{{#  if(d.report_state == 2){ }}
+								<a class="layui-btn layui-btn-xs cursorD w60" lay-event="" style="background-color:#4600ff">代理报到</a>
+								{{#  } else if(d.report_state == 1){ }}
+								<a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="se" style="background-color:#008908">本人报到</a>
+								{{#  } else{d.report_state == 0 }}
+								<a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="" style="background-color:#ff0000">未报到</a>
+								{{#  } }}
+							</script>
+							<script type="text/html" id="test-table-operate-sign">
+								{{#  if(d.sign_in_state == 1){ }}
+								<a class="layui-btn layui-btn-sign-red w40" lay-event="registerPOP" style="">更改</a>
+								{{#  } else{ }}
+								<a class="layui-btn layui-btn-sign-green w40" lay-event="registerPOP" style="">报到</a>
+								{{#  } }}
+							</script>
 						</div>
-						<!-- 右侧筛选条件 end-->
 					</div>
-					<table id="test-table-operate" lay-filter="test-table-operate"></table>
-					<script type="text/html" id="test-table-operate-state">
-						{{#  if(d.report_state == 2){ }}
-						<a class="layui-btn layui-btn-xs cursorD w60" lay-event="" style="background-color:#4600ff">代理报到</a>
-						{{#  } else if(d.report_state == 1){ }}
-						<a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="se" style="background-color:#008908">本人报到</a>
-						{{#  } else{d.report_state == 0 }}
-						<a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="" style="background-color:#ff0000">未报到</a>
-						{{#  } }}
-					</script>
-					<script type="text/html" id="test-table-operate-sign">
-						{{#  if(d.sign_in_state == 1){ }}
-						<a class="layui-btn layui-btn-sign-red w40" lay-event="registerPOP" style="">更改</a>
-						{{#  } else{ }}
-						<a class="layui-btn layui-btn-sign-green w40" lay-event="registerPOP" style="">报到</a>
-						{{#  } }}
-					</script>
 				</div>
 			</div>
 		</div>

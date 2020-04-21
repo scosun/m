@@ -228,8 +228,8 @@ html {
     margin-top: -20px;
 }
 .iconfont.icon-wodehuichang{
-    font-size: 15px;
-    margin-left:1px
+    font-size: 18px;
+    margin-left: -1px;
 }
 
 .iconfont.icon-bianpaiguize{
@@ -247,6 +247,6 @@ html {
 }
 
 .iconfont.icon-zhinengpaixu {
-    font-size: 19px;
-    margin-left: -2px;
+    font-size: 18px;
+    margin-left: -1px;
 }

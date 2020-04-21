@@ -6,9 +6,30 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14226025",
+      "name": "homepage (1)",
+      "font_class": "wodehuichang",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "14226021",
+      "name": "homepage",
+      "font_class": "kongzhitai",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "14226020",
+      "name": "机器人",
+      "font_class": "zhinengpaixu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
       "icon_id": "4495591",
       "name": "智能排序",
-      "font_class": "zhinengpaixu",
+      "font_class": "zhinengpaixu--",
       "unicode": "e60d",
       "unicode_decimal": 58893
     },
@@ -50,7 +71,7 @@
     {
       "icon_id": "8589091",
       "name": "控制台",
-      "font_class": "kongzhitai",
+      "font_class": "kongzhitai---",
       "unicode": "e64c",
       "unicode_decimal": 58956
     },
@@ -72,15 +93,15 @@
       "icon_id": "13807081",
       "name": "参会报到",
       "font_class": "canhuibaodao",
-      "unicode": "e604",
-      "unicode_decimal": 58884
+      "unicode": "e610",
+      "unicode_decimal": 58896
     },
     {
       "icon_id": "13807082",
       "name": "参会人员",
       "font_class": "canhuirenyuan",
-      "unicode": "e605",
-      "unicode_decimal": 58885
+      "unicode": "e611",
+      "unicode_decimal": 58897
     },
     {
       "icon_id": "13807083",
@@ -109,13 +130,6 @@
       "font_class": "renlianshibie",
       "unicode": "e60a",
       "unicode_decimal": 58890
-    },
-    {
-      "icon_id": "13807087",
-      "name": "我的会场",
-      "font_class": "wodehuichang",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
     },
     {
       "icon_id": "13807088",

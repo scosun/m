@@ -272,7 +272,7 @@ layui.config({
                         templet: function (data) {
                             return "<a  class = 'tplink' title='"+data.phone1+"'>"+data.card_id+"</a>"
                         },
-                        style:'padding-left: 10px'
+                        // style:'padding-left: 10px'
                     },
                     {
                         field: 'name',
