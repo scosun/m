@@ -315,6 +315,20 @@
 			<div class="toollist_li">
 				<a data="drag-container" href="javascript:;" alt="拖拽画布" title="拖拽画布"><img src="../../../images/toolkit/hand.svg"></a>
 			</div>
+			<div class="toollist_li has_child">
+				<a id="set-centerpoint" data="set-centerpoint" href="javascript:;" alt="设置向心点" title="设置向心点"><img src="../../../images/toolkit/restore.svg"><span>设置向心点</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a id="set-centerpoint-down" data="set-centerpoint" href="javascript:;" alt="设置向心点" title="设置向心点"><img src="../../../images/toolkit/prev_step.svg"><span>设置向心点</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="close-centerpoint" href="javascript:;" alt="关闭向心点" title="关闭向心点"><img src="../../../images/toolkit/prev_step.svg"><span>关闭向心点</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a id="centerpoint-list" data="centerpoint-list" href="javascript:;" alt="向心点列表" title="向心点列表"><img src="../../../images/toolkit/restore.svg"><span>向心点列表</span></a>
+					</div>
+				</div>
+			</div>
 			<!--
 
 			<div class="toollist_li">
@@ -330,27 +344,33 @@
 
 	<div id="rulerOuter">
 		<div id="seatcontainer" class="seatcontainer" style="width: 2000px; height: 2000px;">
-			<!-- <div style="position:absolute;left:10px;top:15px;">
+			<div style="position:absolute;left:10px;top:15px;">
 				<img style="height:20px;" src="../../../images/leftright-ts.svg">
 			</div>
 			<div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div>
 			<div id="seatcontainerId"></div>
 			<div id="mousecontainerId"></div>
-			<div id="circlemousexyId" title="点击设置圆心" style="position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>
 			
-
+			
 			<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div>
 			<div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div>
 			<div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:'黑体';display:none;">地点：[#会议地点#]</div>
 			<div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:'黑体';display:none;">时间：[#会议时间#]</div>
-			<div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div> -->
+			<div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:'黑体';display:none;">备注：[#会议备注#]</div>
 		
 		</div>
-		<!-- <div style="width: 100%;height: 100%;">
+		
+		<div id="xaxis" style="width: 0px;height: 1px;position: absolute;left: 0px;top: 0px;background: green;"></div>
+		<div id="yaxis" style="height: 0px;width: 1px;position: absolute;left: 0px;top: 0px;background: green;"></div>
+		<div id="xytip" style="display:none;position: absolute;height: 20px; border: 1px solid red;padding: 0 2px;"></div>
+		<div id="xyaxis" style="left:0px;top:0px;position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>
+		
+		<div id="circlemousexyId" title="点击设置圆心" style="pointer-events: none;position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>
+		<div style="width: 100%;height: 100%;">
 			<svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1">
 				<line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/>
 			</svg>
-		</div> -->
+		</div>
 	</div>
 	
 </body>
@@ -690,6 +710,11 @@
 					__handDrag = new Drag();
 				}
 			break;
+
+
+			case "close-centerpoint":
+				unbindRulePoint();
+			break;
 		}
 	}
 
@@ -811,12 +836,135 @@
 			clearTimeout(t);
 		});
 	}
+</script>
 
-	
 
+<script>
 	$(function(){
 		new Ruler().wrap('seatcontainer');
 	});
+
+	var rulexy = [];
+	var editRuleId = "";
+	function bindRulePoint(editid){
+		editRuleId = editid;
+		unbindRulePoint();
+		$("#rulerOuter").bind("mousemove",function(){
+			evt = window.event || arguments[0];
+			var _x = null;
+			var _y = null;
+
+			//鼠标位置
+			_x = (evt.x || evt.clientX);
+			_y = (evt.y || evt.clientY);
+
+			var _stop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+			var _sleft = document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+
+			_x = _x + _sleft;
+			_y = _y + _stop - 56;
+
+			
+			$("#xaxis").css({"width":_x+"px","top":_y+"px"});
+			$("#yaxis").css({"height":_y+"px","left":_x+"px"});
+
+			$("#xytip").html("x:"+(_x - 17)+",y:"+(_y - 17));
+			$("#xytip").attr("data",(_x - 17)+","+(_y - 17));
+			$("#xytip").css({"left":(_x + 10)+"px","top":(_y - 20) +"px"});
+			$("#xaxis,#yaxis,#xytip").show();
+		});
+
+		$("#rulerOuter").bind("click",function(){
+			var xy = $("#xytip").attr("data");
+			// console.log(xy)
+			if(editRuleId){
+				//修改历史记录
+				editRulePointById(editRuleId,xy);
+			}else{
+				window.sessionStorage.setItem("__rulepoint",xy);
+				$("#xaxis,#yaxis,#xytip").hide();
+				__setCenterPoint();
+			}
+		});
+	}
+	function unbindRulePoint(){
+		$("#rulerOuter").unbind("click");
+		$("#rulerOuter").unbind("mousemove");
+		$("#xaxis,#yaxis,#xytip").hide();
+	}
+	
+
+	
+	function saveRulePointData(name,x,y){
+		//	{
+		// 		name:"",
+		// 		pos:100.93,20.45
+		// 	}
+		var obj = {};
+		obj.name = name;
+		obj.id = "p_" + (new Date() - 0);
+		obj.pos = x+","+y;
+		
+
+		var rulepoint = window.localStorage.getItem("__rulepoint") || "";
+		if(rulepoint){
+			rulepoint = JSON.parse(rulepoint);
+		}else{
+			rulepoint = [];
+		}
+		rulepoint.push(obj);
+
+		var jsonstr = JSON.stringify(rulepoint);
+		window.localStorage.setItem("__rulepoint",jsonstr);
+		layer.msg("向心点保存成功");
+
+		unbindRulePoint();
+	}
+	
+	function showRulePoint(pos){
+		var xy = pos.split(',');
+
+		$("#xyaxis").css({"left":+xy[0]+14+"px","top":+xy[1]+14+"px"});
+		$("#xyaxis").show();
+
+	}
+
+	function editRulePointById(id,pos){
+		var rulepoint = window.localStorage.getItem("__rulepoint") || "";
+		if(rulepoint){
+			rulepoint = JSON.parse(rulepoint);
+			rulepoint.map(function(item){
+				if(item.id == id){
+					item.pos = pos;
+				}
+			});
+			
+			showRulePoint(pos);
+			unbindRulePoint();
+			var jsonstr = JSON.stringify(rulepoint);
+			window.localStorage.setItem("__rulepoint",jsonstr);
+			layer.msg("重新定位成功");
+		}
+	}
+
+	function deleteRulePointById(id){
+		var rulepoint = window.localStorage.getItem("__rulepoint") || "";
+		if(rulepoint){
+			rulepoint = JSON.parse(rulepoint);
+			var ind = 0
+			for(var i = 0,len = rulepoint.length; i < len; i++){
+				var item = rulepoint[i];
+				if(item.id == id){
+					ind = i;
+				}
+			}
+			rulepoint.splice(ind,1);
+			
+			var jsonstr = JSON.stringify(rulepoint);
+			window.localStorage.setItem("__rulepoint",jsonstr);
+			layer.msg("删除成功");
+		}
+	}
 </script>
 
 <script type="text/javascript">
@@ -910,7 +1058,7 @@ layui.config({
 					title: '设置座位数',
 					shadeClose: true, //弹出框之外的地方是否可以点击
 					offset: '10%',
-					area: ['500px', '400px'],
+					area: ['500px', '460px'],
 					content: 'special_circle_type.html',
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
@@ -947,7 +1095,7 @@ layui.config({
 					title: '设置座位数',
 					shadeClose: true, //弹出框之外的地方是否可以点击
 					offset: '10%',
-					area: ['500px', '450px'],
+					area: ['500px', '500px'],
 					content: 'special_run_type.html',
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
@@ -995,6 +1143,126 @@ layui.config({
 			var data = $(this).attr("data");
 			circleAndRunCreate(data);
 		});
+		
+
+		/*向心点设置*/
+		$('#set-centerpoint,#set-centerpoint-down').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+			
+			var data = $(this).attr("data");
+			if(data == "set-centerpoint"){
+				setCenterPoint();
+			}
+		});
+		
+		window.__setCenterPoint = setCenterPoint;
+		function setCenterPoint(){
+			
+			layer.open({
+				type: 2,
+				title: '设置向心点',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '240px'],
+				content: 'set_point.html',
+				resize:false,
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					var xaxis = +layero.find('iframe').contents().find("#xaxis").val() || "";
+					var yaxis = +layero.find('iframe').contents().find("#yaxis").val() || "";
+					var pointname = layero.find('iframe').contents().find("#pointname").val() || "";
+					
+					if(xaxis <= 0 ){
+						layer.msg('X坐标输入错误');
+						return false;
+					}
+					if(yaxis <= 0 ){
+						layer.msg('Y坐标输入错误');
+						return false;
+					}
+					if(pointname == ""){
+						layer.msg('请输入向心点名称');
+						return false;
+					}else{
+						//保存向心点数据到本地
+						saveRulePointData(pointname,xaxis,yaxis);
+					}
+					layer.close(index);
+				}
+			});
+		
+		}
+
+		/*向心点列表*/
+		$("#centerpoint-list").on('click',function(){
+			if(__longEvent){
+				return;
+			}
+			
+			var data = $(this).attr("data");
+			if(data == "centerpoint-list"){
+				openCenterPointList();
+			}
+		});
+		function openCenterPointList(){
+			layer.open({
+				type: 2,
+				title: '向心点列表',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '400px'],
+				content: 'point_list.html',
+				resize:false,
+				btn: ['显示','重新定位','删除', '关闭'],
+				yes: function(index, layero) {
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					
+					var data = point.attr("data");
+					showRulePoint(data);
+					layer.close(index);
+				}
+				,btn2:function(index,layero){
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					var id = point.attr("id");
+					bindRulePoint(id);
+					layer.close(index);
+				}
+				,btn3:function(index,layero){
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					var myIframe = window[layero.find('iframe')[0]['name']];
+					
+					var id = point.attr("id");
+					deleteRulePointById(id);
+					myIframe.addPonitList();
+					return false;
+					// layer.close(index);
+				}
+				,btn4:function(index,layero){
+					console.log(4)
+				}
+			});
+		}
+
+
+
+
+
+
+
 
 		/*右侧菜单 设置行列弹框*/
 		$('#nav-down').on('click', function(){

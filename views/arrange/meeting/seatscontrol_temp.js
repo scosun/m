@@ -1263,8 +1263,9 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 				autoRunCode(ruleid,ids);
 			}
 
-			countMaxWidth();
+			// countMaxWidth();
 			// clearCompleteSeats();
+
 			selectSeats();
 		},
 		click:function(e){
@@ -1273,8 +1274,9 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 			}
 		},
 		mousemove:function(e){
-			var sl = $("#seatcontainer").position().left;
-			var st = $("#seatcontainer").position().top;
+			var sl = $("#seatcontainer").offset().left - 18;
+			var st = $("#seatcontainer").offset().top - 18;
+
 			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
 			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 			var x = event.x - sl + scrollX - 3;
@@ -1293,9 +1295,10 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 
 				// $("#seatcontainerId").html('');
 				if(mt == 1){
-					createCircleSeatMap(x1,y1,r1,seatnum,ruleid,1);
+					createCircleSeatMap(x1 - 18,y1 - 18,r1,seatnum,ruleid,1);
 				}else{
-					createRunSeatMap(x1,y1,r1,seatnum,centernum,ruleid,1);
+					console.log(x1 - 18,y1 - 18)
+					createRunSeatMap(x1 - 18,y1 - 18,r1,seatnum,centernum,ruleid,1);
 				}
 				
 			}
@@ -1336,7 +1339,8 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism){
 	// __circleRow = __circleRow - 0 + 1;
 	var seathtml = [];
 	
-	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+	console.log(ccx,ccy)
+	$("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
 	
 	var ids = [];
@@ -1401,9 +1405,10 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ruleid,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
 	centernum = Math.ceil(centernum/2);
-	if(ism){
+	
+	// if(ism){
 		ccx = ccx - ((centernum-1)*50+20)/2;
-	}
+	// }
 
 	//每个座位的宽高,用来计算位置偏移
 	var seatw = 40;

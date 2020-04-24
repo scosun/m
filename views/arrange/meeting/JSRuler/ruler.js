@@ -105,6 +105,7 @@ var Ruler = (function () {
 
             panelContainer.width(topElement.width() - this.rulerPadding);
             panelContainer.height(topElement.height() - this.rulerPadding);
+            panelContainer.css("overflow","hidden");
         };
 
         Ruler.prototype._renderCorner = function(topElement){
@@ -136,25 +137,23 @@ var Ruler = (function () {
                 dd.tipPanel = thisRuler._createTipPanel();
 
                 /* ruler_drag_hline是标识性样式 */
-                return $('<div class="ruler_drag_hline" />')
-                    .appendTo(wrappedElement).width(wrappedElement.width());
-            })
-                .drag(function (ev, dd) {
-                    $(dd.proxy).offset({
-                        top: ev.pageY,
-                        left: 0
-                    });
-
-                    dd.tipPanel.setHtml("y:" + parseInt(ev.pageY - wrappedElement.offset().top + 1));
-                    dd.tipPanel.updatePosition({
-                        left: ev.pageX,
-                        top: ev.pageY
-                    });
-                })
-                .drag("end", function (ev, dd) {
-                    $(dd.proxy).remove();
-                    dd.tipPanel.destroy();
+                return $('<div class="ruler_drag_hline" />').appendTo(wrappedElement).width(wrappedElement.width());
+                
+            }).drag(function (ev, dd) {
+                $(dd.proxy).offset({
+                    top: ev.pageY,
+                    left: 0
                 });
+
+                dd.tipPanel.setHtml("y:" + parseInt(ev.pageY - wrappedElement.offset().top + 1));
+                dd.tipPanel.updatePosition({
+                    left: ev.pageX,
+                    top: ev.pageY
+                });
+            }).drag("end", function (ev, dd) {
+                $(dd.proxy).remove();
+                dd.tipPanel.destroy();
+            });
 
         };
 
@@ -259,6 +258,7 @@ var Ruler = (function () {
             var panelContainer = $(".ruler_panel_container", topElement);
             panelContainer.width(topElement.width() - this.rulerPadding);
             panelContainer.height(topElement.height() - this.rulerPadding);
+            panelContainer.css("overflow","hidden");
 
             // 更新水平标尺大小
             var hRuler = $(".ruler_h", topElement);

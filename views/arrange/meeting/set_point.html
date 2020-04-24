@@ -45,24 +45,24 @@
 		<div class="layui-form-item layui-form-item-w50">
 			<label class="layui-form-label">X坐标</label>
 			<div class="layui-input-block">
-				<input id="edges" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
+				<input id="xaxis" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
 			</div>
 		</div>
 		<div class="layui-form-item layui-form-item-w50">
 			<label class="layui-form-label">Y坐标</label>
 			<div class="layui-input-block">
-				<input id="edges" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
+				<input id="yaxis" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
 			</div>
 		</div>
-		<a href="javascript:;" class="rightBTN">
+		<a id="mousecheck" href="javascript:;" class="rightBTN">
 			<i class="layui-icon iconfont icon-dingwei"></i>
-			<span>重选</span>
+			<span>点选</span>
 		</a>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">名称</label>
 		<div class="layui-input-block">
-			<input id="seat_nums" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
+			<input id="pointname" type="text" name="name" lay-verify="required" placeholder="请输入向心点名称" autocomplete="off" class="layui-input hyname">
 		</div>
 	</div>
 </div>
@@ -81,51 +81,35 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
-		$('#ballNumber1,#centernum').on('keydown', function (event) {
+
+		var point = window.sessionStorage.getItem("__rulepoint") || "";
+		window.sessionStorage.setItem("__rulepoint","");
+		if(point){
+			point = point.split(",");
+			$("#xaxis").val(point[0]);
+			$("#yaxis").val(point[1]);
+		}
+
+		$("#mousecheck").bind('click',function(){
+			window.parent.bindRulePoint();
+
+			var index=parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		});
+		$('#pointname').on('keydown', function (event) {
 			if (event.keyCode == 13) {
-				// var layer = layui.layer;
-				// var ccx = +$("#ccx").val() || 0;
-				// var ccy = +$("#ccy").val() || 0;
-				// var r1 = +$("#r1").val() || 0;
-				// var ballNumber1 = +$("#ballNumber1").val() || 0;
-				// var centernum = $("#centernum").val() || "";
-
-				// if(ccx <= 0 || ccy <= 0){
-				// 	layer.msg('圆心坐标输入错误');
-				// 	return false;
-				// }
-				// if(r1 <= 0 ){
-				// 	layer.msg('半径输入错误');
-				// 	return false;
-				// }
-				// if(ballNumber1 <= 0 ){
-				// 	layer.msg('座位数量输入错误');
-				// 	return false;
-				// }
+				var layer = layui.layer;
+				var pointname = $("#pointname").val() || "";
 				
-				// if(centernum == ""){
-				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// 	parent.layer.close(index);		//关闭窗口
-				// 	window.parent.createCircleSeatMap(ccx,ccy,r1,ballNumber1);
-				// }else{
-				// 	if(centernum <= 0){
-				// 		layer.msg('中间座位数输入错误');
-				// 		return false;
-				// 	}
-				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// 	parent.layer.close(index);		//关闭窗口
-				// 	window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
-				// }
-
-				// // if(ccx > 0 && ccy > 0 && ){
-				// // 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// // 	parent.layer.close(index);		//关闭窗口
-				// // 	window.parent.creatSeats(rownum,colnum);
-				// // }else{
-				// // 	layer.msg('行，列数字输入错误');
-				// // }
-				// return false
+				if(pointname == ""){
+					layer.msg('请输入向心点名称');
+					return false;
+				}else{
+					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               		parent.layer.close(index);		//关闭窗口
+					window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
+				}
+				return false
 			}
 		});
 })
