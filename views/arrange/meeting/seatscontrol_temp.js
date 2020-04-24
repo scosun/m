@@ -238,40 +238,43 @@ function unDragMoveSeats(){
 	selectSeats(true);
 
 }
-function leftMoveSeats(){
+function leftMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left-1+"px");
+		$(this).css("left",left-px+"px");
 	});
 }
-function rightMoveSeats(){
+function rightMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var left = parseFloat($(this).css("left"));
-		$(this).css("left",left+1+"px");
+		$(this).css("left",left+px+"px");
 	});
 }
-function topMoveSeats(){
+function topMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top-1+"px");
+		$(this).css("top",top-px+"px");
 	});
 }
-function bottomMoveSeats(){
+function bottomMoveSeats(px){
+	px = px || 1;
 	var seled = $("#seatcontainerId ."+seledClass);
 
 	seled.each(function(){
 		var top = parseFloat($(this).css("top"));
-		$(this).css("top",top+1+"px");
+		$(this).css("top",top+px+"px");
 	});
 }
 function keyDownMoveSeats(evt){
-	// console.log(evt.keyCode)
 	if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){
 		return;
 	}
@@ -281,25 +284,41 @@ function keyDownMoveSeats(evt){
 		case 38:
 			//上
 			if(__keydownMoveUp){
-				topMoveSeats();
+				if(evt.shiftKey){
+					topMoveSeats(10);
+				}else{
+					topMoveSeats(1);
+				}
 			}
 		break;
 		case 40:
 			//下
 			if(__keydownMoveDown){
-				bottomMoveSeats();
+				if(evt.shiftKey){
+					bottomMoveSeats(10);
+				}else{
+					bottomMoveSeats(1);
+				}
 			}
 		break;
 		case 37:
 			//左
 			if(__keydownMoveLeft){
-				leftMoveSeats();
+				if(evt.shiftKey){
+					leftMoveSeats(10);
+				}else{
+					leftMoveSeats(1);
+				}
 			}
 		break;
 		case 39:
 			//右
 			if(__keydownMoveRight){
-				rightMoveSeats();
+				if(evt.shiftKey){
+					rightMoveSeats(10);
+				}else{
+					rightMoveSeats(1);
+				}
 			}
 		break;
 	}
@@ -1244,8 +1263,9 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 				autoRunCode(ruleid,ids);
 			}
 
-			countMaxWidth();
+			// countMaxWidth();
 			// clearCompleteSeats();
+
 			selectSeats();
 		},
 		click:function(e){
@@ -1254,8 +1274,9 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 			}
 		},
 		mousemove:function(e){
-			var sl = $("#seatcontainer").position().left;
-			var st = $("#seatcontainer").position().top;
+			var sl = $("#seatcontainer").offset().left - 18;
+			var st = $("#seatcontainer").offset().top - 18;
+
 			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
 			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 			var x = event.x - sl + scrollX - 3;
@@ -1274,9 +1295,10 @@ function mouseCreateSeatMap(mt,seatnum,centernum,ruleid){
 
 				// $("#seatcontainerId").html('');
 				if(mt == 1){
-					createCircleSeatMap(x1,y1,r1,seatnum,ruleid,1);
+					createCircleSeatMap(x1 - 18,y1 - 18,r1,seatnum,ruleid,1);
 				}else{
-					createRunSeatMap(x1,y1,r1,seatnum,centernum,ruleid,1);
+					console.log(x1 - 18,y1 - 18)
+					createRunSeatMap(x1 - 18,y1 - 18,r1,seatnum,centernum,ruleid,1);
 				}
 				
 			}
@@ -1317,7 +1339,8 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism){
 	// __circleRow = __circleRow - 0 + 1;
 	var seathtml = [];
 	
-	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+	console.log(ccx,ccy)
+	$("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
 	
 	var ids = [];
@@ -1382,9 +1405,10 @@ function bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ruleid,ism){
 	//长半径,//高半径, 两个半径一样就是圆形
 	// var r1 = +$("#r1").val() || 400;
 	centernum = Math.ceil(centernum/2);
-	if(ism){
+	
+	// if(ism){
 		ccx = ccx - ((centernum-1)*50+20)/2;
-	}
+	// }
 
 	//每个座位的宽高,用来计算位置偏移
 	var seatw = 40;

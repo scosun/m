@@ -25,9 +25,18 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">编号规则</label>
         <div class="layui-input-block">
-            <select class="dialogRuleSelect" id="select_ruleid">
+            <select class="dialogRuleSelect" lay-skin="select" id="select_ruleid">
                 <option value="1">左单右双</option>
 				<option value="2">左双右单</option>
+            </select>
+        </div>
+	</div>
+
+	<div class="layui-form-item"  id="meet3form" style="display: none;">
+		<label class="layui-form-label">向心点选择</label>
+        <div class="layui-input-block">
+            <select class="dialogRuleSelect" lay-skin="select" lay-filter="point-form-select"  id="select_point">
+                
             </select>
         </div>
 	</div>
@@ -86,12 +95,17 @@ layui.config({
 		form.on('select(meetrule-form-select)', function(data){
 			var id = +data.value;
 			if(id == 1){
-				$("#meet2form").hide();
+				$("#meet2form,#meet3form").hide();
 				$("#mousetip").show();
 			}else{
-				$("#meet2form").show();
+				$("#meet2form,#meet3form").show();
 				$("#mousetip").hide();
 			}
+		});
+
+		form.on('select(point-form-select)', function(data){
+			var pos = data.value;
+			setPointXy(pos);
 		});
 
 	$('#seatnum,#r1').on('keydown', function (event) {
@@ -127,6 +141,37 @@ layui.config({
 			return false
 		}
 	});
+
+	
+	addPonitList();
+	//加载本地数据
+	function addPonitList(){
+		var rulepoint = window.localStorage.getItem("__rulepoint") || "";
+		if(rulepoint){
+			rulepoint = JSON.parse(rulepoint);
+		}else{
+			rulepoint = [];
+		}
+
+
+		var ul = [];
+		ul.push('<option value="" >请选择</option>');
+		for(var i = 0,len = rulepoint.length; i < len; i++){
+			var item = rulepoint[i] || {};
+			var pos = item.pos;
+
+			ul.push('<option value="' + pos + '" >' + item.name +'</option>');
+
+		}
+		$("#select_point").html(ul.join(''));
+		layui.form.render();
+	}
+
+	function setPointXy(pos){
+		var xy = pos.split(',');
+		$("#ccx").val(xy[0]);
+		$("#ccy").val(xy[1])
+	}
 });
 </script>
 </body>
