@@ -6,7 +6,7 @@ var __keydownMoveLeft = false;
 var __keydownMoveRight = false;
 var __boxCreate = false;
 var __longEvent = false;
-var __maxWidth;
+// var __maxWidth;
 var showRuleIds = [];
 var isDrop = false;
 var meetingid  = 0;
@@ -943,9 +943,9 @@ function countMaxWidth(issave){
 	var width = lefts[lefts.length - 1];
 	var height = tops[tops.length - 1];
 
-	__maxWidth = width + 150;
+	// __maxWidth = width + 150;
 	// if(issave){
-		$("#seatcontainer").width(width + 150);
+		$("#seatcontainer").width(width + 100);
 	// }
 	$("#seatcontainer").height(height + 250);
 }
@@ -1313,7 +1313,7 @@ function createCircleSeatMap(ccx,ccy,r1,seatnum,ruleid,ism){
 	bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism);
 	
 	if(!ism){
-		countMaxWidth();
+		// countMaxWidth();
 		// clearCompleteSeats();
 		selectSeats();
 	}
@@ -1339,8 +1339,8 @@ function bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism){
 	// __circleRow = __circleRow - 0 + 1;
 	var seathtml = [];
 	
-	console.log(ccx,ccy)
-	$("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
+	// console.log(ccx,ccy)
+	// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
 	
 	var ids = [];
@@ -1395,8 +1395,8 @@ function createRunSeatMap(ccx,ccy,r1,seatnum,centernum,ruleid,ism){
 	bulidRunSeatsContainer(ccx,ccy,r1,seatnum,centernum,ruleid,ism);
 	
 	if(!ism){
-		countMaxWidth();
-		clearCompleteSeats();
+		// countMaxWidth();
+		// clearCompleteSeats();
 		selectSeats();
 	}
 }
@@ -1529,7 +1529,7 @@ function creatSeats(rownum,colnum,mleft,mtop,ism){
 	bulidSeatsContainer(rownum,colnum,mleft,mtop,ism);
 
 	if(!ism){
-		countMaxWidth();
+		// countMaxWidth();
 		clearCompleteSeats();
 		selectSeats();
 	}
@@ -2075,7 +2075,7 @@ function bindContainerEvent(){
 			$("#seatcontainerId").append($("#mousecontainerId").html());
 			$("#mousecontainerId").html('');
 
-			countMaxWidth();
+			// countMaxWidth();
 			clearCompleteSeats();
 			selectSeats();
 
