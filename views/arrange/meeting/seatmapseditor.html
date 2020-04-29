@@ -152,8 +152,9 @@
 		}
 	</script>
 </head>
-<body oncontextmenu="doNothing()">
-	<header style="position: relative;">
+<body>
+	<!-- oncontextmenu="doNothing()" -->
+	<header>
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图编辑器</cite></a>|
 			<a><cite id="refreshbtn" style="cursor: pointer;"><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
@@ -328,7 +329,7 @@
 	</div>
 
 
-	<div id="rulerOuter">
+	<div id="rulerOuter" style="margin-top:56px">
 		<div id="seatcontainer" class="seatcontainer" style="width: 2000px; height: 2000px;">
 			<!-- <div style="position:absolute;left:10px;top:15px;">
 				<img style="height:20px;" src="../../../images/leftright-ts.svg">
