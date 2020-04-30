@@ -9,6 +9,8 @@ layui.config({
         setter = layui.setter,
         tree = layui.tree
     var url = setter.baseUrl;
+    var attributes =[];
+    var uploadfile = null;
     //监听提交
     var uploadInst = upload.render({
         elem: '#test-upload-normal'
@@ -29,7 +31,7 @@ layui.config({
         ,error: function(){
             //演示失败状态，并实现重传
             var demoText = $('#test-upload-demoText');
-            demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+            demoText.html('<span style="color: #ff5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
             demoText.find('.demo-reload').on('click', function(){
                 uploadInst.upload();
             });
@@ -211,7 +213,7 @@ layui.config({
 			processData: false,
 			success: function (res) {
 			    if (res.code == '0') {
-			        layer.msg('维护成功');
+			        parent.layer.msg('维护成功');
 					var index = parent.layer.getFrameIndex(window.name)
 					parent.layer.close(index)
 					parent.ajaxs(data.field.meeting_list)

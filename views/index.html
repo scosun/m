@@ -134,7 +134,7 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd><a lay-href="arrange/attendersort/sortattendee.html">排序列表</a></dd>
-                            <dd><a lay-href="arrange/attendersort/sortattendee.html">用户字典</a></dd>
+                            <dd><a lay-href="arrange/dictionary/dictionarylist.html">用户字典</a></dd>
                         </dl>
                         </dl>
                     </li>
@@ -336,6 +336,7 @@
       setter =layui.setter;
         window.element = layui.element;
         var url = setter.baseUrl;
+        console.log(url)
         $.ajax({
             async: false,
             type: "get",

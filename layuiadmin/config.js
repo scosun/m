@@ -31,7 +31,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       statusName: 'code' //数据状态的字段名称
       ,statusCode: {
         ok: 0 //数据状态一切正常的状态码
-        ,logout: 1001 //登录状态失效的状态码
+        ,logout:300 //登录状态失效的状态码
       }
       ,msgName: 'msg' //状态信息的字段名称
       ,dataName: 'data' //数据详情的字段名称
@@ -44,8 +44,8 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     ]
     
     //全局配置url
-    ,baseUrl:'https://f.longjuli.com'
-    // ,baseUrl:'http://127.0.0.1:8083'
+    // ,baseUrl:'https://f.longjuli.com'
+    ,baseUrl:'http://127.0.0.1:8083'
     //验证码的url
     ,smsUrl:'https://f.longjuli.com'
   });

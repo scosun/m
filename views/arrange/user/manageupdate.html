@@ -48,12 +48,13 @@
 								index: 'lib/index' //主入口模块
 							}).use(['index', 'form', 'laydate', 'element'], function() {
 								var $ = layui.$,
+									setter =layui.setter,
 									admin = layui.admin,
 									element = layui.element,
 									layer = layui.layer,
 									laydate = layui.laydate,
 									form = layui.form;
-                                    var url="https://f.longjuli.com"
+                                    var url=setter.baseUrl;
 								$.ajax({
 									url: url+"/role/findAll",
 									type: "get",
