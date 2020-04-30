@@ -164,14 +164,23 @@ layui.config({
     //     }
     // });
     form.render();
-    form.on('select(component-form-isconvenor)', function(data){
-      if(data.value == 1){
-          $("#convenornum_list").show();
+    form.on('select(isconvenor)', function(data){
+        if(data.value == 0){
+            $("#convenornums").show();
 
-      }
-      if(data.value == 2){
-          $("#convenornum_list").css("display","none");
-      }
+        }
+        if(data.value == 1){
+            $("#convenornums").css("display","none");
+        }
+    });
+    form.on('select(isstagger)', function(data){
+        if(data.value == 1){
+            $("#viprooms").show();
+
+        }
+        if(data.value == 0){
+            $("#viprooms").css("display","none");
+        }
     });
 	
 	form.on('submit(updatameeting)', function(data) {
@@ -196,11 +205,17 @@ layui.config({
 		formdata.append('attributes',JSON.stringify(attributes));
 		formdata.append('seatid','');
 		formdata.append('sortItems','');
-		formdata.append('viproomId',0);
 		formdata.append('camera','');
 		formdata.append('compareimg1','');
 		formdata.append('compareimg2','');
 		formdata.append('compareimg3','');
+        formdata.append('viproomId',data.field.viproom);
+        formdata.append('isconvenor',data.field.isconvenor);
+        formdata.append('isstage',data.field.isstagger);
+        formdata.append('convenornum',data.field.convenornum);
+        formdata.append('address',data.field.address);
+        formdata.append('roomnum',data.field.roomnum);
+        formdata.append('szx',data.field.szm);
 		$.ajax({
 			async: false,
 			url: url + "/meetingcanhui/updateMeetingCanHui",

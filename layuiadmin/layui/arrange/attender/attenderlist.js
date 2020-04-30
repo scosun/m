@@ -286,6 +286,11 @@ layui.config({
                     body.find('#convenornum').val(age.convenornum)
                     body.find('#isconvenor_list').val(age.isconvenor)
                     body.find('#specialid').val(age.specialid)
+                    body.find('#viproom').val(age.viproomId)
+                    body.find('#isstagger').val(age.isstage)
+                    body.find('#roomnum').val(age.roomnum)
+                    body.find('#address').val(age.address)
+                    body.find('#szm').val(age.szx)
                     var a = indexs + "";
                     body.find('#meetingid').val(indexs)
                     body.find('#id').val(age.id)
