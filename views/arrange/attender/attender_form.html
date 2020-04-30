@@ -35,6 +35,13 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label class="layui-form-label">姓名首字母</label>
+				<div class="layui-input-block">
+					<input type="text" name="szm" lay-verify="required" placeholder="请输入姓名首字母" autocomplete="off" id="szm"
+						   class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label class="layui-form-label">性别</label>
 				<div class="layui-input-block">
 					<select name="sexid" id="sexid">
@@ -90,6 +97,59 @@
 				<div class="layui-input-block">
 					<input type="text" name="cardid" lay-verify="required" placeholder="请输入人员证件编号(大会证件编号)" autocomplete="off" id="cardid"
 					 class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否上主席台</label>
+				<div class="layui-input-block">
+					<select name="isstagger" lay-filter="isstagger" id="isstagger"  style="width: 400px">
+						<option value="">请选择</option>
+						<option value="0">不上</option>
+						<option value="1">上</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item" id="viprooms" style="display: none">
+				<label class="layui-form-label">休息室</label>
+				<div class="layui-input-block">
+					<select name="viproom" lay-filter="component-form-select" id="viproom"  style="width: 400px">
+						<option value="">请选择休息室</option>
+						<option value="1">南休息室</option>
+						<option value="2">东休息室</option>
+						<option value="3">西休息室</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否是召集人</label>
+				<div class="layui-input-block">
+					<select name="isconvenor" lay-filter="isconvenor" id="isconvenor"  style="width: 400px;">
+						<option value="">请选择</option>
+						<option value="0">是</option>
+						<option value="1">不是</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item" style="display: none" id="convenornums">
+				<label class="layui-form-label">第几召集人</label>
+				<div class="layui-input-block">
+					<input type="text" name="convenornum" placeholder="请输入" autocomplete="off" id="convenornum"
+						   class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">驻地</label>
+				<div class="layui-input-block">
+					<input type="text" name="address" lay-verify="required" placeholder="请输入驻地" autocomplete="off" id="address"
+						   class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">房间号</label>
+				<div class="layui-input-block">
+					<input type="text" name="roomnum" lay-verify="required" placeholder="请输入驻地" autocomplete="off" id="roomnum"
+						   class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">

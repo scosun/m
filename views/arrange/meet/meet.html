@@ -39,10 +39,6 @@
 
                            <div>
                            	<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-                           		<!-- <button class="layui-btn" data-type="add">增加</button>
-                           		<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-                           		<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-                           		<button class="layui-btn" data-type="isAll">验证是否全选</button> -->
                            	</div>
                            	<!-- 右侧筛选条件 -->
                            	<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
@@ -57,6 +53,23 @@
 
 
                             <table id="test-table-operate" lay-filter="test-table-operate"></table>
+                            <script type="text/html" id="groups">
+                                {{#  if($.inArray("addmeet", d) != -1){ }}
+                                <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>
+                                {{# }}}
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>
+                                {{#  if($.inArray("emptymeet", d) != -1){ }}
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>
+                                {{# }}}
+                                {{#  if($.inArray("batchmeet", d) != -1){ }}
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
+                                {{# }}}
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="recycle" id="1"><img src="../../../images/recycle.png" width="17px"height="17px"/><span style="margin-left: 3px"> /</span></a>
+
+                                <div class="assistBtn" style="margin-top: 10px"><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh" ></i></i></div>
+
+
+                            </script>
                             <script type="text/html" id="rulezone">
                                 <!-- <a class="layui-btn layui-btn-xs" lay-event="rulezone">查看</a> -->
                                 <a class=" layui-icon " lay-event="rulezone" style="font-size:1.4rem">&#xe62d;</a>
