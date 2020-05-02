@@ -204,7 +204,9 @@
                         success: function(msg) {
                             console.log(msg);
                             if (msg.code == 0) {
-
+                                var storage=window.localStorage;
+                                console.log(msg.id)
+                                storage.setItem("id",msg.id);
                                 layer.msg("登入成功", {
                                     offset: "15px",
                                     icon: 1,

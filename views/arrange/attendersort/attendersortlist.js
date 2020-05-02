@@ -1267,6 +1267,159 @@ layui.config({
 
 
     })
+    var active = {
+        //排序属性
+        attribute: function () {
+            layer.open({
+                type: 2,
+                title: '<p style="">排序属性</p>',
+                content: 'attribute_pop.html',
+                // maxmin: true,
+                area: ['60%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                },
+                success: function (layero, index) {
+                }
+            });
+
+        },
+        custom: function () {
+            layer.open({
+                type: 2,
+                title: '<p style="">自定义排序</p>',
+                content: 'custom_pop.html',
+                maxmin: true,
+                area: ['60%', '80%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+
+                },
+                success: function (layero, index) {
+                }
+            })
+        },
+        exportb:function(){
+            console.log(JSON.parse(storage.getItem("data")));
+        },
+        download:function(){
+            window.location=url + "/attendeesort/download";
+        },
+        Intelligent: function () {
+            $.ajax({
+                type: "get",
+                url: url+"/attendeesort/autosort",
+                data: {
+                    "id":id
+                },
+                success: function(data){
+                    // console.log(data)
+                    // $("#myDiv").html('<h2>'+data+'</h2>');
+                    if(data.code == 0){
+                        layer.msg("智能排序成功");
+
+                        intelligentsorting(1,15);
+                    }else{
+                        layer.msg("智能排序失败");
+                    }
+                }
+            });
+
+        },
+        getCheckData: function () { //获取选中数据
+
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再添加人员")
+            }
+            var cb = $(".layui-form-checkbox");
+            $(".layui-form-checkbox").each(function () {
+
+                $(this).click();
+
+            })
+
+
+        },
+        getCheckLength: function () { //获取选中数目
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再删除人员")
+            }
+            if (attenderList.length == 0) {
+                return layer.msg("请选择要删除的人员")
+            }
+            layer.confirm('确定要批量删除吗?', function (index) {
+
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: url + "/meetingcanhui/batchRemove",
+                    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    //成功的回调函数
+                    data: {
+                        "meetingcanhuiid": attenderList.join(",")
+
+                    },
+                    success: function (msg) {
+                        if (msg.code == 0) {
+                            layer.msg("删除成功");
+                            ajaxs($('#select-room').val()); // 父页面刷新
+
+                        } else {
+                            layer.msg(msg.msg);
+
+
+                        }
+
+                    },
+                    //失败的回调函数
+                    error: function () {
+                        console.log("error")
+                    }
+                })
+            })
+        },
+        isAll: function () { //验证是否全选
+            layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function (index) {
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url + "/meetingcanhui/empty",
+                    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    //成功的回调函数
+                    data: {
+
+                    },
+                    success: function (msg) {
+                        if (msg.code == 0) {
+                            layer.msg("清空成功");
+                            reloads(); // 父页面刷新
+
+                        } else {
+                            layer.msg(msg.msg);
+
+
+                        }
+
+                    },
+                    //失败的回调函数
+                    error: function () {
+                        console.log("error")
+                    }
+                })
+                layer.close(index);
+            });
+
+        },
+
+
+
+    }
     //弹出层选项区
 
     $('.layui-ds').on('click', function () {

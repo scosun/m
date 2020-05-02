@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编排规则</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <script src="../../../js/scosun.js"></script>
+    <style type="text/css">
+        .layui-btn {background-color: #666;}
+        .layui-btn-danger {background-color: #FF5722;}
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+        .w60{
+            width: 60px;
+        }
+        .w40{
+            width: 40px;
+        }
+        .textC{
+            text-align: center;
+        }
+        .layui-btn-sign-red,.layui-btn-sign-green {
+            height: 20px;
+            line-height: 20px;
+            padding: 0 4px;
+            font-size: 12px;
+            background-color: #fff;
+            border: 1px solid #e6e6e6;
+        }
+        .layui-btn-sign-red{color:#ff0000;border-color:#ff0000}
+        .layui-btn-sign-green{color:#008908;border-color:#008908}
+        .layui-btn-sign-red:hover{color:#fff;border-color:#ff0000;background-color: #ff0000;}
+        .layui-btn-sign-green:hover{color:#fff;border-color:#008908;background-color: #008908;}
+        .cursorD{cursor: default;}
+        .layui-btn-group .layui-btn:only-child {
+            border-radius:2px;
+        }
+
+        .btnsearch {
+            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+
+        .layui-table-header .layui-table tr th:nth-child(1) .layui-table-cell {
+            padding: 0 10px 0 15px;
+        }
+        .layui-table-body .layui-table tr td:nth-child(1) .layui-table-cell {
+            padding: 0 10px 0 15px;
+        }
+    </style>
+
+    <style>
+        #tplink{border:1px solid red; background:#FF6;
+            position:absolute;
+            padding:1px;
+            color:red;
+            display:none;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<!-- <div class="layui-card layadmin-header">
+	<div class="layui-breadcrumb" lay-filter="breadcrumb">
+		<a lay-href="">主页</a>
+		<a><cite>组件</cite></a>
+		<a><cite>数据表格</cite></a>
+		<a><cite>数据操作</cite></a>
+	</div>
+</div> -->
+<div class="layui-fluid" style="padding:3px 0">
+    <div class="layui-col-md12">
+        <div class="layui-row grid-demo grid-demo-bg1">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div>
+                            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+                                <!-- <button class='layui-btn layui-ds' data-type='download' id='download'>导出</button> -->
+                                <!-- // 20.04.06 dh 修改为以下-->
+                                <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="download" id='download'>导出<s></s></a>
+                            </div>
+                            <!-- 右侧筛选条件 -->
+                            <div class="layui-input-inline"
+                                 style="margin-bottom:10px;margin-left:20px;width: 25%">
+                                <form class="layui-form" action="">
+                                    <select name="interest" lay-skin="select" lay-filter="component-form-select"
+                                            id="select-room">
+                                        <option value="-1">选择会议</option>
+                                        <option value="" id="select_meets"></option>
+                                    </select>
+                                </form>
+                            </div>
+                            <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+                                <div class="layui-inline">
+                                    <input class="layui-input"  id="searchinput"name="id" placeholder="请输入关键字" id="demoReload"
+                                           autocomplete="off">
+                                </div>
+
+                                <button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+                            </div>
+                            <!-- 右侧筛选条件 end-->
+                        </div>
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                预览图：
+                                <div class="layui-upload-list" id="demo2"></div>
+                            </blockquote>
+                        </div>
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                            <div class="layui-upload-list">
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr><th>文件名</th>
+                                        <th>大小</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr></thead>
+                                    <tbody id="demoList"></tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                        </div>
+                        <form action="http://127.0.0.1:8083/meetingcanhui/uploadfilefolder" method="post" enctype="multipart/form-data">
+                            <p>头像：<input type="file" name="file" id="inputfile" multiple webkitdirectory /></p>
+                            <p><input type="submit" value="提交"></p>
+                        </form>
+                        <!-- <table id="test-table-operate" lay-filter="test-table-operate"></table> -->
+                        <script type="text/html" id="test-table-operate-state">
+                            {{#  if(d.report_state == 2){ }}
+                            <a class="layui-btn layui-btn-xs cursorD w60" lay-event="" style="background-color:#4600ff">代理报到</a>
+                            {{#  } else if(d.report_state == 1){ }}
+                            <a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="se" style="background-color:#008908">本人报到</a>
+                            {{#  } else{d.report_state == 0 }}
+                            <a class="layui-btn layui-btn-danger cursorD layui-btn-xs w60" lay-event="" style="background-color:#ff0000">未报到</a>
+                            {{#  } }}
+                        </script>
+                        <script type="text/html" id="test-table-operate-sign">
+                            {{#  if(d.sign_in_state == 1){ }}
+                            <a class="layui-btn layui-btn-sign-red w40" lay-event="registerPOP" style="">更改</a>
+                            {{#  } else{ }}
+                            <a class="layui-btn layui-btn-sign-green w40" lay-event="registerPOP" style="">报到</a>
+                            {{#  } }}
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'jquery','upload'], function () {
+        var table = layui.table,
+            admin = layui.admin,
+            form = layui.form,
+            upload = layui.upload,
+            setter = layui.setter,
+            $ = layui.jquery;
+
+        // #test-table-operate
+        var url = setter.baseUrl;
+        //  var url = "http://127.0.0.1:8083"
+        var devices = {};
+        var arrangeList = [];
+        window.flag = false
+        $('#group').append(
+            // "<button class='layui-btn layui-ds' data-type='screening' id='screening'>筛选</button><button class='layui-btn layui-ds' data-type='detailedinfo' id='detailedinfo' style='position: relative;'>详细信息</button>"
+            '<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="screening" id="screening">筛选<s></s></a><a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="detailedinfo" id="detailedinfo">详细<s></s></a>'
+        )
+
+
+
+        upload.render({
+            elem: '#test2'
+            ,url: 'http://127.0.0.1:8083/meetingcanhui/uploadfilefolder' //改成您自己的上传接口
+            ,multiple: true
+            ,auto:true
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                });
+            }
+            ,done: function(res){
+                //上传完毕
+            }
+        });
+        var demoListView = $('#demoList')
+            ,uploadListIns = upload.render({
+            elem: '#testList'
+            ,url: 'https://httpbin.org/post' //改成您自己的上传接口
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#testListAction'
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    var tr = $(['<tr id="upload-'+ index +'">'
+                        ,'<td>'+ file.name +'</td>'
+                        ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                        ,'<td>等待上传</td>'
+                        ,'<td>'
+                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        ,'</td>'
+                        ,'</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function(){
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function(){
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    demoListView.append(tr);
+                });
+            }
+            ,done: function(res, index, upload){
+                if(res.files.file){ //上传成功
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                var tr = demoListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+
+        $('.layui-ds').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>
+</body>
+</html>

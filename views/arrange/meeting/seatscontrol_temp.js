@@ -834,7 +834,8 @@ function completeSeats(){
 	$("#meetingtime").show();
 	$("#meetingremark").show();
 
-
+	$("#seatcontainerId .seled").removeClass("seled");
+	
 	var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	seats.each(function(){
 		var id = this.id;
@@ -904,7 +905,7 @@ function saveCompleteSeats(){
 	// var flag = copyText(copyhtml); //传递文本
 	// alert(flag ? "复制成功！" : "复制失败！");
 	var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-
+	
 	sessionStorage.setItem("_seatnum",allseats.length);
 	sessionStorage.setItem("_seatscomplete",copyhtml);
 }

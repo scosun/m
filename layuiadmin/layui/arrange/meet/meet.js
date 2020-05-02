@@ -2,10 +2,11 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery',], function() {
+}).use(['index', 'table', 'jquery','laytpl'], function() {
     var table = layui.table,
         admin = layui.admin,
         setter = layui.setter,
+        tpl = layui.laytpl;
         router = layui.router(),
         $ = layui.jquery;
     var url = setter.baseUrl;
@@ -16,8 +17,7 @@ layui.config({
     //渲染表格
 
     // 20.04.06 dh 下行有修改 
-    $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
-    $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
+
     
 
     $.ajax({
@@ -37,18 +37,10 @@ layui.config({
                 location.href = "user/login.html"
             }
                 window.a = data
-                if ($.inArray("addmeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').before("<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>")
-                }
-                if ($.inArray("emptymeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>');
-                }
-                if ($.inArray("batchmeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
-                }
+                var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+                    console.log(grouphtml)
+                document.getElementById("group").innerHTML= html;
+            })
 
         },
         error: function(error) {
@@ -450,6 +442,22 @@ layui.config({
                 })
 
 
+            },
+            recycle:function(){
+                 layer.open({
+                    type: 2,
+                    title: '回收站',
+                    area: ['75%', '85%'],
+                    maxmin: true,
+                    // btn: ['确定', '取消'],
+                    content: 'meetrecycle.html',
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+
+                    }
+                    // content: '/gkzytb/franchiser/rigthColumnJsonList'
+                });
             },
             refresh:function(){
                     location.reload();
