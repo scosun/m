@@ -944,12 +944,69 @@ function countMaxWidth(issave){
 	var width = lefts[lefts.length - 1];
 	var height = tops[tops.length - 1];
 
+	
+
 	// __maxWidth = width + 150;
-	// if(issave){
+	if(issave){
 		$("#seatcontainer").width(width + 100);
-	// }
-	$("#seatcontainer").height(height + 250);
+		$("#seatcontainer").height(height + 250);
+
+		if($("#rulerOuter").length > 0 && ( width > 2800 || height > 2800)){
+			var seatcontainer = $("#seatcontainer").prop("outerHTML").trim();
+			resetSeatContainer(seatcontainer,width,height);
+		}
+	}else{
+		if(width > 2800 || height > 2800){
+			$("#seatcontainer").width(width + 100);
+			$("#seatcontainer").height(height + 250);
+		}
+		if($("#rulerOuter").length > 0 && ( width > 2800 || height > 2800)){
+			var seatcontainer = $("#seatcontainer").prop("outerHTML").trim();
+			resetSeatContainer(seatcontainer,width,height);
+		}
+	}
 }
+
+function resetSeatContainer(seatcontainer,width,height){
+	var html = [];
+	// html.push('<div id="seatcontainer" class="seatcontainer" style="width: 2000px; height: 2000px;">');
+	// html.push('<div style="position:absolute;left:10px;top:15px;">');
+	// html.push('<img style="height:20px;" src="../../../images/leftright-ts.svg">');
+	// html.push('</div>');
+	// html.push('<div id="meetingname" style="display:none;font-family: FZXiaoBiaoSong-B05S,方正小标宋简体 !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div>');
+	// html.push('<div id="seatcontainerId"></div>');
+	// html.push('<div id="mousecontainerId"></div>');
+		
+		
+	// html.push('<div id="dragcontainerId" title="双击选中" class="dragcontainer" style="box-sizing:border-box !important;"></div>');
+	// html.push('<div id="movecontainerId" title="拖拽调整" class="dragcontainer" style="box-sizing:border-box !important;"></div>');
+	// html.push('<div id="meetingaddress" style="text-align: left;position:absolute;left:50px;bottom:50px;font-family:黑体;display:none;">地点：[#会议地点#]</div>');
+	// html.push('<div id="meetingtime" style="text-align: left;position:absolute;right:50px;bottom:50px;font-family:黑体;display:none;">时间：[#会议时间#]</div>');
+	// html.push('<div id="meetingremark" style="text-align: left;position:absolute;left:50px;bottom:20px;font-family:黑体;display:none;">备注：[#会议备注#]</div>');
+	
+	// html.push('</div>');
+	html.push(seatcontainer);
+	html.push('<div id="xaxis" style="width: 0px;height: 1px;position: absolute;left: 0px;top: 0px;background: green;"></div>');
+	html.push('<div id="yaxis" style="height: 0px;width: 1px;position: absolute;left: 0px;top: 0px;background: green;"></div>');
+	html.push('<div id="xytip" style="display:none;position: absolute;height: 20px; border: 1px solid red;padding: 0 2px;"></div>');
+	html.push('<div id="xyaxis" style="left:0px;top:0px;position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>');
+	
+	html.push('<div id="circlemousexyId" title="点击设置圆心" style="pointer-events: none;position:absolute;width: 6px;height: 6px;background: red;border-radius: 50%;display: none;"></div>');
+	html.push('<div style="width: 100%;height: 100%;">');
+	html.push('<svg id="circlemousesvg" style="width: 100%;height:100%;" xmlns="http://www.w3.org/2000/svg" version="1.1">');
+	html.push('<line id="circlemouseline" x1="0" y1="0" x2="0" y2="0" style="stroke:rgb(255,0,0);stroke-width:2"/>');
+	html.push('</svg>');
+	html.push('</div>');
+
+
+	$("#rulerOuter").css({"width":width + 100 +"px","height":height + 250 + "px"});
+
+	$("#rulerOuter").html(html.join(''));
+	
+	new Ruler().wrap('seatcontainer');
+}
+
+
 function isLocked(el){
 	return $(el).hasClass(lockClass);
 }
@@ -1530,7 +1587,7 @@ function creatSeats(rownum,colnum,mleft,mtop,ism){
 	bulidSeatsContainer(rownum,colnum,mleft,mtop,ism);
 
 	if(!ism){
-		// countMaxWidth();
+		countMaxWidth();
 		clearCompleteSeats();
 		selectSeats();
 	}
@@ -1539,6 +1596,17 @@ function creatSeats(rownum,colnum,mleft,mtop,ism){
 
 function autoCode(ruleid){
 	var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)[id$='s']");
+	if(seled.length == 0){
+		var time = new Date().getTime() + "-s";
+		var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+		seats.each(function(){
+			var id = this.id;
+			$(this).attr("id",id+"-"+time);
+		});
+	}
+	
+
+	// var seled = $("#seatcontainerId ."+seatNodeClass+":not(.rownumseats)");
 	// console.log(seled.length)
 	// seled.removeClass(seledClass);
 	
@@ -2546,6 +2614,12 @@ function loadSessionData(){
 	// console.log(html)
 	if(html){
 		$("#seatcontainer").prop("outerHTML",html);
+		var time = new Date().getTime() + "-s";
+		var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+		seats.each(function(){
+			var id = this.id;
+			$(this).attr("id",id+"-"+time);
+		});
 		clearCompleteSeats();	
 	}
 }

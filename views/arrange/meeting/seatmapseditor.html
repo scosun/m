@@ -129,15 +129,15 @@
 	
 	
 		#rulerOuter {
-            width : 2000px;
-            height : 2000px;
+            width : 3000px;
+            height : 3000px;
 			position: relative;
         }
 
-        #rulerInner {
+        /* #rulerInner {
             width: 2000px;
             height: 2000px;
-        }
+        } */
 		.ruler_panel_container{
 			overflow: hidden;
 		}
@@ -344,7 +344,7 @@
 
 
 	<div id="rulerOuter">
-		<div id="seatcontainer" class="seatcontainer" style="width: 2000px; height: 2000px;">
+		<div id="seatcontainer" class="seatcontainer" style="width: 3000px; height: 3000px;">
 			<div style="position:absolute;left:10px;top:15px;">
 				<img style="height:20px;" src="../../../images/leftright-ts.svg">
 			</div>
@@ -842,7 +842,17 @@
 
 <script>
 	$(function(){
-		new Ruler().wrap('seatcontainer');
+		// $("#rulerOuter").css({"height":"5000px","width":"5000px"});
+		// $("#seatcontainer").css({"height":"5000px","width":"5000px"});
+		var w = $("#seatcontainer").width();
+		var h = $("#seatcontainer").height();
+		if(w > 3000 || h > 3000){
+			$("#rulerOuter").css({"width":w+"px","height":h+"px"});
+		}else{
+			// $("#seatcontainer").css({"height":"3000px","width":"3000px"});
+		}
+		var rule = new Ruler().wrap('seatcontainer');
+		// console.log(rule)
 	});
 
 	var rulexy = [];
