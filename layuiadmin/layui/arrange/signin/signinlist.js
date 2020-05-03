@@ -585,7 +585,6 @@ layui.config({
                 content: 'register_pop.html?id=' + obj.data.id + "&meetingid=" + $('#select-room').val(),
                 success: function (layero, index) {
                     flag = true;
-                    console.log(flag);
                     var body = layui.layer.getChildFrame('body', index);
                     body.find("#names").text(obj.data.name);
                     body.find("#id").text(obj.data.card_id);
@@ -609,6 +608,13 @@ layui.config({
                     body.find("#img").attr("src", img);}
                     body.find("#phone1").val(obj.data.phone1);
                     body.find("#phone2").val(obj.data.phone2);
+                    body.find("#groups").text(obj.data.attributes.组别.name);
+                    if (obj.data.isconvenor === 0){
+                        body.find("#isconvenor").text("不是召集人");
+                    }
+                    if (obj.data.isconvenor === 1){
+                        body.find("#isconvenor").text("是第"+obj.data.convenornum+"召集人");
+                    }
                     // console.log( obj.data.report_state===0)
                     if (obj.data.report_state === 0) {
                         body.find("#wei").attr('checked', 'checked')
