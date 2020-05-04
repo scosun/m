@@ -385,8 +385,14 @@ layui.config({
                     maxmin: true,
                     content: 'screening.html',
                     yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#ruleclick");
-                        submit.click();
+                        // var submit = layero.find('iframe').contents().find("#ruleclick");
+                        // submit.click();
+
+                        var myIframe = window[layero.find('iframe')[0]['name']];
+                        var checkData = myIframe.getCheckedTreeNode();
+                        return false;
+                        // layero.find('iframe').contents().getCheckedTreeNode()
+                        // var checkData = tree.getChecked('demoId');
                     }
 
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'

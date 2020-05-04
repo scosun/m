@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html >
+
 <head>
     <meta charset="utf-8">
     <title>详细信息</title>
@@ -9,90 +10,234 @@
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
     <style>
-        .detailedinfo{
+        .detailedinfo {
             font-size: 14px;
+            width: 550px;
+            height: 40px;
+            margin: 0 auto;
         }
-        .detailedinfo p{
+
+        .detailedinfo p {
             line-height: 30px;
-        }
-        .detailedinfo p.a{
-            color:#008908
-        }
-        .detailedinfo p.b{
-            color:#4600ff
-        }
-        .detailedinfo p.c{
-            color:#ff0000
-        }
-        .detailedinfo p.d{
-            color:#0f0f0f
+            margin-left: 15px;
         }
 
+        .detailedinfo p.a {
+            color: #008908
+        }
 
+        .detailedinfo p.b {
+            color: #4600ff
+        }
+
+        .detailedinfo p.c {
+            color: #ff0000
+        }
+
+        .detailedinfo p.d {
+            color: #0f0f0f
+        }
+
+        #chartdiv > div{
+            float: left;
+            width: 50%;
+            height: 250px;
+        }
     </style>
 </head>
-<body>
-<div style="padding:10px 20px">
-    <div class="detailedinfo" id="detailedinfo">
-        <p>共<span  id="total"></span>条记录</p>
-        <p>委员总数：<span id="totals"></span></p>
-        <p>已报到：<span id="report"></span></p>
-        <p class="a" >本人：<span id="ben"></span></p>
-        <p class="b" >代理：<span id="dai"></span></p>
-        <p class="c" >未报到：<span id="wei"></span></p>
-        <p>报到率：<span id="rate"></span></p>
-    </div>
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-		<script type="text/javascript">
-			layui.config({
-				base: '../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-				index: 'lib/index' //主入口模块
-			}).use(['index', 'user', 'table', 'tree', 'util', 'laydate'], function () {
-				var $ = layui.$,
-                    setter = layui.setter;
-				
-				// var url = "http://127.0.0.1:8083"
-                var url = setter.baseUrl;
-                var uri = window.location.search;
-			var str = uri.substr(4);
-			
-                $.ajax({
-                            async: false,
-                            type: "get",
-                            url: url + "/meetingcanhui/statistical",
-                            dataType: "json",
-                            xhrFields: {
-                                withCredentials: true
-                            },
-                            data: {
-                                meetingId:str,
-                               
 
+<body >
+    <div class="detailedinfo" >
+        <p style="float: left;">参会人员：<span id="totals"></span></p>
+        <p style="float: left;" class="a">本人：<span id="ben"></span></p>
+        <p style="float: left;" class="b">代理：<span id="dai"></span></p>
+        <p style="float: left;" class="c">未报到：<span id="wei"></span></p>
+    </div>
+    <div id="chartdiv" >
+
+        <!-- <div></div>
+        <div></div>
+        <div></div>
+        <div></div> -->
+        <!-- <div class="detailedinfo" id="detailedinfo">
+            <p>共<span id="total"></span>条记录</p>
+            <p>委员总数：<span id="totals"></span></p>
+            <p>已报到：<span id="report"></span></p>
+            <p class="a">本人：<span id="ben"></span></p>
+            <p class="b">代理：<span id="dai"></span></p>
+            <p class="c">未报到：<span id="wei"></span></p>
+            <p>报到率：<span id="rate"></span></p>
+        </div> -->
+    </div>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="../../../js/echarts.min.js"></script>
+    <script type="text/javascript">
+        // console.log(echarts)
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'user', 'table', 'tree', 'util', 'laydate'], function () {
+            var $ = layui.$,
+            setter = layui.setter;
+            
+            // var url = "http://127.0.0.1:8083"
+            var url = setter.baseUrl;
+            var uri = window.location.search;
+            var str = uri.substr(4);
+
+            var totolData;
+            $.ajax({
+                async: false,
+                type: "get",
+                url: url + "/meetingcanhui/statistical",
+                dataType: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: {
+                    meetingId: str,
+
+
+                },
+                //成功的回调函数
+                success: function (msg) {
+                    console.log(msg);
+                    totolData = msg;
+                    $('#totals').text(msg.total);
+                    $('#ben').text(msg.ben + "(" + ((msg.ben/msg.total)*100).toFixed(2)+"%)");
+                    $('#dai').text(msg.dai + "(" + ((msg.dai/msg.total)*100).toFixed(2)+"%)");
+                    $('#wei').text(msg.wei + "(" + ((msg.wei/msg.total)*100).toFixed(2)+"%)");
+                    // $('#rate').text(msg.rate + "%")
+                    // $.each(msg.address, function (key, val) {
+                    //     $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;' + val.address + '<span >&nbsp;&nbsp;&nbsp;应到: ' + val.headcount + '  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;' + val.fullycount + '</span></p>')
+
+                    // })
+                    
+                    var address = msg.address || [];
+                    var div = [];
+                    for(var i = 0, len = address.length + 1; i < len; i++){
+                        div.push('<div id="chart_' + i + '"></div>');
+                    }
+                    $("#chartdiv").html(div.join(''));
+
+                    initChart();
+                },
+                //失败的回调函数
+                error: function () {
+                    console.log("error")
+                }
+            });
+
+
+            $(window).resize(function() {
+                __myChart.forEach(function(item){
+                    item.resize();
+                })
+            }.bind(this));
+
+            
+
+            
+            function initChart(){
+                __myChart = [];
+                var charts = $("#chartdiv div");
+                // console.log(charts)
+                charts.each(function(i){
+                    console.log(this.id,i);
+                    var pie = echarts.init(document.getElementById(this.id));
+
+                    var data = [];
+                    var legend = ['本人报道','代理报道','未报到'];
+                    var name = "";
+                    if(i==0){
+                        var obj = totolData;
+                        name = "总览";
+                        data = [
+                            {value: totolData.ben, name: '本人报道'},
+                            {value: totolData.dai, name: '代理报道'},
+                            {value: totolData.wei, name: '未报到'}
+                        ];
+                        var option = getChartOpiton(data,legend,name);
+                        pie.setOption(option);
+                        
+                    }else{
+                        var obj = totolData.address[i-1] || {};
+                        name = obj.address;
+                        data = [
+                            {value: obj.ben, name: '本人报道'},
+                            {value: obj.dai, name: '代理报道'},
+                            {value: obj.wei, name: '未报到'}
+                        ];
+                        var option = getChartOpiton(data,legend,name);
+                        pie.setOption(option);
+                    }
+                    __myChart.push(pie);
+                })
+                console.log(__myChart)
+            }
+
+            function getChartOpiton(data,legend,name){
+                
+                option = {
+                    title: {
+                        text: name,
+                        left: 'center',
+                        bottom:0,
+                        textStyle:{
+                            color:"#808080",
+                            fontSize:14
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    },
+                    legend: {
+                        show:false,
+                        orient: 'horizontal',
+                        left: 'center',
+                        top:"10%",
+                        data: legend
+                    },
+                    series: [
+                        {
+                            name: name,
+                            type: 'pie',
+                            radius: '50%',
+                            center: ['50%', '50%'],
+                            label: {
+                                formatter: '{b|{b}：}{c}  {per|{d}%}',
+                                backgroundColor: '#eee',
+                                borderColor: '#aaa',
+                                rich: {
+                                    per: {
+                                        color: '#eee',
+                                        backgroundColor: '#334455',
+                                        padding: [2, 4],
+                                        borderRadius: 2
+                                    }
+                                }
                             },
-                            //成功的回调函数
-                            success: function (msg) {
-                              
-                               $('#total').text(msg.total)
-                                $('#totals').text(msg.total)
-                                $('#report').text(msg.report)
-                                $('#ben').text(msg.ben)
-                               $('#dai').text(msg.dai)
-                                $('#wei').text(msg.wei)
-                                $('#rate').text(msg.rate+"%")
-                                $.each(msg.address,function(key,val){
-                                    $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;'   +  val.address  +    '<span >&nbsp;&nbsp;&nbsp;应到: '   +val.headcount+'  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;'+val.fullycount+'</span></p>')
-                                   
-                                })
-                            },
-                            //失败的回调函数
-                            error: function () {
-                                console.log("error")
+                            data: data,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
                             }
-                        })
-				
-		})
-		</script>
+                        }
+                    ]
+                };
+
+
+                return option;
+            }
+
+        });
+        var __myChart = [];
+    </script>
 </body>
+
 </html>
