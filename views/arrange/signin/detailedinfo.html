@@ -102,7 +102,6 @@
                 },
                 //成功的回调函数
                 success: function (msg) {
-                    console.log(msg);
                     totolData = msg;
                     $('#totals').text(msg.total);
                     $('#ben').text(msg.ben + "(" + ((msg.ben/msg.total)*100).toFixed(2)+"%)");
@@ -144,7 +143,6 @@
                 var charts = $("#chartdiv div");
                 // console.log(charts)
                 charts.each(function(i){
-                    console.log(this.id,i);
                     var pie = echarts.init(document.getElementById(this.id));
 
                     var data = [];
@@ -174,7 +172,6 @@
                     }
                     __myChart.push(pie);
                 })
-                console.log(__myChart)
             }
 
             function getChartOpiton(data,legend,name){
