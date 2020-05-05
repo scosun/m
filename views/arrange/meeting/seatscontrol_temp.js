@@ -1115,11 +1115,16 @@ $(function(){
 
 
 function bulidSeverPolygonContainer(data){
-	var maxwidth = data.width/2 || 1000;
-	var maxheight = data.height/2 || 500;
+	
+	// var maxwidth = data.width/2 || 1000;
+	// var maxheight = data.height/2 || 500;
+	var maxwidth = data.width || 1000;
+	var maxheight = data.height || 500;
 
-	$("#seatcontainer").width(maxwidth + 100);
-	$("#seatcontainer").height(maxheight + 150);
+	// $("#seatcontainer").width(maxwidth + 100);
+	// $("#seatcontainer").height(maxheight + 150);
+	$("#seatcontainer").width(maxwidth);
+	$("#seatcontainer").height(maxheight);
 
 	var seatw = 40;
 	var seath = 40;
@@ -1136,7 +1141,8 @@ function bulidSeverPolygonContainer(data){
 		// 	ang = ang - 90;
 		// }
 		var seat = seats[i] || {};
-		seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '辛海涛' + '</div>');
+		// seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '辛海涛' + '</div>');
+		seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '</div>');
 		
 	}
 	$("#seatcontainerId").html(seathtml.join(''));
