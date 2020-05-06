@@ -87,46 +87,54 @@
             var str = uri.substr(4);
 
             var totolData;
-            $.ajax({
-                async: false,
-                type: "get",
-                url: url + "/meetingcanhui/statistical",
-                dataType: "json",
-                xhrFields: {
-                    withCredentials: true
-                },
-                data: {
-                    meetingId: str,
+
+            function getChartData(){
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url + "/meetingcanhui/statistical",
+                    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    data: {
+                        meetingId: str,
 
 
-                },
-                //成功的回调函数
-                success: function (msg) {
-                    totolData = msg;
-                    $('#totals').text(msg.total);
-                    $('#ben').text(msg.ben + "(" + ((msg.ben/msg.total)*100).toFixed(2)+"%)");
-                    $('#dai').text(msg.dai + "(" + ((msg.dai/msg.total)*100).toFixed(2)+"%)");
-                    $('#wei').text(msg.wei + "(" + ((msg.wei/msg.total)*100).toFixed(2)+"%)");
-                    // $('#rate').text(msg.rate + "%")
-                    // $.each(msg.address, function (key, val) {
-                    //     $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;' + val.address + '<span >&nbsp;&nbsp;&nbsp;应到: ' + val.headcount + '  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;' + val.fullycount + '</span></p>')
+                    },
+                    //成功的回调函数
+                    success: function (msg) {
+                        totolData = msg;
+                        $('#totals').text(msg.total);
+                        $('#ben').text(msg.ben + "（" + ((msg.ben/msg.total)*100).toFixed(2)+"%）");
+                        $('#dai').text(msg.dai + "（" + ((msg.dai/msg.total)*100).toFixed(2)+"%）");
+                        $('#wei').text(msg.wei + "（" + ((msg.wei/msg.total)*100).toFixed(2)+"%）");
+                        // $('#rate').text(msg.rate + "%")
+                        // $.each(msg.address, function (key, val) {
+                        //     $('#detailedinfo').append('<p class ="d">驻地:&nbsp;&nbsp;&nbsp;' + val.address + '<span >&nbsp;&nbsp;&nbsp;应到: ' + val.headcount + '  &nbsp;&nbsp;&nbsp; 实到: &nbsp;&nbsp;&nbsp;' + val.fullycount + '</span></p>')
 
-                    // })
-                    
-                    var address = msg.address || [];
-                    var div = [];
-                    for(var i = 0, len = address.length + 1; i < len; i++){
-                        div.push('<div id="chart_' + i + '"></div>');
+                        // })
+                        
+                        var address = msg.address || [];
+                        var div = [];
+                        for(var i = 0, len = address.length + 1; i < len; i++){
+                            div.push('<div id="chart_' + i + '"></div>');
+                        }
+                        $("#chartdiv").html(div.join(''));
+
+                        initChart();
+
+                        refreshChartData();
+                    },
+                    //失败的回调函数
+                    error: function () {
+                        console.log("error")
                     }
-                    $("#chartdiv").html(div.join(''));
+                });
+            }
 
-                    initChart();
-                },
-                //失败的回调函数
-                error: function () {
-                    console.log("error")
-                }
-            });
+            getChartData();
+
 
 
             $(window).resize(function() {
@@ -135,6 +143,12 @@
                 })
             }.bind(this));
 
+
+            function refreshChartData(){
+                setTimeout(function(){
+                    getChartData();
+                },5 * 1000);
+            }
             
 
             
@@ -146,15 +160,15 @@
                     var pie = echarts.init(document.getElementById(this.id));
 
                     var data = [];
-                    var legend = ['本人报道','代理报道','未报到'];
+                    var legend = ['本人报到','代理报到','未报到'];
                     var name = "";
                     if(i==0){
                         var obj = totolData;
                         name = "总览";
                         data = [
-                            {value: totolData.ben, name: '本人报道'},
-                            {value: totolData.dai, name: '代理报道'},
-                            {value: totolData.wei, name: '未报到'}
+                            {value: totolData.ben, name: '本人报到',itemStyle:{color:"#C1E272"}},
+                            {value: totolData.dai, name: '代理报到',itemStyle:{color:"#AEC5EE"}},
+                            {value: totolData.wei, name: '未报到',itemStyle:{color:"#FFA5A5"}}
                         ];
                         var option = getChartOpiton(data,legend,name);
                         pie.setOption(option);
@@ -163,9 +177,9 @@
                         var obj = totolData.address[i-1] || {};
                         name = obj.address;
                         data = [
-                            {value: obj.ben, name: '本人报道'},
-                            {value: obj.dai, name: '代理报道'},
-                            {value: obj.wei, name: '未报到'}
+                            {value: obj.ben, name: '本人报到',itemStyle:{color:"#C1E272"}},
+                            {value: obj.dai, name: '代理报到',itemStyle:{color:"#AEC5EE"}},
+                            {value: obj.wei, name: '未报到',itemStyle:{color:"#FFA5A5"}}
                         ];
                         var option = getChartOpiton(data,legend,name);
                         pie.setOption(option);
