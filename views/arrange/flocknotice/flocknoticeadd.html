@@ -107,6 +107,31 @@
 				$('#smslength').text($(this).val().length);
 				$('#phones').text($(this).val().split(",").length);
 			});
+			$.ajax({
+				async: false,
+				type: "get",
+				url: url + "/smstemplate/findAll?smsTemplateType=0",
+				where: {
+					smsTemplateType: 0
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+
+				//成功的回调函数
+				success: function (msg) {
+					var data = msg;
+					$.each(data.data, function (idx, con) {
+						$("#smss").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
+								"</option>");
+					})
+					form.render();
+				},
+				//失败的回调函数
+				error: function () {
+					console.log("error")
+				}
+			})
 
 			form.on('select(component-form-selects)', function (data) {
 				if (data.value == "0"){

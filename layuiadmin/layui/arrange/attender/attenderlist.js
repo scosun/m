@@ -4,7 +4,7 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'form', 'table'], function () {
+}).use(['index', 'user', 'form', 'table','upload'], function () {
     var a = {};
     var b = {};
 
@@ -15,6 +15,7 @@ layui.config({
         element = layui.element,
         table = layui.table,
         layer = layui.layer,
+        upload = layui.upload,
         datas = null,
         router = layui.router();
     element.render();
@@ -22,11 +23,13 @@ layui.config({
     var url = setter.baseUrl;
     var devices = {};
     var attenderList = [];
+    var ids = -1
     layer.msg("上方下拉框选择会议后自动加载相关人员");
     $('#group').append('<button class="layui-btn layui-ds btncheckall" data-type="getCheckData" id="buttongroup" data="全选">全选</button>')
     $('#group').append(' <button class="layui-btn layui-ds btnupload" data-type="upload" data="批量导入" id="buttonupload">批量导入</button>')
     $('#group').append(' <button class="layui-btn layui-ds btnuploadimg" data-type="uploadphoto" data="批量导入人员图片" id="buttonuploadimg">批量导入人员图片</button>')
     $('#group').append('<button class="layui-btn layui-ds btndow" data-type="download" id="buttondow" data="下载模板">下载模板</button>')
+    $('#group').append('<button class="layui-btn layui-ds leave" data-type="leave" id="leave" data="批量修改请假">批量修改请假</button>')
     $.ajax({
         async: false,
         type: "get",
@@ -77,6 +80,39 @@ layui.config({
         };
         return jlength
     };
+    upload.render({
+        elem: '#leave'
+        , url: url+'/meetingcanhui/leave',
+        // auto: false,
+        exts:'xls|xlsx',
+        data:{
+            meeting:function(){
+                return $('#select-room').val();
+            }
+        },
+        //bindAction: '#btn99',
+        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+        //     obj.preview(function (index, file, result) {
+        //         // console.log(index); //得到文件索引
+        //         // console.log(file);
+        //         uploadfile = file //得到文件对象
+        //         // console.log(uploadfile)
+        //         // console.log(result); //得到文件base64编码，比如图片
+        //
+        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+        //
+        //         //这里还可以做一些 append 文件列表 DOM 的操作
+        //
+        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+        //     });
+        // },
+        done: function (res) {
+           layer.msg(res.msg)
+            ajaxs(window.indexs);
+
+        }
+    });
 
     //渲染下拉框的ajax
     $.ajax({
