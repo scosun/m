@@ -144,80 +144,85 @@
 		window.meetingid=str.substring(str.lastIndexOf("=")+1)
 		window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
 		window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
-			   
+		
+		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+		var seatsdata = [];
+		
 		/*右侧菜单HOVER显示提示文字 end*/
 		layer.load(2);
+		
 		$.ajax({
-			    url: url+"/roomtemplate/findByIdTemplatecode",
-			    type: "post",
-			    async: false,
-			    xhrFields: {
-			        withCredentials: true
-			    },
-			    data: {
-			        "id": newroomid,
-			       
-			    },
-			    success: function(data) {
-			        var datas = data.data
-					$("body").append(datas.templatecode);
-					
-					selectSeats();
+			url: url+"/roomtemplate/findByIdTemplatecode",
+			type: "post",
+			async: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			data: {
+				"id": newroomid,
+				
+			},
+			success: function(data) {
+				var datas = data.data
+				$("body").append(datas.templatecode);
+				
+				selectSeats();
 
-					var condi = {
-						"meeting_id": +meetingid
-					};
+				var condi = {
+					"meeting_id": +meetingid
+				};
 
-					// importSeatsData(condi);
-					queryAllSeatStatus();
-					layer.closeAll();
-				},
-				error:function(){
-					layer.closeAll();
+				// importSeatsData(condi);
+				queryAllSeatStatus();
+				layer.closeAll();
+			},
+			error:function(){
+				layer.closeAll();
+			}
+		});
+		$.ajax({
+			url: url+"/meeting/findByMeeting",
+			type: "get",
+			async: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			data: {
+				"id": meetingid,
+				
+			},
+			success: function(data) {
+				var datas = data.data
+				
+				$("#meetingname").text(datas[0].name);
+				$("#meetingaddress").text("地点："+datas[0].address);
+				$("#meetingremark").text("备注："+datas[0].memo);
+				$("#meetingtime").text("时间："+datas[0].meetingtime);
+				
+				// selectSeats();
+
+				// var condi = {
+				// 	"meeting_id": +meetingid
+				// };
+				// importSeatsData(condi);
+				// queryAllSeatStatus(roomid, ruleid);
+			}
+		});
+
+		$.ajax({
+			type: "get",
+			url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
+			dataType: "json",
+			success: function(obj) {
+				var data = obj.data || [];
+				if(data && data.length > 0){
+					$.each(data, function (index, item) {
+						$('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+					});
+					layui.form.render("select");
 				}
-			})
-			$.ajax({
-			    url: url+"/meeting/findByMeeting",
-			    type: "get",
-			    async: false,
-			    xhrFields: {
-			        withCredentials: true
-			    },
-			    data: {
-			        "id": meetingid,
-			       
-			    },
-			    success: function(data) {
-			        var datas = data.data
-			       
-					$("#meetingname").text(datas[0].name);
-					$("#meetingaddress").text("地点："+datas[0].address);
-					$("#meetingremark").text("备注："+datas[0].memo);
-					$("#meetingtime").text("时间："+datas[0].meetingtime);
-					
-					// selectSeats();
-
-					// var condi = {
-					// 	"meeting_id": +meetingid
-					// };
-					// importSeatsData(condi);
-					// queryAllSeatStatus(roomid, ruleid);
-			    }
-			});
-			$.ajax({
-				type: "get",
-				url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
-				dataType: "json",
-			    success: function(obj) {
-					var data = obj.data || [];
-					if(data && data.length > 0){
-						$.each(data, function (index, item) {
-							$('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
-						});
-						layui.form.render("select");
-					}
-			    }
-			});
+			}
+		});
 		
 		form.on('select(component-ruleselect)', function(data){
 			var id = +data.value;
@@ -303,8 +308,7 @@
 
 	
 	
-		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
-		var seatsdata = [];
+		
 		
 		window.serverSeatIds = [];
 		function changeSeatColor(attendees){
