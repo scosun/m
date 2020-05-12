@@ -147,7 +147,7 @@
 		
 		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
 		var seatsdata = [];
-		
+
 		/*右侧菜单HOVER显示提示文字 end*/
 		layer.load(2);
 		
@@ -284,6 +284,7 @@
 		}
 
 		function setSeatData(data){
+			// console.log(data)
 			$.ajax({
 				async: false,
 				type: "post",
@@ -366,6 +367,7 @@
 				ids[item.seatid] = item.id;
 				names[item.seatid] = item.attender;
 			});
+			// console.log(ids,names)
 
 			seats.each(function(){
 				var name = $(this).text() || "";
@@ -376,6 +378,7 @@
 						if(names[id] == name){
 							seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
 						}else{
+							//挪动名字之后  原来的位置名字跟id对不上，就没传id
 							seatsobj.attendees.push({attender:name,seatid:id});
 						}
 					}else{
@@ -385,11 +388,20 @@
 							// 挪动名字需要把原来的id带回去
 							seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id});
 						}else{
+							// 右键添加名字没有id
 							seatsobj.attendees.push({attender:name,seatid:id});
 						}
 					}
 				}
 			});
+
+			/*
+			座区图保存规则
+			1.当名字和位置都没有变化，传递原来的id,name,seatid;
+			2.当把名字挪动到其它空白位置，不修改原来的名字，传递名字原来的座位id,name,新的seatid;
+			3.当修改座位上原有名字（直接拖拽其它座区名字覆盖当前名字和通过右键改名字），传递新的name 和 seatid;
+			4.当使用右键在空间座区添加新名字，传递新建的name 和 seatid
+			ps: 当前的座区图不支持交换操作，如需交换 可以 先把名字拖拽到空白座区，然后再做交换。
 
 			setSeatData(seatsobj);
 		}
