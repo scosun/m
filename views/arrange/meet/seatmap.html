@@ -101,7 +101,8 @@
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
 			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
 			<i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
-			<input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/>
+			<!-- <input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/> -->
+			<input type="file" name="file" id="upload-file" style="display:none;"/>
 			<i id="nav-word" data-type="word" data="word模板下载"><img src="../../../images/word.png"></i>
 			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
 		</span>
@@ -394,7 +395,7 @@
 					}
 				}
 			});
-
+}
 			/*
 			座区图保存规则
 			1.当名字和位置都没有变化，传递原来的id,name,seatid;
@@ -405,7 +406,6 @@
 			*/
 			setSeatData(seatsobj);
 		}
-
 		/**
 		 * 打印局部div
 		 * @param printpage 局部div的ID
@@ -432,7 +432,21 @@
 		}
 		
 		//上传模板文件的类型判断
-		function uploadFile(){
+		/* function uploadFile(){
+			var fileName = $("#upload-file").val();
+			var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+			console.log(fileType);
+			if(fileType!=".docx" && fileType!=".doc"){
+				alert("上传模板类型错误！")
+				console.log("上传模板类型错误！");
+				return false;
+			}else {
+				var file = document.getElementById("upload-file").files[0];
+				upload(meetingid,newroomid,file);
+			}
+		} */
+		
+		$('#upload-file').on('change', function() {
 			var fileName = $("#upload-file").val();
 			var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
 			console.log(fileType);
@@ -444,7 +458,7 @@
 				var file = document.getElementById("upload-file").files[0];
 				upload(meetingid,newroomid,file);
 			}
-		}
+		});
 		
 		function upload(meetingid,newroomid,file){
 			var formData = new FormData();
@@ -522,6 +536,7 @@
 						iframe.init(meetingid,newroomid);
 					},
 					yes: function(index, layero) {
+						
 						/* var url = "http://127.0.0.1:8083"; */
 						var url = "https://f.longjuli.com";
 						var body = layer.getChildFrame('body', index);
@@ -530,7 +545,8 @@
 						wordname = wordname[0] || "";
 						if(wordid==''||wordid==null)
 						{return layer.msg("请选择word模板");}
-						window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid
+						console.log("meetignid="+meetingid+",wordid="+wordid);
+						window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
 					}
 				})
 			},
@@ -700,8 +716,6 @@
 		};
 
 	});
-
-
 	
 
 	function asd() {
