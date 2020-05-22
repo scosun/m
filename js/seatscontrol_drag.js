@@ -372,23 +372,31 @@ function dragSeats(){
 function dragContainerMove(e){
 	//获取推拽框位置
 	var container = $("#" + dragcontainerId);
-	var cx = container.position().left;
-	var cy = container.position().top;
+	// var cx = container.position().left;
+	// var cy = container.position().top;
+	var cx = parseInt(container.css("left"));
+	var cy = parseInt(container.css("top"));
+
 	//获取框内方框位置
 	var seledPos = [];
 	var seledIds = [];
 	var seled = container.find("."+seledClass);
 	// console.log("seled------",seled)
 	for(var n = 0,len = seled.length; n < len; n++){
-		var x = $(seled[n]).position().left;
-		var y = $(seled[n]).position().top;
+		// var x = $(seled[n]).position().left;
+		// var y = $(seled[n]).position().top;
+		var x = parseInt($(seled[n]).css("left"));
+		var y = parseInt($(seled[n]).css("top"));
+
 		seledPos.push([cx+x,cy+y]);
 		seledIds.push(seled[n].id);
 	}
 	for (var i = 0,ilen = selList.length; i < ilen; i++) {
 		var sel = $(selList[i]);
-		var sl = sel.position().left;
-		var st = sel.position().top;
+		// var sl = sel.position().left;
+		// var st = sel.position().top;
+		var sl = parseInt(sel.css("left"));
+		var st = parseInt(sel.css("top"));
 
 		if(isLocked(sel)){
 			continue;
@@ -436,10 +444,29 @@ function dblclickDragSeats(){
 	// alert("匹配上" + ids.join(','));
 	console.log(ids)
 
+	var reg = /^\d*$/gi;
+
+	//did 是拖拽的， nid 是匹配的
 	ids.forEach(function(item){
-		$("#" + item.nid).html($("#" + item.did).html());
+		var dname = $("#" + item.did).html();
+		if(reg.test(dname)){
+			//空座位不做交换
+			reg.lastIndex = 0;
+			return;
+		}
+		var nname = $("#" + item.nid).html();
+
+		$("#" + item.nid).html(dname);
 		$("#" + item.nid).attr("sid",item.did);
-		$("#" + item.did).html(item.did.split('-')[1]);
+		if(!reg.test(nname)){
+			// 有人名, 交换
+			$("#" + item.did).html(nname);
+			$("#" + item.did).attr("sid",item.nid);
+		}else{
+			$("#" + item.did).html(item.did.split('-')[1]);
+		}
+		reg.lastIndex = 0;
+		
 
 		if(serverSeatIds && serverSeatIds.length > 0){
 			serverSeatIds.splice(serverSeatIds.indexOf(item.did),1);
