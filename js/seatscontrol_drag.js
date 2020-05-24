@@ -291,9 +291,17 @@ function bindContainerEvent(){
 }
 
 function removeContainerEvent(){
-	$("." + seatContainerClass).unbind("mousedown");
-	$("." + seatContainerClass).unbind("mousemove");
-	$("." + seatContainerClass).unbind("mouseup");
+	// $("." + seatContainerClass).unbind("mousedown");
+	// $("." + seatContainerClass).unbind("mousemove");
+	// $("." + seatContainerClass).unbind("mouseup");
+
+	$("#seatcontainer").unbind("mousedown");
+	$("#seatcontainer").unbind("mousemove");
+	$("#seatcontainer").unbind("mouseup");
+	$("#seatcontainer").unbind("dblclick");
+	$("#seatcontainer").unbind("click");
+
+	$("#seatcontainer").unbind("dragover");
 }
 
 function cancelDragSeats(){
@@ -1623,9 +1631,52 @@ function copyText(text) {
 
 
 
+function bindStaffDrap(){
+	this.removeContainerEvent();
 
+	$("#seatcontainer").bind("dragover",function(){
+		//鼠标位置
+		_x = window.event.x
+		_y = window.event.y
+		
+		//滚动条高度
+		var _stop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+		var _sleft = document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+		var container = $("#seatcontainer");
+		//减去容器初始化位移,因为鼠标是屏幕坐标
+		var cx = container.offset().left;
+		var cy = container.offset().top;
 
+		var sleft = _x - cx + _sleft;
+		var stop = _y - cy + _stop;
+		
+		for (var i = 0,len = selList.length; i < len; i++) {
+			var sel = $(selList[i]);
+			var sl = parseInt(sel.css("left"));
+			var st = parseInt(sel.css("top"));
+			var text = sel.text().trim();
+			var reg = /^\d*$/gi;
+			if (sleft > sl && stop > st && sleft < (sl + 40) && stop < (st + 40)) {
+				if(isLocked(sel)){
+					continue;
+				}
+				if(!reg.test(text)){
+					continue;
+				}
+				//在里面
+				if (!sel.hasClass('R99')) {
+					sel.addClass("R99");
+				}
+			} else {
+				sel.removeClass("R99");
+			}
+		}
+	});
+}
 
+function unbindStaffDrap(){
+	removeContainerEvent();
+}
 
 
 

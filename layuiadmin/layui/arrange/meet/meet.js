@@ -407,7 +407,7 @@ layui.config({
                 // maxmin: true,
                 closeBtn:false,
                 offset: '0',
-                content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+                content: 'aaaa.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
                 success: function(layero, index) {
                 
                 }
