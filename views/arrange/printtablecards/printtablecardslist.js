@@ -94,7 +94,7 @@ layui.config({
                     toolbar: '#rulezone',
                 },
                 {
-                    width: 100,
+                    width: 130,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -158,7 +158,7 @@ layui.config({
                         toolbar: '#rulezone',
                     },
                     {
-                        width: 100,
+                        width: 130,
                         title: '操作',
                         toolbar: '#test-table-operate-barDemo',
                     }
@@ -279,10 +279,21 @@ layui.config({
                     layer.close(index);
                 });
         }
+        if(obj.event === 'setup'){
+            layer.open({
+                type: 2,
+                title: '设置',
+                area: ['30%', '40%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'setup_pop.html',
+                success: function(layero, index) {
+                }
+            })
+        }
         if(obj.event === 'rulezone'){
             layer.open({
                 type: 2,
-                //title: '收藏管理 (考生姓名：张无忌)',
                 title: false,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
@@ -290,12 +301,15 @@ layui.config({
                 // maxmin: true,
                 closeBtn:false,
                 offset: '0',
-                content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+                //拷贝 meeting_room_zq.html
+                //content: 'meeting_room_zq.html?roomid='+age.id
+                content: 'print_room_zq.html?roomid=228',
                 success: function(layero, index) {
                 
                 }
             })
         }
+        
     });
     var $ = layui.$,
         active = {
@@ -460,7 +474,7 @@ layui.config({
                                 toolbar: '#rulezone',
                             },
                             {
-                                width: 100,
+                                width: 130,
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }
