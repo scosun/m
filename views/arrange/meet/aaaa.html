@@ -1,51 +1,170 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>编排规则</title>
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-        <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-        <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
-        <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
-        <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/sourtable/soulTable.css"/>
-        <script src="../../../js/scosun.js"></script>
-        <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-        <style type="text/css">
-			.layui-tab {
-                margin: 0;
-                text-align: left !important;
-            }
-            .iconfont.icon-xitongguanli {
-                color: #515151;
-                font-size: 20px;
-                margin-right: -2px;
-            }
-            /*右侧菜单*/
-            .layui-right-nav {
-                float: right;
-				background-color: #fff;
-			}
-			.layui-right-nav i {
-				display: block;
-				height: 20px;
-				width: 20px;
-				float: left;
-				margin-top: 3px;
-				padding-left: 7px;
-				padding-right: 7px;
-			}
-			.layui-right-nav i img {
-				width: 100%;
-				display: block;
-			}
+<head>
+    <meta charset="utf-8">
+    <title>编排规则</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/sourtable/soulTable.css"/>
+    <script src="../../../js/scosun.js"></script>
+    <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../js/jquery.jqprint-0.3.js"></script>
+
+    <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
+    <script src="../../../web.contextmenu/web.contextmenu.js"></script>
+    <link rel="stylesheet" href="../../../css/seat.css" media="all">
+    <link rel="stylesheet" href="rule_zq.css" />
+    
+    <style type="text/css">
+        .layui-tab {
+            margin: 0;
+            text-align: left !important;
+        }
+        .iconfont.icon-xitongguanli {
+            color: #515151;
+            font-size: 20px;
+            margin-right: -2px;
+        }
+        /*右侧菜单*/
+        .layui-right-nav {
+            float: right;
+            background-color: #fff;
+        }
+        .layui-right-nav i {
+            display: block;
+            height: 20px;
+            width: 20px;
+            float: left;
+            margin-top: 3px;
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+        .layui-right-nav i img {
+            width: 100%;
+            display: block;
+        }
     </style>
+    <style type="text/css">
+		header {
+			box-shadow: 0px 0px 5px gray;
+			height: 3.5rem;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			z-index: 9999;
+			background-color: white;
+		}
+
+		body {
+			background-color: white;
+		}
+
+		/*右侧菜单*/
+		.layui-right-nav {
+			position: absolute;
+			right: 5px;
+			top: 0;
+			height: 3.5rem;
+			line-height: 3.5rem;
+			background-color: #fff;
+		}
+
+		.layui-right-nav i {
+			display: block;
+			height: 20px;
+			width: 20px;
+			float: left;
+			margin-top: 18px;
+			padding-left: 7px;
+			padding-right: 7px;
+		}
+
+		.layui-right-nav i img {
+			width: 100%;
+			display: block;
+		}
+
+		.btnbar-select{
+			display: inline-block;
+			width: 112px;
+			float: right;
+			margin-right: 585px;
+			margin-top: 9px;
+		}
+		
+        .dragh3{
+            cursor: pointer;
+        }
+        .float-right{
+            height: 80%;
+            right: 10px;
+        }
+
+        .drag-staff{
+            width: 20px;
+            height: 35px;
+            display: inline-block;
+        }
+	</style>
+	<script type="text/javascript">  
+		function doNothing(){  
+			window.event.returnValue=false;  
+			return false;  
+		}
+	</script>
 </head>
-<body>
-<div class="layui-card-body">
-    <div class="clearfix">
+<body oncontextmenu="doNothing()">
+
+    <div>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
+			<!-- <a onclick="asd()" href="javascript:;"><cite>刷新</cite></a> -->
+			<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+		</span>
+		<!-- 右侧菜单 -->
+		<div class="layui-form btnbar-select">
+            <select class="dialogRuleSelect" lay-filter="component-ruleselect" id="ruleselect">
+                <option value="1">按规则标色</option>
+            </select>
+		</div>
+		<span class="layui-right-nav">
+            <i id="revertbtn" data-type="revertbtn" data="撤销上一步"><img src="../../../images/toolkit/prev_step.svg"></i>
+			<i id="leavebtn" data-type="askLeave" data="显示请假人员列表"><img src="../../../images/Closedlist.svg"></i>
+			<i id="importedbtn" data-type="notImport" data="显示未导入人员列表"><img src="../../../images/Closedlist.svg"></i>
+			
+			
+			<i id="drag-container" data-type="dragcontainer" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+			<i id="nav-parallelism" data-type="parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
+			<i id="nav-lock" data-type="bindLockSeats" data="锁定"><img src="../../../images/lock.png"></i>
+			<i id="nav-radio" data-type="bindOneSeats" data="单选"><img src="../../../images/radio.png"></i>
+			<i id="nav-selection" data-type="selectSeats" data="框选"><img src="../../../images/selection.png"></i>
+			<i id="nav-drag" data-type="dragSeats" data="拖动"><img src="../../../images/drag.png"></i>
+			<i id="rightbtn" data-type="bindContextMenu" data="右键"><img src="../../../images/rightbtn.png"></i>
+			<i id="cancelrightbtn" data-type="removeContextMenu" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
+			<!-- <i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i> -->
+			<!-- <i id="nav-delete" data="删除"><img src="../../../images/delete.png"></i> -->
+			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
+			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
+			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
+			
+			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
+			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
+			<i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
+			<!-- <input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/> -->
+			<input type="file" name="file" id="upload-file" style="display:none;"/>
+			<i id="nav-word" data-type="word" data="word模板下载"><img src="../../../images/word.png"></i>
+			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		</span>
+		<!-- 右侧菜单 end-->
+    </div>
+    
+    <!-- <div class="clearfix">
         <span class="layui-right-nav">
             <i id="nav-ClosedaskLeave" data-type="askLeave" class="layui-ds" data="关闭请假人员列表"><img src="../../../images/Closedlist.svg"></i>
             <i id="nav-showaskLeave" data-type="askLeave" style="display: none;" class="layui-ds" data="显示请假人员列表"><img src="../../../images/leave.svg"></i>
@@ -53,147 +172,226 @@
             <i id="nav-shownotImport" data-type="notImport" style="display: none;" class="layui-ds" data="显示未导入座区人员列表"><img src="../../../images/user-group.svg"></i>
         </span>
         <div class="assistBtn" style="float:right">
-            <i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i><!--刷新-->
-            <i class="layui-icon layui-ds iconfont icon-fanhuishangyibu" data-type="close"></i><!--返回上一层-->
+            <i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i>
+            <i class="layui-icon layui-ds iconfont icon-fanhuishangyibu" data-type="close"></i>
+        </div>
+    </div> -->
+
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">***主席台</li>
+            <!-- <li>***一层</li>
+            <li>***二层</li> -->
+        </ul>
+        <div class="positionR">
+            <!-- tab1 -->
+            <div id="seatsbody" class="layui-tab-item layui-show">
+            </div>
+            <!-- tab2
+            <div class="layui-tab-item">
+                一层
+            </div>
+             -->
+            <!-- tab3 
+            <div class="layui-tab-item">二层</div>
+            -->
+
+            <!-- 请假人员列表 -->
+            <div class="float-right" style="display: none;" id="askLeave">
+                <h3 id="askLeaveTitle" class="dragh3" >请假人员列表<span class="iconfont icon-xitongguanli"></span></h3>
+                <ul id="askLeaveTitleList" class="float-right-list">
+                    <li>
+                        <h4>特邀出席领导同志(10人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>1组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>2组(3人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>王五<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>3组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>4组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- 未导入人员列表 -->
+            <div class="float-right" style="display: none;" id="notImport">
+                <h3 id="notImportTitle" class="dragh3" >未导入人员列表<span class="iconfont icon-xitongguanli"></span></h3>
+                <ul id="notImportList" class="float-right-list">
+                    <li>
+                        <h4>特邀出席领导同志(10人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>1组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>2组(3人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>王五<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>3组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>4组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
+                        <ul class="list-body">
+                            <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                            <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
-<div>
-<div class="layui-tab">
-    <ul class="layui-tab-title">
-        <li class="layui-this">***主席台</li>
-        <li>***一层</li>
-        <li>***二层</li>
-    </ul>
-    <div class="layui-tab-content positionR">
-        <!-- tab1 -->
-        <div class="layui-tab-item layui-show">
-            主席台
-        </div>
-        <!-- tab2 -->
-        <div class="layui-tab-item">
-            一层
-        </div>
-        <!-- tab3 -->
-        <div class="layui-tab-item">二层</div>
 
-        <!-- 请假人员列表 -->
-        <div class="float-right" id="askLeave">
-            <h3>请假人员列表<span class="iconfont icon-xitongguanli"></span></h3>
-            <ul class="float-right-list">
-                <li>
-                    <h4>特邀出席领导同志(10人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>1组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>2组(3人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>王五<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>3组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>4组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <!-- 未导入人员列表 -->
-        <div class="float-right" id="notImport">
-            <h3>未导入人员列表<span class="iconfont icon-xitongguanli"></span></h3>
-            <ul class="float-right-list">
-                <li>
-                    <h4>特邀出席领导同志(10人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>1组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>2组(3人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>王五<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>3组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>4组(2人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
-                    <ul class="list-body">
-                        <li>张三张三<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                        <li>李四<span><img height="16" src="../../../images/toolkit/hand.svg"></span></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+    <script src="aaaa.js"></script>
 
-    </div>
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script src="aaaa.js"></script>
-<script>
-//请假人员列表 展开收起
-$(function(){
-    $(".float-right-list>li>h4").on("click",function(){
-        $(this).addClass('active');
-        $(".float-right-list>li>h4").not(this).removeClass('active');
-        var next = $(this).next();
-        next.slideToggle('fade');
-        $('.list-body').not(next).slideUp('fast');
-        return false;
+    <!-- /* dragDiv 拖动工具箱 3.25*/ -->
+    <script type="text/javascript">
+        /*-------------------------- + 获取id, class, tagName +-------------------------- */
+        var get = {
+            byId: function(id) {
+                return typeof id === "string" ? document.getElementById(id) : id
+            },
+            byClass: function(sClass, oParent) {
+                var aClass = [];
+                var reClass = new RegExp("(^| )" + sClass + "( |$)");
+                var aElem = this.byTagName("*", oParent);
+                for (var i = 0; i < aElem.length; i++) reClass.test(aElem[i].className) && aClass.push(aElem[i]);
+                return aClass
+            },
+            byTagName: function(elem, obj) {
+                return (obj || document).getElementsByTagName(elem)
+            }
+        };
+        /*-------------------------- + 拖拽函数 +-------------------------- */
+        function dragAction(oDrag, handle){
+            var disX = dixY = 0;
+            // var oJreduction = get.byClass("Jreduction", oDrag)[0];
+            handle = handle || oDrag;
+            handle.style.cursor = "move";
+            handle.onmousedown = function (event){
+                var event = event || window.event;
+                disX = event.clientX - oDrag.offsetLeft;
+                disY = event.clientY - oDrag.offsetTop;
+                document.onmousemove = function (event){
+                    var event = event || window.event;
+                    var iL = event.clientX - disX;
+                    var iT = event.clientY - disY;
+                    var maxL = document.documentElement.clientWidth - oDrag.offsetWidth - 10;
+                    var maxT = document.documentElement.clientHeight - oDrag.offsetHeight - 10;
+                    
+                    iL <= 8 && (iL = 8);
+                    iT <= 65 && (iT = 65);
+                    iL >= maxL && (iL = maxL);
+                    iT >= maxT && (iT = maxT);
+                    oDrag.style.left = iL + "px";
+                    oDrag.style.top = iT + "px";
+                    return false
+                };
+                document.onmouseup = function (){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    this.releaseCapture && this.releaseCapture()
+                };
+                this.setCapture && this.setCapture();
+                return false
+            };	
+            //还原到原来位置
+            // oJreduction.onclick = function (){
+            // 	oDrag.style.left ='auto';
+            // 	oDrag.style.top = 65 + "px";
+            // };
+        }
+        window.onload = window.onresize = function (){
+            var oDrag = document.getElementById("askLeave");
+            var oTitle = document.getElementById("askLeaveTitle");
+            dragAction(oDrag, oTitle);
+            
+            var oDrag2 = document.getElementById("notImport");
+            var oTitle2 = document.getElementById("notImportTitle");
+            dragAction(oDrag2, oTitle2);
+        }
+    </script>
+
+    <script>
+    //请假人员列表 展开收起
+    $(function(){
+        $(".float-right-list>li>h4").on("click",function(){
+            $(this).addClass('active');
+            $(".float-right-list>li>h4").not(this).removeClass('active');
+            var next = $(this).next();
+            next.slideToggle('fade');
+            $('.list-body').not(next).slideUp('fast');
+            return false;
+        })
     })
-})
-</script>
+    </script>
+
+    <script type="text/javascript">
+
+        function asd() {
+            location.reload();
+        }
+    </script>
 
 </body>
 </html>
