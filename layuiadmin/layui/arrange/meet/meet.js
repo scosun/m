@@ -556,6 +556,26 @@ layui.config({
                 });
 
             },
+            addMore: function() {
+                var addmeet = layer.open({
+                    type: 2,
+                    title: '新建多会场会议',
+                    area: ['75%', '85%'],
+                    maxmin: true,
+                    // btn: ['确定', '取消'],
+                    content: 'meet_create_more.html',
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+
+                    }
+                    // content: '/gkzytb/franchiser/rigthColumnJsonList'
+                });
+
+            },
+
+
+
             reloads:function(){
                 location.reload();
             },
