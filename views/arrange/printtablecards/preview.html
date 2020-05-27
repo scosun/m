@@ -67,26 +67,38 @@
 		float: left;
 	}
 	.preview_left_text{
-		width: 600px;/*动态数据*/
-		height: 300px;/*动态数据*/
+		width: 200mm;/*动态数据*/
+		height: 100mm;/*动态数据*/
 		border: 1px solid #ccc;
 		position: relative;
 		background-color: #fff;
 		margin:50px;
-		/* text-align: center; */
+		text-align: center;
+		/*弹性盒模型*/    
+		display:flex;
+		/*主轴居中对齐*/
+			justify-content: center;
+		/*侧轴居中对齐*/    
+			align-items: center;  
 	}
 	.preview_left_text p{ 
 		border: 1px dotted #ccc;
     line-height: 100%;
     color: #000;
-    font-size: 155px;/*动态数据*/
+    font-size: 52mm;/*动态数据*/
     display: inline-block;
-    font-family: "Microsoft Yahei";
-    padding: 7px 6px 16px 6px;/*动态数据*/
-	margin-left: 60px;/*动态数据*/
-	margin-right: 60px;/*动态数据*/
-	margin-bottom: 60px;/*动态数据*/
-    margin-top: 60px;/*动态数据*/
+	/* font-family: "Microsoft Yahei"; */
+	font-family: "方正姚体";
+	padding:0mm 2mm 4mm 2mm;
+	/*动态数据*/
+	/* margin-left: 20mm; */
+	/*动态数据*/
+	/* margin-right: 60mm; */
+	/*动态数据*/
+	/* margin-bottom: 60mm; */
+	/*动态数据*/
+	/* margin-top: 22mm; */
+	/*动态数据*/
 	}
 	.text_width{
 		height: 21px;
@@ -136,14 +148,14 @@
 		right:auto;
 	top: 50%;
 	margin-top: -11px;
-	width: 60px; /* 30PX-> 1CM*//*动态数据*/
+	width: 20mm; /*动态数据*/
 	}
     
 	.padding_right{
 		left:auto;
 	top: 50%;
 	margin-top: -11px;
-	width: 60px; /* 30PX-> 1CM*//*动态数据*/
+	width: 20mm; /*动态数据*/
 	}
 	
 .text_height{
@@ -176,7 +188,7 @@
 	.text_height span{
 		text-align: center;
 		position: absolute;
-		left:-15px;
+		left:-25px;
 		bottom: 0;
 		top:0;
 		color: #f00;
@@ -192,7 +204,7 @@
 		width: 1px;
 		position: absolute;
 		top: 2px;
-		left: 20px;
+		left: 30px;
 		bottom: 2px;
 		background-color: #808080;
 	}
@@ -201,16 +213,23 @@
 		margin-left: -10px;
 		bottom: auto;
 		top: 0;
-		height: 60px; /* 30PX-> 1CM*//*动态数据*/
+		height: 22mm; /*动态数据*/
 	}
 	.padding_bottom{
 		left: 50%;
 		margin-left: -10px;
 		bottom: 0;
 		top: auto;
-		height: 60px; /* 30PX-> 1CM*//*动态数据*/
+		height: 22mm; /*动态数据*/
 	}
-	
+	.mytest img{
+		width:20px;
+		margin-left: 10px;
+		/* margin-right: 10px; */
+	}
+	.mytest span{
+		display: none;
+	}
 
 
 </style>
@@ -236,12 +255,12 @@
 								<!-- <p>张&emsp;三</p> -->
 								<!-- <p>张三李四</p> -->
 								<!-- 20px 是1CM -->
-								<div class="text_width"><span>20cm</span></div>
-								<div class="text_width padding_left"><span>2cm</span></div>
-								<div class="text_width padding_right"><span>2cm</span></div>
-								<div class="text_height"><span>10cm</span></div>
-								<div class="text_height padding_top"><span>2cm</span></div>
-								<div class="text_height padding_bottom"><span>2cm</span></div>
+								<div class="text_width"><span>200mm</span></div>
+								<div class="text_width padding_left"><span>20mm</span></div>
+								<div class="text_width padding_right"><span>20mm</span></div>
+								<div class="text_height"><span>100mm</span></div>
+								<div class="text_height padding_top"><span>22mm</span></div>
+								<div class="text_height padding_bottom"><span>22mm</span></div>
 							</div>
 						</div>
 						<div class="preview_right">
@@ -250,7 +269,7 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">名称</label>
 										<div class="layui-input-block">
-											<input type="text" name="author" lay-verify="required" placeholder="主席会议室桌牌" value="主席会议室桌牌" autocomplete="off" id="name" class="layui-input">
+											<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌名称" value="主席会议室桌牌" autocomplete="off" id="name" class="layui-input">
 										</div>
 									</div>
 									<div class="clearfix">
@@ -258,7 +277,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">长度</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="20CM" value="20CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌长度" value="200mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -266,7 +285,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">宽度</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="10CM" value="10CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌宽度"" value="100mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -280,13 +299,19 @@
 											</select>
 										</div>
 									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label">字号</label>
+										<div class="layui-input-block">
+											<input type="text" name="author" lay-verify="required" placeholder="请输入字体大小" value="52mm" autocomplete="off" id="name" class="layui-input">
+										</div>
+									</div>
 									<div class="layui-form-smbt">位置设置</div>
 									<div class="clearfix">
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
 												<label class="layui-form-label">上边</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入居上厘米" value="2CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入居上毫米" value="22mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -294,7 +319,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">下边</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入居下厘米" value="2CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入居下毫米" value="22mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -304,7 +329,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">左边</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入居左厘米" value="2CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入居左毫米" value="20mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -312,7 +337,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">右边</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入居右厘米" value="2CM" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入居右毫米" value="20mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -341,7 +366,11 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">对齐</label>
 												<div class="layui-input-block">
-
+													<div style="margin-left:-10px;padding-top:6px">
+														<a data="nav-align-left" href="javascript:;" class="mytest"><span>左对齐</span><img src="../../../images/toolkit/left.svg"></a>
+														<a data="nav-align-center" href="javascript:;" class="mytest"><span>左右对齐</span><img src="../../../images/toolkit/or_so.svg"></a>
+														<a data="nav-align-right" href="javascript:;" class="mytest"><span>右对齐</span><img src="../../../images/toolkit/right.svg"></a>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -349,11 +378,19 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">位置</label>
 												<div class="layui-input-block">
-
+													<div style="margin-left:-6px;padding-top:6px">
+														<a data="nav-align-up" href="javascript:;" class="mytest"><span>上对齐</span><img src="../../../images/toolkit/up.svg"></a>
+														<a data="nav-align-center-v" href="javascript:;" class="mytest"><span>上下对齐</span><img src="../../../images/toolkit/up_down.svg"></a>
+														<a data="nav-align-down" href="javascript:;" class="mytest"><span>下对齐</span><img src="../../../images/toolkit/down.svg"></a>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
+
+										
+
+
 									<div class="layui-form-item layui-layout-admin">
 											<div class="layui-layer-btn zi-ding-yi-btn">
 												<a class="layui-layer-btn0"  lay-submit="" lay-filter="component-form-demo2" id="ruleclickBymeet">确定</a>

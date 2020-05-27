@@ -85,21 +85,31 @@ layui.config({
     });
 
 
-        /*右侧菜单HOVER显示提示文字*/
-        $('.layui-right-nav i').each(function() {
-            var _id = $(this).attr('id');
-            var _data = $(this).attr('data');
-            $("#" + _id).hover(function() {
-                openMsg();
-            }, function() {
-                layer.close(subtips);
-            });
-
-            function openMsg() {
-                subtips = layer.tips(_data, '#' + _id, {
-                    tips: [3, '#666'],
-                    time: 30000
-                });
-            }
+    /*右侧菜单HOVER显示提示文字*/
+    $('.layui-right-nav i').each(function() {
+        var _id = $(this).attr('id');
+        var _data = $(this).attr('data');
+        $("#" + _id).hover(function() {
+            openMsg();
+        }, function() {
+            layer.close(subtips);
         });
+
+        function openMsg() {
+            subtips = layer.tips(_data, '#' + _id, {
+                tips: [3, '#666'],
+                time: 30000
+            });
+        }
+    });
+    // 修改弹出方式 5.26
+    $('.mytest').mouseover(function() {
+        layer.tips($(this).children('span').text(), this, {
+            tips: [3, "#808080"],
+            offset: '200px'
+        });
+    });
+
+
+
 });
