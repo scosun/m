@@ -22,8 +22,16 @@
     
     <style type="text/css">
         .layui-tab {
-            margin: 0;
-            text-align: left !important;
+            margin: 68px 0 0 15px;
+        }
+        .layui-tab-title {
+            position: fixed;
+            top: 67px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            padding:0 15px;
+            background-color: #fff;
         }
         .iconfont.icon-xitongguanli {
             color: #515151;
@@ -106,11 +114,7 @@
             right: 10px;
         }
 
-        .drag-staff{
-            width: 20px;
-            height: 35px;
-            display: inline-block;
-        }
+        
 	</style>
 	<script type="text/javascript">  
 		function doNothing(){  
@@ -121,7 +125,7 @@
 </head>
 <body oncontextmenu="doNothing()">
 
-    <div>
+    <div style="position: fixed;left:0;right: 0;top:0;background-color: #fff;z-index: 99;">
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
 			<!-- <a onclick="asd()" href="javascript:;"><cite>刷新</cite></a> -->
@@ -135,8 +139,8 @@
 		</div>
 		<span class="layui-right-nav">
             <i id="revertbtn" data-type="revertbtn" data="撤销上一步"><img src="../../../images/toolkit/prev_step.svg"></i>
-			<i id="leavebtn" data-type="askLeave" data="显示请假人员列表"><img src="../../../images/Closedlist.svg"></i>
-			<i id="importedbtn" data-type="notImport" data="显示未导入人员列表"><img src="../../../images/Closedlist.svg"></i>
+			<i id="leavebtn" data-type="askLeave" data="显示请假人员列表"><img src="../../../images/leave.svg"></i>
+			<i id="importedbtn" data-type="notImport" data="显示未导入人员列表"><img src="../../../images/user-group.svg"></i>
 			
 			
 			<i id="drag-container" data-type="dragcontainer" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
