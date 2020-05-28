@@ -584,6 +584,9 @@ layui.config({
     var inde1 = false;
 
     active = {
+        revertbtn:function(){
+            console.log("revertbtn------");
+        },
         askLeave: function() {
             if (!inde) {
                 setTimeout(function(){
