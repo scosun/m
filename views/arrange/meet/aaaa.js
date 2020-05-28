@@ -150,6 +150,17 @@ layui.config({
         }
     });
     
+    $.ajax({
+        type: "get",
+        url: "https://m.longjuli.com/v1/attendees/pending?meeting_id="+meetingid,
+        dataType: "json",
+        success: function(obj) {
+            console.log("pending-----",obj)
+            getAskLeaveData(obj.leave);
+            getNotImportData(obj.pending);
+        }
+    });
+
     form.on('select(component-ruleselect)', function(data){
         var id = +data.value;
         // meetingId = id;
@@ -226,56 +237,43 @@ layui.config({
     }
 
 
-    getAskLeaveData();
+    
     //获取请假人员列表
-    function getAskLeaveData(){
+    function getAskLeaveData(obj){
         // console.log(data)
-        var data = [
-            {
-                title:"特邀出席领导同志",
-                list:[
-                    {id:1,name:"张三1"},
-                    {id:2,name:"张三2"},
-                    {id:3,name:"张三3"},
-                    {id:4,name:"张三4"},
-                    {id:5,name:"张三5"}
-                ]
-            },
-            {
-                title:"1组",
-                list:[
-                    {id:1,name:"张三1"},
-                    {id:2,name:"张三2"},
-                    {id:3,name:"张三3"},
-                    {id:4,name:"张三4"},
-                    {id:5,name:"张三5"}
-                ]
-            }
-        ];
+        // var data = [
+        //     {
+        //         title:"特邀出席领导同志",
+        //         list:[
+        //             {id:1,name:"张三1"},
+        //             {id:2,name:"张三2"},
+        //             {id:3,name:"张三3"},
+        //             {id:4,name:"张三4"},
+        //             {id:5,name:"张三5"}
+        //         ]
+        //     },
+        //     {
+        //         title:"1组",
+        //         list:[
+        //             {id:1,name:"张三1"},
+        //             {id:2,name:"张三2"},
+        //             {id:3,name:"张三3"},
+        //             {id:4,name:"张三4"},
+        //             {id:5,name:"张三5"}
+        //         ]
+        //     }
+        // ];
+        var data = [];
+        for(var k in obj){
+            data.push({
+                title:k,
+                list:obj[k]
+            })
+        }
+        
 
         addAskLeaveHtml(data);
 
-        
-        // $.ajax({
-        //     async: false,
-        //     type: "post",
-        //     data: JSON.stringify(data),
-        //     contentType: 'application/json', 
-        //     url: "https://m.longjuli.com/v1/meetings/store",
-        //     dataType: "json",
-        //     success: function(obj) {
-        //         console.log("--setSeatData---",obj);
-        //         if(obj && obj.attendees){
-        //             layer.msg("保存成功");
-        //         }else{
-        //             layer.msg("保存错误");
-        //         }
-        //     },
-        //     //失败的回调函数
-        //     error: function() {
-        //         console.log("error")
-        //     }
-        // });
     }
     function addAskLeaveHtml(data){
 
@@ -300,57 +298,42 @@ layui.config({
         
         bindStaffListEvent();
     }
-
-    getNotImportData();
+    
     //获取未导入人员列表
-    function getNotImportData(){
+    function getNotImportData(obj){
         // console.log(data)
-        var data = [
-            {
-                title:"特邀出席领导同志",
-                list:[
-                    {id:1,name:"李四1"},
-                    {id:2,name:"李四2"},
-                    {id:3,name:"李四3"},
-                    {id:4,name:"李四4"},
-                    {id:5,name:"李四5"}
-                ]
-            },
-            {
-                title:"2组",
-                list:[
-                    {id:1,name:"李四1"},
-                    {id:2,name:"李四2"},
-                    {id:3,name:"李四3"},
-                    {id:4,name:"李四4"},
-                    {id:5,name:"李四5"}
-                ]
-            }
-        ];
+        // var data = [
+        //     {
+        //         title:"特邀出席领导同志",
+        //         list:[
+        //             {id:1,name:"李四1"},
+        //             {id:2,name:"李四2"},
+        //             {id:3,name:"李四3"},
+        //             {id:4,name:"李四4"},
+        //             {id:5,name:"李四5"}
+        //         ]
+        //     },
+        //     {
+        //         title:"2组",
+        //         list:[
+        //             {id:1,name:"李四1"},
+        //             {id:2,name:"李四2"},
+        //             {id:3,name:"李四3"},
+        //             {id:4,name:"李四4"},
+        //             {id:5,name:"李四5"}
+        //         ]
+        //     }
+        // ];
+
+        var data = [];
+        for(var k in obj){
+            data.push({
+                title:k,
+                list:obj[k]
+            })
+        }
 
         addNotImportHtml(data);
-
-        
-        // $.ajax({
-        //     async: false,
-        //     type: "post",
-        //     data: JSON.stringify(data),
-        //     contentType: 'application/json', 
-        //     url: "https://m.longjuli.com/v1/meetings/store",
-        //     dataType: "json",
-        //     success: function(obj) {
-        //         console.log("--setSeatData---",obj);
-        //         if(obj && obj.attendees){
-        //             layer.msg("保存成功");
-        //         }else{
-        //             layer.msg("保存错误");
-        //         }
-        //     },
-        //     //失败的回调函数
-        //     error: function() {
-        //         console.log("error")
-        //     }
-        // });
     }
     function addNotImportHtml(data){
 
@@ -584,6 +567,9 @@ layui.config({
     var inde1 = false;
 
     active = {
+        revertbtn:function(){
+            console.log("revertbtn------");
+        },
         askLeave: function() {
             if (!inde) {
                 setTimeout(function(){

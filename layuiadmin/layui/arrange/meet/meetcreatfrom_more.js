@@ -11,6 +11,7 @@ layui.config({
         setter = layui.setter,
         router = layui.router(),
         form = layui.form;
+    
     var url = setter.baseUrl;
     var day2 = new Date();
     day2.setTime(day2.getTime());
@@ -23,6 +24,189 @@ layui.config({
     var s3 = hour + ":" + minu + ":" + sec;
 
 
+    /*chenxy add 批量添加会议室模板 */
+    var meetsData = [{
+        roomId:-1,
+        ruleId:-1
+    }];
+
+    var allMeetData;
+    var allMeetRoomRule = {};
+    //查询全部会议室
+    $.ajax({
+        async: false,
+        type: "get",
+        url: url + "/roomtemplate/findByroomtemplate",
+        dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
+        //成功的回调函数
+        success: function(msg) {
+
+            if(msg.code == 0){
+                var data = msg.data || [];
+                allMeetData = data;
+                // $.each(data, function(idx, con) {
+                //     $("#select_meet").after("<option value=" + con.id + ">" + con.name +
+                //         "</option>");
+                // })
+                
+                buildMeetTplHtml();
+            }else{
+                layer.msg("获取会议室列表错误");
+            }
+        }
+    });
+    
+    function buildMeetTplHtml(){
+        var html = [];
+        for(var i = 0,len = meetsData.length; i < len; i++){
+            var meetItem = meetsData[i] || {};
+            html.push('<tr>');
+            html.push('<td>' + (i+1) + '</td>');
+            html.push('<td>');
+            html.push('<select id="meet_'+ i + '" class="meetselect" name="interest" lay-skin="select" lay-filter="meeting-form-select">');
+            html.push('<option value="">请选择会议室</option>');
+
+            allMeetData.forEach(function(item){
+                if(item.id == meetItem.roomId && meetItem.roomId != -1){
+                    html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
+                }else{
+                    html.push('<option value="' + item.id + '" >' + item.name + '</option>');
+                }
+            });
+
+            html.push('</select>');
+            html.push('</td>');
+            html.push('<td>');
+            html.push('<select id="rule_'+ i + '" name="interest" lay-skin="select" lay-filter="rule-form-select">');
+            html.push('<option value="">请选择编排规则</option>');
+            
+            var ruleData = allMeetRoomRule[meetItem.roomId] || null;
+            if(ruleData && ruleData.length > 0){
+                ruleData.forEach(function(item){
+                    if(item.id == meetItem.ruleId && meetItem.ruleId != -1){
+                        html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
+                    }else{
+                        html.push('<option value="' + item.id + '" >' + item.name + '</option>');
+                    }
+                });
+            }
+
+            html.push('</select>');
+            html.push('</td>');
+            html.push('<td width="30" class="pr0">');
+            if(i<len-1){
+                html.push('<a href="javascript:void(0)" class="mytest"><span>下移</span><i id="pre_' + i + '" class="layui-icon layui-icon-down" style="font-size:20px;margin-left:10px"></i></a>');
+            }
+            html.push('</td>');
+            html.push('<td width="30" class="pr0"> ');
+            if(i!=0){
+                html.push('<a href="javascript:void(0)" class="mytest"><span>上移</span><i id="next_' + i + '" class="layui-icon layui-icon-up" style="font-size:20px;margin-left:10px"></i></a>');
+            }
+            html.push('</td>');
+            html.push('<td width="30" class="pr0">');
+            html.push('<a href="javascript:void(0)" class="mytest"><span>删除</span><i id="del_' + i + '" class="layui-icon layui-icon-close" style="font-size:20px;margin-left:10px"></i></a>');
+            html.push('</td>');
+            html.push('</tr>');
+        }
+
+        $("#meettpl").html(html.join(''));
+		layui.form.render();
+
+		$(".layui-icon-close").unbind('click');
+		$(".layui-icon-close").on('click',function(){
+			var i = +this.id.split("_")[1];
+			meetsData.splice(i,1);
+			buildMeetTplHtml();
+		});
+		$(".layui-icon-down").unbind('click');
+		$(".layui-icon-down").on('click',function(){
+            var i = +this.id.split("_")[1];
+            if(i == meetsData.length - 1){
+                return;
+            }
+            var down = meetsData.splice(i,1);
+            meetsData.splice(i+1,0,down[0]);
+			buildMeetTplHtml();
+		});
+		$(".layui-icon-up").unbind('click');
+		$(".layui-icon-up").on('click',function(){
+            var i = +this.id.split("_")[1];
+            if(i == 0){
+                return;
+            }
+            var up = meetsData.splice(i,1);
+            meetsData.splice(i-1,0,up[0]);
+			buildMeetTplHtml();
+		});
+		form.on('select(meeting-form-select)', function(data){
+            var id = +data.value;
+            var eleid = +data.elem.id.split("_")[1];
+            meetsData[eleid].roomId = id;
+            
+            if(!allMeetRoomRule[id]){
+                getMeetRoomRule(id);
+            }else{
+                buildMeetTplHtml();
+            }
+		});
+		form.on('select(rule-form-select)', function(data){
+            var id = +data.value;
+            var eleid = +data.elem.id.split("_")[1];
+            meetsData[eleid].ruleId = id;
+		});
+    }
+
+    $("#addMeetTplBtn").bind("click",function(){
+        meetsData.push({
+            roomId:-1,
+            ruleId:-1
+        });
+        buildMeetTplHtml();
+    });
+    //获取会议室对应的规则
+    function getMeetRoomRule(roomid) {
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/ruletemplate/findByruletemplate",
+            dataType: "json",
+            data: {
+                "roomid": roomid
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function(msg) {
+                if(msg.code == 0){
+                    var data = msg.data || [];
+                    allMeetRoomRule[roomid] = data;
+                    buildMeetTplHtml();
+                }else{
+                    layer.msg("查询会议室规则错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
     // 修改弹出方式 5.26
@@ -67,9 +251,8 @@ layui.config({
            error: function() {
                console.log("error")
            }
-       }) 
-    form.render(null, 'component-form-group');
-    
+        });
+        form.render(null, 'component-form-group');
     }
 
     var ins22 = laydate.render({
@@ -88,26 +271,9 @@ layui.config({
         btns: ['clear','now', 'confirm'],
         theme: 'molv'
     });
-    $.ajax({
-        async: false,
-        type: "get",
-        url: url + "/roomtemplate/findByroomtemplate",
-        dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        //成功的回调函数
-        success: function(msg) {
+    
 
-            var data = msg.data;
 
-            $.each(data, function(idx, con) {
-
-                $("#select_meet").after("<option value=" + con.id + ">" + con.name +
-                    "</option>");
-            })
-        }
-    })
     var names = getUrlParam("name");
     var meetings = getUrlParam("meeting");
     var  ruleids = getUrlParam("ruleid");
@@ -118,9 +284,9 @@ layui.config({
         $('#meetingname').val(decodeURI(names));
     }
     if (meetings!=""&&meetings!=null){
-                $('#meeting').val(decodeURI(meetings));
-                console.log(decodeURI(meetings))
-                form.render(null, 'component-form-group');
+        $('#meeting').val(decodeURI(meetings));
+        console.log(decodeURI(meetings))
+        form.render(null, 'component-form-group');
     }
     if (ruleids!=""&&ruleids!=null){
         $.ajax({
@@ -177,101 +343,68 @@ layui.config({
     laydate.render({
         elem: '#LAY-component-form-group-date'
     });
-
- $('#addmeeting').click(()=>{
-      var name = $('#meetingname').val();
-     var meeting = $('#meeting').val();
-     var  ruleid = $('#ruleid').val();
-     var  dates = $('#dates').val();
-     var  times = $('#times').val();
-     var  remake = $('#remake').val();
-      location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
- })
- $('#addrule').click(()=>{
-  
-    if ($('#meeting').val() == '') {
-    	return layer.msg('请选择会议后再新建规则');
-    }
-     var name = $('#meetingname').val();
-     var meeting = $('#meeting').val();
-     var  ruleid = $('#ruleid').val();
-     var  dates = $('#dates').val();
-     var  times = $('#times').val();
-     var  remake = $('#remake').val();
-     location.href = decodeURI("./group.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
-    // var addrule =layer.open({
-    //     type: 2,
-    //     title: '添加编排规则',
-    //     shadeClose: true, //弹出框之外的地方是否可以点击
-    //     offset: '10%',
-    //     // area: ['%', '75%'],
-    //     btn: ['确定', '取消'],
-    //     content: '../arrangeman/group.html',
-    //     yes: function(index, layero) {
-    //        var submit = layero.find('iframe').contents().find("#ruleclickBymeet");
-    //        								submit.click();
-    //     },
-    //     success: function(layero, index) {
-    //       var body = layui.layer.getChildFrame('body', index);
-    //         body.find("#meetingid").val($('#meeting').val());
-    //
-    //     }
-    // });
-    // layer.full(addrule)
- })
-
-
-    /* 监听指定开关 */
-    form.on('select(component-form-select)', function(data) {
-        $.ajax({
-            async: false,
-            type: "get",
-            url: url + "/ruletemplate/findByruletemplate",
-            dataType: "json",
-            data: {
-                "roomid": data.value
-            },
-            xhrFields: {
-                withCredentials: true
-            },
-            //成功的回调函数
-            success: function(msg) {
-                var data = msg.data;
-                $("#select_rule").parent().find("option").filter(".selectOp").remove();
-                form.render(null, 'component-form-group');
-                $.each(data, function(idx, con) {
-                 
-        
-                    $("#select_rule").after("<option class='selectOp' value=" + con
-                        .id + ">" + con.name + "</option>");
-                })
-                form.render(null, 'component-form-group');
-        
-                // .parent()
-                // }
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
-        // })
+    
+    $('#addmeeting').click(()=>{
+        var name = $('#meetingname').val();
+        var meeting = $('#meeting').val();
+        var  ruleid = $('#ruleid').val();
+        var  dates = $('#dates').val();
+        var  times = $('#times').val();
+        var  remake = $('#remake').val();
+        location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
     });
+
+    $('#addrule').click(()=>{
+    
+        if ($('#meeting').val() == '') {
+            return layer.msg('请选择会议后再新建规则');
+        }
+        var name = $('#meetingname').val();
+        var meeting = $('#meeting').val();
+        var  ruleid = $('#ruleid').val();
+        var  dates = $('#dates').val();
+        var  times = $('#times').val();
+        var  remake = $('#remake').val();
+        location.href = decodeURI("./group.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
+        // var addrule =layer.open({
+        //     type: 2,
+        //     title: '添加编排规则',
+        //     shadeClose: true, //弹出框之外的地方是否可以点击
+        //     offset: '10%',
+        //     // area: ['%', '75%'],
+        //     btn: ['确定', '取消'],
+        //     content: '../arrangeman/group.html',
+        //     yes: function(index, layero) {
+        //        var submit = layero.find('iframe').contents().find("#ruleclickBymeet");
+        //        								submit.click();
+        //     },
+        //     success: function(layero, index) {
+        //       var body = layui.layer.getChildFrame('body', index);
+        //         body.find("#meetingid").val($('#meeting').val());
+        //
+        //     }
+        // });
+        // layer.full(addrule)
+    });
+
+
+    
     window.onappent = function() {
         $('#click').click();
     }
 
-function getMyDay(date){
-    var week;
-    if(date.getDay()==0) week="星期日";
-    if(date.getDay()==1) week="星期一";
-    if(date.getDay()==2) week="星期二";
-    if(date.getDay()==3) week="星期三";
-    if(date.getDay()==4) week="星期四";
-    if(date.getDay()==5) week="星期五";
-    if(date.getDay()==6) week="星期六";
-    return week;
-}
+    function getMyDay(date){
+        var week;
+        if(date.getDay()==0) week="星期日";
+        if(date.getDay()==1) week="星期一";
+        if(date.getDay()==2) week="星期二";
+        if(date.getDay()==3) week="星期三";
+        if(date.getDay()==4) week="星期四";
+        if(date.getDay()==5) week="星期五";
+        if(date.getDay()==6) week="星期六";
+        return week;
+    }
+
     var active = {
         cancel:function () {
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
@@ -280,6 +413,7 @@ function getMyDay(date){
 
         }
     }
+
     /* 监听提交 */
     form.on('submit(addmeeting)', function(data) {
         // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
@@ -341,6 +475,7 @@ function getMyDay(date){
         })
         return false;
     });
+
     $('.layui-ds').on('click', function() {
         var type = $(this).data('type');
         active[type] && active[type].call(this);

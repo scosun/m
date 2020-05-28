@@ -92,46 +92,11 @@
             <hr>
             <h2 class="add_bt">
                 批量添加会议室和规则模板
-                <a href="javascript:void(0)" class="mytest" style="float:right;height: 30px;"><span>添加</span><i class="layui-icon layui-icon-add-1" style="font-size:20px;vertical-align: -2px;margin-left:10px"></i></a>
+                <a href="javascript:void(0)" class="mytest" style="float:right;height: 30px;"><span>添加</span><i id="addMeetTplBtn" class="layui-icon layui-icon-add-1" style="font-size:20px;vertical-align: -2px;margin-left:10px"></i></a>
             </h2>
             <table class="sort_table">
-                <!-- <thead>
-                    <tr>
-                        <th width="18%">级别序号</th>
-                        <th width="">排序项</th>
-                        <th width="20%">顺序</th>
-                        <th width="40">操作</th>
-                    </tr>
-                </thead> -->
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <select name="interest" lay-skin="select" lay-filter="component-form-select">
-                                <option value="">请选择会议室</option>
-                                <option value="1">会议室1</option>
-                                <option value="2">会议室2</option>
-                                <option value="3">会议室3</option>
-                                <option value="4">会议室4</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="interest" lay-skin="select" lay-filter="component-form-select">
-                                <option value="">请选择编排规则</option>
-                                <option value="1">升序</option>
-                                <option value="2">降序</option>
-                            </select>
-                        </td>
-                        <td width="30" class="pr0">
-                            <a href="javascript:void(0)" class="mytest"><span>下移</span><i class="layui-icon layui-icon-down" style="font-size:20px;margin-left:10px"></i></a>
-                        </td>
-                        <td width="30" class="pr0"> 
-                            <!-- <a href="javascript:void(0)" class="mytest"><span>上移</span><i class="layui-icon layui-icon-up" style="font-size:20px;margin-left:10px"></i></a> -->
-                        </td>
-                        <td width="30" class="pr0">
-                            <a href="javascript:void(0)" class="mytest"><span>删除</span><i class="layui-icon layui-icon-close" style="font-size:20px;margin-left:10px"></i></a>
-                        </td>
-                    </tr>
+                <tbody id="meettpl">
+                    <!-- 
                     <tr>
                         <td>1</td>
                         <td>
@@ -179,7 +144,7 @@
                             </select>
                         </td>
                         <td width="30" class="pr0">
-                            <!-- <a href="javascript:void(0)" class="mytest"><span>下移</span><i class="layui-icon layui-icon-down" style="font-size:20px;margin-left:10px"></i></a> -->
+                            <a href="javascript:void(0)" class="mytest"><span>下移</span><i class="layui-icon layui-icon-down" style="font-size:20px;margin-left:10px"></i></a>
                         </td>
                         <td width="30" class="pr0"> 
                             <a href="javascript:void(0)" class="mytest"><span>上移</span><i class="layui-icon layui-icon-up" style="font-size:20px;margin-left:10px"></i></a>
@@ -187,7 +152,35 @@
                         <td width="30" class="pr0">
                             <a href="javascript:void(0)" class="mytest"><span>删除</span><i class="layui-icon layui-icon-close" style="font-size:20px;margin-left:10px"></i></a>
                         </td>
-                    </tr>
+                    </tr> -->
+                    <!-- <tr>
+                        <td>1</td>
+                        <td>
+                            <select name="interest" lay-skin="select" lay-filter="component-form-select">
+                                <option value="">请选择会议室</option>
+                                <option value="1">会议室1</option>
+                                <option value="2">会议室2</option>
+                                <option value="3">会议室3</option>
+                                <option value="4">会议室4</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="interest" lay-skin="select" lay-filter="component-form-select">
+                                <option value="">请选择编排规则</option>
+                                <option value="1">升序</option>
+                                <option value="2">降序</option>
+                            </select>
+                        </td>
+                        <td width="30" class="pr0">
+                            <a href="javascript:void(0)" class="mytest"><span>下移</span><i class="layui-icon layui-icon-down" style="font-size:20px;margin-left:10px"></i></a>
+                        </td>
+                        <td width="30" class="pr0"> 
+                            <a href="javascript:void(0)" class="mytest"><span>上移</span><i class="layui-icon layui-icon-up" style="font-size:20px;margin-left:10px"></i></a>
+                        </td>
+                        <td width="30" class="pr0">
+                            <a href="javascript:void(0)" class="mytest"><span>删除</span><i class="layui-icon layui-icon-close" style="font-size:20px;margin-left:10px"></i></a>
+                        </td>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
