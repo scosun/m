@@ -587,9 +587,9 @@ layui.config({
                 inde = false;
             }
             if(inde){
-                $("#leavebtn img").attr("src","../../../images/showlist.svg");
+                $("#leavebtn img").attr("src","../../../images/leave.svg");
             }else{
-                $("#leavebtn img").attr("src","../../../images/Closedlist.svg");
+                $("#leavebtn img").attr("src","../../../images/Closedleave.svg");
             }
         },
         notImport: function() {
@@ -609,9 +609,9 @@ layui.config({
                 inde1 = false;
             }
             if(inde1){
-                $("#importedbtn img").attr("src","../../../images/showlist.svg");
+                $("#importedbtn img").attr("src","../../../images/user-group.svg");
             }else{
-                $("#importedbtn img").attr("src","../../../images/Closedlist.svg");
+                $("#importedbtn img").attr("src","../../../images/Closeduser-group.svg");
             }
         },
         dragcontainer:function(){
