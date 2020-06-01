@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Meeting++ | 咪叮加加 &copy;</title>
+        <title>批量打印桌牌</title>
         <!-- <script type="text/javascript"src="http://code.jquery.com/jquery-1.4.1.min.js"></script> -->
         <script src="../../../js/jquery-3.1.1.min.js"></script>
     </head>
@@ -13,14 +13,17 @@
         .bottomname{font-family: "方正小标宋简体";text-align: right;position:relative;top:30mm;left:20mm;font-size:40mm;transform: scale(1,1.8);letter-spacing: 10mm;}
         .topname_s{font-family: "华文楷体";text-align: center;position:relative;top:23mm;font-size:45mm;letter-spacing: 5mm;transform:rotate(180deg) scale(1,1);left:-4mm;}
         .bottomname_s{font-family: "华文楷体";text-align: center;position:relative;top:45mm;font-size:45mm;transform: scale(1,1);letter-spacing: 5mm;}
-        .controlpad{position: fixed;top:20px;left:300mm;}
+        .controlpad{position: fixed;top:20px;right:0;z-index: 9999;}
         textarea{height:400px;width: 130px}
         .label{font-size:12px;padding:5px 0;}
         .btn{padding:5px 0;}
         .btnstyle{width:140px;}
+        @media print {
+            .no-print {display:none;}
+        }
     </style>
     <body>
-        <div class="controlpad">
+        <div class="controlpad no-print">
             <div class="label">请输入姓名（每人一行）：</div>
             <textarea id="name"></textarea>
             <div class="btn">
