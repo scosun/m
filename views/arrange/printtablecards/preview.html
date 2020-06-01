@@ -73,32 +73,16 @@
 		position: relative;
 		background-color: #fff;
 		margin:50px;
-		text-align: center;
-		/*弹性盒模型*/    
-		display:flex;
-		/*主轴居中对齐*/
-			justify-content: center;
-		/*侧轴居中对齐*/    
-			align-items: center;  
+		/* text-align: center; */
+		/* display:flex; */
+		/* justify-content: center; */
+		/* align-items: center;   */
 	}
 	.preview_left_text p{ 
 		border: 1px dotted #ccc;
     line-height: 100%;
     color: #000;
-    font-size: 52mm;/*动态数据*/
     display: inline-block;
-	/* font-family: "Microsoft Yahei"; */
-	font-family: "方正姚体";
-	padding:0mm 2mm 4mm 2mm;
-	/*动态数据*/
-	/* margin-left: 20mm; */
-	/*动态数据*/
-	/* margin-right: 60mm; */
-	/*动态数据*/
-	/* margin-bottom: 60mm; */
-	/*动态数据*/
-	/* margin-top: 22mm; */
-	/*动态数据*/
 	}
 	.text_width{
 		height: 21px;
@@ -148,14 +132,12 @@
 		right:auto;
 	top: 50%;
 	margin-top: -11px;
-	width: 20mm; /*动态数据*/
 	}
     
 	.padding_right{
 		left:auto;
 	top: 50%;
 	margin-top: -11px;
-	width: 20mm; /*动态数据*/
 	}
 	
 .text_height{
@@ -213,28 +195,233 @@
 		margin-left: -10px;
 		bottom: auto;
 		top: 0;
-		height: 22mm; /*动态数据*/
 	}
 	.padding_bottom{
 		left: 50%;
 		margin-left: -10px;
 		bottom: 0;
 		top: auto;
-		height: 22mm; /*动态数据*/
 	}
 	.mytest img{
 		width:20px;
 		margin-left: 10px;
-		/* margin-right: 10px; */
 	}
 	.mytest span{
 		display: none;
 	}
 
+	/*-----------默认微软-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3+4））除2取整
+	上下间距==> 22mm=（100-52-4）除2取整
+	*/
+	.preview_left_text p{ 
+		font-size: 52mm;
+		font-family: "Microsoft Yahei";
+		padding:0mm 2mm 4mm 2mm;
+		margin-left: 20mm;/*左右间距*/
+		margin-top: 22mm;/*上下间距*/
+	}
+	.preview_left_text .padding_top{
+    	height: 22mm;/*上下间距*/
+	}
+	.preview_left_text .padding_bottom{
+    	height: 22mm;/*上下间距*/
+	}
+	.preview_left_text .padding_left{
+    	width: 22mm;/*左右间距*/
+	}
+	.preview_left_text .padding_right{
+    	width: 22mm;/*左右间距*/
+	}
 
+	/*-----------宋体 songti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.songti p{
+		font-family: "宋体"; 
+		padding: 0;
+		font-size: 52mm;
+		margin-left: 22mm;/*左右间距*/
+		margin-top: 24mm;/*上下间距*/
+	}
+	.preview_left_text.songti .padding_top{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.songti .padding_bottom{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.songti .padding_left{
+    	width: 22mm;/*左右间距*/
+	}
+	.preview_left_text.songti .padding_right{
+    	width: 22mm;/*左右间距*/
+	}
+	/*-----------黑体 heiti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 20mm=（200-（52*3+4））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.heiti p{
+		font-family: "黑体"; 
+		padding: 0mm 2mm;
+		font-size: 52mm;
+		margin-left: 20mm;/*左右间距*/
+		margin-top: 24mm;/*上下间距*/
+	}
+	.preview_left_text.heiti .padding_top{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.heiti .padding_bottom{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.heiti .padding_left{
+    	width: 20mm;/*左右间距*/
+	}
+	.preview_left_text.heiti .padding_right{
+    	width: 20mm;/*左右间距*/
+	}
+	/*-----------楷体 kaiti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 21mm=（200-（52*3+2））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.kaiti p{
+		font-family: "楷体"; 
+		padding: 0 0 0 2mm;
+		font-size: 52mm;
+		margin-left: 21mm;/*左右间距*/
+		margin-top: 24mm;/*上下间距*/
+	}
+	.preview_left_text.kaiti .padding_top{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.kaiti .padding_bottom{
+    	height: 24mm;/*上下间距*/
+	}
+	.preview_left_text.kaiti .padding_left{
+    	width: 21mm;/*左右间距*/
+	}
+	.preview_left_text.kaiti .padding_right{
+    	width: 21mm;/*左右间距*/
+	}
+
+	/*-----------方正小标宋简体 fangzhengxiaobiaosong-----------*/
+	/*繁体 濤 显示的是默认字体*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 21mm=（200-（52*3+2））除2取整
+	上下间距==> 23mm=（100-52-2）除2取整
+	*/
+	.preview_left_text.fangzhengxiaobiaosong p{
+		font-family: "方正小标宋简体"; 
+		padding: 1.5mm 0 0.5mm 2mm;
+		font-size: 52mm;
+		margin-left: 21mm;/*左右间距*/
+		margin-top: 23mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_top{
+    	height: 23mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_bottom{
+    	height: 23mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_left{
+    	width: 21mm;/*左右间距*/
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_right{
+    	width: 21mm;/*左右间距*/
+	}
+	
+	/*-----------方正魏碑简体 fangzhengweibei-----------*/
+	/*繁体 濤 显示的是默认字体*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 22mm=（100-52-4）除2取整
+	*/
+	.preview_left_text.fangzhengweibei p{
+		font-family: "方正魏碑简体"; 
+		padding: 2mm 0;
+		font-size: 52mm;
+		margin-left: 22mm;/*左右间距*/
+		margin-top: 22mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengweibei .padding_top{
+    	height: 22mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengweibei .padding_bottom{
+    	height: 22mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengweibei .padding_left{
+    	width: 22mm;/*左右间距*/
+	}
+	.preview_left_text.fangzhengweibei .padding_right{
+    	width: 22mm;/*左右间距*/
+	}
+
+	/*-----------方正姚体 fangzhengyaoti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 21mm=（100-52-6）除2取整
+	*/
+	.preview_left_text.fangzhengyaoti p{
+		font-family: "方正姚体"; 
+		padding: 0 0 6mm;
+		font-size: 52mm;
+		margin-left: 22mm;/*左右间距*/
+		margin-top: 21mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengyaoti .padding_top{
+    	height: 21mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengyaoti .padding_bottom{
+    	height: 21mm;/*上下间距*/
+	}
+	.preview_left_text.fangzhengyaoti .padding_left{
+    	width: 22mm;/*左右间距*/
+	}
+	.preview_left_text.fangzhengyaoti .padding_right{
+    	width: 22mm;/*左右间距*/
+	}
+	/* 微软雅黑
+	宋体 .songti
+	黑体 .heiti
+	楷体 .kaiti
+	方正小标宋简体 .fangzhengxiaobiaosong
+	方正魏碑简体 .fangzhengweibei 
+
+	方正姚体 .fangzhengyaoti 
+	*/
 </style>
 </head>
 <body>
+<!-- 
+---------微软雅黑---------
+----基本设置----
+//用户设置 长度（200mm）、字体大小（52mm）后 计算左右间距的值
+左右间距=（200mm-（字体大小*字数+4mm））除2取整（4mm==浏览器上字不局中写的padding值）
+例：辛海濤   20mm=（200-（52*3+4））除2取整
+例：辛海濤   30mm=（200-（45*3+4））除2取整
+例：杜红   46mm=（200-（52*2+4））除2取整
+//用户设置 高度（100mm）、字体大小（52mm）后 计算上下间距的值
+上下间距=（100mm-（字体大小+4mm））除2取整（4mm==浏览器上字不局中写的padding值）上下间距与字数多少没关系。
+例：辛海濤   22mm=（100-（52+4））除2取整
+例：辛海濤  25mm=（100-（45+4））除2取整
+----位置设置----
+当用户设置 长度（200mm）、高度（200mm）、字体大小（52mm）设置后，计算左右间距、上下间距 填充到 上下左右输入框里。
+----文字设置----
+水平？垂直？
+对齐：左对齐   左右居中   右居中
+位置：上对齐   上下居中   下对齐
+-->
 
 <div class="layui-fluid">
 	<div class="layui-row layui-col-space15">
@@ -250,11 +437,12 @@
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div class="preview_left_text">
+							<div class="preview_left_text fangzhengyaoti">
+								<!-- <p>辛海涛</p> -->
 								<p>辛海濤</p>
 								<!-- <p>张&emsp;三</p> -->
 								<!-- <p>张三李四</p> -->
-								<!-- 20px 是1CM -->
+								<!-- <p>杜红</p> -->
 								<div class="text_width"><span>200mm</span></div>
 								<div class="text_width padding_left"><span>20mm</span></div>
 								<div class="text_width padding_right"><span>20mm</span></div>
@@ -285,7 +473,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">宽度</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌宽度"" value="100mm" autocomplete="off" id="name" class="layui-input">
+													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌宽度" value="100mm" autocomplete="off" id="name" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -295,10 +483,27 @@
 										<div class="layui-input-block">
 											<select name="meeting_list" lay-filter="component-form-select" id="meeting_list" class="meeting_list" style="width: 400px">
 												<option value="0">请选择会议</option>
-												<option value="1" selected>方正小标宋简体</option>
+												<option value="1" selected>微软雅黑</option>
+												<option value="2" selected>宋体</option>
+												<option value="3" selected>黑体</option>
+												<option value="4" selected>楷体</option>
+												<option value="5" selected>方正小标宋简体</option>
+												<option value="6" selected>方正魏碑简体</option>
+												<option value="7" selected>方正姚体</option>
+												<!-- 微软雅黑
+												宋体 .songti
+												黑体 .heiti
+												楷体 .kaiti
+												方正小标宋简体 .fangzhengxiaobiaosong
+												方正魏碑简体 .fangzhengweibei 
+												方正姚体 .fangzhengyaoti
+												 -->
 											</select>
+											<span style="margin-top:10px;color:#f00">请确保本机已安装了该字体</span>
+											<a href="../../../images/download-font.zip">下载安装字体</a>
 										</div>
 									</div>
+									
 									<div class="layui-form-item">
 										<label class="layui-form-label">字号</label>
 										<div class="layui-input-block">

@@ -344,7 +344,7 @@ layui.config({
                     return layer.msg("请选择后再批量打印！")
                 }
                 //获取选中数目
-                layer.confirm('    是否将 '+ deviceList.join('+') +' = '+ printSum +' 个桌牌全部打印？',
+                layer.confirm('    是否将 '+ deviceList.length +' 个桌牌全部打印？',
                 {
                     title:'打印桌牌',
                     skin: '',
