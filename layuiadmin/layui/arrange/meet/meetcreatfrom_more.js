@@ -68,12 +68,23 @@ layui.config({
             html.push('<td>');
             html.push('<select id="meet_'+ i + '" class="meetselect" name="interest" lay-skin="select" lay-filter="meeting-form-select">');
             html.push('<option value="">请选择会议室</option>');
-
+            
             allMeetData.forEach(function(item){
                 if(item.id == meetItem.roomid && meetItem.roomid != -1){
                     html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
                 }else{
-                    html.push('<option value="' + item.id + '" >' + item.name + '</option>');
+                    var b = true;
+                    for(var n = 0,len3 = meetsData.length; n < len3; n++){
+                        if(meetsData[n].roomid == item.id){
+                            b = false;
+                            break;
+                        }
+                    }
+                    if(!b){
+                        html.push('<option disabled value="' + item.id + '">'+ item.name + '</option>');
+                    }else{
+                        html.push('<option value="' + item.id + '">'+ item.name + '</option>');
+                    }
                 }
             });
 
