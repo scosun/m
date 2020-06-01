@@ -26,8 +26,8 @@ layui.config({
 
     /*chenxy add 批量添加会议室模板 */
     var meetsData = [{
-        roomId:-1,
-        ruleId:-1
+        roomid:-1,
+        ruleid:-1
     }];
 
     var allMeetData;
@@ -70,7 +70,7 @@ layui.config({
             html.push('<option value="">请选择会议室</option>');
 
             allMeetData.forEach(function(item){
-                if(item.id == meetItem.roomId && meetItem.roomId != -1){
+                if(item.id == meetItem.roomid && meetItem.roomid != -1){
                     html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
                 }else{
                     html.push('<option value="' + item.id + '" >' + item.name + '</option>');
@@ -83,10 +83,10 @@ layui.config({
             html.push('<select id="rule_'+ i + '" name="interest" lay-skin="select" lay-filter="rule-form-select">');
             html.push('<option value="">请选择编排规则</option>');
             
-            var ruleData = allMeetRoomRule[meetItem.roomId] || null;
+            var ruleData = allMeetRoomRule[meetItem.roomid] || null;
             if(ruleData && ruleData.length > 0){
                 ruleData.forEach(function(item){
-                    if(item.id == meetItem.ruleId && meetItem.ruleId != -1){
+                    if(item.id == meetItem.ruleid && meetItem.ruleid != -1){
                         html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
                     }else{
                         html.push('<option value="' + item.id + '" >' + item.name + '</option>');
@@ -144,7 +144,7 @@ layui.config({
 		form.on('select(meeting-form-select)', function(data){
             var id = +data.value;
             var eleid = +data.elem.id.split("_")[1];
-            meetsData[eleid].roomId = id;
+            meetsData[eleid].roomid = id;
             
             if(!allMeetRoomRule[id]){
                 getMeetRoomRule(id);
@@ -155,14 +155,14 @@ layui.config({
 		form.on('select(rule-form-select)', function(data){
             var id = +data.value;
             var eleid = +data.elem.id.split("_")[1];
-            meetsData[eleid].ruleId = id;
+            meetsData[eleid].ruleid = id;
 		});
     }
 
     $("#addMeetTplBtn").bind("click",function(){
         meetsData.push({
-            roomId:-1,
-            ruleId:-1
+            roomid:-1,
+            ruleid:-1
         });
         buildMeetTplHtml();
     });
@@ -197,7 +197,73 @@ layui.config({
     }
 
 
+    function addMultiplemeeting(data) {
+        $.ajax({
+            async: false,
+            type: "post",
+            url: url + "/meeting/Multiplemeeting",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data),
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function(msg) {
+                if(msg.code == 0){
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads(); // 父页面刷新
+                }else{
+                    layer.msg("添加会议错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        })
+    }
 
+    /* 监听提交 */
+    form.on('submit(addmeeting)', function(data) {
+        // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
+        console.log(data.field);
+
+        var newdate = data.field.date.replace('年','-').replace('月','-').slice(0,data.field.date.length-1);
+        var newdates =" ("+getMyDay(new Date(newdate))+") "
+        var datime = "";
+        if (data.field.time > '12:00') {
+            datime = "下午" + data.field.time;
+        } else {
+            datime = "上午" + data.field.time;
+        }
+
+        var datatime = data.field.date +newdates + datime;
+        console.log(datatime);
+
+        var condi = {};
+        condi.name = data.field.name;
+        condi.meetingtime = datatime;
+        condi.address = data.field.address;
+        condi.memo = data.field.memo;
+        var room = [];
+        meetsData.forEach(function(item){
+            if(item.roomid != -1 && item.ruleid != -1){
+                room.push({"roomid":+item.roomid,"ruleid":+item.ruleid});
+            }
+        });
+        if(room.length == 0){
+            layer.msg("请选择会议室和规则模板");
+            return;
+        }
+        condi.room = room;
+        
+        console.log("condi----",condi)
+        addMultiplemeeting(condi);
+
+        return false;
+    });
 
 
 
@@ -210,59 +276,59 @@ layui.config({
 
 
     // 修改弹出方式 5.26
-    $('.mytest').mouseover(function() {
-        layer.tips($(this).children('span').text(), this, {
-            tips: [3, "#808080"],
-            offset: '200px'
-        });
-    });
+    // $('.mytest').mouseover(function() {
+    //     layer.tips($(this).children('span').text(), this, {
+    //         tips: [3, "#808080"],
+    //         offset: '200px'
+    //     });
+    // });
 
 
     //日期时间选择器
-    window.reloads  = function(){
-       $.ajax({
-           async: false,
-           type: "get",
-           url: url + "/ruletemplate/findByruletemplate",
-           dataType: "json",
-           data: {
-               "roomid": $('#meeting').val()
-           },
-           xhrFields: {
-               withCredentials: true
-           },
-           //成功的回调函数
-           success: function(msg) {
-               var data = msg.data;
-               $("#select_rule").parent().find("option").filter(".selectOp").remove();
-               form.render(null, 'component-form-group');
-               $.each(data, function(idx, con) {
+    // window.reloads  = function(){
+    //    $.ajax({
+    //        async: false,
+    //        type: "get",
+    //        url: url + "/ruletemplate/findByruletemplate",
+    //        dataType: "json",
+    //        data: {
+    //            "roomid": $('#meeting').val()
+    //        },
+    //        xhrFields: {
+    //            withCredentials: true
+    //        },
+    //        //成功的回调函数
+    //        success: function(msg) {
+    //            var data = msg.data;
+    //            $("#select_rule").parent().find("option").filter(".selectOp").remove();
+    //            form.render(null, 'component-form-group');
+    //            $.each(data, function(idx, con) {
                 
        
-                   $("#select_rule").after("<option class='selectOp' value=" + con
-                       .id + ">" + con.name + "</option>");
-               })
-               form.render(null, 'component-form-group');
+    //                $("#select_rule").after("<option class='selectOp' value=" + con
+    //                    .id + ">" + con.name + "</option>");
+    //            })
+    //            form.render(null, 'component-form-group');
        
-               // .parent()
-               // }
-           },
-           //失败的回调函数
-           error: function() {
-               console.log("error")
-           }
-        });
-        form.render(null, 'component-form-group');
-    }
+    //            // .parent()
+    //            // }
+    //        },
+    //        //失败的回调函数
+    //        error: function() {
+    //            console.log("error")
+    //        }
+    //     });
+    //     form.render(null, 'component-form-group');
+    // }
 
-    var ins22 = laydate.render({
-        elem: '#dates',
-        min: s2,
-        max: '2080-10-14',
-        format: 'yyyy年MM月dd日' //可任意组合
-            ,
-        theme: 'molv'
-    });
+    // var ins22 = laydate.render({
+    //     elem: '#dates',
+    //     min: s2,
+    //     max: '2080-10-14',
+    //     format: 'yyyy年MM月dd日' //可任意组合
+    //         ,
+    //     theme: 'molv'
+    // });
 
     laydate.render({
         elem: '#times',
@@ -271,7 +337,9 @@ layui.config({
         btns: ['clear','now', 'confirm'],
         theme: 'molv'
     });
-    
+    laydate.render({
+        elem: '#LAY-component-form-group-date'
+    });
 
 
     var names = getUrlParam("name");
@@ -340,19 +408,17 @@ layui.config({
     }
     form.render(null, 'component-form-group');
 
-    laydate.render({
-        elem: '#LAY-component-form-group-date'
-    });
     
-    $('#addmeeting').click(()=>{
-        var name = $('#meetingname').val();
-        var meeting = $('#meeting').val();
-        var  ruleid = $('#ruleid').val();
-        var  dates = $('#dates').val();
-        var  times = $('#times').val();
-        var  remake = $('#remake').val();
-        location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
-    });
+    
+    // $('#addmeeting').click(()=>{
+    //     var name = $('#meetingname').val();
+    //     var meeting = $('#meeting').val();
+    //     var  ruleid = $('#ruleid').val();
+    //     var  dates = $('#dates').val();
+    //     var  times = $('#times').val();
+    //     var  remake = $('#remake').val();
+    //     location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
+    // });
 
     $('#addrule').click(()=>{
     
@@ -414,67 +480,7 @@ layui.config({
         }
     }
 
-    /* 监听提交 */
-    form.on('submit(addmeeting)', function(data) {
-        // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
-       console.log(data.field);
-      
-       var newdate = data.field.date.replace('年','-').replace('月','-').slice(0,data.field.date.length-1);
-       var newdates =" ("+getMyDay(new Date(newdate))+") "
-        var datime = "";
-        if (data.field.time > '12:00') {
-            datime = "下午" + data.field.time;
-        } else {
-            datime = "上午" + data.field.time;
-        }
-
-        var datatime = data.field.date +newdates + datime;
-        console.log(datatime);
-
-        // console.log(data.field.addressd);
-      
-     
-        $.ajax({
-            async: false,
-            type: "post",
-            url: url+"/meeting/addMeeting",
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            },
-            //成功的回调函数
-            data: {
-                "name": data.field.name,
-                "meetingtime": datatime,
-                "roomid": data.field.meeting,
-                "address":$("#meeting option:selected").text(),
-                "ruleid": data.field.rule,
-                "memo": data.field.memo
-            },
-            success: function(msg) {
-                if (msg.code == 0) {
-                    parent.layer.msg("增加成功");
-                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
-                    parent.reloads(); // 父页面刷新
-
-                } else {
-                    layer.msg("增加失败");
-                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
-                    // parent.location.reload(); // 父页面刷新
-
-
-                }
-
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        })
-        return false;
-    });
+    
 
     $('.layui-ds').on('click', function() {
         var type = $(this).data('type');

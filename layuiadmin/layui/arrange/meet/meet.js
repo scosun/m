@@ -313,6 +313,7 @@ layui.config({
                 layer.close(index);
             });
         } else if (obj.event === 'edit') {
+            
             var addmeet = layer.open({
                 type: 2,
                 title: '编辑信息',
@@ -397,6 +398,7 @@ layui.config({
             });
         }
         if(obj.event === 'rulezone'){
+            // debugger
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
