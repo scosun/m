@@ -313,7 +313,7 @@ layui.config({
                 layer.close(index);
             });
         } else if (obj.event === 'edit') {
-            
+            console.log(obj)
             var addmeet = layer.open({
                 type: 2,
                 title: '编辑信息',
@@ -321,8 +321,9 @@ layui.config({
                 // offset: '10%',
                 area: ['75%', '85%'],
                 maxmin: true,
-                btn: ['确定', '取消'],
-                content: 'form.html',
+                // btn: ['确定', '取消'],
+                // content: 'form.html',
+                content: 'meet_create_more.html',
                 yes: function(index, layero) {
                     var body = layui.layer.getChildFrame('body', index);
                     var date = body.find("#date").val()
@@ -378,27 +379,29 @@ layui.config({
                 },
                 success: function(layero, index) {
                     var body = layui.layer.getChildFrame('body', index);
+                    
                     if (data) {
                         var datatime = data.meetingtime;
 
                         var arrdatatime = datatime.split(" ");
 
-                        console.log(arrdatatime)
+                        // console.log(arrdatatime)
 
                         // 取到弹出层里的元素，并把编辑的内容放进去
                         body.find("#meetingid").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                         body.find(".hyname").val(data.name); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
-                        body.find("#date").val(arrdatatime[0]); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
-                        body.find("#time").val(arrdatatime[2].substring(2)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
-                        body.find("#roomid").val(data.roomid);
-                        body.find("#meetingrule").val(data.ruleid);
-                        body.find("#memo").val(data.memo);
+                        body.find("#dates").val(arrdatatime[0]); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                        body.find("#times").val(arrdatatime[2].substring(2)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                        // body.find("#roomid").val(data.roomid);
+                        // body.find("#meetingrule").val(data.ruleid);
+                        body.find("#remake").val(data.memo);
                     }
                 }
             });
         }
         if(obj.event === 'rulezone'){
             // debugger
+            console.log(obj)
             layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
@@ -409,7 +412,8 @@ layui.config({
                 // maxmin: true,
                 closeBtn:false,
                 offset: '0',
-                content: 'aaaa.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+                // content: 'aaaa.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+                content: 'aaaa.html?meetingid=' + data.id,
                 success: function(layero, index) {
                 
                 }

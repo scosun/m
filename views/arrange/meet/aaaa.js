@@ -33,17 +33,157 @@ layui.config({
     });
 
     
+    var url = setter.baseUrl;
+    var uri = window.location.search;
+    var str = uri.substr(1);
+    // window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
+    // window.meetingid = str.substring(str.lastIndexOf("=")+1)
+    // window.roomid = str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
+    // window.newroomid = roomid.substring(roomid.indexOf("=")+1,roomid.length);
     
-   
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+         var uri = window.location.search;
+        var r = uri.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return r[2]; return null; //返回参数值
+    }
+    var meetingid = +getUrlParam("meetingid") || null;
 
-    var str = '<li class="layui-this">***主席台</li><li >主席台123</li><li >主席台4444</li>'
-    $(".layui-tab-title").html(str);
+    if(!meetingid){
+        layer.msg("没有获取到会议id");
+        return;
+    }
 
-    $('.layui-tab-title > li').on('click', function(title) {
-        // console.log(111111111,title,$(this).text())
-        // console.log(title.toElement.textContent)
+    $.ajax({
+        url: url+"/meeting/findroomBymeetingid?id=" + meetingid,
+        type: "get",
+        async: false,
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(obj) {
+            console.log("findroomBymeetingid-----",data);
+            var code = obj.code;
+            if(code == 0){
+                var data = obj.data || [];
+                buildMeetTabHtml(data);
+            }else{
+                layer.msg("获取会议会议室数据错误");
+            }
+        },
+        error:function(){
+            layer.closeAll();
+        }
     });
 
+
+    function buildMeetTabHtml(data){
+        var str = [];
+        data.forEach(function(item,i){
+            if(i == 0){
+                str.push('<li id="' + item.roomid + '" class="layui-this">' + item.name + '</li>');
+
+                getRoomTemplateCode(item.roomid);
+            }else{
+                str.push('<li id="' + item.roomid + '">' + item.name + '</li>');
+            }
+            
+        });
+        $(".layui-tab-title").html(str);
+
+        $('.layui-tab-title > li').on('click', function(evt) {
+            var roomid = this.id;
+            console.log("roomid----",roomid)
+            getRoomTemplateCode(roomid);
+        });
+    }
+
+
+    function getRoomTemplateCode(roomid){
+        layer.load(2);
+    
+        $.ajax({
+            url: url+"/roomtemplate/findByIdTemplatecode",
+            type: "post",
+            async: false,
+            xhrFields: {
+                withCredentials: true
+            },
+            data: {
+                "id": roomid,
+            },
+            success: function(obj) {
+                console.log("findByIdTemplatecode---",obj);
+                var code = obj.code;
+                if(code == 0){
+                    var datas = obj.data || {};
+                    // $("#seatsbody").append(datas.templatecode);
+                    $("#seatsbody").html(datas.templatecode);
+                    
+                    selectSeats();
+
+                    getMeetInfo();
+
+                    
+                    queryAllSeatStatus();
+                }else{
+                    layer.msg("获取会议室模板错误");
+                }
+                
+                layer.closeAll();
+            },
+            error:function(){
+                layer.closeAll();
+            }
+        });
+    }
+
+    function queryAllSeatStatus(){
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+            dataType: "json",
+            success: function(obj) {
+                console.log("--queryAllSeatStatus---");
+                if(obj && obj.attendees){
+                    seatsdata = obj.attendees;
+                    changeSeatColor(obj.attendees);
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
+
+    
+    function getMeetInfo(){
+        $.ajax({
+            url: url+"/meeting/findByMeeting",
+            type: "get",
+            async: false,
+            xhrFields: {
+                withCredentials: true
+            },
+            data: {
+                "id": meetingid,
+            },
+            success: function(obj) {
+                var code = obj.code;
+                if(code == 0){
+                    var datas = obj.data || {};
+                    $("#meetingname").text(datas[0].name);
+                    $("#meetingaddress").text("地点："+datas[0].address);
+                    $("#meetingremark").text("备注："+datas[0].memo);
+                    $("#meetingtime").text("时间："+datas[0].meetingtime);
+                }else{
+                    layer.msg("获取会议地址信息错误");
+                }
+            }
+        });
+    }
 
     /*右侧菜单HOVER显示提示文字*/
     var subtips;
@@ -63,78 +203,12 @@ layui.config({
     })
     /*右侧菜单HOVER显示提示文字 end*/
 
-    var url = setter.baseUrl;
-    var uri = window.location.search;
-    var str = uri.substr(1);
-    window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
-    window.meetingid = str.substring(str.lastIndexOf("=")+1)
-    window.roomid = str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
-    window.newroomid = roomid.substring(roomid.indexOf("=")+1,roomid.length)
+    
     
     var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
     var seatsdata = [];
 
-    /*右侧菜单HOVER显示提示文字 end*/
-    layer.load(2);
     
-    $.ajax({
-        url: url+"/roomtemplate/findByIdTemplatecode",
-        type: "post",
-        async: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        data: {
-            "id": newroomid,
-            
-        },
-        success: function(data) {
-            var datas = data.data
-            $("#seatsbody").append(datas.templatecode);
-            
-            selectSeats();
-
-            var condi = {
-                "meeting_id": +meetingid
-            };
-
-            // importSeatsData(condi);
-            queryAllSeatStatus();
-            layer.closeAll();
-        },
-        error:function(){
-            layer.closeAll();
-        }
-    });
-    $.ajax({
-        url: url+"/meeting/findByMeeting",
-        type: "get",
-        async: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        data: {
-            "id": meetingid,
-            
-        },
-        success: function(data) {
-            var datas = data.data
-            
-            $("#meetingname").text(datas[0].name);
-            $("#meetingaddress").text("地点："+datas[0].address);
-            $("#meetingremark").text("备注："+datas[0].memo);
-            $("#meetingtime").text("时间："+datas[0].meetingtime);
-            
-            // selectSeats();
-
-            // var condi = {
-            // 	"meeting_id": +meetingid
-            // };
-            // importSeatsData(condi);
-            // queryAllSeatStatus(roomid, ruleid);
-        }
-    });
-
     $.ajax({
         type: "get",
         url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
@@ -170,25 +244,11 @@ layui.config({
 
 
 
-    function queryAllSeatStatus(){
-        $.ajax({
-            async: false,
-            type: "get",
-            url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
-            dataType: "json",
-            success: function(obj) {
-                console.log("--queryAllSeatStatus---");
-                if(obj && obj.attendees){
-                    seatsdata = obj.attendees;
-                    changeSeatColor(obj.attendees);
-                }
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        });
-    }
+    
+
+
+
+
 
     function importSeatsData(condi){
         $.ajax({
