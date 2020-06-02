@@ -17,6 +17,25 @@
                 background-size: 1.2rem 1.2rem;
                 text-indent: -9999px;
             }
+            .dropdown-menu-warp{
+                font-size: 14px;display:inline-block;vertical-align: middle;
+            }
+            
+            .dropdown-menu-nav.dropdown-bottom-right{
+                top:44px;left:0;width: 60px;padding:10px; margin:0 auto;
+                min-width: 60px;
+            }
+            .dropdown-menu-nav.dropdown-bottom-right .dropdown-anchor {
+                right: 38px!important;
+            }
+            .dropdown-menu-nav.dropdown-bottom-right .layui-ds{
+                display: block;
+                text-align: center;
+                height: 36px;
+                line-height: 36px;
+            }
+
+            
         </style>
     </head>
     <body>
@@ -55,21 +74,31 @@
                             <table id="test-table-operate" lay-filter="test-table-operate"></table>
                             <script type="text/html" id="groups">
                                 {{#  if($.inArray("addmeet", d) != -1){ }}
-                                <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>
-                                <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button>
+                                <!-- <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button> -->
+                                <!-- <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button> -->
+                                <!-- 新建 -->
+                                <div class="dropdown-menu-warp">
+                                        <div class="dropdown-menu dropdown-hover">
+                                                <button class='layui-ds gradient-block-diagonal'>新建</button>
+                                                <div class="dropdown-menu-nav dropdown-bottom-right">
+                                                        <div class="dropdown-anchor"></div>
+                                                        <a class='layui-ds' href="javascript:;" data-type='add' id='addmeeting'>单会场</a>
+                                                        <a class='layui-ds' href="javascript:;" data-type='addMore' id='addmeeting'>多会场</a>
+                                                </div>
+                                        </div>
+                                </div>
                                 {{# }}}
                                 <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>
                                 {{#  if($.inArray("emptymeet", d) != -1){ }}
                                 <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>
                                 {{# }}}
                                 {{#  if($.inArray("batchmeet", d) != -1){ }}
-                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除</a>
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
                                 {{# }}}
+                                <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="recycle" id="recycle">回收站</a>
                                 <a class="layui-ds layui-btn-a-grey" href="javascript:;" id="1" style="padding:0">
-                                    <!-- <img src="../../../images/recycle.png" width="17px"height="17px"/> -->
                                     <span style="margin-left: 3px"> /</span>
                                 </a>
-
                                 <div class="assistBtn" style="margin-top: 10px"><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh" ></i></i></div>
 
 

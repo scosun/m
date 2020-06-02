@@ -1,12 +1,14 @@
 layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
-    index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery','laytpl'], function() {
+    index: 'lib/index', //主入口模块
+    dropdown: '/dropdown/dropdown'
+}).use(['index', 'table', 'jquery','laytpl','dropdown'], function() {
     var table = layui.table,
         admin = layui.admin,
         setter = layui.setter,
         tpl = layui.laytpl;
+        dropdown = 'dropdown',
         router = layui.router(),
         $ = layui.jquery;
     var url = setter.baseUrl;
@@ -15,11 +17,6 @@ layui.config({
     var deviceList = [];
     // #test-table-operate
     //渲染表格
-
-    // 20.04.06 dh 下行有修改 
-
-    
-
     $.ajax({
         async: false,
         type: "get",
