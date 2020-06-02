@@ -23,6 +23,26 @@ layui.config({
     var s2 = day2.getFullYear() + "-" + (day2.getMonth() + 1) + "-" + day2.getDate();
     var s3 = hour + ":" + minu + ":" + sec;
 
+    var ins22 = laydate.render({
+        elem: '#dates',
+        min: s2,
+        max: '2080-10-14',
+        format: 'yyyy年MM月dd日' //可任意组合
+            ,
+        theme: 'molv'
+    });
+
+    laydate.render({
+        elem: '#times',
+        type: 'time',
+        format: 'HH:mm',
+        btns: ['clear','now', 'confirm'],
+        theme: 'molv'
+    });
+    laydate.render({
+        elem: '#LAY-component-form-group-date'
+    });
+
 
     /*chenxy add 批量添加会议室模板 */
     var meetsData = [{
@@ -52,7 +72,13 @@ layui.config({
                 //         "</option>");
                 // })
                 
-                buildMeetTplHtml();
+                var meetingid = $("#meetingid").val() || null;
+    
+                if(meetingid){
+                    getMeetingRooms(meetingid);
+                }else{
+                    buildMeetTplHtml();
+                }
             }else{
                 layer.msg("获取会议室列表错误");
             }
@@ -68,12 +94,23 @@ layui.config({
             html.push('<td>');
             html.push('<select id="meet_'+ i + '" class="meetselect" name="interest" lay-skin="select" lay-filter="meeting-form-select">');
             html.push('<option value="">请选择会议室</option>');
-
+            
             allMeetData.forEach(function(item){
                 if(item.id == meetItem.roomid && meetItem.roomid != -1){
                     html.push('<option selected value="' + item.id + '" >' + item.name + '</option>');
                 }else{
-                    html.push('<option value="' + item.id + '" >' + item.name + '</option>');
+                    var b = true;
+                    for(var n = 0,len3 = meetsData.length; n < len3; n++){
+                        if(meetsData[n].roomid == item.id){
+                            b = false;
+                            break;
+                        }
+                    }
+                    if(!b){
+                        html.push('<option disabled value="' + item.id + '">'+ item.name + '</option>');
+                    }else{
+                        html.push('<option value="' + item.id + '">'+ item.name + '</option>');
+                    }
                 }
             });
 
@@ -166,6 +203,7 @@ layui.config({
         });
         buildMeetTplHtml();
     });
+
     //获取会议室对应的规则
     function getMeetRoomRule(roomid) {
         $.ajax({
@@ -183,8 +221,11 @@ layui.config({
             success: function(msg) {
                 if(msg.code == 0){
                     var data = msg.data || [];
-                    allMeetRoomRule[roomid] = data;
-                    buildMeetTplHtml();
+                    if(data.length > 0){
+                        allMeetRoomRule[data[0].roomid] = data;
+                    
+                        buildMeetTplHtml();
+                    }
                 }else{
                     layer.msg("查询会议室规则错误");
                 }
@@ -195,7 +236,6 @@ layui.config({
             }
         })
     }
-
 
     function addMultiplemeeting(data) {
         $.ajax({
@@ -260,28 +300,37 @@ layui.config({
         condi.room = room;
         
         console.log("condi----",condi)
-        addMultiplemeeting(condi);
+
+        var meetingid = $("#meetingid").val() || null;
+    
+        if(meetingid){
+            
+            // getMeetingRooms(meetingid);
+        }else{
+            addMultiplemeeting(condi);
+        }
+        
 
         return false;
     });
 
 
-
-
-
-
-
-
-    
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+         var uri = window.location.search;
+        var r = uri.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return r[2]; return null; //返回参数值
+    }
 
 
     // 修改弹出方式 5.26
-    // $('.mytest').mouseover(function() {
-    //     layer.tips($(this).children('span').text(), this, {
-    //         tips: [3, "#808080"],
-    //         offset: '200px'
-    //     });
-    // });
+    $('.mytest').mouseover(function() {
+        layer.tips($(this).children('span').text(), this, {
+            tips: [3, "#808080"],
+            offset: '200px'
+        });
+    });
+
 
 
     //日期时间选择器
@@ -321,69 +370,36 @@ layui.config({
     //     form.render(null, 'component-form-group');
     // }
 
-    // var ins22 = laydate.render({
-    //     elem: '#dates',
-    //     min: s2,
-    //     max: '2080-10-14',
-    //     format: 'yyyy年MM月dd日' //可任意组合
-    //         ,
-    //     theme: 'molv'
-    // });
+    
 
-    laydate.render({
-        elem: '#times',
-        type: 'time',
-        format: 'HH:mm',
-        btns: ['clear','now', 'confirm'],
-        theme: 'molv'
-    });
-    laydate.render({
-        elem: '#LAY-component-form-group-date'
-    });
-
-
-    var names = getUrlParam("name");
-    var meetings = getUrlParam("meeting");
-    var  ruleids = getUrlParam("ruleid");
-    var  datess = getUrlParam("dates");
-    var  timess = getUrlParam("times");
-    var  remakes= getUrlParam("remake");
-    if (names!=""&&names!=null){
-        $('#meetingname').val(decodeURI(names));
-    }
-    if (meetings!=""&&meetings!=null){
-        $('#meeting').val(decodeURI(meetings));
-        console.log(decodeURI(meetings))
-        form.render(null, 'component-form-group');
-    }
-    if (ruleids!=""&&ruleids!=null){
+    function getMeetingRooms(meetingid){
         $.ajax({
             async: false,
             type: "get",
-            url: url + "/ruletemplate/findByruletemplate",
+            url: url + "/meeting/findMultiplemeeting?id=" + meetingid,
             dataType: "json",
-            data: {
-                "roomid": meetings
-            },
             xhrFields: {
                 withCredentials: true
             },
             //成功的回调函数
             success: function(msg) {
-                var data = msg.data;
-                $("#select_rule").parent().find("option").filter(".selectOp").remove();
-                form.render(null, 'component-form-group');
-                $.each(data, function(idx, con) {
+                console.log("getMeetingRooms----",msg);
+                var code = msg.code;
+                if(code == 0){
+                    var data = msg.data || [];
+                    meetsData = [];
+                    data.forEach(function(item){
+                        meetsData.push({
+                            roomid:item.roomid,
+                            ruleid:item.ruleid
+                        });
 
-
-                    $("#select_rule").after("<option class='selectOp' value=" + con
-                        .id + ">" + con.name + "</option>");
-                })
-                $('#ruleid').val(ruleids);
-                form.render(null, 'component-form-group');
-
-                // .parent()
-                // }
+                        getMeetRoomRule(item.roomid);
+                    });
+                    buildMeetTplHtml();
+                }else{
+                    layer.msg("获取会议室数据错误")
+                }
             },
             //失败的回调函数
             error: function() {
@@ -391,25 +407,78 @@ layui.config({
             }
         })
     }
-    if (datess!=""&&datess!=null){
-        $('#dates').val(decodeURI(datess));
-    }
-    if (timess!=""&&timess!=null){
-        $('#times').val(decodeURI(timess));
-    }
-    if (remakes!=""&&remakes!=null){
-        $('#remake').val(decodeURI(remakes));
-    }
-    function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-         var uri = window.location.search;
-        var r = uri.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return r[2]; return null; //返回参数值
-    }
-    form.render(null, 'component-form-group');
+    
+    
+
+
+    // var names = getUrlParam("name");
+    // var meetings = getUrlParam("meeting");
+    // var  ruleids = getUrlParam("ruleid");
+    // var  datess = getUrlParam("dates");
+    // var  timess = getUrlParam("times");
+    // var  remakes= getUrlParam("remake");
+
+    // if (names!=""&&names!=null){
+    //     $('#meetingname').val(decodeURI(names));
+    // }
+    // if (meetings!=""&&meetings!=null){
+    //     $('#meeting').val(decodeURI(meetings));
+    //     console.log(decodeURI(meetings))
+    //     form.render(null, 'component-form-group');
+    // }
+
+    // if (ruleids!=""&&ruleids!=null){
+    //     $.ajax({
+    //         async: false,
+    //         type: "get",
+    //         url: url + "/ruletemplate/findByruletemplate",
+    //         dataType: "json",
+    //         data: {
+    //             "roomid": meetings
+    //         },
+    //         xhrFields: {
+    //             withCredentials: true
+    //         },
+    //         //成功的回调函数
+    //         success: function(msg) {
+    //             var data = msg.data;
+    //             $("#select_rule").parent().find("option").filter(".selectOp").remove();
+    //             form.render(null, 'component-form-group');
+    //             $.each(data, function(idx, con) {
+
+
+    //                 $("#select_rule").after("<option class='selectOp' value=" + con
+    //                     .id + ">" + con.name + "</option>");
+    //             })
+    //             $('#ruleid').val(ruleids);
+    //             form.render(null, 'component-form-group');
+
+    //             // .parent()
+    //             // }
+    //         },
+    //         //失败的回调函数
+    //         error: function() {
+    //             console.log("error")
+    //         }
+    //     })
+    // }
+
+    // if (datess!=""&&datess!=null){
+    //     $('#dates').val(decodeURI(datess));
+    // }
+    // if (timess!=""&&timess!=null){
+    //     $('#times').val(decodeURI(timess));
+    // }
+    // if (remakes!=""&&remakes!=null){
+    //     $('#remake').val(decodeURI(remakes));
+    // }
+    
+    // form.render(null, 'component-form-group');
 
     
     
+
+
     // $('#addmeeting').click(()=>{
     //     var name = $('#meetingname').val();
     //     var meeting = $('#meeting').val();
