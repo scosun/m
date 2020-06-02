@@ -437,9 +437,9 @@ layui.config({
 			
 			layer.open({
 				type: 2,
-				title: obj.data.id,
+				title: obj.data.name,
 				//content: 'meeting_room_zq.html?roomid='+age.id
-				content: 'meeting_room_zq.html?roomid=230'
+				content: 'meeting_room_zq.html?roomid='+age.id
 					,maxmin: true
 					,
 				area: ['100%', '100%'],
