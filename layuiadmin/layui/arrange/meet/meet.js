@@ -391,6 +391,7 @@ layui.config({
                         body.find("#times").val(arrdatatime[2].substring(2)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                         // body.find("#roomid").val(data.roomid);
                         // body.find("#meetingrule").val(data.ruleid);
+                        body.find("#meetingaddress").val(data.address);
                         body.find("#remake").val(data.memo);
                     }
                 }

@@ -313,7 +313,7 @@ layui.config({
 
         var datatime = data.field.date +newdates + datime;
         console.log(datatime);
-
+        
         var condi = {};
         condi.name = data.field.name;
         condi.meetingtime = datatime;
