@@ -264,11 +264,43 @@ layui.config({
             }
         })
     }
+    function updateMultiplemeeting(data) {
+        $.ajax({
+            async: false,
+            type: "post",
+            url: url + "/meeting/upMultiplemeeting",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data),
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function(msg) {
+                if(msg.code == 0){
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads(); // 父页面刷新
+                }else{
+                    layer.msg("添加会议错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        })
+    }
 
     /* 监听提交 */
     form.on('submit(addmeeting)', function(data) {
         // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
         console.log(data.field);
+
+        if(!data.field.date || !data.field.time){
+            layer.msg("请选择会议日期和时间");
+            return;
+        }
 
         var newdate = data.field.date.replace('年','-').replace('月','-').slice(0,data.field.date.length-1);
         var newdates =" ("+getMyDay(new Date(newdate))+") "
@@ -287,29 +319,32 @@ layui.config({
         condi.meetingtime = datatime;
         condi.address = data.field.address;
         condi.memo = data.field.memo;
-        var room = [];
+        // var room = [];
+        var b = true;
         meetsData.forEach(function(item){
-            if(item.roomid != -1 && item.ruleid != -1){
-                room.push({"roomid":+item.roomid,"ruleid":+item.ruleid});
+            if(item.roomid == -1 || item.ruleid == -1){
+                b = false;
+                return;
+                // room.push({"roomid":+item.roomid,"ruleid":+item.ruleid});
             }
         });
-        if(room.length == 0){
+        
+        if(meetsData.length == 0 || !b){
             layer.msg("请选择会议室和规则模板");
             return;
         }
-        condi.room = room;
+        condi.room = meetsData;
         
         console.log("condi----",condi)
 
         var meetingid = $("#meetingid").val() || null;
     
         if(meetingid){
-            
-            // getMeetingRooms(meetingid);
+            condi.id = meetingid;
+            updateMultiplemeeting(condi);
         }else{
             addMultiplemeeting(condi);
         }
-        
 
         return false;
     });
