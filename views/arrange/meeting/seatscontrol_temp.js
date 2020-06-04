@@ -925,6 +925,8 @@ function countMaxWidth(issave){
 	// $(".seatcontainer").width(colnum*50 + 100);
 	// $(".seatcontainer").height(rownum*50 + 200);
 
+	
+
 	hideMeetTitle();
 	
 	var seats = $("#seatcontainerId .seatdiv");
@@ -944,7 +946,16 @@ function countMaxWidth(issave){
 	var width = lefts[lefts.length - 1];
 	var height = tops[tops.length - 1];
 
-	
+	// console.log($("body").width(),$("body").height(),document.documentElement.clientWidth,document.documentElement.clientHeight);
+
+	var clientwidth = document.documentElement.clientWidth - 100;
+	var clientheight = document.documentElement.clientHeight - 306;
+	if(width < clientwidth){
+		width = clientwidth;
+	}
+	if(height < clientheight){
+		height = clientheight;
+	}
 
 	// __maxWidth = width + 150;
 	if(issave){

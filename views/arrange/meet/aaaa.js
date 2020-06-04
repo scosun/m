@@ -48,7 +48,9 @@ layui.config({
         if (r != null) return r[2]; return null; //返回参数值
     }
     var meetingid = +getUrlParam("meetingid") || null;
+    var roomId = 0;
 
+    meetingid = 330
     if(!meetingid){
         layer.msg("没有获取到会议id");
         return;
@@ -100,6 +102,8 @@ layui.config({
 
 
     function getRoomTemplateCode(roomid){
+        roomId = roomid;
+
         layer.load(2);
     
         $.ajax({
@@ -298,6 +302,8 @@ layui.config({
 
 
     
+    var groupids = {};
+
     //获取请假人员列表
     function getAskLeaveData(obj){
         // console.log(data)
@@ -328,7 +334,12 @@ layui.config({
             data.push({
                 title:k,
                 list:obj[k]
-            })
+            });
+
+            groupids[k] = [];
+            obj[k].forEach(function(item){
+                groupids[k].push(item.id);
+            });
         }
         
 
@@ -343,7 +354,7 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(' + list.length + '人)<a class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4>' + title + '(' + list.length + '人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -390,7 +401,11 @@ layui.config({
             data.push({
                 title:k,
                 list:obj[k]
-            })
+            });
+            groupids[k] = [];
+            obj[k].forEach(function(item){
+                groupids[k].push(item.id);
+            });
         }
 
         addNotImportHtml(data);
@@ -403,7 +418,7 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(' + list.length + '人)<a class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4>' + title + '(' + list.length + '人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -440,18 +455,61 @@ layui.config({
                 // return false;
             }
             item.ondragend = function(evt){
-                console.log("ondragend-----------------",evt,this);
+                console.log("ondragend-----------------",evt,this.id);
+                
                 unbindStaffDrap();
                 if($(".R99").length > 0){
                     var id = $(".R99").attr("id");
-                    var pid = $(this).attr("id");
-                    console.log(id,pid);
+                    
+                    
                     $(".R99").removeClass("R99");
+
+                    var condi = {};
+                    condi.meeting_id = meetingid;
+
+                    condi.room_id = roomId;
+                    condi.seat_id = id;
+
+                    var pid = this.id;
+
+                   
+
+                    if(!pid){
+                        //组拖拽
+                        var pkey = $(this).attr("data");
+                        condi.attendee_ids = groupids[pkey];
+                    }else{
+                        condi.attendee_ids = [pid];
+                    }
+
+                    console.log(id,pid,condi);
+                    
+                    
+                    saveDragSort(condi);
                 }
             }
         });
     
     }
+
+
+    function saveDragSort(data){
+        $.ajax({
+            type: "post",
+            url: "https://m.longjuli.com/v1/meetings/drag_sort",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data),
+            success: function(obj) {
+                console.log("pending-----",obj)
+                getAskLeaveData(obj.leave);
+                getNotImportData(obj.pending);
+            }
+        });
+    }
+
+
+
 
 
     window.serverSeatIds = [];
