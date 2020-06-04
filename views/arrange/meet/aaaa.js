@@ -50,7 +50,6 @@ layui.config({
     var meetingid = +getUrlParam("meetingid") || null;
     var roomId = 0;
 
-    meetingid = 330
     if(!meetingid){
         layer.msg("没有获取到会议id");
         return;
