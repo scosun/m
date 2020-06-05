@@ -119,6 +119,9 @@
             height: 35px;
             display: inline-block;
         }
+        .drag-hide{
+            display: none;
+        }
 	</style>
 	<script type="text/javascript">  
 		function doNothing(){  
@@ -382,16 +385,16 @@
 
     <script>
     //请假人员列表 展开收起
-    $(function(){
-        $(".float-right-list>li>h4").on("click",function(){
-            $(this).addClass('active');
-            $(".float-right-list>li>h4").not(this).removeClass('active');
-            var next = $(this).next();
-            next.slideToggle('fade');
-            $('.list-body').not(next).slideUp('fast');
-            return false;
-        })
-    })
+    // $(function(){
+    //     $(".float-right-list>li>h4").on("click",function(){
+    //         $(this).addClass('active');
+    //         $(".float-right-list>li>h4").not(this).removeClass('active');
+    //         var next = $(this).next();
+    //         next.slideToggle('fade');
+    //         $('.list-body').not(next).slideUp('fast');
+    //         return false;
+    //     })
+    // })
     </script>
 
     <script type="text/javascript">

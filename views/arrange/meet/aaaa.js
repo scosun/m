@@ -32,7 +32,9 @@ layui.config({
         active[type] && active[type].call(this);
     });
 
-    
+    var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+    var seatsdata = [];
+
     var url = setter.baseUrl;
     var uri = window.location.search;
     var str = uri.substr(1);
@@ -127,8 +129,11 @@ layui.config({
 
                     getMeetInfo();
 
+                    if(seatsdata.length == 0){
+                        queryAllSeatStatus();
+                    }
                     
-                    queryAllSeatStatus();
+                    changeSeatColor(seatsdata);
                 }else{
                     layer.msg("获取会议室模板错误");
                 }
@@ -151,7 +156,7 @@ layui.config({
                 console.log("--queryAllSeatStatus---");
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees;
-                    changeSeatColor(obj.attendees);
+                    // changeSeatColor(obj.attendees);
                 }
             },
             //失败的回调函数
@@ -208,9 +213,6 @@ layui.config({
 
     
     
-    var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
-    var seatsdata = [];
-
     
     $.ajax({
         type: "get",
@@ -265,7 +267,11 @@ layui.config({
                 console.log("--importSeatsData---",condi);
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees;
-                    changeSeatColor(obj.attendees);
+                    
+                    //导入数据是全部的数据，重新获取模板加载人员
+                    getRoomTemplateCode(roomId);
+                }else{
+                    layer.msg("没有可导入的人员数据");
                 }
             },
             //失败的回调函数
@@ -276,7 +282,7 @@ layui.config({
     }
 
     function setSeatData(data){
-        // console.log(data)
+        console.log(data)
         $.ajax({
             async: false,
             type: "post",
@@ -359,7 +365,7 @@ layui.config({
                 var item2 = list[j];
                 var name2 = item2.name;
                 var id2 = item2.id;
-                li.push('<li>'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
+                li.push('<li id="pa_' + id2 + '" >'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
             }
             li.push('</ul>');
             li.push('</li>');
@@ -423,7 +429,7 @@ layui.config({
                 var item2 = list[j];
                 var name2 = item2.name;
                 var id2 = item2.id;
-                li.push('<li>'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
+                li.push('<li id="pa_' + id2 + '">'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
             }
             li.push('</ul>');
             li.push('</li>');
@@ -434,13 +440,22 @@ layui.config({
     }
     
     function bindStaffListEvent(){
-        $(".float-right-list>li>h4").unbind('click');
-        $(".float-right-list>li>h4").on("click",function(){
+        $("#askLeaveTitleList>li>h4").unbind('click');
+        $("#askLeaveTitleList>li>h4").on("click",function(){
             $(this).addClass('active');
-            $(".float-right-list>li>h4").not(this).removeClass('active');
+            $("#askLeaveTitleList>li>h4").not(this).removeClass('active');
             var next = $(this).next();
             next.slideToggle('fade');
-            $('.list-body').not(next).slideUp('fast');
+            $('#askLeaveTitleList .list-body').not(next).slideUp('fast');
+            return false;
+        });
+        $("#notImportList>li>h4").unbind('click');
+        $("#notImportList>li>h4").on("click",function(){
+            $(this).addClass('active');
+            $("#notImportList>li>h4").not(this).removeClass('active');
+            var next = $(this).next();
+            next.slideToggle('fade');
+            $('#notImportList .list-body').not(next).slideUp('fast');
             return false;
         });
 
@@ -466,7 +481,7 @@ layui.config({
                     var condi = {};
                     condi.meeting_id = meetingid;
 
-                    condi.room_id = roomId;
+                    condi.room_id = +roomId;
                     condi.seat_id = id;
 
                     var pid = this.id;
@@ -478,7 +493,7 @@ layui.config({
                         var pkey = $(this).attr("data");
                         condi.attendee_ids = groupids[pkey];
                     }else{
-                        condi.attendee_ids = [pid];
+                        condi.attendee_ids = [+pid];
                     }
 
                     console.log(id,pid,condi);
@@ -491,6 +506,36 @@ layui.config({
     
     }
 
+    function dragSaveChangeStaffHtml(attendees){
+        var ids = [];
+        attendees.forEach(function(item){
+            var id = item.id;
+            ids.push("#pa_"+id);
+        });
+        $(ids.join(",")).addClass("drag-hide");
+
+        
+        //如果组下面没人员了 隐藏组
+        $('#askLeaveTitleList > li').each(function(item){
+            var list = this.find(".list-body");
+            var len = list.children("li:not(.drag-hide)").length;
+            if(len == 0){
+                this.hide();
+            }
+        });
+        $('#notImportList > li').each(function(){
+            var list = $(this).find(".list-body");
+            var len = list.children("li:not(.drag-hide)").length;
+            console.log(len)
+            if(len == 0){
+                $(this).hide();
+            }
+        });
+
+        // $('#askLeaveTitleList .list-body > li:not(.drag-hide)')
+        // $('#notImportList .list-body > li:not(.drag-hide)')
+    }
+
 
     function saveDragSort(data){
         $.ajax({
@@ -501,12 +546,37 @@ layui.config({
             data: JSON.stringify(data),
             success: function(obj) {
                 console.log("pending-----",obj)
-                getAskLeaveData(obj.leave);
-                getNotImportData(obj.pending);
+                // getAskLeaveData(obj.leave);
+                // getNotImportData(obj.pending);
+                if(obj && obj.attendees){
+                    changeDragSeatColor(obj.attendees);
+
+                    dragSaveChangeStaffHtml(obj.attendees);
+                }
+            },
+            error:function(obj){
+                layer.msg(obj.responseJSON.msg || "drag_sort--error");
+                console.log("drag_sort--error",obj.responseJSON.msg)
             }
         });
     }
 
+    function changeDragSeatColor(attendees){
+        if(attendees.length > 0){
+            // serverSeatIds = [];
+            for(var i = 0,len = attendees.length; i < len; i++){
+                // {"seatid":"1-1","attender":"028","id":"39"}
+                var item = attendees[i] || {};
+                //多会场判断只加载当前会议室的数据
+                if(item.roomtemplate_id == roomId){
+
+                    $("#" + item.seatid).css("background-color",item.bgcolor);
+                    $("#" + item.seatid).html(item.attender);
+                    // serverSeatIds.push(item.seatid);
+                }
+            }
+        }
+    }
 
 
 
@@ -520,19 +590,25 @@ layui.config({
                 for(var i = 0,len = attendees.length; i < len; i++){
                     // {"seatid":"1-1","attender":"028","id":"39"}
                     var item = attendees[i] || {};
-                    
-                    $("#" + item.seatid).css("background-color",item.bgcolor);
-                    $("#" + item.seatid).html(item.attender);
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
 
-                    serverSeatIds.push(item.seatid);
+                        $("#" + item.seatid).css("background-color",item.bgcolor);
+                        $("#" + item.seatid).html(item.attender);
+                        
+                        serverSeatIds.push(item.seatid);
+                    }
                 }
             }else{
                 var colorsids = [];
                 attendees.forEach(function(item){
-                    var colors = item.colors;
-                    var cid = colors[ruleselect];
-                    if(colorsids.indexOf(cid) == -1){
-                        colorsids.push(cid);
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        if(colorsids.indexOf(cid) == -1){
+                            colorsids.push(cid);
+                        }
                     }
                 });
                 var colorsobj = {};
@@ -546,10 +622,13 @@ layui.config({
                 });
 
                 attendees.forEach(function(item){
-                    var colors = item.colors;
-                    var cid = colors[ruleselect];
-                    var cc = colorsobj[cid];
-                    $("#" + item.seatid).css("background-color",cc);
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        var cc = colorsobj[cid];
+                        $("#" + item.seatid).css("background-color",cc);
+                    }
                 });
             }
         }
@@ -564,8 +643,10 @@ layui.config({
         var ids = {};
         var names = {};
         seatsdata.forEach(function(item){
-            ids[item.seatid] = item.id;
-            names[item.seatid] = item.attender;
+            if(item.roomtemplate_id == roomId){
+                ids[item.seatid] = item.id;
+                names[item.seatid] = item.attender;
+            }
         });
         // console.log(ids,names)
 
@@ -576,20 +657,20 @@ layui.config({
             if(name != "" && !reg.test(name)){
                 if(ids[id]){
                     if(names[id] == name){
-                        seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
+                        seatsobj.attendees.push({id:ids[id],attender:name,seatid:id,roomtemplate_id:+roomId});
                     }else{
                         //挪动名字之后  原来的位置名字跟id对不上，就没传id
-                        seatsobj.attendees.push({attender:name,seatid:id});
+                        seatsobj.attendees.push({attender:name,seatid:id,roomtemplate_id:+roomId});
                     }
                 }else{
                     // 新加名字  或者 挪动
                     var sid = $(this).attr("sid");
                     if(ids[sid]){
                         // 挪动名字需要把原来的id带回去
-                        seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id});
+                        seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id,roomtemplate_id:+roomId});
                     }else{
                         // 右键添加名字没有id
-                        seatsobj.attendees.push({attender:name,seatid:id});
+                        seatsobj.attendees.push({attender:name,seatid:id,roomtemplate_id:+roomId});
                     }
                 }
             }
