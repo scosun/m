@@ -359,7 +359,7 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(' + list.length + '人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4>' + title + '(<span>' + list.length + '人)</span><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -423,7 +423,7 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(' + list.length + '人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4>' + title + '(<span>' + list.length + '</span>人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -474,19 +474,14 @@ layui.config({
                 unbindStaffDrap();
                 if($(".R99").length > 0){
                     var id = $(".R99").attr("id");
-                    
-                    
                     $(".R99").removeClass("R99");
 
                     var condi = {};
                     condi.meeting_id = meetingid;
-
                     condi.room_id = +roomId;
                     condi.seat_id = id;
 
                     var pid = this.id;
-
-                   
 
                     if(!pid){
                         //组拖拽
@@ -495,10 +490,7 @@ layui.config({
                     }else{
                         condi.attendee_ids = [+pid];
                     }
-
                     console.log(id,pid,condi);
-                    
-                    
                     saveDragSort(condi);
                 }
             }
@@ -519,6 +511,8 @@ layui.config({
         $('#askLeaveTitleList > li').each(function(item){
             var list = this.find(".list-body");
             var len = list.children("li:not(.drag-hide)").length;
+
+            list.prev().find("span").html(len);
             if(len == 0){
                 this.hide();
             }
@@ -526,12 +520,15 @@ layui.config({
         $('#notImportList > li').each(function(){
             var list = $(this).find(".list-body");
             var len = list.children("li:not(.drag-hide)").length;
+            list.prev().find("span").html(len);
             if(len == 0){
                 $(this).hide();
             }
         });
     }
 
+
+    dragSortData=null;
 
     function saveDragSort(data){
         $.ajax({
@@ -545,6 +542,8 @@ layui.config({
                 // getAskLeaveData(obj.leave);
                 // getNotImportData(obj.pending);
                 if(obj && obj.attendees){
+                    dragSortData = obj.attendees;
+
                     changeDragSeatColor(obj.attendees);
 
                     dragSaveChangeStaffHtml(obj.attendees);
@@ -574,7 +573,39 @@ layui.config({
         }
     }
 
+    function cancelDragSort(){
+        var attendees = dragSortData;
+        if(attendees && attendees.length > 0){
+            // serverSeatIds = [];
+            for(var i = 0,len = attendees.length; i < len; i++){
+                // {"seatid":"1-1","attender":"028","id":"39"}
+                var item = attendees[i] || {};
 
+                $("#" + item.seatid).css("background-color","");
+                $("#" + item.seatid).html(item.seatid.split('-')[1]);
+                
+                $("#pa_" + item.id).removeClass("drag-hide");
+            }
+
+            //如果组下面没人员了 隐藏组
+            $('#askLeaveTitleList > li').each(function(item){
+                var list = this.find(".list-body");
+                var len = list.children("li:not(.drag-hide)").length;
+                list.prev().find("span").html(len);
+                if(len > 0){
+                    this.show();
+                }
+            });
+            $('#notImportList > li').each(function(){
+                var list = $(this).find(".list-body");
+                var len = list.children("li:not(.drag-hide)").length;
+                list.prev().find("span").html(len);
+                if(len > 0){
+                    $(this).show();
+                }
+            });
+        }
+    }
 
 
     window.serverSeatIds = [];
@@ -763,6 +794,7 @@ layui.config({
     active = {
         revertbtn:function(){
             console.log("revertbtn------");
+            cancelDragSort();
         },
         askLeave: function() {
             if (!inde) {

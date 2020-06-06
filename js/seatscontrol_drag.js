@@ -1634,11 +1634,18 @@ function copyText(text) {
 function bindStaffDrap(){
 	this.removeContainerEvent();
 
+	var __x = 0;
+	var __y = 0;
+	var tout = null;
 	$("#seatcontainer").bind("dragover",function(){
 		//鼠标位置
-		_x = window.event.x
-		_y = window.event.y
-		
+		var _x = window.event.x
+		var _y = window.event.y
+
+		if(Math.abs(__x - _x) < 10 && Math.abs(__y - _y) < 10){
+			return;
+		}
+
 		//滚动条高度
 		var _stop = document.documentElement.scrollTop || document.body.scrollTop || 0;
 		var _sleft = document.documentElement.scrollLeft || document.body.scrollLeft || 0;
@@ -1647,31 +1654,40 @@ function bindStaffDrap(){
 		var cx = container.offset().left;
 		var cy = container.offset().top;
 
-		var sleft = _x - cx + _sleft;
-		var stop = _y - cy + _stop;
-		
-		for (var i = 0,len = selList.length; i < len; i++) {
-			var sel = $(selList[i]);
-			var sl = parseInt(sel.css("left"));
-			var st = parseInt(sel.css("top"));
-			var text = sel.text().trim();
-			var reg = /^\d*$/gi;
-			if (sleft > sl && stop > st && sleft < (sl + 40) && stop < (st + 40)) {
-				if(isLocked(sel)){
-					continue;
-				}
-				if(!reg.test(text)){
-					continue;
-				}
-				//在里面
-				if (!sel.hasClass('R99')) {
-					sel.addClass("R99");
-				}
-			} else {
-				sel.removeClass("R99");
+		__x = _x;
+		__y = _y;
+		clearTimeout(tout);
+		tout = setTimeout(function(){
+			matchStaffDrap(_x,_y,cx,cy,_sleft,_stop);
+		},100);
+	});
+}
+
+function matchStaffDrap(_x,_y,cx,cy,_sleft,_stop){
+	var sleft = _x - cx + _sleft;
+	var stop = _y - cy + _stop;
+	
+	$(".R99").removeClass("R99");
+	for (var i = 0,len = selList.length; i < len; i++) {
+		var sel = $(selList[i]);
+		var sl = parseInt(sel.css("left"));
+		var st = parseInt(sel.css("top"));
+		var text = sel.text().trim();
+		var reg = /^\d*$/gi;
+		if (sleft > sl && stop > st && sleft < (sl + 40) && stop < (st + 40)) {
+			if(isLocked(sel)){
+				continue;
+			}
+			if(!reg.test(text)){
+				continue;
+			}
+			//在里面
+			if (!sel.hasClass('R99')) {
+				sel.addClass("R99");
+				continue;
 			}
 		}
-	});
+	}
 }
 
 function unbindStaffDrap(){
