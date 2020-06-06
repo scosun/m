@@ -526,14 +526,10 @@ layui.config({
         $('#notImportList > li').each(function(){
             var list = $(this).find(".list-body");
             var len = list.children("li:not(.drag-hide)").length;
-            console.log(len)
             if(len == 0){
                 $(this).hide();
             }
         });
-
-        // $('#askLeaveTitleList .list-body > li:not(.drag-hide)')
-        // $('#notImportList .list-body > li:not(.drag-hide)')
     }
 
 

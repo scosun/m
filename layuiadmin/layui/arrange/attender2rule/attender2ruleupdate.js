@@ -22,11 +22,18 @@ layui.config({
 	//人员属性数据
 	var attributesData = [];
 	var open = 0;
+	var ruleSetupsTempData;
 	var ruleSetupData = [];
 	var sortItemsData = [];
+	var roomTemplates = {};
+	var roomTemplatesChecked = {};
 
 	var attendee2rules;
+	var meetingId;
 
+	var bindRuleSetupId = [];
+	
+	//第一步，查询对应关系数据
 	$.ajax({
 		async: false,
 		type: "get",
@@ -35,6 +42,10 @@ layui.config({
 		success: function(obj) {
 			if(obj){
 				attendee2rules = obj;
+				var rulebindings = obj.rule_bindings || [];
+				rulebindings.forEach(function(item){
+					bindRuleSetupId.push(item.rulesetup_id);
+				});
 
 				$("#programmename").val(obj.name);
 			}else{
@@ -48,6 +59,7 @@ layui.config({
 		}
 	});
 
+	//第二步，初始化查询全部会议
 	$.ajax({
 		async: true,
 		type: "get",
@@ -65,6 +77,11 @@ layui.config({
 					$("#select_meet").val(attendee2rules.meeting_id);
 
 					meetingId = attendee2rules.meeting_id;
+
+					//第三步，查询会议对应的会议室
+					getRoomIds(meetingId);
+
+					//获取绑定关系大json
 					getRuleSetups(attendee2rules.meeting_id);
 				}
 			}
@@ -76,6 +93,7 @@ layui.config({
 		}
 	});
 	
+	//初始化查询全部人员属性
 	$.ajax({
 		async: true,
 		type: "get",
@@ -118,6 +136,7 @@ layui.config({
 		}
 	});
 
+	//初始化查询全部排序属性
 	$.ajax({
 		async: true,
 		type: "get",
@@ -136,10 +155,15 @@ layui.config({
 	});
 
 
-	var meetingId;
+	//切换会议
 	form.on('select(component-form-select)', function(data){
 		var id = +data.value;
 		meetingId = id;
+
+		//切换会议 ，首先查会议对应会议室
+		getRoomIds(id);
+
+		//然后查询 会议绑定的大对象
 		getRuleSetups(id);
 	});
 
@@ -148,86 +172,69 @@ layui.config({
 		ruleSetupData[open].sort_item = id;
 	});
 
+	function meetRoomChecked(){
+		form.on('checkbox(meetroom-form-checkbox)', function(data){
+			var roomid = +data.value;
+			roomTemplatesChecked[roomid] = data.elem.checked;
+			setRuleSetupHtml();
+		});   
+	}
 	
+	//第三步，查询会议室
+	function getRoomIds(meeting_id){
+		$.ajax({
+			async: false,
+			type: "get",
+			url: "https://m.longjuli.com/v1/roomtemplates?meeting_id="+meeting_id,
+			dataType: "json",
+			success: function(obj) {
+				console.log("----",obj);
+				var data = obj.roomtemplates || null;
+				
+				if(data){
+					roomTemplates = data;
+					// attributesData = data;
+					changeMeetRoomHtml();
+				}
+
+				
+			},
+			//失败的回调函数
+			error: function() {
+				console.log("error")
+			}
+		});
+	}
+
 	function getRuleSetups(meeting_id){
 		$.ajax({
-			async: true,
+			async: false,
 			type: "get",
 			url: "https://m.longjuli.com/v1/rulesetups?meeting_id="+meeting_id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
+				// debugger
+				if(obj.rulesetups){
+					ruleSetupsTempData = obj.rulesetups;
 
-				var data = obj.rulesetups || null;
-				var html = [];
-				var ids = [];
-				if(data && data.length){
-					ruleSetupData = data;
-					ruleSetupData.forEach(function(item){
-						item.ckPerAttr = [];
-						item.ckPerAttrId = [];
-						item.treeData = [];
-						item.treeCheckedIds = [];
-						item.treeNoCheckedIds = [];
-						item.sort_item = 0;
-						item.attendees = {};
-						item.sortSelectItemData = [];
+					//初始化保存已选中会议室
+					for(var k in ruleSetupsTempData){
+						var rules = ruleSetupsTempData[k] || [];
+						rules.forEach(function(item){
+							if(bindRuleSetupId.indexOf(item.id) > -1){
+								roomTemplatesChecked[k] = true;
+							}else{
+								roomTemplatesChecked[k] = false;
+							}
+						});
+					}
+					changeMeetRoomHtml();
 
-						if(attendee2rules && meeting_id == attendee2rules.meeting_id){
-							var rule_bindings = attendee2rules.rule_bindings;
-							rule_bindings.forEach(function(rule){
-								var rulesetup_id = rule.rulesetup_id;
-								if(rulesetup_id == item.id){
-									var attributes = rule.attributes;
-									attributes.forEach(function(attr){
-										item.treeCheckedIds.push(attr.id);
-									});
-									item.sortSelectItemData = rule.sort_items || [];
-								}
-							})
-						}
-
-
-						// if(attendee2rules){
-						// 	var rule_bindings = attendee2rules.rule_bindings;
-						// 	rule_bindings.forEach(function(item){
-						// 		var attributes = item.attributes;
-						// 		if(attributes && attributes.length > 0){
-						// 			var one = attributes[0] || {};
-						// 			var path = one.path.split("/")[1];
-						// 			$("#" + path).attr("checked",true);
-						// 		}
-						// 	});
-						// 	layui.form.render(); 
-						// }
-					});
-
-					
-
-					$.each(data, function (index, item) {
-						ids.push(item.id);
-						html.push('<p class="mb10">' + item.ruletype +' '+ item.rulename + '<span id="c_green" style="background:' + item.bgcolor +';"></span></p>');
-						// html.push('<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</p>');
-						
-						if(attendee2rules && meeting_id == attendee2rules.meeting_id){
-							var rule_bindings = attendee2rules.rule_bindings;
-							rule_bindings.forEach(function(rule){
-								var rulesetup_id = rule.rulesetup_id;
-								if(rulesetup_id == item.id){
-									var attributes = rule.attributes;
-									html.push('<p class="mb15">');
-									attributes.forEach(function(attr){
-										html.push(attr.name);
-									});
-									html.push('</p>');
-								}
-							})
-						}
-					
-					});
+					setRuleSetupHtml();
+				}else{
+					layer.msg("获取relesetup错误");
 				}
-				$("#rulesetups").html(html.join(''));
-				layui.form.render();
 
 				// getRuleAttrById(ids);
 			},
@@ -236,6 +243,22 @@ layui.config({
 				console.log("error")
 			}
 		});
+	}
+
+	function changeMeetRoomHtml(){
+		var data = roomTemplates;
+		var html = [];
+		for(var k in data){
+			if(roomTemplatesChecked[k]){
+				html.push('<input checked lay-filter="meetroom-form-checkbox" type="checkbox" name="meetroom" title="' + data[k] + '" value="' + k + '" lay-skin="primary"></input>');
+			}else{
+				html.push('<input lay-filter="meetroom-form-checkbox" type="checkbox" name="meetroom" title="' + data[k] + '" value="' + k + '" lay-skin="primary"></input>');
+			}
+		}
+		$("#select_roomids").html(html.join(''));
+		layui.form.render();
+
+		meetRoomChecked();
 	}
 
 	function getAttendeesCount(meeting_id,attribute_ids){
@@ -254,6 +277,7 @@ layui.config({
 
 					var AttendeesNum = data.AttendeesNum;
 					var attributes = data.attributes || [];
+					
 					html.push('<p class="mb10">筛选结果：' + AttendeesNum +'人</p>');
 					html.push('<p class="mb15">详情：<span class="c_green">');
 					for(var i = 0,len = attributes.length; i < len;i++){
@@ -277,26 +301,131 @@ layui.config({
 		});
 	}
 
+	function setRuleSetupHtml(){
+		var data = [];
+		ruleSetupData = [];
+		
+		for(var k in ruleSetupsTempData){
+			if(roomTemplatesChecked[k]){
+				data = data.concat(ruleSetupsTempData[k]);
+			}
+		}
+		data.forEach(function(item){
+			item.roomname = roomTemplates[item.room_id];
+		});
+
+		console.log("rulesetupss----",data)
+		// var data = ruleSetupsTempData["218"] || null;
+		// var html = [];
+		// var ids = [];
+		// var data = obj.rulesetups || null;
+
+		var html = [];
+		var ids = [];
+		if(data && data.length){
+			ruleSetupData = data;
+			ruleSetupData.forEach(function(item){
+				item.ckPerAttr = [];
+				item.ckPerAttrId = [];
+				item.treeData = [];
+				item.treeCheckedIds = [];
+				item.treeNoCheckedIds = [];
+				item.sort_item = 0;
+				item.attendees = {};
+				item.sortSelectItemData = [];
+
+				if(attendee2rules && meetingId == attendee2rules.meeting_id){
+					var rule_bindings = attendee2rules.rule_bindings;
+					rule_bindings.forEach(function(rule){
+						var rulesetup_id = rule.rulesetup_id;
+						if(rulesetup_id == item.id){
+							var attributes = rule.attributes;
+							attributes.forEach(function(attr){
+								item.treeCheckedIds.push(attr.id);
+							});
+							item.sortSelectItemData = rule.sort_items || [];
+						}
+					})
+				}
+			});
+
+			
+
+			$.each(data, function (index, item) {
+				ids.push(item.id);
+				html.push('<p class="mb10">'+ item.roomname + ' ' + item.ruletype +' '+ item.rulename + '<span id="c_green" style="background:' + item.bgcolor +';"></span></p>');
+				// html.push('<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</p>');
+				
+				if(attendee2rules && meetingId == attendee2rules.meeting_id){
+					var rule_bindings = attendee2rules.rule_bindings;
+					rule_bindings.forEach(function(rule){
+						var rulesetup_id = rule.rulesetup_id;
+						if(rulesetup_id == item.id){
+							var attributes = rule.attributes;
+							var alen = attributes.length;
+							html.push('<p class="mb15">');
+							attributes.forEach(function(attr,i){
+								if(i == (alen - 1)){
+									html.push(attr.name);
+								}else{
+									html.push(attr.name + "、");
+								}
+							});
+							html.push('</p>');
+						}
+					})
+				}
+			
+			});
+		}
+		$("#rulesetups").html(html.join(''));
+		layui.form.render();
+	}
+
 	function setEditRuleHtml(){
 		var data = ruleSetupData;
+		console.log("setEditRuleHtml---------",data,attendee2rules)
 		if(data && data.length){
 
 			var html = [];
 			$.each(data, function (index, item) {
-				html.push('<p class="mb10">' + item.ruletype +' '+ item.rulename + '<span id="c_green" style="background:' + item.bgcolor +';"></span></p>');
+				html.push('<p class="mb10">'+ item.roomname + ' ' + item.ruletype +' '+ item.rulename + '<span id="c_green" style="background:' + item.bgcolor +';"></span></p>');
 				// html.push('<p class="mb15">属性1（a/b/c）、属性2（d/e/f）、属性3（g/h/i）、属性4（j/k/l）</p>');
 				var obj = item.attendees;
 				var attributes = obj.attributes || [];
+				if(attributes.length == 0){
+					attributes = attendee2rules.rule_bindings[index].attributes || []
+				}
 				html.push('<p class="mb15">');
 				for(var i = 0,len = attributes.length; i < len;i++){
 					item = attributes[i];
 					if(i == (len - 1)){
-						html.push(item);
+						html.push(item.name || item);
 					}else{
-						html.push(item+"、");
+						html.push((item.name || item)+"、");
 					}
 				}
 				html.push('</p>');
+
+				// if(attendee2rules && meetingId == attendee2rules.meeting_id){
+				// 	var rule_bindings = attendee2rules.rule_bindings;
+				// 	rule_bindings.forEach(function(rule){
+				// 		var rulesetup_id = rule.rulesetup_id;
+				// 		if(rulesetup_id == item.id){
+				// 			var attributes = rule.attributes;
+				// 			var alen = attributes.length;
+				// 			html.push('<p class="mb15">');
+				// 			attributes.forEach(function(attr,i){
+				// 				if(i == (alen - 1)){
+				// 					html.push(attr.name);
+				// 				}else{
+				// 					html.push(attr.name + "、");
+				// 				}
+				// 			});
+				// 			html.push('</p>');
+				// 		}
+				// 	})
+				// }
 			});
 		}
 		$("#rulesetups").html(html.join(''));
@@ -389,26 +518,28 @@ layui.config({
 	//编辑属性
 	$('#reload_pop').on('click', function(){
 		open = 0;
+		if(ruleSetupData && ruleSetupData.length > 0){
+			//获取人员属性类别选择
+			var cbox = $("input[type='checkbox'][name='attributes']:checked");
+			for(var i = 0,len = ruleSetupData.length; i < len; i++){
+				ruleSetupData[i].ckPerAttr = [];
+				ruleSetupData[i].ckPerAttrId = [];
+				cbox.each(function(){
+					ruleSetupData[i].ckPerAttr.push({id:this.id,title:this.title});
+					ruleSetupData[i].ckPerAttrId.push(+this.id);
+				});
+			}
 
-		//获取人员属性类别选择
-		var cbox = $("input[type='checkbox'][name='attributes']:checked");
-		for(var i = 0,len = ruleSetupData.length; i < len; i++){
-			ruleSetupData[i].ckPerAttr = [];
-			ruleSetupData[i].ckPerAttrId = [];
-			cbox.each(function(){
-				ruleSetupData[i].ckPerAttr.push({id:this.id,title:this.title});
-				ruleSetupData[i].ckPerAttrId.push(+this.id);
-			});
+			setTreeData();
+
+			//加载排序select数据
+			setSortItem();
+			
+			//弹出窗口
+			handleOpen();
+		}else{
+			layer.msg("没有获取到人员规则对应关系,请选择会议");
 		}
-
-		setTreeData();
-
-		//加载排序select数据
-		setSortItem();
-		
-		//弹出窗口
-		handleOpen();
-		
 	});
 	/* 编辑绑定上一步 下一步 end */
 
