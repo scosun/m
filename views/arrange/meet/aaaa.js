@@ -96,7 +96,10 @@ layui.config({
 
         $('.layui-tab-title > li').on('click', function(evt) {
             var roomid = this.id;
-            console.log("roomid----",roomid)
+            console.log("roomid----",roomid);
+
+            saveSeats();
+            
             getRoomTemplateCode(roomid);
         });
     }
