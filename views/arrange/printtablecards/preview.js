@@ -2,9 +2,10 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery',], function() {
+}).use(['index', 'form', 'table', 'jquery',], function() {
     var table = layui.table,
         admin = layui.admin,
+        form = layui.form,
         setter = layui.setter,
         router = layui.router(),
         $ = layui.jquery;
@@ -17,8 +18,77 @@ layui.config({
 
     $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="print" id="batchmeet">设置<s></s></a>');
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
+
     
-   
+
+    var seatSignData = {};
+    seatSignData.name = "";
+    seatSignData.font = "fangzhengyaoti";
+    seatSignData.fontSize = "52";
+    seatSignData.length = "100";
+    seatSignData.width = "200";
+    seatSignData.above = "";
+    seatSignData.below = "";
+    seatSignData.left = "";
+    seatSignData.right = "";
+    seatSignData.level = "";
+    seatSignData.vertical = "";
+    seatSignData.align = "";
+    seatSignData.position = "";
+    seatSignData.type = "";
+
+
+
+
+    $("#fontwidth").bind("input propertychange",function(){
+        var width = this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(width)){
+            seatSignData.width = width;
+            changeSignStyle();
+        }
+    });
+    $("#fontheight").bind("input propertychange",function(){
+        var height = this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(height)){
+            seatSignData.length = height;
+            changeSignStyle();
+        }
+    });
+    $("#fontsize").bind("input propertychange",function(){
+        var size = this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(size)){
+            seatSignData.fontSize = size;
+            changeSignStyle();
+        }
+    });
+
+    form.on('select(font-form-select)', function(data){
+        var font = data.value;
+
+        if(seatSignData.font){
+            $("#fontwh").removeClass(seatSignData.font);
+        }
+        seatSignData.font = font;
+        changeSignStyle();
+    });
+
+
+    function changeSignStyle(){
+        $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
+        $("#fontwh > p").css({"font-size":seatSignData.fontSize+"mm"});
+        $("#text_width").html(seatSignData.width+"mm");
+        $("#text_height").html(seatSignData.length+"mm");
+        if(seatSignData.font){
+            $("#fontwh").addClass(seatSignData.font);
+        }
+    }
+
+
+
+
     window.onkeyup = function(ev) {
         var key = ev.keyCode || ev.which;
         if (key == 27) { //按下Escape
@@ -30,59 +100,62 @@ layui.config({
 
         }
     }
-    var $ = layui.$,
-        active = {
-            refresh:function(){
-                location.reload();
-            },
-            //选择区域打印
-            print: function() {
-                deviceList.length=10;//先定义个假数据
-                if ( deviceList.length == 0 ) {
-                    return layer.msg("请选择后再批量打印！")
-                }
-                //获取选中数目
-                layer.confirm('    是否将 12 个桌牌全部打印？',
-                {
-                    title:'指定区域打印',
-                    skin: '',
-                    btn: ['预览','取消'],
-                    // 取消
-                    btn2: function(){
-                        layer.close();
-                    },
-                    // 预览
-                    yes: function(index){
-                        // layer.open({
-                        //     type: 2,
-                        //     title: '收藏管理 (考生姓名：张无忌)',
-                        //     //title: false,
-                        //     shadeClose: false, //弹出框之外的地方是否可以点击
-                        //     area: ['100%', '100%'],
-                        //     closeBtn: 1,
-                        //     // maxmin: true,
-                        //     closeBtn:false,
-                        //     offset: '0',
-                        //     content: 'seatmap.html',
-                        //     success: function(layero, index) {
-                        //     }
-                        // })
-                    }
-                },
-                function(index) {
-                    layer.close(index);
-                });
-            },
-            search: function() {
-                
 
+    var $ = layui.$,
+    active = {
+        refresh:function(){
+            location.reload();
+        },
+        //选择区域打印
+        print: function() {
+            deviceList.length=10;//先定义个假数据
+            if ( deviceList.length == 0 ) {
+                return layer.msg("请选择后再批量打印！")
             }
-        };
+            //获取选中数目
+            layer.confirm('    是否将 12 个桌牌全部打印？',
+            {
+                title:'指定区域打印',
+                skin: '',
+                btn: ['预览','取消'],
+                // 取消
+                btn2: function(){
+                    layer.close();
+                },
+                // 预览
+                yes: function(index){
+                    // layer.open({
+                    //     type: 2,
+                    //     title: '收藏管理 (考生姓名：张无忌)',
+                    //     //title: false,
+                    //     shadeClose: false, //弹出框之外的地方是否可以点击
+                    //     area: ['100%', '100%'],
+                    //     closeBtn: 1,
+                    //     // maxmin: true,
+                    //     closeBtn:false,
+                    //     offset: '0',
+                    //     content: 'seatmap.html',
+                    //     success: function(layero, index) {
+                    //     }
+                    // })
+                }
+            },
+            function(index) {
+                layer.close(index);
+            });
+        },
+        search: function() {
+            
+
+        }
+    };
+
 
     $('.layui-ds').on('click', function() {
         var type = $(this).data('type');
         active[type] && active[type].call(this);
     });
+
 
 
     /*右侧菜单HOVER显示提示文字*/
@@ -102,6 +175,7 @@ layui.config({
             });
         }
     });
+
     // 修改弹出方式 5.26
     $('.mytest').mouseover(function() {
         layer.tips($(this).children('span').text(), this, {
@@ -109,7 +183,4 @@ layui.config({
             offset: '200px'
         });
     });
-
-
-
 });

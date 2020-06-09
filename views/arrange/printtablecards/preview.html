@@ -437,23 +437,27 @@
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div class="preview_left_text fangzhengyaoti">
+							<div id="fontwh" class="preview_left_text fangzhengyaoti" style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
 								<p>辛海濤</p>
 								<!-- <p>张&emsp;三</p> -->
 								<!-- <p>张三李四</p> -->
 								<!-- <p>杜红</p> -->
-								<div class="text_width"><span>200mm</span></div>
+								<div class="text_width"><span id="text_width">200mm</span></div>
 								<div class="text_width padding_left"><span>20mm</span></div>
 								<div class="text_width padding_right"><span>20mm</span></div>
-								<div class="text_height"><span>100mm</span></div>
+								<div class="text_height"><span id="text_height">100mm</span></div>
 								<div class="text_height padding_top"><span>22mm</span></div>
 								<div class="text_height padding_bottom"><span>22mm</span></div>
 							</div>
 						</div>
+
+
+
+
 						<div class="preview_right">
 							<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
-									<div class="layui-form-smbt" style="margin-top:20px">基本设置</div>
+									<div class="layui-form-smbt" style="margin-top:20px">基本设置(单位mm)</div>
 									<div class="layui-form-item">
 										<label class="layui-form-label">名称</label>
 										<div class="layui-input-block">
@@ -463,17 +467,17 @@
 									<div class="clearfix">
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
-												<label class="layui-form-label">长度</label>
+												<label class="layui-form-label">宽度</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌长度" value="200mm" autocomplete="off" id="name" class="layui-input">
+													<input id="fontwidth" type="number" name="fontwidth" lay-verify="required" placeholder="请输入桌牌长度" value="200" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
-												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">宽度</label>
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">高度</label>
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌宽度" value="100mm" autocomplete="off" id="name" class="layui-input">
+													<input id="fontheight" type="number" name="fontheight" lay-verify="required" placeholder="请输入桌牌宽度" value="100" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -481,15 +485,14 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">字体</label>
 										<div class="layui-input-block">
-											<select name="meeting_list" lay-filter="component-form-select" id="meeting_list" class="meeting_list" style="width: 400px">
-												<option value="0">请选择会议</option>
-												<option value="1" selected>微软雅黑</option>
-												<option value="2" selected>宋体</option>
-												<option value="3" selected>黑体</option>
-												<option value="4" selected>楷体</option>
-												<option value="5" selected>方正小标宋简体</option>
-												<option value="6" selected>方正魏碑简体</option>
-												<option value="7" selected>方正姚体</option>
+											<select lay-filter="font-form-select" class="meeting_list" style="width: 400px">
+												<option value="" >微软雅黑</option>
+												<option value="songti" >宋体</option>
+												<option value="heiti" >黑体</option>
+												<option value="kaiti" >楷体</option>
+												<option value="fangzhengxiaobiaosong" >方正小标宋简体</option>
+												<option value="fangzhengweibei" >方正魏碑简体</option>
+												<option value="fangzhengyaoti" selected>方正姚体</option>
 												<!-- 微软雅黑
 												宋体 .songti
 												黑体 .heiti
@@ -507,10 +510,10 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">字号</label>
 										<div class="layui-input-block">
-											<input type="text" name="author" lay-verify="required" placeholder="请输入字体大小" value="52mm" autocomplete="off" id="name" class="layui-input">
+											<input id="fontsize" type="number" name="fontsize" lay-verify="required" placeholder="请输入字体大小" value="52" autocomplete="off" class="layui-input">
 										</div>
 									</div>
-									<div class="layui-form-smbt">位置设置</div>
+									<div class="layui-form-smbt">位置设置(单位mm)</div>
 									<div class="clearfix">
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
@@ -604,6 +607,9 @@
 									</div>
 							</div>
 						</div>
+
+
+						
 					</div>
 				</div>
 			</div>
