@@ -21,28 +21,19 @@
 				<div class="layui-form-item">
 				<label class="layui-form-label">桌牌规格</label>
 				<div class="layui-input-block">
-					<select class="dialogRuleSelect" id="ruleselect">
-						<option value="">请选择</option>
-						<option value="R1">主席会议室桌牌（200*100mm）</option>
-						<option value="R2">主席会议室桌牌（200*100mm）</option>
-						<option value="R3">主席会议室桌牌（200*100mm）</option>
-						<option value="R4">主席会议室桌牌（200*100mm）</option>
+					<select class="dialogRuleSelect"  name="ruleselect" id="ruleselect">
+						<option value="" id="select_meet"></option>
 					</select>
 				</div>
 			</div>
-
-			<div class="layui-form-item">
-				<label class="layui-form-label">选择字体</label>
-				<div class="layui-input-block">
-					<select class="dialogRuleSelect2" id="isincrement" name="isincrement">
-						<option value="">请选择</option>
-						<option value="0">方正小标宋简体</option>
-						<option value="1">方正小标宋简体</option>
-						<option value="2">方正小标宋简体</option>
-						<option value="3">方正小标宋简体</option>
-					</select>
+				<div class="layui-form-item layui-layout-admin layui-hide">
+					<div class="layui-input-block">
+						<div style="position: absolute;right: 0px;bottom: 0px;">
+							<button class="layui-btn" lay-submit="" lay-filter="component-form-group" id="click">增加</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
 				</div>
-			</div>
             </form>
         </div>
 
@@ -55,10 +46,94 @@
 			}).use(['index', 'user', 'table', 'form'], function() {
 				var $ = layui.$,
 					form = layui.form,
+						setter = layui.setter,
 					element = layui.element;
+				var url = setter.baseUrl;
+				var meetid = getUrlParam("meetid")
+				var templateid = getUrlParam("templateid");
+				console.log(meetid);
+				function getUrlParam(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+					var uri = window.location.search;
+					var r = uri.substr(1).match(reg);  //匹配目标参数
+					if (r != null) return decodeURI(r[2]) ; return null; //返回参数值
+				}
 				/* 监听提交 */
-				form.on('submit(component-form-demo1)', function(data) {
-					return true;
+						$.ajax({
+							async: false,
+							type: "get",
+							url: url + "/seatsgin/selectSeletive",
+							dataType: "json",
+							data: {
+							},
+							xhrFields: {
+								withCredentials: true
+							},
+							//成功的回调函数
+							success: function(msg) {
+								var data = msg.data;
+								$.each(data, function(idx, con) {
+
+
+									$("#select_meet").after("<option class='selectOp' value=" + con
+											.id + ">" + con.name + "</option>");
+								})
+
+										$("#ruleselect").val(templateid)
+
+
+								form.render(null, 'component-form-group');
+
+
+								// .parent()
+								// }
+							},
+							//失败的回调函数
+							error: function() {
+								console.log("error")
+							}
+						})
+
+
+				form.on('submit(component-form-group)', function(data) {
+					if (data.field.ruleselect ==""){
+						return parent.layer.msg("请选择桌牌模版");
+					}
+					console.log(data.field.ruleselect)
+					$.ajax({
+						async: false,
+						type: "post",
+						url: url + "/printseatsgin/settingprinttemplate",
+						dataType: "json",
+						xhrFields: {
+							withCredentials: true
+						},
+						//成功的回调函数
+						data: {
+							"meetid":meetid,
+							"printseatsgintemplateid": data.field.ruleselect,
+						},
+						success: function(msg) {
+							if (msg.code == 0) {
+								parent.layer.msg(msg.msg);
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.layer.close(index);
+
+								parent.reloads(); // 父页面刷新
+
+							} else {
+								layer.msg(msg.msg);
+
+
+							}
+
+						},
+						//失败的回调函数
+						error: function() {
+							console.log("error")
+						}
+					})
+					return false;
 				});
 			})
 		</script>
