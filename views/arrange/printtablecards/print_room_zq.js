@@ -112,16 +112,16 @@ layui.config({
                     var datas = obj.data || {};
                     // $("#seatsbody").append(datas.templatecode);
                     $("#seatsbody").html(datas.templatecode);
-                    
-                    // selectSeats();
 
+                    //注册框选事件
+                    selectSeats();
+
+                    //加载会议标题
                     getMeetInfo();
 
-                    // if(seatsdata.length == 0){
-                    //     queryAllSeatStatus();
-                    // }
+                    //查询座区人员
+                    queryAllSeatStatus();
                     
-                    // changeSeatColor(seatsdata);
                 }else{
                     layer.msg("获取会议室模板错误");
                 }
@@ -160,7 +160,97 @@ layui.config({
         });
     }
 
-    
+
+    function queryAllSeatStatus(){
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+            dataType: "json",
+            success: function(obj) {
+                console.log("--queryAllSeatStatus---");
+                if(obj && obj.attendees){
+                    seatsdata = obj.attendees;
+                    
+                    changeSeatColor(obj.attendees);
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
+
+    // window.serverSeatIds = [];
+    function changeSeatColor(attendees){
+        if(attendees.length > 0){
+            // var ruleselect = $("#ruleselect").val() - 0;
+            var ruleselect = 1;
+            // serverSeatIds = [];
+            if(ruleselect == 1){
+                for(var i = 0,len = attendees.length; i < len; i++){
+                    // {"seatid":"1-1","attender":"028","id":"39"}
+                    var item = attendees[i] || {};
+                    //多会场判断只加载当前会议室的数据
+                    // if(item.roomtemplate_id == roomId){
+
+                        $("#" + item.seatid).css("background-color",item.bgcolor);
+                        $("#" + item.seatid).html(item.attender);
+                        
+                        // serverSeatIds.push(item.seatid);
+                    // }
+                }
+            }else{
+                var colorsids = [];
+                attendees.forEach(function(item){
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        if(colorsids.indexOf(cid) == -1){
+                            colorsids.push(cid);
+                        }
+                    }
+                });
+                var colorsobj = {};
+                var cli = 0;
+                colorsids.forEach(function(item){
+                    colorsobj[item] = seatcolors[cli];
+                    cli++;
+                    if(cli==5){
+                        cli=0;
+                    }
+                });
+
+                attendees.forEach(function(item){
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        var cc = colorsobj[cid];
+                        $("#" + item.seatid).css("background-color",cc);
+                    }
+                });
+            }
+        }
+    }
+
+    function getSelectedSeat(){
+        var seled = $("#seatcontainerId .seled");
+        var names = [];
+        seled.each(function(){
+            var name = $(this).text();
+            //判断哪些是人名
+            var reg = /^\d+$/gi;
+            if(!reg.test(name)){
+                names.push(name);
+            }
+        });
+        
+        return names;
+    }
+
 
     window.onkeyup = function(ev) {
         var key = ev.keyCode || ev.which;
@@ -180,12 +270,15 @@ layui.config({
             },
             //选择区域打印
             print: function() {
-                deviceList.length=10;//先定义个假数据
-                if ( deviceList.length == 0 ) {
+                var deviceList = getSelectedSeat();
+                console.log(deviceList)
+                // debugger
+                // deviceList.length=10;//先定义个假数据
+                if (deviceList.length == 0 ) {
                     return layer.msg("请选择后再批量打印！")
                 }
                 //获取选中数目
-                layer.confirm('    是否将 12 个桌牌全部打印？',
+                layer.confirm('是否将'+deviceList.length+'个桌牌全部打印？',
                 {
                     title:'指定区域打印',
                     skin: '',
@@ -196,20 +289,20 @@ layui.config({
                     },
                     // 预览
                     yes: function(index){
-                        // layer.open({
-                        //     type: 2,
-                        //     title: '收藏管理 (考生姓名：张无忌)',
-                        //     //title: false,
-                        //     shadeClose: false, //弹出框之外的地方是否可以点击
-                        //     area: ['100%', '100%'],
-                        //     closeBtn: 1,
-                        //     // maxmin: true,
-                        //     closeBtn:false,
-                        //     offset: '0',
-                        //     content: 'seatmap.html',
-                        //     success: function(layero, index) {
-                        //     }
-                        // })
+                        layer.open({
+                            type: 2,
+                            title: '收藏管理 (考生姓名：张无忌)',
+                            //title: false,
+                            shadeClose: false, //弹出框之外的地方是否可以点击
+                            area: ['100%', '100%'],
+                            closeBtn: 1,
+                            // maxmin: true,
+                            closeBtn:false,
+                            offset: '0',
+                            content: 'signprint.html',
+                            success: function(layero, index) {
+                            }
+                        })
                     }
                 },
                 function(index) {
@@ -219,6 +312,11 @@ layui.config({
             search: function() {
                 
 
+            },
+            close: function() {
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭 
+                // parent.reloads()
             }
         };
 
