@@ -61,7 +61,7 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/meeting/findMeetingBylayui" //数据接口
+        url: url + "/printseatsgin/selectSeatsginListPage" //数据接口
             ,
 
         method: 'get',
@@ -83,8 +83,13 @@ layui.config({
                     align: 'left',
                 },
                 {
-                    field: 'name',
-                    title: '会议人员',
+                    field: 'address',
+                    title: '人员数量',
+                    align: 'left',
+                },
+                {
+                    field: 'memo',
+                    title: '桌牌模版',
                     align: 'left',
                 },
                 {
@@ -286,8 +291,12 @@ layui.config({
                 area: ['30%', '40%'],
                 btn: ['确定', '取消'],
                 maxmin: true,
-                content: 'setup_pop.html',
+                content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.isgrouplist,
                 success: function(layero, index) {
+                },
+                yes:function (index,layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
                 }
             })
         }
