@@ -64,6 +64,22 @@ layui.config({
             changeSignStyle();
         }
     });
+    $("#margintop").bind("input propertychange",function(){
+        var above = this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(above)){
+            seatSignData.above = above;
+            changeSignStyle();
+        }
+    });
+    $("#marginleft").bind("input propertychange",function(){
+        var left = this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(left)){
+            seatSignData.left = left;
+            changeSignStyle();
+        }
+    });
 
     form.on('select(font-form-select)', function(data){
         var font = data.value;
@@ -78,7 +94,7 @@ layui.config({
 
     function changeSignStyle(){
         $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
-        $("#fontwh > p").css({"font-size":seatSignData.fontSize+"mm"});
+        $("#fontwh > p").css({"font-size":seatSignData.fontSize+"mm","margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"});
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.length+"mm");
         if(seatSignData.font){

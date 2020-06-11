@@ -11,6 +11,9 @@
 <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
 <script src="../../../js/scosun.js"></script>
 <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+<link rel="stylesheet" href="../../../css/seat.css" media="all">
+
 <style type="text/css">
 	.btnsearch {
 		background: #666 url(../../../images/btnsearch.png) no-repeat center center;
@@ -18,41 +21,85 @@
 		text-indent: -9999px;
 	}
 </style>
+<style type="text/css">
+	.layui-tab {
+		margin: 68px 0 0 15px;
+	}
+	.layui-tab-title {
+		position: fixed;
+		top: 67px;
+		left: 0;
+		right: 0;
+		z-index: 99;
+		padding:0 15px;
+		background-color: #fff;
+	}
+	.iconfont.icon-xitongguanli {
+		color: #515151;
+		font-size: 20px;
+		margin-right: -2px;
+	}
+</style>
 </head>
 <body>
 
-<div class="layui-fluid">
-	<div class="layui-row layui-col-space15">
-		<div class="layui-col-md12">
-			<div class="layui-card">
-				<div class="layui-card-body">
-					<div>
-						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
-						</div>
-						<!-- 右侧筛选条件 -->
-						<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
-							<div class="layui-inline">
-								<input class="layui-input" name="id" placeholder="请输入关键字" id="demoReload" autocomplete="off">
+	<!-- <div class="layui-fluid">
+		<div class="layui-row layui-col-space15">
+			<div class="layui-col-md12">
+				<div class="layui-card">
+					<div class="layui-card-body">
+						<div>
+							<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 							</div>
-							<button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+							<div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+								<div class="layui-inline">
+									<input class="layui-input" name="id" placeholder="请输入关键字" id="demoReload" autocomplete="off">
+								</div>
+								<button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+							</div>
 						</div>
-						<!-- 右侧筛选条件 end-->
 					</div>
-
-
-
-					<div>--------座位图代码--------</div>
-
-
-
-
-
 				</div>
 			</div>
 		</div>
+	</div> -->
+
+	<div style="position: fixed;left:0;right: 0;top:0;background-color: #fff;z-index: 99;">
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a><cite> &nbsp; &nbsp; &nbsp; 打印</cite></a>
+			<!-- <a onclick="asd()" href="javascript:;"><cite>刷新</cite></a> -->
+			<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+		</span>
 	</div>
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script src="print_room_zq.js" type="text/javascript" charset="utf-8"></script>
+	
+	<div class="layui-tab">
+        <ul class="layui-tab-title" style="z-index: 90;">
+            <li class="layui-this">会议室</li>
+            <!-- <li>***一层</li>
+            <li>***二层</li> -->
+        </ul>
+        <div class="positionR">
+            <!-- tab1 -->
+            <div id="seatsbody" class="layui-tab-item layui-show">
+            </div>
+            <!-- tab2
+            <div class="layui-tab-item">
+                一层
+            </div>
+             -->
+            <!-- tab3 
+            <div class="layui-tab-item">二层</div>
+            -->
+        </div>
+	</div>
+	
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+	<script src="print_room_zq.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        function asd() {
+            location.reload();
+        }
+    </script>
 </body>
 </html>

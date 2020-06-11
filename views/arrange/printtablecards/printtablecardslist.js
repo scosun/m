@@ -303,7 +303,7 @@ layui.config({
                 offset: '0',
                 //拷贝 meeting_room_zq.html
                 //content: 'meeting_room_zq.html?roomid='+age.id
-                content: 'print_room_zq.html?roomid=228',
+                content: 'print_room_zq.html?meetingid='+obj.data.id,
                 success: function(layero, index) {
                 
                 }
