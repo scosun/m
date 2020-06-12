@@ -36,8 +36,27 @@
                 <button id="cancel" class="btnstyle">重置</button>
             </div>
         </div>
+        
+        <section id="list1"></section>
+    	<section style="display:none">
+            <div class="bigsign">
+                <div class="topname"><span id=""></span></div>
+            </div>
+            <div class="bigsign">
+                <div class="bottomname"><span id=""></span></div>
+            </div>
+		</section>
+        <section style="display:none">
+            <div class="smallsign">
+                <div class="topname_s"><span id="list1"></span></div>
+            </div>
+            <div class="smallsign">
+                <div class="bottomname_s"><span id="list2"></span></div>
+            </div>
+        </section>
+
         <script type="text/javascript">
-            $('#name').val("66\n66");
+            // $('#name').val("66\n66");
             function signecho(){
                 var textarea=document.getElementById("name");
                 var value=textarea.value;
@@ -65,23 +84,9 @@
                 document.getElementById("list1").innerHTML = loveStr;
 
             }
+
         </script>
-        <section id="list1"></section>
-    	<section style="display:none">
-            <div class="bigsign">
-                <div class="topname"><span id=""></span></div>
-            </div>
-            <div class="bigsign">
-                <div class="bottomname"><span id=""></span></div>
-            </div>
-		</section>
-        <section style="display:none">
-            <div class="smallsign">
-                <div class="topname_s"><span id="list1"></span></div>
-            </div>
-            <div class="smallsign">
-                <div class="bottomname_s"><span id="list2"></span></div>
-            </div>
-        </section>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="signprint.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>
