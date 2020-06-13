@@ -134,9 +134,9 @@ layui.config({
 
                     if(seatsdata.length == 0){
                         queryAllSeatStatus();
+                    }else{
+                        changeSeatColor(seatsdata);
                     }
-                    
-                    changeSeatColor(seatsdata);
                 }else{
                     layer.msg("获取会议室模板错误");
                 }
@@ -159,7 +159,8 @@ layui.config({
                 console.log("--queryAllSeatStatus---");
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees;
-                    // changeSeatColor(obj.attendees);
+
+                    changeSeatColor(obj.attendees);
                 }
             },
             //失败的回调函数
@@ -296,6 +297,9 @@ layui.config({
             success: function(obj) {
                 console.log("--setSeatData---",obj);
                 if(obj && obj.attendees){
+                    //保存完之后，要重新查一下吗
+                    queryAllSeatStatus();
+
                     layer.msg("保存成功");
                 }else{
                     layer.msg("保存错误");
@@ -669,13 +673,16 @@ layui.config({
         var seatsobj = {
             meeting_id: +meetingid,
             attendees:[]
-        }
+        };
+
         var ids = {};
         var names = {};
         seatsdata.forEach(function(item){
             if(item.roomtemplate_id == roomId){
                 ids[item.seatid] = item.id;
                 names[item.seatid] = item.attender;
+            }else{
+                seatsobj.attendees.push(item);
             }
         });
         // console.log(ids,names)

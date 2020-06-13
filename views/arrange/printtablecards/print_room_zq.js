@@ -193,13 +193,13 @@ layui.config({
                     // {"seatid":"1-1","attender":"028","id":"39"}
                     var item = attendees[i] || {};
                     //多会场判断只加载当前会议室的数据
-                    // if(item.roomtemplate_id == roomId){
+                    if(item.roomtemplate_id == roomId){
 
                         $("#" + item.seatid).css("background-color",item.bgcolor);
                         $("#" + item.seatid).html(item.attender);
                         
                         // serverSeatIds.push(item.seatid);
-                    // }
+                    }
                 }
             }else{
                 var colorsids = [];
