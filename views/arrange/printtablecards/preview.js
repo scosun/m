@@ -22,22 +22,34 @@ layui.config({
     
 
     var seatSignData = {};
-    seatSignData.name = "";
+    seatSignData.name = "主席会议室桌牌";
     seatSignData.font = "fangzhengyaoti";
-    seatSignData.fontSize = "52";
+    seatSignData.fontSize = "26";
     seatSignData.length = "100";
     seatSignData.width = "200";
+
+    seatSignData.level = "";
+    seatSignData.vertical = "";
+
+    seatSignData.align = "";
+    seatSignData.position = "";
+
     seatSignData.above = "";
     seatSignData.below = "";
     seatSignData.left = "";
     seatSignData.right = "";
-    seatSignData.level = "";
-    seatSignData.vertical = "";
-    seatSignData.align = "";
-    seatSignData.position = "";
+    
+    
     seatSignData.type = "";
 
 
+    //默认 200mm 100mm 字体52mm ,
+    //字体 26mm 当做基准值
+    //系数 默认就是 200/100 = 2, 当 宽高发生变化之后，改变系数
+    var coefficient = 2;
+
+
+    changeSignStyle();
 
 
     $("#fontwidth").bind("input propertychange",function(){
@@ -45,7 +57,7 @@ layui.config({
         var reg = /^\d+$/g;
         if(reg.test(width)){
             seatSignData.width = width;
-            changeSignStyle();
+            // changeSignStyle();
         }
     });
     $("#fontheight").bind("input propertychange",function(){
@@ -53,7 +65,7 @@ layui.config({
         var reg = /^\d+$/g;
         if(reg.test(height)){
             seatSignData.length = height;
-            changeSignStyle();
+            // changeSignStyle();
         }
     });
     $("#fontsize").bind("input propertychange",function(){
@@ -93,8 +105,8 @@ layui.config({
 
 
     function changeSignStyle(){
-        $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
-        $("#fontwh > p").css({"font-size":seatSignData.fontSize+"mm","margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"});
+        // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
+        $("#fontwh > p").css({"font-size":(+seatSignData.fontSize*coefficient)+"mm","margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"});
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.length+"mm");
         if(seatSignData.font){
