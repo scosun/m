@@ -87,10 +87,10 @@
 	}
 	.preview_left_text p{ 
 		border: 1px dotted #ccc;
-    line-height: 100%;
-    color: #000;
-    display: inline-block;
-	position: relative;
+		line-height: 100%;
+		color: #000;
+		display: inline-block;
+		position: relative;
 		z-index: 9999999;
 	}
 	.text_width{
@@ -228,6 +228,10 @@
 	.preview_left_text p{ 
 		font-size: 52mm;
 		font-family: "Microsoft Yahei";
+		/* display: flex; */
+		/* align-items: center; */
+		/* justify-content: center; */
+		/* flex-direction: column; */
 		/* padding:0mm 2mm 4mm 2mm; */
 		/* margin-left: 20mm; */
 		/*左右间距*/
@@ -396,7 +400,7 @@
 	.preview_left_text.fangzhengyaoti p{
 		font-family: "方正姚体"; 
 		/* padding: 0 0 6mm; */
-		/* font-size: 52mm; */
+		font-size: 52mm;
 		/* margin-left: 22mm; */
 		/*左右间距*/
 		/* margin-top: 21mm; */
@@ -432,6 +436,45 @@
 		background-size: 1mm 1mm;
 		/* background:url(../../../images/arr-bot.png) no-repeat right bottom; */
 	}
+	/* 水平 给#fontwh p 设置 letter-spacing: 0mm; */
+	.preview_left_text.letters p{
+		letter-spacing: 0mm;
+	}
+	/* 垂直 给#fontwh p 设置 line-height: 100%;*/
+	.preview_left_text.vertical p{
+		line-height: 100%;
+	}
+	/* 居左 */
+	.preview_left_text.tl{
+		text-align: left;
+	}
+	.preview_left_text.tl p{
+		margin-left: 0;
+	}
+	/* 居中 */
+	.preview_left_text.tc{
+		text-align: center;
+	}
+	.preview_left_text.tc p{
+		margin-left: 0;
+	}
+	/* 居右 */
+	.preview_left_text.tr{
+		text-align: right;
+	}
+	.preview_left_text.tr p{
+		margin-left: 0;
+	}
+	/* 上 */
+	.preview_left_text.tt p{
+		margin-top: 0;
+	}
+	/* 下 */
+	.preview_left_text.tb p{
+		margin-top:0;
+		/* margin-top: 42mm; */
+	}
+
 </style>
 </head>
 <body>
@@ -469,7 +512,7 @@
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div id="fontwh" class="preview_left_text fangzhengyaoti" style="width: 200mm;height: 100mm;">
+							<div id="fontwh" class="preview_left_text fangzhengyaoti tl tb" style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
 								<p>辛海濤</p>
 								<div class="bjmm"></div>
@@ -477,11 +520,11 @@
 								<!-- <p>张三李四</p> -->
 								<!-- <p>杜红</p> -->
 								<div class="text_width"><span id="text_width">200mm</span></div>
-								<div class="text_width padding_left"><span>20mm</span></div>
-								<div class="text_width padding_right"><span>20mm</span></div>
+								<div class="text_width padding_left"><span>22mm</span></div>
+								<div class="text_width padding_right"><span>22mm</span></div>
 								<div class="text_height"><span id="text_height">100mm</span></div>
-								<div class="text_height padding_top"><span>22mm</span></div>
-								<div class="text_height padding_bottom"><span>22mm</span></div>
+								<div class="text_height padding_top"><span>21mm</span></div>
+								<div class="text_height padding_bottom"><span>21mm</span></div>
 							</div>
 						</div>
 
@@ -494,13 +537,13 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">名称</label>
 										<div class="layui-input-block">
-											<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌名称" value="主席会议室桌牌" autocomplete="off" id="name" class="layui-input">
+											<input type="text" id="name" name="name" lay-verify="required" placeholder="请输入桌牌名称" value="" autocomplete="off" class="layui-input">
 										</div>
 									</div>
 									<div class="layui-form-item">
-										<label class="layui-form-label">名字</label>
+										<label class="layui-form-label">姓名</label>
 										<div class="layui-input-block">
-											<input type="text" name="author" lay-verify="required" placeholder="请输入桌牌名称" value="辛海涛" autocomplete="off" id="name" class="layui-input">
+											<input type="text" id="printname" name="printname" lay-verify="required" placeholder="请输入桌牌名称" value="" autocomplete="off" class="layui-input">
 										</div>
 									</div>
 									<div class="clearfix">
@@ -508,7 +551,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">宽度</label>
 												<div class="layui-input-block">
-													<input id="fontwidth" type="number" name="fontwidth" lay-verify="required" placeholder="请输入桌牌长度" value="200" autocomplete="off" class="layui-input">
+													<input id="fontwidth" type="number" name="fontwidth" lay-verify="required" placeholder="请输入桌牌长度" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -516,7 +559,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">高度</label>
 												<div class="layui-input-block">
-													<input id="fontheight" type="number" name="fontheight" lay-verify="required" placeholder="请输入桌牌宽度" value="100" autocomplete="off" class="layui-input">
+													<input id="fontheight" type="number" name="fontheight" lay-verify="required" placeholder="请输入桌牌宽度" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -557,17 +600,17 @@
 									<div class="clearfix">
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
-												<label class="layui-form-label">水平</label>
+												<label class="layui-form-label">水平</label><!-- 水平 给#fontwh p 设置 letter-spacing: 0mm; -->
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="" value="20" autocomplete="off" id="name" class="layui-input">
+													<input type="text" id="letterspacing" name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
-												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">垂直</label>
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">垂直</label><!--垂直 给#fontwh p 设置 line-height: 100%;-->
 												<div class="layui-input-block">
-													<input type="text" name="author" lay-verify="required" placeholder="" value="10" autocomplete="off" id="name" class="layui-input">
+													<input type="text" id="vertical" name="vertical" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -579,20 +622,37 @@
 												<div class="layui-input-block">
 													<div style="margin-left:-10px;padding-top:6px">
 														<a data="nav-align-left" href="javascript:;" class="mytest"><span>左对齐</span><img src="../../../images/toolkit/left.svg"></a>
+														<!--左对齐 给#fontwh 添加class tl-->
 														<a data="nav-align-center" href="javascript:;" class="mytest"><span>左右对齐</span><img src="../../../images/toolkit/or_so.svg"></a>
+														<!--左右对齐 给#fontwh 添加class tc 去掉tl-->
 														<a data="nav-align-right" href="javascript:;" class="mytest"><span>右对齐</span><img src="../../../images/toolkit/right.svg"></a>
+														<!--右对齐 给#fontwh 添加class tr 去掉tc tl-->
 													</div>
 												</div>
 											</div>
 										</div>
+										<!--
+											A 1 : 给#fontwh 添加class tl tt
+											A 2 : 给#fontwh 添加class tl
+											A 3 : 给#fontwh 添加class tl tb
+											B 1 : 给#fontwh 添加class tt
+											B 2 : 给#fontwh 什么都不添加
+											B 3 : 给#fontwh 添加class tb
+											C 1 : 给#fontwh 添加class tc tt 
+											C 2 : 给#fontwh 添加class tc
+											C 3 : 给#fontwh 添加class tc tb
+										-->
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">位置</label>
 												<div class="layui-input-block">
 													<div style="margin-left:-6px;padding-top:6px">
 														<a data="nav-align-up" href="javascript:;" class="mytest"><span>上对齐</span><img src="../../../images/toolkit/up.svg"></a>
+														<!--上对齐 给#fontwh 添加class tt-->
 														<a data="nav-align-center-v" href="javascript:;" class="mytest"><span>上下对齐</span><img src="../../../images/toolkit/up_down.svg"></a>
+														<!--上下对齐 给#fontwh 不添加class-->
 														<a data="nav-align-down" href="javascript:;" class="mytest"><span>下对齐</span><img src="../../../images/toolkit/down.svg"></a>
+														<!--下对齐 给#fontwh 添加class tb-->
 													</div>
 												</div>
 											</div>
