@@ -27,7 +27,9 @@ layui.config({
     
     
     seatSignData.length = "100";
+    seatSignData.domheight = "100";
     seatSignData.width = "200";
+    seatSignData.domwidth = "200";
 
     seatSignData.font = "fangzhengyaoti";
 
@@ -37,12 +39,16 @@ layui.config({
     seatSignData.level = "0";
     seatSignData.vertical = "0";
 
-    seatSignData.align = "";
-    seatSignData.position = "";
+    seatSignData.align = "aligncenter";
+    seatSignData.position = "positioncenter";
 
-    seatSignData.above = "";
+    seatSignData.above = "0";
+    seatSignData.domabove = "0";
+    seatSignData.left = "0";
+    seatSignData.domleft = "0";
+
+    
     seatSignData.below = "";
-    seatSignData.left = "";
     seatSignData.right = "";
     
     
@@ -50,7 +56,7 @@ layui.config({
 
 
     //默认 200mm 100mm 字体52mm ,
-    //字体 26mm 当做基准值
+    //字体 52mm 当做基准值
     //系数 默认就是 200*100 = 20000, 按面积算 当 宽高发生变化之后，改变系数
     var coefficient = 20000;
     // 字体计算法法 52 / (最新width *  height / 20000 )
@@ -59,11 +65,25 @@ layui.config({
     changeSignStyle();
 
 
+    $("#printname").bind("input propertychange",function(){
+        var printname = this.value;
+        printname = printname.split('\n').join('<br />');
+        seatSignData.printname = printname;
+        $("#printnametext").html(printname);
+        // changeSignStyle();
+    });
     $("#fontwidth").bind("input propertychange",function(){
         var width = this.value;
         var reg = /^\d+$/g;
         if(reg.test(width)){
+            var hh = Math.round(100*200/width);
+    
+            $("#fontwh").css({"height":hh+"mm"});
+
             seatSignData.width = width;
+            seatSignData.domheight = hh;
+
+            // changeSignHtml();
             changeSignStyle();
         }
     });
@@ -71,7 +91,14 @@ layui.config({
         var height = this.value;
         var reg = /^\d+$/g;
         if(reg.test(height)){
+            var ww = Math.round(100*200/height);
+    
+            $("#fontwh").css({"width":ww+"mm"});
+
             seatSignData.length = height;
+            seatSignData.domwidth = ww;
+            // changeSignHtml();
+            
             changeSignStyle();
         }
     });
@@ -81,7 +108,10 @@ layui.config({
         var size = +this.value;
         var reg = /^\d+$/g;
         if(reg.test(size)){
+            
+
             seatSignData.fontSize = size;
+
             changeSignStyle();
         }
     });
@@ -90,23 +120,97 @@ layui.config({
         var level = +this.value;
         var reg = /^\d+$/g;
         if(reg.test(level)){
+            
             seatSignData.level = level;
+
             changeSignStyle();
         }
     });
 
+    $("#alignbtn img").bind("click",function(){
+        console.log($(this).attr("data"));
+        var data = $(this).attr("data");
+        if(seatSignData.align){
+            $("#fontwh").removeClass(seatSignData.align);
+        }
+        // if(seatSignData.position){
+        //     $("#fontwh").removeClass(seatSignData.position);
+        // }
+        seatSignData.above = 0;
+        seatSignData.left = 0;
+        switch(data){
+            case "left":
+                seatSignData.align = "";
+            break;
+            case "center":
+                seatSignData.align = "aligncenter";
+            break;
+            case "right":
+                seatSignData.align = "alignright";
+            break;
+        }
+        changeSignHtml();
+        changeSignStyle();
+    });
+
+    $("#positionbtn img").bind("click",function(){
+        console.log($(this).attr("data"));
+        var data = $(this).attr("data");
+        if(seatSignData.position){
+            $("#fontwh").removeClass(seatSignData.position);
+        }
+        seatSignData.above = 0;
+        seatSignData.left = 0;
+        switch(data){
+            case "top":
+                seatSignData.position = "";
+            break;
+            case "center":
+                seatSignData.position = "positioncenter";
+            break;
+            case "end":
+                seatSignData.position = "positionend";
+            break;
+        }
+        changeSignHtml();
+        changeSignStyle();
+    });
+
+
     $("#margintop").bind("input propertychange",function(){
         var above = this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
+        
         if(reg.test(above)){
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
+
+            seatSignData.align = "";
+            seatSignData.position = "";
+
+            
             seatSignData.above = above;
+
             changeSignStyle();
         }
     });
     $("#marginleft").bind("input propertychange",function(){
         var left = this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
         if(reg.test(left)){
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
+            seatSignData.align = "";
+            seatSignData.position = "";
+
             seatSignData.left = left;
             changeSignStyle();
         }
@@ -125,30 +229,82 @@ layui.config({
 
     function changeSignHtml(){
         $("#name").val(seatSignData.name);
-        $("#printname").val(seatSignData.printname);
+        $("#printname").html(seatSignData.printname);
 
         $("#fontwidth").val(seatSignData.width);
         $("#fontheight").val(seatSignData.length);
 
         $("#letterspacing").val(seatSignData.level);
+        $("#vertical").val(seatSignData.vertical);
+
+        $("#margintop").val(seatSignData.above);
+        $("#marginleft").val(seatSignData.left);
     }
     function changeSignStyle(){
         // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
         // 52 / (最新width *  height / 20000 )
         // ,"margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"
-        var cc = (+seatSignData.width*+seatSignData.length)/coefficient;
+
+       
+
+        // var cc = (+seatSignData.width*+seatSignData.length)/coefficient;
+
+        var fontcc = +seatSignData.length / +seatSignData.domheight;
+
+        var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
+        var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
+        var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
+
         $("#fontwh > p").css({
-            "font-size":(+seatSignData.fontSize/cc)+"mm",
-            "letter-spacing":(+seatSignData.level/cc)+"mm"
+            "font-size":(+seatSignData.fontSize/fontcc)+"mm",
+            "letter-spacing":(+domlevel)+"mm",
+            "margin-top":(+domabove)+"mm",
+            "margin-left":(+domleft)+"mm"
         });
-        // $("#text_width").html(seatSignData.width+"mm");
-        // $("#text_height").html(seatSignData.length+"mm");
+
+        $("#text_width").html(seatSignData.width+"mm");
+        $("#text_height").html(seatSignData.length+"mm");
+
+
+        $("#text_padding_top").html((+seatSignData.above)+"mm");
+        $("#m_padding_top").height((+domabove)+"mm");
+
+        $("#text_padding_left").html((+seatSignData.left)+"mm");
+        $("#m_padding_left").width((+domleft)+"mm");
+
         if(seatSignData.font){
             $("#fontwh").addClass(seatSignData.font);
+        }
+        if(seatSignData.align){
+            $("#fontwh").addClass(seatSignData.align);
+        }
+        if(seatSignData.position){
+            $("#fontwh").addClass(seatSignData.position);
         }
     }
 
 
+    function addSeatSign(){
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: url + "/seatsgin/addseatsgin",
+            dataType: "json",
+            data:seatSignData,
+            success: function(obj) {
+                console.log("--addSeatSign---");
+                // if(obj && obj.attendees){
+                //     seatsdata = obj.attendees;
+                    
+                //     changeSeatColor(obj.attendees);
+                // }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
 
 
     window.onkeyup = function(ev) {
@@ -168,47 +324,17 @@ layui.config({
         refresh:function(){
             location.reload();
         },
-        //选择区域打印
-        print: function() {
-            deviceList.length=10;//先定义个假数据
-            if ( deviceList.length == 0 ) {
-                return layer.msg("请选择后再批量打印！")
-            }
-            //获取选中数目
-            layer.confirm('    是否将 12 个桌牌全部打印？',
-            {
-                title:'指定区域打印',
-                skin: '',
-                btn: ['预览','取消'],
-                // 取消
-                btn2: function(){
-                    layer.close();
-                },
-                // 预览
-                yes: function(index){
-                    // layer.open({
-                    //     type: 2,
-                    //     title: '收藏管理 (考生姓名：张无忌)',
-                    //     //title: false,
-                    //     shadeClose: false, //弹出框之外的地方是否可以点击
-                    //     area: ['100%', '100%'],
-                    //     closeBtn: 1,
-                    //     // maxmin: true,
-                    //     closeBtn:false,
-                    //     offset: '0',
-                    //     content: 'seatmap.html',
-                    //     success: function(layero, index) {
-                    //     }
-                    // })
-                }
-            },
-            function(index) {
-                layer.close(index);
-            });
+        enterbtn: function() {
+            debugger
+            addSeatSign();
         },
-        search: function() {
-            
-
+        cancel: function() {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭 
+        },
+        close:function(){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭 
         }
     };
 
