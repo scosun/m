@@ -20,6 +20,14 @@ layui.config({
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
 
     
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+         var uri = window.location.search;
+        var r = uri.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return r[2]; return null; //返回参数值
+    }
+    var pid = +getUrlParam("id") || null;
+
 
     var seatSignData = {};
     seatSignData.name = "主席会议室桌牌";
@@ -48,18 +56,29 @@ layui.config({
     seatSignData.domleft = "0";
 
     
-    seatSignData.below = "";
-    seatSignData.right = "";
+    seatSignData.below = undefined;
+    seatSignData.right = undefined;
     
-    
-    seatSignData.type = "";
+    //打印字面 0:一字两面,1:一字一面 
+    seatSignData.type = "0";
 
 
     //默认 200mm 100mm 字体52mm ,
     //字体 52mm 当做基准值
-    //系数 默认就是 200*100 = 20000, 按面积算 当 宽高发生变化之后，改变系数
-    var coefficient = 20000;
-    // 字体计算法法 52 / (最新width *  height / 20000 )
+
+    //编辑
+    if(pid){
+        var seatdata = window.sessionStorage.getItem("_printtpl"+pid) || "";
+        if(seatdata){
+            seatdata = JSON.parse(seatdata);
+            for(var k in seatdata){
+                if(k != "below" && k != "right" && k != "modifytime"){
+                    seatSignData[k] = seatdata[k];
+                }
+            }
+            seatSignData.id = seatdata.id;
+        }
+    }
 
     changeSignHtml();
     changeSignStyle();
@@ -225,6 +244,10 @@ layui.config({
         seatSignData.font = font;
         changeSignStyle();
     });
+    form.on('select(printtype-form-select)', function(data){
+        var type = data.value;
+        seatSignData.type = type;
+    });
 
 
     function changeSignHtml(){
@@ -234,11 +257,19 @@ layui.config({
         $("#fontwidth").val(seatSignData.width);
         $("#fontheight").val(seatSignData.length);
 
+        $("#fontsize").val(seatSignData.fontSize);
+
+        $("#font_list").val(seatSignData.font);
+
         $("#letterspacing").val(seatSignData.level);
         $("#vertical").val(seatSignData.vertical);
 
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
+
+        $("#printtype_selset").val(seatSignData.type);
+
+        layui.form.render("select");
     }
     function changeSignStyle(){
         // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
@@ -285,19 +316,50 @@ layui.config({
 
 
     function addSeatSign(){
+        seatSignData.name = $("#name").val();
+
         $.ajax({
             async: false,
             type: "POST",
+            xhrFields: {
+                withCredentials: true
+            },
             url: url + "/seatsgin/addseatsgin",
             dataType: "json",
             data:seatSignData,
             success: function(obj) {
                 console.log("--addSeatSign---");
-                // if(obj && obj.attendees){
-                //     seatsdata = obj.attendees;
-                    
-                //     changeSeatColor(obj.attendees);
-                // }
+                if(obj.code == 0){
+                    layer.msg("添加成功");
+                }else{
+                    layer.msg("添加席签模板错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
+
+    function editSeatSign(){
+        seatSignData.name = $("#name").val();
+        $.ajax({
+            async: false,
+            type: "POST",
+            xhrFields: {
+                withCredentials: true
+            },
+            url: url + "/seatsgin/updateseatsgin",
+            dataType: "json",
+            data:seatSignData,
+            success: function(obj) {
+                console.log("--addSeatSign---");
+                if(obj.code == 0){
+                    layer.msg("修改成功");
+                }else{
+                    layer.msg("修改席签模板错误");
+                }
             },
             //失败的回调函数
             error: function() {
@@ -325,8 +387,11 @@ layui.config({
             location.reload();
         },
         enterbtn: function() {
-            debugger
-            addSeatSign();
+            if(pid){
+                editSeatSign();
+            }else{
+                addSeatSign();
+            }
         },
         cancel: function() {
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引

@@ -529,13 +529,13 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 						</div>
-						<span class="layui-right-nav">
+						<!-- <span class="layui-right-nav">
 							<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
-						</span>
+						</span> -->
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div id="fontwh" class="preview_left_text fangzhengyaoti aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+							<div id="fontwh" class="preview_left_text aligncenter positioncenter" style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
 								<p id="printnametext">辛海濤</p>
 								<div class="bjmm"></div>
@@ -564,7 +564,7 @@
 										</div>
 									</div>
 									<div class="layui-form-item">
-										<label class="layui-form-label">姓名</label>
+										<label class="layui-form-label">示例</label>
 										<div class="layui-input-block">
 											<textarea type="text" id="printname" name="printname" lay-verify="required" placeholder="请输入桌牌名称" value="" autocomplete="off" class="layui-input" ></textarea>
 										</div>
@@ -590,7 +590,7 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">字体</label>
 										<div class="layui-input-block">
-											<select lay-filter="font-form-select" class="meeting_list" style="width: 400px">
+											<select id="font_list" lay-filter="font-form-select" class="meeting_list" style="width: 400px">
 												<option value="" >微软雅黑</option>
 												<option value="songti" >宋体</option>
 												<option value="heiti" >黑体</option>
@@ -703,6 +703,15 @@
 									</div>
 										
 
+									<div class="layui-form-item">
+										<label class="layui-form-label">字面</label>
+										<div class="layui-input-block">
+											<select id="printtype_selset" lay-filter="printtype-form-select" class="meeting_list" style="width: 400px">
+												<option value="0" selected >一字两面</option>
+												<option value="1" >一字一面</option>
+											</select>
+										</div>
+									</div>
 
 								<div class="layui-form-item layui-layout-admin">
 									<div class="layui-layer-btn zi-ding-yi-btn">
