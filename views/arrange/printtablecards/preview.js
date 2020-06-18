@@ -91,12 +91,14 @@ layui.config({
         $("#printnametext").html(printname);
         // changeSignStyle();
     });
+
     $("#fontwidth").bind("input propertychange",function(){
         var width = this.value;
         var reg = /^\d+$/g;
         if(reg.test(width)){
-            var hh = Math.round(100*200/width);
-    
+
+            var hh = Math.round(+seatSignData.length*200/width);
+
             $("#fontwh").css({"height":hh+"mm"});
 
             seatSignData.width = width;
@@ -110,12 +112,12 @@ layui.config({
         var height = this.value;
         var reg = /^\d+$/g;
         if(reg.test(height)){
-            var ww = Math.round(100*200/height);
+            var hh = Math.round(height*200/+seatSignData.width);
     
-            $("#fontwh").css({"width":ww+"mm"});
+            $("#fontwh").css({"height":hh+"mm"});
 
             seatSignData.length = height;
-            seatSignData.domwidth = ww;
+            seatSignData.domheight = hh;
             // changeSignHtml();
             
             changeSignStyle();
@@ -128,6 +130,10 @@ layui.config({
         var reg = /^\d+$/g;
         if(reg.test(size)){
             
+            if(size >= +seatSignData.length){
+                size = +seatSignData.length;
+                $("#fontsize").val(size);
+            }
 
             seatSignData.fontSize = size;
 
@@ -149,6 +155,7 @@ layui.config({
     $("#alignbtn img").bind("click",function(){
         console.log($(this).attr("data"));
         var data = $(this).attr("data");
+        $("#fontwh").addClass("flex");
         if(seatSignData.align){
             $("#fontwh").removeClass(seatSignData.align);
         }
@@ -175,6 +182,7 @@ layui.config({
     $("#positionbtn img").bind("click",function(){
         console.log($(this).attr("data"));
         var data = $(this).attr("data");
+        $("#fontwh").addClass("flex");
         if(seatSignData.position){
             $("#fontwh").removeClass(seatSignData.position);
         }
@@ -201,6 +209,7 @@ layui.config({
         var reg = /^-?\d+$/g;
         
         if(reg.test(above)){
+            $("#fontwh").removeClass("flex");
             if(seatSignData.align){
                 $("#fontwh").removeClass(seatSignData.align);
             }
@@ -221,6 +230,8 @@ layui.config({
         var left = this.value;
         var reg = /^-?\d+$/g;
         if(reg.test(left)){
+            $("#fontwh").removeClass("flex");
+
             if(seatSignData.align){
                 $("#fontwh").removeClass(seatSignData.align);
             }
@@ -280,13 +291,13 @@ layui.config({
 
         // var cc = (+seatSignData.width*+seatSignData.length)/coefficient;
 
-        var fontcc = +seatSignData.length / +seatSignData.domheight;
+        var fontcc = +seatSignData.length/+seatSignData.domheight;
 
         var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
         var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
         var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
-
-        $("#fontwh > p").css({
+        
+        $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
             "margin-top":(+domabove)+"mm",

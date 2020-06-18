@@ -80,14 +80,15 @@
 		background-color: #fff;
 		margin:50px;
 
-		display:flex;
-
 		flex-direction: column;
 
 		/* text-align: center; */
 		
 		/* justify-content: center; */
 		/* align-items: center;   */
+	}
+	.preview_left_text.flex{
+		display:flex;
 	}
 	.preview_left_text.aligncenter{
 		text-align: center;
@@ -104,8 +105,8 @@
 	}
 
 
-	.preview_left_text p{ 
-		/* border: 1px dotted #ccc; */
+	.preview_left_text .printname{ 
+		border: 1px dotted #ccc;
 		line-height: 100%;
 		color: #000;
 		display: inline-block;
@@ -244,7 +245,7 @@
 	左右间距==> 22mm=（200-（52*3+4））除2取整
 	上下间距==> 22mm=（100-52-4）除2取整
 	*/
-	.preview_left_text p{ 
+	.preview_left_text .printname{ 
 		font-size: 52mm;
 		font-family: "Microsoft Yahei";
 		/* display: flex; */
@@ -280,7 +281,7 @@
 	左右间距==> 22mm=（200-（52*3））除2取整
 	上下间距==> 24mm=（100-52）除2取整
 	*/
-	.preview_left_text.songti p{
+	.preview_left_text.songti .printname{
 		font-family: "宋体"; 
 		/* padding: 0; */
 		/* font-size: 52mm; */
@@ -307,7 +308,7 @@
 	左右间距==> 20mm=（200-（52*3+4））除2取整
 	上下间距==> 24mm=（100-52）除2取整
 	*/
-	.preview_left_text.heiti p{
+	.preview_left_text.heiti .printname{
 		font-family: "黑体"; 
 		/* padding: 0mm 2mm; */
 		/* font-size: 52mm; */
@@ -334,7 +335,7 @@
 	左右间距==> 21mm=（200-（52*3+2））除2取整
 	上下间距==> 24mm=（100-52）除2取整
 	*/
-	.preview_left_text.kaiti p{
+	.preview_left_text.kaiti .printname{
 		font-family: "楷体"; 
 		/* padding: 0 0 0 2mm; */
 		/* font-size: 52mm; */
@@ -363,7 +364,7 @@
 	左右间距==> 21mm=（200-（52*3+2））除2取整
 	上下间距==> 23mm=（100-52-2）除2取整
 	*/
-	.preview_left_text.fangzhengxiaobiaosong p{
+	.preview_left_text.fangzhengxiaobiaosong .printname{
 		font-family: "方正小标宋简体"; 
 		/* padding: 1.5mm 0 0.5mm 2mm; */
 		/* font-size: 52mm; */
@@ -392,7 +393,7 @@
 	左右间距==> 22mm=（200-（52*3））除2取整
 	上下间距==> 22mm=（100-52-4）除2取整
 	*/
-	.preview_left_text.fangzhengweibei p{
+	.preview_left_text.fangzhengweibei .printname{
 		font-family: "方正魏碑简体"; 
 		/* padding: 2mm 0; */
 		/* font-size: 52mm; */
@@ -420,7 +421,7 @@
 	左右间距==> 22mm=（200-（52*3））除2取整
 	上下间距==> 21mm=（100-52-6）除2取整
 	*/
-	.preview_left_text.fangzhengyaoti p{
+	.preview_left_text.fangzhengyaoti .printname{
 		font-family: "方正姚体"; 
 		/* padding: 0 0 6mm; */
 		font-size: 52mm;
@@ -460,40 +461,42 @@
 		/* background:url(../../../images/arr-bot.png) no-repeat right bottom; */
 	}
 	/* 水平 给#fontwh p 设置 letter-spacing: 0mm; */
-	.preview_left_text.letters p{
+	.preview_left_text.letters .printname{
 		letter-spacing: 0mm;
 	}
 	/* 垂直 给#fontwh p 设置 line-height: 100%;*/
-	.preview_left_text.vertical p{
+	.preview_left_text.vertical .printname{
 		line-height: 100%;
 	}
+
+
 	/* 居左 */
 	.preview_left_text.tl{
 		text-align: left;
 	}
-	.preview_left_text.tl p{
+	.preview_left_text.tl .printname{
 		margin-left: 0;
 	}
 	/* 居中 */
 	.preview_left_text.tc{
 		text-align: center;
 	}
-	.preview_left_text.tc p{
+	.preview_left_text.tc .printname{
 		margin-left: 0;
 	}
 	/* 居右 */
 	.preview_left_text.tr{
 		text-align: right;
 	}
-	.preview_left_text.tr p{
+	.preview_left_text.tr .printname{
 		margin-left: 0;
 	}
 	/* 上 */
-	.preview_left_text.tt p{
+	.preview_left_text.tt .printname{
 		margin-top: 0;
 	}
 	/* 下 */
-	.preview_left_text.tb p{
+	.preview_left_text.tb .printname{
 		margin-top:0;
 		/* margin-top: 42mm; */
 	}
@@ -535,9 +538,9 @@
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div id="fontwh" class="preview_left_text aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+							<div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
-								<p id="printnametext">辛海濤</p>
+								<span id="printnametext" class="printname">辛海濤</span>
 								<div class="bjmm"></div>
 								<!-- <p>张&emsp;三</p> -->
 								<!-- <p>张三李四</p> -->
