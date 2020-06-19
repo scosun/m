@@ -105,13 +105,15 @@
 	}
 
 
-	.preview_left_text .printname{ 
-		border: 1px dotted #ccc;
+	.preview_left_text .printname{
 		line-height: 100%;
 		color: #000;
 		display: inline-block;
 		position: relative;
 		z-index: 9999999;
+	}
+	.preview_left_text .printname.border{ 
+		border: 1px dotted #ccc;
 	}
 	.text_width{
 		height: 21px;
@@ -598,9 +600,9 @@
 												<option value="songti" >宋体</option>
 												<option value="heiti" >黑体</option>
 												<option value="kaiti" >楷体</option>
-												<option value="fangzhengxiaobiaosong" >方正小标宋简体</option>
+												<option value="fangzhengxiaobiaosong" selected>方正小标宋简体</option>
 												<option value="fangzhengweibei" >方正魏碑简体</option>
-												<option value="fangzhengyaoti" selected>方正姚体</option>
+												<option value="fangzhengyaoti" >方正姚体</option>
 												<!-- 微软雅黑
 												宋体 .songti
 												黑体 .heiti

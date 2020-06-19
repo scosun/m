@@ -39,13 +39,13 @@ layui.config({
     seatSignData.width = "200";
     seatSignData.domwidth = "200";
 
-    seatSignData.font = "fangzhengyaoti";
+    seatSignData.font = "fangzhengxiaobiaosong";
 
-    seatSignData.fontSize = "52";
+    seatSignData.fontSize = "51";
     
 
-    seatSignData.level = "0";
-    seatSignData.vertical = "0";
+    seatSignData.level = "5";
+    seatSignData.vertical = "5";
 
     seatSignData.align = "aligncenter";
     seatSignData.position = "positioncenter";
@@ -77,6 +77,15 @@ layui.config({
                 }
             }
             seatSignData.id = seatdata.id;
+
+            $("#fontwh").removeClass("aligncenter");
+            $("#fontwh").removeClass("positioncenter");
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
         }
     }
 
@@ -156,6 +165,7 @@ layui.config({
         console.log($(this).attr("data"));
         var data = $(this).attr("data");
         $("#fontwh").addClass("flex");
+        $("#printnametext").removeClass("border");
         if(seatSignData.align){
             $("#fontwh").removeClass(seatSignData.align);
         }
@@ -183,6 +193,7 @@ layui.config({
         console.log($(this).attr("data"));
         var data = $(this).attr("data");
         $("#fontwh").addClass("flex");
+        $("#printnametext").removeClass("border");
         if(seatSignData.position){
             $("#fontwh").removeClass(seatSignData.position);
         }
@@ -210,6 +221,7 @@ layui.config({
         
         if(reg.test(above)){
             $("#fontwh").removeClass("flex");
+            $("#printnametext").addClass("border");
             if(seatSignData.align){
                 $("#fontwh").removeClass(seatSignData.align);
             }
@@ -231,7 +243,7 @@ layui.config({
         var reg = /^-?\d+$/g;
         if(reg.test(left)){
             $("#fontwh").removeClass("flex");
-
+            $("#printnametext").addClass("border");
             if(seatSignData.align){
                 $("#fontwh").removeClass(seatSignData.align);
             }
@@ -296,7 +308,7 @@ layui.config({
         var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
         var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
         var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
-        
+
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
@@ -306,7 +318,6 @@ layui.config({
 
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.length+"mm");
-
 
         $("#text_padding_top").html((+seatSignData.above)+"mm");
         $("#m_padding_top").height((+domabove)+"mm");
