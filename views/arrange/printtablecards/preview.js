@@ -341,7 +341,10 @@ layui.config({
             success: function(obj) {
                 console.log("--addSeatSign---");
                 if(obj.code == 0){
-                    layer.msg("添加成功");
+                    parent.layer.msg("添加成功");
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads();
                 }else{
                     layer.msg("添加席签模板错误");
                 }
@@ -367,7 +370,10 @@ layui.config({
             success: function(obj) {
                 console.log("--addSeatSign---");
                 if(obj.code == 0){
-                    layer.msg("修改成功");
+                    parent.layer.msg("修改成功");
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads();
                 }else{
                     layer.msg("修改席签模板错误");
                 }
