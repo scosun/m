@@ -78,6 +78,13 @@ layui.config({
             }
             seatSignData.id = seatdata.id;
 
+            
+
+            var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
+            $("#fontwh").css({"height":hh+"mm"});
+            seatSignData.domheight = hh;
+
+
             $("#fontwh").removeClass("aligncenter");
             $("#fontwh").removeClass("positioncenter");
             if(seatSignData.align){
