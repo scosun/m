@@ -17,11 +17,11 @@
 	<body>
 
 		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
-            <form class="layui-form" action="" lay-filter="component-form-group">
+            <form class="layui-form" action="" >
 				<div class="layui-form-item">
 				<label class="layui-form-label">桌牌规格</label>
 				<div class="layui-input-block">
-					<select class="dialogRuleSelect"  name="ruleselect" id="ruleselect">
+					<select class="dialogRuleSelect" lay-filter="component-form-select" name="ruleselect" id="ruleselect">
 						<option value="" id="select_meet"></option>
 					</select>
 				</div>
@@ -49,51 +49,59 @@
 						setter = layui.setter,
 					element = layui.element;
 				var url = setter.baseUrl;
-				var meetid = getUrlParam("meetid")
-				var templateid = getUrlParam("templateid");
+
+				var meetid = getUrlParam("meetid") || ""
+				var templateid = getUrlParam("templateid") || "";
 				console.log(meetid);
+
 				function getUrlParam(name) {
 					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 					var uri = window.location.search;
 					var r = uri.substr(1).match(reg);  //匹配目标参数
 					if (r != null) return decodeURI(r[2]) ; return null; //返回参数值
 				}
+
+				var signData;
+				var selectSign;
+
 				/* 监听提交 */
-						$.ajax({
-							async: false,
-							type: "get",
-							url: url + "/seatsgin/selectSeletive",
-							dataType: "json",
-							data: {
-							},
-							xhrFields: {
-								withCredentials: true
-							},
-							//成功的回调函数
-							success: function(msg) {
-								var data = msg.data;
-								$.each(data, function(idx, con) {
+				$.ajax({
+					async: false,
+					type: "get",
+					url: url + "/seatsgin/selectSeletive",
+					dataType: "json",
+					data: {
+					},
+					xhrFields: {
+						withCredentials: true
+					},
+					//成功的回调函数
+					success: function(msg) {
+						console.log(msg)
+						var data = msg.data;
+						signData = data;
+						$.each(data, function(idx, con) {
+							$("#select_meet").after("<option class='selectOp' value=" + con.id + ">" + con.name + "</option>");
+						});
 
+						$("#ruleselect").val(templateid);
 
-									$("#select_meet").after("<option class='selectOp' value=" + con
-											.id + ">" + con.name + "</option>");
-								})
+						layui.form.render("select");
+						// .parent()
+						// }
+					},
+					//失败的回调函数
+					error: function() {
+						console.log("error")
+					}
+				});
 
-										$("#ruleselect").val(templateid)
+				form.on('select(component-form-select)', function(data){
+					var id = +data.value;
+					selectSign = signData.filter(item=>item.id == id)[0] || "";
 
-
-								form.render(null, 'component-form-group');
-
-
-								// .parent()
-								// }
-							},
-							//失败的回调函数
-							error: function() {
-								console.log("error")
-							}
-						})
-
+					window.sessionStorage.setItem("__selectsign",JSON.stringify(selectSign));
+				});
 
 				form.on('submit(component-form-group)', function(data) {
 					if (data.field.ruleselect ==""){
