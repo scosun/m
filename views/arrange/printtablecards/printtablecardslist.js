@@ -312,7 +312,7 @@ layui.config({
                 offset: '0',
                 //拷贝 meeting_room_zq.html
                 //content: 'meeting_room_zq.html?roomid='+age.id
-                content: 'print_room_zq.html?meetingid='+obj.data.id,
+                content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.isgrouplist,
                 success: function(layero, index) {
                 
                 }

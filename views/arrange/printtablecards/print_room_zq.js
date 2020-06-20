@@ -35,6 +35,7 @@ layui.config({
         if (r != null) return r[2]; return null; //返回参数值
     }
     var meetingid = +getUrlParam("meetingid") || null;
+    var isgrouplist = +getUrlParam("isgrouplist") || null;
     var roomId = 0;
 
     if(!meetingid){
@@ -290,21 +291,21 @@ layui.config({
                     // 预览
                     yes: function(index){
                         sessionStorage.setItem("_printnames",deviceList.join(','));
-
-                        layer.open({
-                            type: 2,
-                            title: '桌牌打印',
-                            //title: false,
-                            shadeClose: false, //弹出框之外的地方是否可以点击
-                            area: ['100%', '100%'],
-                            closeBtn: 1,
-                            // maxmin: true,
-                            closeBtn:false,
-                            offset: '0',
-                            content: 'signprint.html',
-                            success: function(layero, index) {
-                            }
-                        })
+                        window.open("previewprint.html?isgrouplist="+isgrouplist,"_blank");  
+                        // layer.open({
+                        //     type: 2,
+                        //     title: '桌牌打印',
+                        //     //title: false,
+                        //     shadeClose: false, //弹出框之外的地方是否可以点击
+                        //     area: ['100%', '100%'],
+                        //     closeBtn: 1,
+                        //     // maxmin: true,
+                        //     closeBtn:false,
+                        //     offset: '0',
+                        //     content: 'signprint.html',
+                        //     success: function(layero, index) {
+                        //     }
+                        // })
                     }
                 },
                 function(index) {
