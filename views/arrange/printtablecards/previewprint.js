@@ -60,9 +60,12 @@ layui.config({
                 }
             }
 
-            namestyle = " font-size:"+styles.fontSize + "mm;letter-spacing:"+styles.vertical + "mm;"
+            namestyle = " font-size:"+styles.fontSize + "mm;letter-spacing:"+styles.level + "mm;"
             if(styles.above || styles.left){
                 namestyle += " margin-top:"+styles.above + "mm;margin-left:"+styles.left + "mm;"
+            }
+            if(styles.vertical){
+                namestyle += " line-height:" +(100+(+styles.vertical))+"%";
             }
             // $("#printnametext").css({
             //     "font-size":(+seatSignData.fontSize/fontcc)+"mm",

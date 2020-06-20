@@ -31,7 +31,7 @@ layui.config({
 
     var seatSignData = {};
     seatSignData.name = "主席会议室桌牌";
-    seatSignData.printname = "辛海涛";
+    seatSignData.printname = "打席签";
     
     
     seatSignData.length = "100";
@@ -76,14 +76,14 @@ layui.config({
                     seatSignData[k] = seatdata[k];
                 }
             }
+            if(!seatSignData.printname){
+                seatSignData.printname = "打席签";
+            }
             seatSignData.id = seatdata.id;
-
-            
 
             var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
             $("#fontwh").css({"height":hh+"mm"});
             seatSignData.domheight = hh;
-
 
             $("#fontwh").removeClass("aligncenter");
             $("#fontwh").removeClass("positioncenter");
@@ -165,6 +165,20 @@ layui.config({
             seatSignData.level = level;
 
             changeSignStyle();
+        }
+    });
+
+    $("#vertical").bind("input propertychange",function(){
+        var vertical = +this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(vertical)){
+            if(vertical > 0){
+                seatSignData.vertical = vertical;
+
+                changeSignStyle();
+            }else{
+                $("#vertical").val(0);
+            }
         }
     });
 
@@ -283,6 +297,7 @@ layui.config({
     function changeSignHtml(){
         $("#name").val(seatSignData.name);
         $("#printname").html(seatSignData.printname);
+        $("#printnametext").html(seatSignData.printname);
 
         $("#fontwidth").val(seatSignData.width);
         $("#fontheight").val(seatSignData.length);
@@ -315,10 +330,12 @@ layui.config({
         var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
         var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
         var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
+        var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.length);
 
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
+            "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
             "margin-left":(+domleft)+"mm"
         });

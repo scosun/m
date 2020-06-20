@@ -542,7 +542,7 @@
 						<div class="preview_left">
 							<div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
-								<span id="printnametext" class="printname">辛海濤</span>
+								<span id="printnametext" class="printname">打席签</span>
 								<div class="bjmm"></div>
 								<!-- <p>张&emsp;三</p> -->
 								<!-- <p>张三李四</p> -->
@@ -630,7 +630,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">水平</label><!-- 水平 给#fontwh p 设置 letter-spacing: 0mm; -->
 												<div class="layui-input-block">
-													<input type="text" id="letterspacing" name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+													<input type="number" id="letterspacing" min=0 name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -638,7 +638,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">垂直</label><!--垂直 给#fontwh p 设置 line-height: 100%;-->
 												<div class="layui-input-block">
-													<input type="text" id="vertical" name="vertical" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+													<input type="number" id="vertical" name="vertical" min=0 lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
