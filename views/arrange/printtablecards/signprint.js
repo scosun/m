@@ -19,17 +19,16 @@ layui.config({
 
 
     $(document).bind("keydown",bodyOnKeyDown);
+
     function bodyOnKeyDown(){
         //Function Key
         if(event.ctrlKey){
-            if(event.keyCode==80 ){
-                console.log("ASdfsadf")
+            if(event.keyCode == 80){
                 printContainer();
                 event.keyCode = 0;
                 event.returnValue = false;
             }
         }
-        
     }
 
     $("#smallbtn").bind('click',function(){
@@ -43,12 +42,13 @@ layui.config({
     });
 
     function printContainer(){
-        $("#container").jqprint({
-            debug: false, 
-            importCSS: true, 
-            printContainer: true, 
-            operaSupport: false
-        });
+        window.print()
+        // $("#container").jqprint({
+        //     debug: false, 
+        //     importCSS: false, 
+        //     printContainer: true, 
+        //     operaSupport: false
+        // });
     }
 
     var signData;
@@ -93,7 +93,12 @@ layui.config({
         var value = textarea.value;
         var names = value.split("\n");
         
-        if(names.length > 0){
+        if(!styles){
+            layer.msg("请选择席签模板");
+            return;
+        }
+
+        if(names.length > 0 && styles){
             var html = [];
 
             var namestyle = "";
@@ -111,7 +116,7 @@ layui.config({
 
             namestyle = " font-size:"+styles.fontSize + "mm;letter-spacing:"+styles.level + "mm;"
             if(styles.above || styles.left){
-                namestyle += " margin-top:"+styles.above + "mm;margin-left:"+styles.left + "mm;"
+                namestyle += " top:"+styles.above + "mm;left:"+styles.left + "mm;"
             }
             if(styles.vertical){
                 namestyle += " line-height:" +(100+(+styles.vertical))+"%;";
