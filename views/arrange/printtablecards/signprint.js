@@ -67,7 +67,7 @@ layui.config({
 
             var namestyle = "";
             var style = "width:" + styles.width + "mm;height:" + styles.length + "mm;"
-            var classtext = "preview_left_text " + styles.font;
+            var classtext = "preview_left_text ";
             if(styles.position || styles.align){
                 classtext += " flex ";
                 if(styles.align){
@@ -83,7 +83,10 @@ layui.config({
                 namestyle += " margin-top:"+styles.above + "mm;margin-left:"+styles.left + "mm;"
             }
             if(styles.vertical){
-                namestyle += " line-height:" +(100+(+styles.vertical))+"%";
+                namestyle += " line-height:" +(100+(+styles.vertical))+"%;";
+            }
+            if(styles.font){
+                namestyle += " font-family:" +styles.font;
             }
             // $("#printnametext").css({
             //     "font-size":(+seatSignData.fontSize/fontcc)+"mm",
@@ -101,27 +104,27 @@ layui.config({
                 var name = names[i] || {};
                 if(type == 0){
                     html.push('<div>');
-                    html.push('<div id="fontwh" class="' + classtext + '" style="transform: rotate(180deg); ' + style + '">');
-                    html.push('<span id="printnametext" class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('<div class="' + classtext + '" style="transform: rotate(180deg); ' + style + '">');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
 
                     html.push('<div>');
-                    html.push('<div id="fontwh" class="' + classtext + '" style="' + style + '">');
-                    html.push('<span id="printnametext" class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('<div class="' + classtext + '" style="' + style + '">');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
                 }else{
                     html.push('<div>');
                     html.push('<div id="fontwh" class="' + classtext + '" style="' + style + '">');
-                    html.push('<span id="printnametext" class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
                     
                     
                     html.push('<div>');
-                    html.push('<div id="fontwh" class="' + classtext + '" style="' + style + '">');
-                    html.push('<span id="printnametext" class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('<div class="' + classtext + '" style="' + style + '">');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
                 }

@@ -20,6 +20,101 @@ layui.config({
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
 
     
+    var fonts = [];
+    var detector = new Detector();
+    /**
+     * other stuff
+     */
+    function font_init() {
+        fonts.push(["PingFang SC","PingFang SC"]);
+        fonts.push(["Hiragino Sans GB","冬青黑体"]);
+        fonts.push(["microsoft yahei","微软雅黑"]);
+        fonts.push(["方正小标宋简体","方正小标宋简体"]);
+        fonts.push(["方正魏碑简体","方正魏碑简体"]);
+        fonts.push(["黑体","黑体"]);
+        fonts.push(["simsun","宋体"]);
+        fonts.push(["NSimSun","新宋体"]);
+        fonts.push(["FangSong","仿宋"]);
+        fonts.push(["FangSong","仿宋"]);
+        fonts.push(["KaiTi","楷体"]);
+        fonts.push(["FangSongGB2312","仿宋GB2312"]);
+        fonts.push(["KaiTiGB2312","楷体GB2312"]);
+        fonts.push(["STHeiti Light","华文细黑"]);
+        fonts.push(["STHeiti","华文黑体"]);
+        fonts.push(["STKaiti","华文楷体"]);
+        fonts.push(["STSong","华文宋体"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STXingkai","华文行楷"]);
+        fonts.push(["STLiti","华文隶书"]);
+        fonts.push(["STHupo","华文琥珀"]);
+        fonts.push(["STCaiyun","华文彩云"]);
+        fonts.push(["FZYaoti","方正姚体"]);
+        fonts.push(["FZShuTi","方正舒体"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STZhongsong","华文中宋"]);
+        fonts.push(["STSong","华文宋体"]);
+        fonts.push(["STKaiti","华文楷体"]);
+        fonts.push(["STXihei","华文细黑"]);
+        fonts.push(["cursive","cursive"]);
+        fonts.push(["monospace","monospace"]);
+        fonts.push(["serif","serif"]);
+        fonts.push(["sans-serif","sans-serif"]);
+        fonts.push(["fantasy","fantasy"]);
+        fonts.push(["default","default"]);
+        fonts.push(["Arial","Arial"]);
+        fonts.push(["Arial Black","Arial Black"]);
+        fonts.push(["Arial Narrow","Arial Narrow"]);
+        fonts.push(["Arial Rounded MT Bold","Arial Rounded MT Bold"]);
+        fonts.push(["Bookman Old Style","Bookman Old Style"]);
+        fonts.push(["Bradley Hand ITC","Bradley Hand ITC"]);
+        fonts.push(["Century","Century"]);
+        fonts.push(["Century Gothic","Century Gothic"]);
+        fonts.push(["Comic Sans MS","Comic Sans MS"]);
+        fonts.push(["Courier","Courier"]);
+        fonts.push(["Courier New","Courier New"]);
+        fonts.push(["Georgia","Georgia"]);
+        fonts.push(["Gentium","Gentium"]);
+        fonts.push(["Impact","Impact"]);
+        fonts.push(["King","King"]);
+        fonts.push(["Lucida Console","Lucida Console"]);
+        fonts.push(["Lalit","Lalit"]);
+        fonts.push(["Modena","Modena"]);
+        fonts.push(["Monotype Corsiva","Monotype Corsiva"]);
+        fonts.push(["Papyrus","Papyrus"]);
+        fonts.push(["Tahoma","Tahoma"]);
+        fonts.push(["TeX","TeX"]);
+        fonts.push(["Times","Times"]);
+        fonts.push(["Times New Roman","Times New Roman"]);
+        fonts.push(["Trebuchet MS","Trebuchet MS"]);
+        fonts.push(["Verdana","Verdana"]);
+        fonts.push(["Verona","Verona"]);
+        var table = document.getElementById('table');
+        for (i = 0; i < fonts.length; i++) {
+            var result = detector.detect(fonts[i][0]);
+            console.log(result,fonts[i][0])
+            if(result){
+                $('#font_list').append(new Option(fonts[i][1], fonts[i][0]));
+            }
+
+            // if(data && data.length > 0){
+				// $.each(data, function (index, item) {
+					// 下拉菜单里添加元素
+				// });
+				
+			// }
+            // row = table.insertRow(-1);
+            // col = row.insertCell(-1);
+            // col.appendChild(document.createTextNode(fonts[i]))
+            // col.style.fontFamily = fonts[i];
+            // col = row.insertCell(-1);
+            // result ? col.className = "f_green" : col.className = "f_red";
+            // col.appendChild(document.createTextNode(result));
+        }
+        layui.form.render("select");
+    }
+    font_init();
+    
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
          var uri = window.location.search;
@@ -39,7 +134,8 @@ layui.config({
     seatSignData.width = "200";
     seatSignData.domwidth = "200";
 
-    seatSignData.font = "fangzhengxiaobiaosong";
+    seatSignData.font = "黑体";
+    // seatSignData.font = "方正小标宋简体";
 
     seatSignData.fontSize = "51";
     
@@ -282,9 +378,9 @@ layui.config({
     form.on('select(font-form-select)', function(data){
         var font = data.value;
 
-        if(seatSignData.font){
-            $("#fontwh").removeClass(seatSignData.font);
-        }
+        // if(seatSignData.font){
+        //     $("#fontwh").removeClass(seatSignData.font);
+        // }
         seatSignData.font = font;
         changeSignStyle();
     });
@@ -301,6 +397,8 @@ layui.config({
 
         $("#fontwidth").val(seatSignData.width);
         $("#fontheight").val(seatSignData.length);
+
+        $("#font_list").val(seatSignData.font);
 
         $("#fontsize").val(seatSignData.fontSize);
 
@@ -337,7 +435,8 @@ layui.config({
             "letter-spacing":(+domlevel)+"mm",
             "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
-            "margin-left":(+domleft)+"mm"
+            "margin-left":(+domleft)+"mm",
+            "font-family":seatSignData.font || "方正小标宋简体"
         });
 
         $("#text_width").html(seatSignData.width+"mm");
