@@ -14,18 +14,44 @@ layui.config({
     
 
     $("#print").bind('click',function(){
+        printContainer();
+    });
+
+
+    $(document).bind("keydown",bodyOnKeyDown);
+    function bodyOnKeyDown(){
+        //Function Key
+        if(event.ctrlKey){
+            if(event.keyCode==80 ){
+                console.log("ASdfsadf")
+                printContainer();
+                event.keyCode = 0;
+                event.returnValue = false;
+            }
+        }
+        
+    }
+
+    $("#smallbtn").bind('click',function(){
+        setSeatsign();
+    });
+    $("#preview").bind('click',function(){
+        showName(signData);
+    });
+    $("#cancel").bind('click',function(){
+        $("#name").val("");
+    });
+
+    function printContainer(){
         $("#container").jqprint({
             debug: false, 
             importCSS: true, 
             printContainer: true, 
             operaSupport: false
         });
-    });
+    }
 
-    $("#smallbtn").bind('click',function(){
-        setSeatsign();
-    });
-
+    var signData;
     function setSeatsign(){
         var data = {};
         data.id = 123;
@@ -45,7 +71,12 @@ layui.config({
                 console.log("sign-----",sign);
 
                 if(sign){
-                    showName(JSON.parse(sign));
+                    signData = JSON.parse(sign);
+
+                    $("#smallbtn").html(signData.name);
+                    showName(signData);
+                }else{
+                    $("#smallbtn").html("设置席签模板");
                 }
 
                 layer.close(index);
@@ -61,8 +92,8 @@ layui.config({
         var textarea = document.getElementById("name");
         var value = textarea.value;
         var names = value.split("\n");
-
-        if(names){
+        
+        if(names.length > 0){
             var html = [];
 
             var namestyle = "";
@@ -101,32 +132,34 @@ layui.config({
 
             for(var i = 0, len = names.length; i < len; i++){
 
-                var name = names[i] || {};
-                if(type == 0){
-                    html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="transform: rotate(180deg); ' + style + '">');
-                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
-                    html.push('</div>');
-                    html.push('</div>');
+                var name = names[i] || "";
+                if(name){
+                    if(type == 0){
+                        html.push('<div>');
+                        html.push('<div class="' + classtext + '" style="transform: rotate(180deg); ' + style + '">');
+                        html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                        html.push('</div>');
+                        html.push('</div>');
 
-                    html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="' + style + '">');
-                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
-                    html.push('</div>');
-                    html.push('</div>');
-                }else{
-                    html.push('<div>');
-                    html.push('<div id="fontwh" class="' + classtext + '" style="' + style + '">');
-                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
-                    html.push('</div>');
-                    html.push('</div>');
-                    
-                    
-                    html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="' + style + '">');
-                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
-                    html.push('</div>');
-                    html.push('</div>');
+                        html.push('<div>');
+                        html.push('<div class="' + classtext + '" style="' + style + '">');
+                        html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                        html.push('</div>');
+                        html.push('</div>');
+                    }else{
+                        html.push('<div>');
+                        html.push('<div id="fontwh" class="' + classtext + '" style="' + style + '">');
+                        html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                        html.push('</div>');
+                        html.push('</div>');
+                        
+                        
+                        html.push('<div>');
+                        html.push('<div class="' + classtext + '" style="' + style + '">');
+                        html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                        html.push('</div>');
+                        html.push('</div>');
+                    }
                 }
             }
             $("#container").html(html.join(''));
