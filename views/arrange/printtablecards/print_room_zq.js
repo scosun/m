@@ -264,6 +264,9 @@ layui.config({
 
         }
     }
+
+
+    var __handDrag = null;
     var $ = layui.$,
         active = {
             refresh:function(){
@@ -320,6 +323,81 @@ layui.config({
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                 parent.layer.close(index); //再执行关闭 
                 // parent.reloads()
+            },
+            dragcontainer:function(){
+                if(__handDrag){
+                    __handDrag = null;
+                    $('#seatcontainer').unbind('mousedown');
+                    $('#seatcontainer').unbind('mouseup');
+                    $('#seatcontainer').unbind('mousemove');
+                    // $('.toollist_li').removeClass("on");
+                    // $("#nav-selection").addClass("on");
+                    selectSeats();
+                }else{
+                    removeContainerEvent();
+                    __handDrag = new Drag();
+                }
+            }
+        };
+
+        function Drag(){
+            this.dragWrap = $("#seatcontainer");
+            this.init.apply(this,arguments);
+        };
+        Drag.prototype = {
+            constructor:Drag,
+            _dom : {},
+            _x : 0,
+            _y : 0,
+            _top :0,
+            _left: 0,
+            move : false,
+            down : false,
+            init : function () {
+                this.bindEvent();
+            },
+            bindEvent : function () {
+                var t = this;
+                $('#seatcontainer').bind('mousedown',function(e){
+                    e && e.preventDefault();
+                    if ( !t.move) {
+                        t.mouseDown(e);
+                    }
+                });
+                $('#seatcontainer').bind('mouseup',function(e){
+                    t.mouseUp(e);
+                });
+    
+                $('#seatcontainer').bind('mousemove',function(e){
+                    if (t.down) {
+                        t.mouseMove(e);
+                    }
+                });
+            },
+            mouseMove : function (e) {
+                e && e.preventDefault();
+                this.move = true;
+                var x = this._x - e.clientX,
+                    y = this._y - e.clientY,
+                    dom = document.documentElement;
+                dom.scrollLeft = (this._left + x);
+                dom.scrollTop = (this._top + y);
+            },
+            mouseUp : function (e) {
+                e && e.preventDefault();
+                this.move = false;
+                this.down = false;
+                this.dragWrap.css('cursor','');
+            },
+            mouseDown : function (e) {
+                this.move = false;
+                this.down = true;
+                this._x = e.clientX;
+                this._y = e.clientY;
+                this._top = document.documentElement.scrollTop;
+                this._left = document.documentElement.scrollLeft;
+                // console.log(this._top,this._left)
+                this.dragWrap.css('cursor','move');
             }
         };
 
