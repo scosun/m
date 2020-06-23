@@ -124,8 +124,8 @@ layui.config({
             if(styles.font){
                 namestyle += " font-family:" +styles.font +";";
             }
-            if(styles.rotate || styles.scale){
-                namestyle += " transform:rotate(" + (rotate || 0) + "deg)" + "scale(1," + (scale || 1) + ");";
+            if(styles.zoom || styles.spin){
+                namestyle += " transform:rotate(" + (styles.zoom || 0) + "deg)" + "scale(1," + (styles.spin || 1) + ");";
             }
             // $("#printnametext").css({
             //     "font-size":(+seatSignData.fontSize/fontcc)+"mm",

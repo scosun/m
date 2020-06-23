@@ -143,8 +143,8 @@ layui.config({
     seatSignData.level = "5";
     seatSignData.vertical = "5";
 
-    seatSignData.scale = 1;
-    seatSignData.rotate = 0;
+    seatSignData.zoom = 1;
+    seatSignData.spin = 0;
 
     seatSignData.align = "aligncenter";
     seatSignData.position = "positioncenter";
@@ -202,6 +202,10 @@ layui.config({
     $("#printname").bind("input propertychange",function(){
         var printname = this.value;
         printname = printname.split('\n').join('<br />');
+
+        if(printname.length == 2){
+            printname = printname.split("").join("　");
+        }
         seatSignData.printname = printname;
         $("#printnametext").html(printname);
         // changeSignStyle();
@@ -287,7 +291,7 @@ layui.config({
         if(reg.test(scale)){
             console.log("scale-----",scale)
             if(scale > 0){
-                seatSignData.scale = scale;
+                seatSignData.zoom = scale;
 
                 changeSignStyle();
             }else{
@@ -302,7 +306,7 @@ layui.config({
         if(reg.test(rotate)){
             console.log("rotate-----",rotate)
             if(rotate > 0){
-                seatSignData.rotate = rotate;
+                seatSignData.spin = rotate;
 
                 changeSignStyle();
             }else{
@@ -440,8 +444,8 @@ layui.config({
         $("#letterspacing").val(seatSignData.level);
         $("#vertical").val(seatSignData.vertical);
 
-        $("#scale").val(seatSignData.scale);
-        $("#rotate").val(seatSignData.rotate);
+        $("#scale").val(seatSignData.zoom);
+        $("#rotate").val(seatSignData.spin || 0);
 
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
@@ -466,8 +470,8 @@ layui.config({
         var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
         var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.length);
         
-        var scale = +seatSignData.domheight*+seatSignData.scale/+seatSignData.length || 1;
-        var rotate = Math.round(+seatSignData.domheight*+seatSignData.rotate/+seatSignData.length);
+        var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.length || 1;
+        var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
 
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
@@ -503,6 +507,8 @@ layui.config({
     function addSeatSign(){
         seatSignData.name = $("#name").val();
 
+        seatSignData.zoom = +seatSignData.zoom;
+
         $.ajax({
             async: false,
             type: "POST",
@@ -532,6 +538,9 @@ layui.config({
 
     function editSeatSign(){
         seatSignData.name = $("#name").val();
+
+        seatSignData.zoom = seatSignData.zoom + "0";
+        console.log(seatSignData)
         $.ajax({
             async: false,
             type: "POST",
