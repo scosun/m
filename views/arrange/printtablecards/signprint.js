@@ -141,6 +141,9 @@ layui.config({
             for(var i = 0, len = names.length; i < len; i++){
 
                 var name = names[i] || "";
+                if(name.length == 2){
+                    name = name.split("").join("　");
+                }
                 if(name){
                     if(type == 0){
                         html.push('<div>');
