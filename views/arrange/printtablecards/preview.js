@@ -144,7 +144,7 @@ layui.config({
     seatSignData.vertical = "5";
 
     seatSignData.zoom = 1;
-    seatSignData.spin = 0;
+    seatSignData.spin = 1;
 
     seatSignData.align = "aligncenter";
     seatSignData.position = "positioncenter";
@@ -302,7 +302,7 @@ layui.config({
 
     $("#rotate").bind("input propertychange",function(){
         var rotate = +this.value;
-        var reg = /^\d+$/g;
+        var reg = /^([0-9]*|\d*.\d{1}?\d*)$/g;
         if(reg.test(rotate)){
             console.log("rotate-----",rotate)
             if(rotate > 0){
@@ -471,7 +471,8 @@ layui.config({
         var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.length);
         
         var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.length || 1;
-        var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
+        var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.length || 1;
+        // var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
 
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
@@ -479,7 +480,7 @@ layui.config({
             "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
             "margin-left":(+domleft)+"mm",
-            "transform":"rotate(" + rotate + "deg)" + "scale(1," + scale + ")",
+            "transform": "scale(" + rotate + "," + scale + ")",
             "font-family":seatSignData.font || "方正小标宋简体"
         });
 
