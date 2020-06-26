@@ -175,6 +175,13 @@ layui.config({
                     seatSignData[k] = seatdata[k];
                 }
             }
+            if(!seatSignData.spin){
+                seatSignData.spin = 1;
+            }
+            if(!seatSignData.zoom){
+                seatSignData.zoom = 1;
+            }
+
             if(!seatSignData.printname){
                 seatSignData.printname = "打席签";
             }
@@ -444,8 +451,8 @@ layui.config({
         $("#letterspacing").val(seatSignData.level);
         $("#vertical").val(seatSignData.vertical);
 
-        $("#scale").val(seatSignData.zoom);
-        $("#rotate").val(seatSignData.spin || 0);
+        $("#scale").val(seatSignData.zoom || 1);
+        $("#rotate").val(seatSignData.spin || 1);
 
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
