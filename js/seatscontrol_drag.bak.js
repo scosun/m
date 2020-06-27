@@ -702,7 +702,7 @@ function containerMouseMove(evt){
 						if(sckids.indexOf(sid) == -1){
 							sckids.push(sid);
 							sel.removeClass(seledClass);
-							sel.css("background","");
+							// sel.css("background","");
 							sel.removeClass("reseled R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R99");
 						}
 						// sel.removeClass(seledClass);

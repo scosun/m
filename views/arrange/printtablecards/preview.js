@@ -547,7 +547,8 @@ layui.config({
     function editSeatSign(){
         seatSignData.name = $("#name").val();
 
-        seatSignData.zoom = seatSignData.zoom + "0";
+        seatSignData.zoom = +seatSignData.zoom;
+        
         console.log(seatSignData)
         $.ajax({
             async: false,
