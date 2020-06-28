@@ -101,7 +101,8 @@
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
 			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
 			<i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
-			<input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/>
+			<!-- <input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/> -->
+			<input type="file" name="file" id="upload-file" style="display:none;"/>
 			<i id="nav-word" data-type="word" data="word模板下载"><img src="../../../images/word.png"></i>
 			<i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
 		</span>
@@ -144,80 +145,85 @@
 		window.meetingid=str.substring(str.lastIndexOf("=")+1)
 		window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
 		window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
-			   
+		
+		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+		var seatsdata = [];
+
 		/*右侧菜单HOVER显示提示文字 end*/
 		layer.load(2);
+		
 		$.ajax({
-			    url: url+"/roomtemplate/findByIdTemplatecode",
-			    type: "post",
-			    async: false,
-			    xhrFields: {
-			        withCredentials: true
-			    },
-			    data: {
-			        "id": newroomid,
-			       
-			    },
-			    success: function(data) {
-			        var datas = data.data
-					$("body").append(datas.templatecode);
-					
-					selectSeats();
+			url: url+"/roomtemplate/findByIdTemplatecode",
+			type: "post",
+			async: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			data: {
+				"id": newroomid,
+				
+			},
+			success: function(data) {
+				var datas = data.data
+				$("body").append(datas.templatecode);
+				
+				selectSeats();
 
-					var condi = {
-						"meeting_id": +meetingid
-					};
+				var condi = {
+					"meeting_id": +meetingid
+				};
 
-					// importSeatsData(condi);
-					queryAllSeatStatus();
-					layer.closeAll();
-				},
-				error:function(){
-					layer.closeAll();
+				// importSeatsData(condi);
+				queryAllSeatStatus();
+				layer.closeAll();
+			},
+			error:function(){
+				layer.closeAll();
+			}
+		});
+		$.ajax({
+			url: url+"/meeting/findByMeeting",
+			type: "get",
+			async: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			data: {
+				"id": meetingid,
+				
+			},
+			success: function(data) {
+				var datas = data.data
+				
+				$("#meetingname").text(datas[0].name);
+				$("#meetingaddress").text("地点："+datas[0].address);
+				$("#meetingremark").text("备注："+datas[0].memo);
+				$("#meetingtime").text("时间："+datas[0].meetingtime);
+				
+				// selectSeats();
+
+				// var condi = {
+				// 	"meeting_id": +meetingid
+				// };
+				// importSeatsData(condi);
+				// queryAllSeatStatus(roomid, ruleid);
+			}
+		});
+
+		$.ajax({
+			type: "get",
+			url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
+			dataType: "json",
+			success: function(obj) {
+				var data = obj.data || [];
+				if(data && data.length > 0){
+					$.each(data, function (index, item) {
+						$('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+					});
+					layui.form.render("select");
 				}
-			})
-			$.ajax({
-			    url: url+"/meeting/findByMeeting",
-			    type: "get",
-			    async: false,
-			    xhrFields: {
-			        withCredentials: true
-			    },
-			    data: {
-			        "id": meetingid,
-			       
-			    },
-			    success: function(data) {
-			        var datas = data.data
-			       
-					$("#meetingname").text(datas[0].name);
-					$("#meetingaddress").text("地点："+datas[0].address);
-					$("#meetingremark").text("备注："+datas[0].memo);
-					$("#meetingtime").text("时间："+datas[0].meetingtime);
-					
-					// selectSeats();
-
-					// var condi = {
-					// 	"meeting_id": +meetingid
-					// };
-					// importSeatsData(condi);
-					// queryAllSeatStatus(roomid, ruleid);
-			    }
-			});
-			$.ajax({
-				type: "get",
-				url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
-				dataType: "json",
-			    success: function(obj) {
-					var data = obj.data || [];
-					if(data && data.length > 0){
-						$.each(data, function (index, item) {
-							$('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
-						});
-						layui.form.render("select");
-					}
-			    }
-			});
+			}
+		});
 		
 		form.on('select(component-ruleselect)', function(data){
 			var id = +data.value;
@@ -279,6 +285,7 @@
 		}
 
 		function setSeatData(data){
+			// console.log(data)
 			$.ajax({
 				async: false,
 				type: "post",
@@ -303,8 +310,7 @@
 
 	
 	
-		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
-		var seatsdata = [];
+		
 		
 		window.serverSeatIds = [];
 		function changeSeatColor(attendees){
@@ -362,6 +368,7 @@
 				ids[item.seatid] = item.id;
 				names[item.seatid] = item.attender;
 			});
+			// console.log(ids,names)
 
 			seats.each(function(){
 				var name = $(this).text() || "";
@@ -372,6 +379,7 @@
 						if(names[id] == name){
 							seatsobj.attendees.push({id:ids[id],attender:name,seatid:id});
 						}else{
+							//挪动名字之后  原来的位置名字跟id对不上，就没传id
 							seatsobj.attendees.push({attender:name,seatid:id});
 						}
 					}else{
@@ -381,15 +389,22 @@
 							// 挪动名字需要把原来的id带回去
 							seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id});
 						}else{
+							// 右键添加名字没有id
 							seatsobj.attendees.push({attender:name,seatid:id});
 						}
 					}
 				}
 			});
-
+			/*
+			座区图保存规则
+			1.当名字和位置都没有变化，传递原来的id,name,seatid;
+			2.当把名字挪动到其它空白位置，不修改原来的名字，传递名字原来的座位id,name,新的seatid;
+			3.当修改座位上原有名字（直接拖拽其它座区名字覆盖当前名字和通过右键改名字），传递新的name 和 seatid;
+			4.当使用右键在空间座区添加新名字，传递新建的name 和 seatid
+			ps: 当前的座区图不支持交换操作，如需交换 可以 先把名字拖拽到空白座区，然后再做交换。
+			*/
 			setSeatData(seatsobj);
 		}
-
 		/**
 		 * 打印局部div
 		 * @param printpage 局部div的ID
@@ -416,7 +431,21 @@
 		}
 		
 		//上传模板文件的类型判断
-		function uploadFile(){
+		/* function uploadFile(){
+			var fileName = $("#upload-file").val();
+			var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+			console.log(fileType);
+			if(fileType!=".docx" && fileType!=".doc"){
+				alert("上传模板类型错误！")
+				console.log("上传模板类型错误！");
+				return false;
+			}else {
+				var file = document.getElementById("upload-file").files[0];
+				upload(meetingid,newroomid,file);
+			}
+		} */
+		
+		$('#upload-file').on('change', function() {
 			var fileName = $("#upload-file").val();
 			var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
 			console.log(fileType);
@@ -428,7 +457,7 @@
 				var file = document.getElementById("upload-file").files[0];
 				upload(meetingid,newroomid,file);
 			}
-		}
+		});
 		
 		function upload(meetingid,newroomid,file){
 			var formData = new FormData();
@@ -506,6 +535,7 @@
 						iframe.init(meetingid,newroomid);
 					},
 					yes: function(index, layero) {
+						
 						/* var url = "http://127.0.0.1:8083"; */
 						var url = "https://f.longjuli.com";
 						var body = layer.getChildFrame('body', index);
@@ -514,7 +544,8 @@
 						wordname = wordname[0] || "";
 						if(wordid==''||wordid==null)
 						{return layer.msg("请选择word模板");}
-						window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid
+						console.log("meetignid="+meetingid+",wordid="+wordid);
+						window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
 					}
 				})
 			},
@@ -684,8 +715,6 @@
 		};
 
 	});
-
-
 	
 
 	function asd() {

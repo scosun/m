@@ -10,19 +10,6 @@ a:hover{color:#f05e4b!important;font-weight:bold;}*/
 *, :after, :before {box-sizing: inherit!important;}
 header{border-bottom:none!important;}*/
 
-#body {
-
-	position: absolute;
-	top: -80px;
-
-}
-
-body,
-html {
-	width: 160rem;
-	
-	
-}
 
 ::-webkit-scrollbar {
 	display: none;

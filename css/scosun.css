@@ -1,6 +1,12 @@
 /*2019-11-17 scosun*/
+.clear { height: 0px; line-height: 0px; clear: both; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+*+html .clearfix { overflow: hidden; }
+* html .clearfix { height: 1%; }
+.positionR{position: relative;}
 
 /*index.html*/
+
 .layadmin-side-shrink .layui-layout-admin .layui-logo {
     background-image: url(../layuiadmin/style/res/logo.svg);
 }
@@ -250,3 +256,70 @@ html {
     font-size: 18px;
     margin-left: -1px;
 }
+/*-------------*/
+.float-right{
+    position: fixed;
+    top:66px;
+    right: 0;
+    bottom:0;
+    width:210px;
+    background-color: #fff;
+    border:1px solid #ccc;
+    height: 100%;
+    overflow: auto;
+    z-index: 120;
+}
+.float-right h3{
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    background-color: #f1f1f1;
+    border-bottom:1px solid #ccc;
+}
+.float-right h3 span{
+    float: right;
+}
+.float-right-list li{
+    border-bottom:1px solid #ccc;
+}
+.float-right-list li h4{
+    font-size: 14px;
+    color: #666;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 7px 0 10px;
+    cursor: pointer;
+}
+.float-right-list li h4.active{
+    color: #000;
+}
+.float-right-list li h4 a{
+    float: right;
+    width: 20px;
+    height: 34px;
+    display: block;
+}
+.list-body{
+    display:none;
+}
+.list-body li{
+    font-size: 12px;
+    color: #666;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 7px 0 20px;
+    border-top:1px solid #e6e6e6;
+    border-bottom:none
+}
+.list-body li a{
+    float: right;
+    width: 20px;
+    height: 30px;
+    display: block;
+}
+
+
+

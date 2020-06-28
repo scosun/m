@@ -270,33 +270,33 @@ layui.config({
                         width: '7%',
                         //align: 'center',
                         templet: function (data) {
-                            return "<a  class = 'tplink' title='"+data.phone1+"'>"+data.card_id+"</a>"
-                        },
-                        // style:'padding-left: 10px'
+                            return "<a title='"+data.phone1+"'>"+data.card_id+"</a>"
+                        }
                     },
                     {
                         field: 'name',
                         title: '姓名',
                         align: 'left',
                     }, {
-                        field: 'sexid',
-                        title: '性别',
-                        align: 'left',
-                        width: '7%',
-                        templet: function (data) {
-                            if (data.sexid == 1) {
-                                return '男'
-                            }
-                            if (data.sexid == 2) {
-                                return '女'
-                            }
-                        },
+                    field: 'sexid',
+                    title: '性别',
+                    align: 'left',
+                    templet: function (data) {
+
+                        if (data.sexid == 1) {
+                            return '男'
+                        }
+                        if (data.sexid == 2) {
+                            return '女'
+                        }
+
                     },
+                },
                     {
                         field: 'state',
                         title: '状态',
-                        align: 'left',
                         width: 80,
+                        align: 'left',
                         toolbar: '#test-table-operate-state'
                     },
                     {
@@ -308,7 +308,7 @@ layui.config({
                     },
                     {
                         field: 'address',
-                        title: '驻地',
+                        title: '房间',
                         align: 'left',
                     },
                     {
@@ -334,18 +334,28 @@ layui.config({
                             }
                         },
                     }, {
-                        field: 'isconvenor',
-                        title: '召集人',
-                        align: 'left',
-                    }, {
-                        field: 'agency_name',
-                        title: '代理人',
-                        align: 'left',
-                    }, {
-                        field: 'report_time',
-                        title: '报到时间',
-                        align: 'left'
-                    }
+                    field: 'isconvenor',
+                    title: '召集人',
+                    align: 'left',
+                    templet: function (data) {
+
+                        if (data.isconvenor == 1) {
+                            return '是'
+                        }
+                        if (data.isconvenor == 0) {
+                            return '否'
+                        }
+
+                    },
+                }, {
+                    field: 'agency_name',
+                    title: '代理人',
+                    align: 'left',
+                }, {
+                    field: 'report_time',
+                    title: '报到时间',
+                    align: 'left',
+                }
                 ]
             ],
 
@@ -385,8 +395,14 @@ layui.config({
                     maxmin: true,
                     content: 'screening.html',
                     yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#ruleclick");
-                        submit.click();
+                        // var submit = layero.find('iframe').contents().find("#ruleclick");
+                        // submit.click();
+
+                        var myIframe = window[layero.find('iframe')[0]['name']];
+                        var checkData = myIframe.getCheckedTreeNode();
+                        return false;
+                        // layero.find('iframe').contents().getCheckedTreeNode()
+                        // var checkData = tree.getChecked('demoId');
                     }
 
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
@@ -407,7 +423,7 @@ layui.config({
                 layer.open({
                     type: 2,
                     title: '详细信息',
-                    area: ['60%', '60%'],
+                    area: ['100%', '100%'],
                     maxmin: true,
                     //btn: ['确定', '取消'],
                     shadeClose: true, //点击遮罩关闭
@@ -518,6 +534,16 @@ layui.config({
                                 field: 'isconvenor',
                                 title: '召集人',
                                 align: 'left',
+                                templet: function (data) {
+
+                                if (data.isconvenor == 1) {
+                                    return '是'
+                                }
+                                if (data.isconvenor == 0) {
+                                    return '否'
+                                }
+
+                            },
                             }, {
                                 field: 'agency_name',
                                 title: '代理人',
@@ -585,7 +611,6 @@ layui.config({
                 content: 'register_pop.html?id=' + obj.data.id + "&meetingid=" + $('#select-room').val(),
                 success: function (layero, index) {
                     flag = true;
-                    console.log(flag);
                     var body = layui.layer.getChildFrame('body', index);
                     body.find("#names").text(obj.data.name);
                     body.find("#id").text(obj.data.card_id);
@@ -609,6 +634,13 @@ layui.config({
                     body.find("#img").attr("src", img);}
                     body.find("#phone1").val(obj.data.phone1);
                     body.find("#phone2").val(obj.data.phone2);
+                    body.find("#groups").text(obj.data.attributes.组别.name);
+                    if (obj.data.isconvenor === 0){
+                        body.find("#isconvenor").text("不是召集人");
+                    }
+                    if (obj.data.isconvenor === 1){
+                        body.find("#isconvenor").text("第"+obj.data.convenornum+"召集人");
+                    }
                     // console.log( obj.data.report_state===0)
                     if (obj.data.report_state === 0) {
                         body.find("#wei").attr('checked', 'checked')

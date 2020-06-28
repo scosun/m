@@ -165,11 +165,11 @@ layui.config({
     // });
     form.render();
     form.on('select(isconvenor)', function(data){
-        if(data.value == 0){
+        if(data.value == 1){
             $("#convenornums").show();
 
         }
-        if(data.value == 1){
+        if(data.value == 0){
             $("#convenornums").css("display","none");
         }
     });
