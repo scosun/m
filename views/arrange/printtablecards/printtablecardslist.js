@@ -61,7 +61,7 @@ layui.config({
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
-        url: url + "/meeting/findMeetingBylayui" //数据接口
+        url: url + "/printseatsgin/selectSeatsginListPage" //数据接口
             ,
 
         method: 'get',
@@ -83,8 +83,13 @@ layui.config({
                     align: 'left',
                 },
                 {
-                    field: 'name',
-                    title: '会议人员',
+                    field: 'address',
+                    title: '人员数量',
+                    align: 'left',
+                },
+                {
+                    field: 'memo',
+                    title: '桌牌模版',
                     align: 'left',
                 },
                 {
@@ -94,7 +99,7 @@ layui.config({
                     toolbar: '#rulezone',
                 },
                 {
-                    width: 100,
+                    width: 130,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -158,7 +163,7 @@ layui.config({
                         toolbar: '#rulezone',
                     },
                     {
-                        width: 100,
+                        width: 130,
                         title: '操作',
                         toolbar: '#test-table-operate-barDemo',
                     }
@@ -279,10 +284,25 @@ layui.config({
                     layer.close(index);
                 });
         }
+        if(obj.event === 'setup'){
+            layer.open({
+                type: 2,
+                title: '设置',
+                area: ['30%', '40%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.isgrouplist,
+                success: function(layero, index) {
+                },
+                yes:function (index,layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                }
+            })
+        }
         if(obj.event === 'rulezone'){
             layer.open({
                 type: 2,
-                //title: '收藏管理 (考生姓名：张无忌)',
                 title: false,
                 shadeClose: false, //弹出框之外的地方是否可以点击
                 area: ['100%', '100%'],
@@ -290,12 +310,15 @@ layui.config({
                 // maxmin: true,
                 closeBtn:false,
                 offset: '0',
-                content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+                //拷贝 meeting_room_zq.html
+                //content: 'meeting_room_zq.html?roomid='+age.id
+                content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.isgrouplist,
                 success: function(layero, index) {
                 
                 }
             })
         }
+        
     });
     var $ = layui.$,
         active = {
@@ -330,7 +353,7 @@ layui.config({
                     return layer.msg("请选择后再批量打印！")
                 }
                 //获取选中数目
-                layer.confirm('    是否将 '+ deviceList.join('+') +' = '+ printSum +' 个桌牌全部打印？',
+                layer.confirm('    是否将 '+ deviceList.length +' 个桌牌全部打印？',
                 {
                     title:'打印桌牌',
                     skin: '',
@@ -460,7 +483,7 @@ layui.config({
                                 toolbar: '#rulezone',
                             },
                             {
-                                width: 100,
+                                width: 130,
                                 title: '操作',
                                 toolbar: '#test-table-operate-barDemo',
                             }

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>批量打印桌牌</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+<script src="../../../js/scosun.js"></script>
+<script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/fontdetect.v0.3.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+	.btnsearch {
+		background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+		background-size: 1.2rem 1.2rem;
+		text-indent: -9999px;
+	}
+	.layui-layer-btn {
+		padding:0!important;
+		margin-right:-4px;
+	}
+	/*右侧菜单*/
+	.layui-right-nav {
+		position: absolute;
+		right: 5px;
+		top: 0;
+		height: 3.5rem;
+		line-height: 3.5rem;
+		background-color: #fff;
+	}
+
+	.layui-right-nav i {
+		display: block;
+		height: 20px;
+		width: 20px;
+		float: left;
+		margin-top: 18px;
+		padding-left: 7px;
+		padding-right: 7px;
+	}
+
+	.layui-right-nav i img {
+		width: 100%;
+		display: block;
+	}
+
+	.preview_right{
+		float: left;
+		width: 30%;
+		background-color: #fff;
+	}
+	.layui-form{
+		padding:0 0 0 20px;
+	}
+	.layui-form-label{
+		width: auto;
+		padding: 9px 0;
+		text-align: left;
+	}
+	.layui-input-block {
+		margin-left: 40px;
+	}
+	.layui-form-smbt{
+		color: #000;
+		font-size: 15px;
+		line-height: 40px;
+	}
+	.preview_left{
+		float: left;
+		width: 70%;
+    	overflow: auto;
+	}
+	.preview_left_text{
+		width: 200mm;/*动态数据*/
+		height: 100mm;/*动态数据*/
+		border: 1px solid #ccc;
+		position: relative;
+		background-color: #fff;
+		margin:50px;
+
+		flex-direction: column;
+
+		/* text-align: center; */
+		
+		/* justify-content: center; */
+		/* align-items: center;   */
+	}
+	.preview_left_text.flex{
+		display:flex;
+	}
+	.preview_left_text.aligncenter{
+		text-align: center;
+	}
+	.preview_left_text.alignright{
+		text-align: right;
+		/* justify-content: right;; */
+	}
+	.preview_left_text.positioncenter{
+		justify-content: center;
+	}
+	.preview_left_text.positionend{
+		justify-content: end;
+	}
+
+
+	.preview_left_text .printname{
+		line-height: 100%;
+		color: #000;
+		display: inline-block;
+		position: relative;
+		z-index: 9999999;
+	}
+	.preview_left_text .printname.border{ 
+		border: 1px dotted #ccc;
+	}
+	.text_width{
+		height: 21px;
+		position:absolute;
+		left:0;
+		right:0;
+		top:-25px;
+		text-align: center;
+	}
+	.text_width:before,.text_width:after{
+		position: absolute;
+		height: 11px;
+		width: 6px;
+		top:5px;
+		content: " "; 
+	}
+	.text_width:before{
+		right: 0;
+		background:url(../../../images/arr-right.png) no-repeat right bottom;
+		background-size: 6px 11px;
+	}
+	.text_width:after{
+		left:0;
+		background:url(../../../images/arr-left.png) no-repeat right bottom;
+		background-size: 6px 11px;
+	}
+	.text_width span{
+		text-align: center;
+		position: absolute;
+		left:0;
+		right: 0;
+		top:-15px;
+		color: #f00;
+	}
+	.text_width span:after{
+		content: " "; 
+		height: 1px;
+		position: absolute;
+		top:25px;
+		left:2px;
+		right:2px;
+		background-color:#808080;
+		z-index: 3;
+	}
+
+	.padding_left{
+		right:auto;
+		top: 50%;
+		margin-top: -11px;
+	}
+    
+	.padding_right{
+		left:auto;
+		top: 50%;
+		margin-top: -11px;
+	}
+	
+	.text_height{
+		width: 25px;
+		position:absolute;
+		left:-25px;
+		bottom:0;
+		top:0;
+		text-align: center;
+	}
+
+
+	.text_height:before,.text_height:after{
+		position: absolute;
+		height: 6px;
+		width: 11px;
+		left:0;
+		content: " "; 
+	}
+	.text_height:before{
+		bottom: 0;
+		background:url(../../../images/arr-bot.png) no-repeat right bottom;
+		background-size: 11px 6px;
+	}
+	.text_height:after{
+		top:0;
+		background:url(../../../images/arr-top.png) no-repeat right bottom;
+		background-size: 11px 6px;
+	}
+	.text_height span{
+		text-align: center;
+		position: absolute;
+		left:-25px;
+		bottom: 0;
+		top:0;
+		color: #f00;
+		/*弹性盒模型*/    
+		display:flex;
+		/*主轴居中对齐*/
+    	justify-content: center;
+		/*侧轴居中对齐*/    
+    	align-items: center;  
+	}
+	.text_height span:after{
+		content: " ";
+		width: 1px;
+		position: absolute;
+		top: 2px;
+		left: 30px;
+		bottom: 2px;
+		background-color: #808080;
+	}
+	.padding_top{
+		left: 50%;
+		margin-left: -10px;
+		bottom: auto;
+		top: 0;
+	}
+	.padding_bottom{
+		left: 50%;
+		margin-left: -10px;
+		bottom: 0;
+		top: auto;
+	}
+	.mytest img{
+		width:20px;
+		margin-left: 10px;
+	}
+	.mytest span{
+		display: none;
+	}
+
+	/*-----------默认微软-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3+4））除2取整
+	上下间距==> 22mm=（100-52-4）除2取整
+	*/
+	.preview_left_text .printname{ 
+		font-size: 52mm;
+		font-family: "Microsoft Yahei";
+		/* display: flex; */
+		/* align-items: center; */
+		/* justify-content: center; */
+		/* flex-direction: column; */
+
+		
+		/* padding:0mm 2mm 4mm 2mm; */
+		/* margin-left: 20mm; */
+		/*左右间距*/
+		/* margin-top: 22mm; */
+		/*上下间距*/
+	}
+	
+
+	/* .preview_left_text .padding_top{
+    	height: 22mm;
+	}
+	.preview_left_text .padding_bottom{
+    	height: 22mm;
+	}
+	.preview_left_text .padding_left{
+    	width: 22mm;
+	}
+	.preview_left_text .padding_right{
+    	width: 22mm;
+	} */
+
+	/*-----------宋体 songti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.songti .printname{
+		font-family: "宋体"; 
+		/* padding: 0; */
+		/* font-size: 52mm; */
+		/* margin-left: 22mm; */
+		/*左右间距*/
+		/* margin-top: 24mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.songti .padding_top{
+    	height: 24mm;
+	}
+	.preview_left_text.songti .padding_bottom{
+    	height: 24mm;
+	}
+	.preview_left_text.songti .padding_left{
+    	width: 22mm;
+	}
+	.preview_left_text.songti .padding_right{
+    	width: 22mm;
+	} */
+	/*-----------黑体 heiti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 20mm=（200-（52*3+4））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.heiti .printname{
+		font-family: "黑体"; 
+		/* padding: 0mm 2mm; */
+		/* font-size: 52mm; */
+		/* margin-left: 20mm; */
+		/*左右间距*/
+		/* margin-top: 24mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.heiti .padding_top{
+    	height: 24mm;
+	}
+	.preview_left_text.heiti .padding_bottom{
+    	height: 24mm;
+	}
+	.preview_left_text.heiti .padding_left{
+    	width: 20mm;
+	}
+	.preview_left_text.heiti .padding_right{
+    	width: 20mm;
+	} */
+	/*-----------楷体 kaiti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 21mm=（200-（52*3+2））除2取整
+	上下间距==> 24mm=（100-52）除2取整
+	*/
+	.preview_left_text.kaiti .printname{
+		font-family: "楷体"; 
+		/* padding: 0 0 0 2mm; */
+		/* font-size: 52mm; */
+		/* margin-left: 21mm; */
+		/*左右间距*/
+		/* margin-top: 24mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.kaiti .padding_top{
+    	height: 24mm;
+	}
+	.preview_left_text.kaiti .padding_bottom{
+    	height: 24mm;
+	}
+	.preview_left_text.kaiti .padding_left{
+    	width: 21mm;
+	}
+	.preview_left_text.kaiti .padding_right{
+    	width: 21mm;
+	} */
+
+	/*-----------方正小标宋简体 fangzhengxiaobiaosong-----------*/
+	/*繁体 濤 显示的是默认字体*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 21mm=（200-（52*3+2））除2取整
+	上下间距==> 23mm=（100-52-2）除2取整
+	*/
+	.preview_left_text.fangzhengxiaobiaosong .printname{
+		font-family: "方正小标宋简体"; 
+		/* padding: 1.5mm 0 0.5mm 2mm; */
+		/* font-size: 52mm; */
+		/* margin-left: 21mm; */
+		/*左右间距*/
+		/* margin-top: 23mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.fangzhengxiaobiaosong .padding_top{
+    	height: 23mm;
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_bottom{
+    	height: 23mm;
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_left{
+    	width: 21mm;
+	}
+	.preview_left_text.fangzhengxiaobiaosong .padding_right{
+    	width: 21mm;
+	} */
+	
+	/*-----------方正魏碑简体 fangzhengweibei-----------*/
+	/*繁体 濤 显示的是默认字体*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 22mm=（100-52-4）除2取整
+	*/
+	.preview_left_text.fangzhengweibei .printname{
+		font-family: "方正魏碑简体"; 
+		/* padding: 2mm 0; */
+		/* font-size: 52mm; */
+		/* margin-left: 22mm; */
+		/*左右间距*/
+		/* margin-top: 22mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.fangzhengweibei .padding_top{
+    	height: 22mm;
+	}
+	.preview_left_text.fangzhengweibei .padding_bottom{
+    	height: 22mm;
+	}
+	.preview_left_text.fangzhengweibei .padding_left{
+    	width: 22mm;
+	}
+	.preview_left_text.fangzhengweibei .padding_right{
+    	width: 22mm;
+	} */
+
+	/*-----------方正姚体 fangzhengyaoti-----------*/
+	/*
+	长度（200mm）、高度（100mm）、字体大小（52mm）
+	左右间距==> 22mm=（200-（52*3））除2取整
+	上下间距==> 21mm=（100-52-6）除2取整
+	*/
+	.preview_left_text.fangzhengyaoti .printname{
+		font-family: "方正姚体"; 
+		/* padding: 0 0 6mm; */
+		font-size: 52mm;
+		/* margin-left: 22mm; */
+		/*左右间距*/
+		/* margin-top: 21mm; */
+		/*上下间距*/
+	}
+	/* .preview_left_text.fangzhengyaoti .padding_top{
+    	height: 21mm;
+	}
+	.preview_left_text.fangzhengyaoti .padding_bottom{
+    	height: 21mm;
+	}
+	.preview_left_text.fangzhengyaoti .padding_left{
+    	width: 22mm;
+	}
+	.preview_left_text.fangzhengyaoti .padding_right{
+    	width: 22mm;
+	} */
+	/* 微软雅黑
+	宋体 .songti
+	黑体 .heiti
+	楷体 .kaiti
+	方正小标宋简体 .fangzhengxiaobiaosong
+	方正魏碑简体 .fangzhengweibei 
+
+	方正姚体 .fangzhengyaoti 
+	*/
+
+	.bjmm{
+		position: absolute;
+		left:0;top:0;
+		right:0;bottom:0;
+		background:url(gridbg.png) repeat left top;
+		background-size: 1mm 1mm;
+		/* background:url(../../../images/arr-bot.png) no-repeat right bottom; */
+	}
+	/* 水平 给#fontwh p 设置 letter-spacing: 0mm; */
+	.preview_left_text.letters .printname{
+		letter-spacing: 0mm;
+	}
+	/* 垂直 给#fontwh p 设置 line-height: 100%;*/
+	.preview_left_text.vertical .printname{
+		line-height: 100%;
+	}
+
+
+	/* 居左 */
+	.preview_left_text.tl{
+		text-align: left;
+	}
+	.preview_left_text.tl .printname{
+		margin-left: 0;
+	}
+	/* 居中 */
+	.preview_left_text.tc{
+		text-align: center;
+	}
+	.preview_left_text.tc .printname{
+		margin-left: 0;
+	}
+	/* 居右 */
+	.preview_left_text.tr{
+		text-align: right;
+	}
+	.preview_left_text.tr .printname{
+		margin-left: 0;
+	}
+	/* 上 */
+	.preview_left_text.tt .printname{
+		margin-top: 0;
+	}
+	/* 下 */
+	.preview_left_text.tb .printname{
+		margin-top:0;
+		/* margin-top: 42mm; */
+	}
+
+</style>
+</head>
+<body>
+<!-- 
+---------微软雅黑---------
+----基本设置----
+//用户设置 长度（200mm）、字体大小（52mm）后 计算左右间距的值
+左右间距=（200mm-（字体大小*字数+4mm））除2取整（4mm==浏览器上字不局中写的padding值）
+例：辛海濤   20mm=（200-（52*3+4））除2取整
+例：辛海濤   30mm=（200-（45*3+4））除2取整
+例：杜红   46mm=（200-（52*2+4））除2取整
+//用户设置 高度（100mm）、字体大小（52mm）后 计算上下间距的值
+上下间距=（100mm-（字体大小+4mm））除2取整（4mm==浏览器上字不局中写的padding值）上下间距与字数多少没关系。
+例：辛海濤   22mm=（100-（52+4））除2取整
+例：辛海濤  25mm=（100-（45+4））除2取整
+----位置设置----
+当用户设置 长度（200mm）、高度（200mm）、字体大小（52mm）设置后，计算左右间距、上下间距 填充到 上下左右输入框里。
+----文字设置----
+水平？垂直？
+对齐：左对齐   左右居中   右居中
+位置：上对齐   上下居中   下对齐
+-->
+
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-body">
+					<div>
+						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+						</div>
+						<!-- <span class="layui-right-nav">
+							<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+						</span> -->
+					</div>
+					<div style="border-top:1px solid #ccc">
+						<div class="preview_left">
+							<div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+								<!-- <p>辛海涛</p> -->
+								<span id="printnametext" class="printname">打席签</span>
+								<div class="bjmm"></div>
+								<!-- <p>张&emsp;三</p> -->
+								<!-- <p>张三李四</p> -->
+								<!-- <p>杜红</p> -->
+								<div class="text_width"><span id="text_width">200mm</span></div>
+								<div id="m_padding_left" class="text_width padding_left"><span id="text_padding_left">0mm</span></div>
+								<!-- <div class="text_width padding_right"><span id="text_padding_right">0mm</span></div> -->
+								<div class="text_height"><span id="text_height">100mm</span></div>
+								<div id="m_padding_top" class="text_height padding_top"><span id="text_padding_top">0mm</span></div>
+								<!-- <div class="text_height padding_bottom"><span>21mm</span></div> -->
+							</div>
+						</div>
+
+
+
+
+						<div class="preview_right">
+							<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
+									<div class="layui-form-smbt" style="margin-top:20px">基本设置(单位mm)</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label">名称</label>
+										<div class="layui-input-block">
+											<input type="text" id="name" name="name" lay-verify="required" placeholder="请输入桌牌名称" value="" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label">示例</label>
+										<div class="layui-input-block">
+											<textarea type="text" id="printname" name="printname" lay-verify="required" placeholder="请输入桌牌名称" value="" autocomplete="off" class="layui-input" ></textarea>
+										</div>
+									</div>
+									<div class="clearfix">
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">宽度</label>
+												<div class="layui-input-block">
+													<input id="fontwidth" type="number" name="fontwidth" lay-verify="required" placeholder="请输入桌牌长度" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">高度</label>
+												<div class="layui-input-block">
+													<input id="fontheight" type="number" name="fontheight" lay-verify="required" placeholder="请输入桌牌宽度" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label">字体</label>
+										<div class="layui-input-block">
+											<select id="font_list" lay-filter="font-form-select" class="meeting_list" style="width: 400px">
+												<!-- <option value="" >微软雅黑</option>
+												<option value="songti" >宋体</option>
+												<option value="heiti" >黑体</option>
+												<option value="kaiti" >楷体</option>
+												<option value="fangzhengxiaobiaosong" selected>方正小标宋简体</option>
+												<option value="fangzhengweibei" >方正魏碑简体</option>
+												<option value="fangzhengyaoti" >方正姚体</option> -->
+
+												<!-- 微软雅黑
+												宋体 .songti
+												黑体 .heiti
+												楷体 .kaiti
+												方正小标宋简体 .fangzhengxiaobiaosong
+												方正魏碑简体 .fangzhengweibei 
+												方正姚体 .fangzhengyaoti
+												 -->
+											</select>
+											<span style="margin-top:10px;color:#f00">请确保本机已安装了该字体</span>
+											<!-- <a href="../../../images/download-font.zip">下载安装字体</a> -->
+										</div>
+									</div>
+									
+									<div class="layui-form-item">
+										<label class="layui-form-label">字号</label>
+										<div class="layui-input-block">
+											<input id="fontsize" type="number" name="fontsize" lay-verify="required" placeholder="请输入字体大小" value="52" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+
+									<div class="layui-form-smbt">文字设置</div>
+									<div class="clearfix">
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">间距</label><!-- 水平 给#fontwh p 设置 letter-spacing: 0mm; -->
+												<div class="layui-input-block">
+													<input type="number" id="letterspacing" min=0 name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">行距</label><!--垂直 给#fontwh p 设置 line-height: 100%;-->
+												<div class="layui-input-block">
+													<input type="number" id="vertical" name="vertical" min=0 lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">拉长</label>
+												<div class="layui-input-block">
+													<input type="number" id="rotate" name="rotate" min=0 step=0.1 lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+													
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">拉宽</label>
+												<div class="layui-input-block">
+													<input type="number" id="scale" min=0 step=0.1  name="scale" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix">
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">对齐</label>
+												<div class="layui-input-block">
+													<div id="alignbtn" style="margin-left:-10px;padding-top:6px">
+														<a data="nav-align-left" href="javascript:;" class="mytest"><span>左对齐</span><img data="left" src="../../../images/toolkit/left.svg" /></a>
+														<!--左对齐 给#fontwh 添加class tl-->
+														<a data="nav-align-center" href="javascript:;" class="mytest"><span>左右对齐</span><img data="center" src="../../../images/toolkit/or_so.svg" /></a>
+														<!--左右对齐 给#fontwh 添加class tc 去掉tl-->
+														<a data="nav-align-right" href="javascript:;" class="mytest"><span>右对齐</span><img data="right" src="../../../images/toolkit/right.svg" /></a>
+														<!--右对齐 给#fontwh 添加class tr 去掉tc tl-->
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--
+											A 1 : 给#fontwh 添加class tl tt
+											A 2 : 给#fontwh 添加class tl
+											A 3 : 给#fontwh 添加class tl tb
+											B 1 : 给#fontwh 添加class tt
+											B 2 : 给#fontwh 什么都不添加
+											B 3 : 给#fontwh 添加class tb
+											C 1 : 给#fontwh 添加class tc tt 
+											C 2 : 给#fontwh 添加class tc
+											C 3 : 给#fontwh 添加class tc tb
+										-->
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">位置</label>
+												<div class="layui-input-block">
+													<div id="positionbtn" style="margin-left:-6px;padding-top:6px">
+														<a data="nav-align-up" href="javascript:;" class="mytest"><span>上对齐</span><img data="top" src="../../../images/toolkit/up.svg"></a>
+														<!--上对齐 给#fontwh 添加class tt-->
+														<a data="nav-align-center-v" href="javascript:;" class="mytest"><span>上下对齐</span><img data="center" src="../../../images/toolkit/up_down.svg"></a>
+														<!--上下对齐 给#fontwh 不添加class-->
+														<a data="nav-align-down" href="javascript:;" class="mytest"><span>下对齐</span><img data="end" src="../../../images/toolkit/down.svg"></a>
+														<!--下对齐 给#fontwh 添加class tb-->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="layui-form-smbt">位置设置(单位mm)</div>
+									<div class="clearfix">
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">上边</label>
+												<div class="layui-input-block">
+													<input id="margintop" type="number" name="margintop" lay-verify="required" placeholder="请输入居上毫米" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">左边</label>
+												<div class="layui-input-block">
+													<input id="marginleft" type="number" name="marginleft" lay-verify="required" placeholder="请输入居下毫米" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+									</div>
+										
+
+									<div class="layui-form-item">
+										<label class="layui-form-label">字面</label>
+										<div class="layui-input-block">
+											<select id="printtype_selset" lay-filter="printtype-form-select" class="meeting_list" style="width: 400px">
+												<option value="0" selected >一字两面</option>
+												<option value="1" >一字一面</option>
+											</select>
+										</div>
+									</div>
+
+								<div class="layui-form-item layui-layout-admin">
+									<div class="layui-layer-btn zi-ding-yi-btn">
+										<a class="layui-layer-btn0 layui-ds"  lay-submit="" data-type="enterbtn" >确定</a>
+										<a class="layui-layer-btn1 layui-ds" type="reset" data-type="cancel">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="preview.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

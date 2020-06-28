@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>批量打印桌牌</title>
+    <!-- <script type="text/javascript"src="http://code.jquery.com/jquery-1.4.1.min.js"></script> -->
+    <script src="../../../js/jquery-3.1.1.min.js"></script>
+</head>
+<style type="text/css">
+    /**/
+    .bigsign{width:239mm;height:119mm;}
+    .smallsign{width:180mm;height:119.5mm;}
+    .topname{font-family: "方正小标宋简体";text-align: right;position:relative;top:20mm;left:0mm;font-size:40mm;letter-spacing: 10mm;transform:rotate(180deg) scale(1,1.8);}
+    .bottomname{font-family: "方正小标宋简体";text-align: right;position:relative;top:30mm;left:20mm;font-size:40mm;transform: scale(1,1.8);letter-spacing: 10mm;}
+    .topname_s{font-family: "华文楷体";text-align: center;position:relative;top:23mm;font-size:45mm;letter-spacing: 5mm;transform:rotate(180deg) scale(1,1);left:-4mm;}
+    .bottomname_s{font-family: "华文楷体";text-align: center;position:relative;top:45mm;font-size:45mm;transform: scale(1,1);letter-spacing: 5mm;}
+    .controlpad{position: fixed;top:20px;right:0;z-index: 9999;}
+    textarea{height:400px;width: 130px}
+    .label{font-size:12px;padding:5px 0;}
+    .btn{padding:5px 0;}
+    .btnstyle{width:140px;}
+    
+    @media print {
+        .no-print {display:none;}
+    }
+</style>
+<!-- <script src="../../../js/jquery.jqprint-0.3.js"></script> -->
+<style type="text/css" >
+    body{
+        margin:0;
+        padding:0;
+    }
+</style>
+<style >
+    .preview_left_text{
+        width: 200mm;/*动态数据*/
+        height: 100mm;/*动态数据*/
+        /* border: 1px solid #ccc; */
+        position: relative;
+        background-color: #fff;
+
+        flex-direction: column;
+
+        /* text-align: center; */
+        
+        /* justify-content: center; */
+        /* align-items: center;   */
+    }
+    .preview_left_text.flex{
+        display:flex;
+    }
+    .preview_left_text.aligncenter{
+        text-align: center;
+    }
+    .preview_left_text.alignright{
+        text-align: right;
+    }
+    .preview_left_text.positioncenter{
+        justify-content: center;
+    }
+    .preview_left_text.positionend{
+        justify-content: end;
+    }
+    .preview_left_text .printname{
+        line-height: 100%;
+        color: #000;
+        display: inline-block;
+        position: relative;
+        z-index: 9999999;
+    }
+    .preview_left_text .printname.border{ 
+        border: 1px dotted #ccc;
+    }
+    .preview_left_text .printname{ 
+        font-size: 52mm;
+        font-family: "Microsoft Yahei";
+    }
+    .preview_left_text.songti .printname{
+        font-family: "宋体"; 
+    }
+    .preview_left_text.heiti .printname{
+        font-family: "黑体"; 
+    }
+    .preview_left_text.kaiti .printname{
+        font-family: "楷体"; 
+    }
+    .preview_left_text.fangzhengxiaobiaosong .printname{
+        font-family: "方正小标宋简体"; 
+    }
+    .preview_left_text.fangzhengweibei .printname{
+        font-family: "方正魏碑简体";
+    }
+    .preview_left_text.fangzhengyaoti .printname{
+        font-family: "方正姚体"; 
+        font-size: 52mm;
+    }
+    /* 水平 给#fontwh p 设置 letter-spacing: 0mm; */
+    .preview_left_text.letters .printname{
+        letter-spacing: 0mm;
+    }
+    /* 垂直 给#fontwh p 设置 line-height: 100%;*/
+    .preview_left_text.vertical .printname{
+        line-height: 100%;
+    }
+</style>
+<body>
+    <div class="controlpad no-print">
+        <div class="label">请输入姓名（每人一行）：</div>
+        <textarea id="name"></textarea>
+        <div class="btn">
+            <button id="smallbtn" class="btnstyle" >设置席签模板</button>
+        </div>
+        <!-- <div class="btn">
+            <button id="bigbtn" class="btnstyle" onclick="signecho1()">生成打印序列（小）</button>
+        </div> -->
+        <div class="btn">
+            <button id="preview" class="btnstyle">预览</button>
+        </div>
+        <div class="btn">
+            <button id="cancel" class="btnstyle">重置</button>
+        </div>
+        <div class="btn">
+            <button id="print" class="btnstyle">打印</button>
+        </div>
+    </div>
+    
+    <div id="container">
+
+    </div>
+
+
+
+
+    <!-- <section id="list1"></section>
+    <section style="display:none">
+        <div class="bigsign">
+            <div class="topname"><span id=""></span></div>
+        </div>
+        <div class="bigsign">
+            <div class="bottomname"><span id=""></span></div>
+        </div>
+    </section>
+    <section style="display:none">
+        <div class="smallsign">
+            <div class="topname_s"><span id="list1"></span></div>
+        </div>
+        <div class="smallsign">
+            <div class="bottomname_s"><span id="list2"></span></div>
+        </div>
+    </section> -->
+
+    <script type="text/javascript">
+        // $('#name').val("66\n66");
+        function signecho(){
+            var textarea=document.getElementById("name");
+            var value=textarea.value;
+            var name_arr=value.split("\n");
+            var loveStr = "";
+            for (let i = 0; i < name_arr.length; i++) {
+                loveStr += `
+                <div class="bigsign"><div class="topname">${name_arr[i]}</div></div>
+                <div class="bigsign"><div class="bottomname">${name_arr[i]}</div></div>
+                `;
+            };
+            document.getElementById("list1").innerHTML = loveStr;
+        }
+        function signecho1(){
+            var textarea=document.getElementById("name");
+            var value=textarea.value;
+            var name_arr=value.split("\n");
+            var loveStr = "";
+            for (let i = 0; i < name_arr.length; i++) {
+                loveStr += `
+                <div class="smallsign"><div class="topname_s">${name_arr[i]}</div></div>
+                <div class="smallsign"><div class="bottomname_s">${name_arr[i]}</div></div>
+                `;
+            };
+            document.getElementById("list1").innerHTML = loveStr;
+
+        }
+
+    </script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script src="signprint.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
