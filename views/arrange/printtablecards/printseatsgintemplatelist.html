@@ -389,16 +389,28 @@
                 });
             }
             if(obj.event === 'setup'){
+                window.sessionStorage.setItem("_printtpl"+obj.data.id,JSON.stringify(obj.data));
                 layer.open({
                     type: 2,
-                    title: '设置',
-                    area: ['30%', '40%'],
-                    btn: ['确定', '取消'],
+                    title: '修改席签模版',
+                    area: ['100%', '100%'],
                     maxmin: true,
-                    content: 'setup_pop.html',
-                    success: function(layero, index) {
+                    // btn: ['确定', '取消'],
+                    content: 'preview.html?id='+obj.data.id,
+                    yes: function(index, layero) {
+
                     }
-                })
+                });
+                // layer.open({
+                //     type: 2,
+                //     title: '设置',
+                //     area: ['30%', '40%'],
+                //     btn: ['确定', '取消'],
+                //     maxmin: true,
+                //     content: 'setup_pop.html',
+                //     success: function(layero, index) {
+                //     }
+                // })
             }
             if(obj.event === 'rulezone'){
                 layer.open({

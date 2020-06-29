@@ -20,31 +20,217 @@ layui.config({
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
 
     
+    var fonts = [];
+    var detector = new Detector();
+    /**
+     * other stuff
+     */
+    function font_init() {
+        fonts.push(["PingFang SC","PingFang SC"]);
+        fonts.push(["Hiragino Sans GB","冬青黑体"]);
+        fonts.push(["microsoft yahei","微软雅黑"]);
+        fonts.push(["方正小标宋简体","方正小标宋简体"]);
+        fonts.push(["方正魏碑简体","方正魏碑简体"]);
+        fonts.push(["黑体","黑体"]);
+        fonts.push(["simsun","宋体"]);
+        fonts.push(["NSimSun","新宋体"]);
+        fonts.push(["FangSong","仿宋"]);
+        fonts.push(["FangSong","仿宋"]);
+        fonts.push(["KaiTi","楷体"]);
+        fonts.push(["FangSongGB2312","仿宋GB2312"]);
+        fonts.push(["KaiTiGB2312","楷体GB2312"]);
+        fonts.push(["STHeiti Light","华文细黑"]);
+        fonts.push(["STHeiti","华文黑体"]);
+        fonts.push(["STKaiti","华文楷体"]);
+        fonts.push(["STSong","华文宋体"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STXingkai","华文行楷"]);
+        fonts.push(["STLiti","华文隶书"]);
+        fonts.push(["STHupo","华文琥珀"]);
+        fonts.push(["STCaiyun","华文彩云"]);
+        fonts.push(["FZYaoti","方正姚体"]);
+        fonts.push(["FZShuTi","方正舒体"]);
+        fonts.push(["STFangsong","华文仿宋"]);
+        fonts.push(["STZhongsong","华文中宋"]);
+        fonts.push(["STSong","华文宋体"]);
+        fonts.push(["STKaiti","华文楷体"]);
+        fonts.push(["STXihei","华文细黑"]);
+        fonts.push(["cursive","cursive"]);
+        fonts.push(["monospace","monospace"]);
+        fonts.push(["serif","serif"]);
+        fonts.push(["sans-serif","sans-serif"]);
+        fonts.push(["fantasy","fantasy"]);
+        fonts.push(["default","default"]);
+        fonts.push(["Arial","Arial"]);
+        fonts.push(["Arial Black","Arial Black"]);
+        fonts.push(["Arial Narrow","Arial Narrow"]);
+        fonts.push(["Arial Rounded MT Bold","Arial Rounded MT Bold"]);
+        fonts.push(["Bookman Old Style","Bookman Old Style"]);
+        fonts.push(["Bradley Hand ITC","Bradley Hand ITC"]);
+        fonts.push(["Century","Century"]);
+        fonts.push(["Century Gothic","Century Gothic"]);
+        fonts.push(["Comic Sans MS","Comic Sans MS"]);
+        fonts.push(["Courier","Courier"]);
+        fonts.push(["Courier New","Courier New"]);
+        fonts.push(["Georgia","Georgia"]);
+        fonts.push(["Gentium","Gentium"]);
+        fonts.push(["Impact","Impact"]);
+        fonts.push(["King","King"]);
+        fonts.push(["Lucida Console","Lucida Console"]);
+        fonts.push(["Lalit","Lalit"]);
+        fonts.push(["Modena","Modena"]);
+        fonts.push(["Monotype Corsiva","Monotype Corsiva"]);
+        fonts.push(["Papyrus","Papyrus"]);
+        fonts.push(["Tahoma","Tahoma"]);
+        fonts.push(["TeX","TeX"]);
+        fonts.push(["Times","Times"]);
+        fonts.push(["Times New Roman","Times New Roman"]);
+        fonts.push(["Trebuchet MS","Trebuchet MS"]);
+        fonts.push(["Verdana","Verdana"]);
+        fonts.push(["Verona","Verona"]);
+        var table = document.getElementById('table');
+        for (i = 0; i < fonts.length; i++) {
+            var result = detector.detect(fonts[i][0]);
+            // console.log(result,fonts[i][0])
+            if(result){
+                $('#font_list').append(new Option(fonts[i][1], fonts[i][0]));
+            }
+
+            // if(data && data.length > 0){
+				// $.each(data, function (index, item) {
+					// 下拉菜单里添加元素
+				// });
+				
+			// }
+            // row = table.insertRow(-1);
+            // col = row.insertCell(-1);
+            // col.appendChild(document.createTextNode(fonts[i]))
+            // col.style.fontFamily = fonts[i];
+            // col = row.insertCell(-1);
+            // result ? col.className = "f_green" : col.className = "f_red";
+            // col.appendChild(document.createTextNode(result));
+        }
+        layui.form.render("select");
+    }
+    font_init();
+    
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+         var uri = window.location.search;
+        var r = uri.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return r[2]; return null; //返回参数值
+    }
+    var pid = +getUrlParam("id") || null;
+
 
     var seatSignData = {};
-    seatSignData.name = "";
-    seatSignData.font = "fangzhengyaoti";
-    seatSignData.fontSize = "52";
+    seatSignData.name = "主席会议室桌牌";
+    seatSignData.printname = "打席签";
+    
+    
     seatSignData.length = "100";
+    seatSignData.domheight = "100";
     seatSignData.width = "200";
-    seatSignData.above = "";
-    seatSignData.below = "";
-    seatSignData.left = "";
-    seatSignData.right = "";
-    seatSignData.level = "";
-    seatSignData.vertical = "";
-    seatSignData.align = "";
-    seatSignData.position = "";
-    seatSignData.type = "";
+    seatSignData.domwidth = "200";
+
+    seatSignData.font = "黑体";
+    // seatSignData.font = "方正小标宋简体";
+
+    seatSignData.fontSize = "51";
+    
+
+    seatSignData.level = "5";
+    seatSignData.vertical = "5";
+
+    seatSignData.zoom = 1;
+    seatSignData.spin = 1;
+
+    seatSignData.align = "aligncenter";
+    seatSignData.position = "positioncenter";
+
+    seatSignData.above = "0";
+    seatSignData.domabove = "0";
+    seatSignData.left = "0";
+    seatSignData.domleft = "0";
+
+    
+    seatSignData.below = undefined;
+    seatSignData.right = undefined;
+    
+    //打印字面 0:一字两面,1:一字一面 
+    seatSignData.type = "0";
 
 
+    //默认 200mm 100mm 字体52mm ,
+    //字体 52mm 当做基准值
 
+    //编辑
+    if(pid){
+        var seatdata = window.sessionStorage.getItem("_printtpl"+pid) || "";
+        if(seatdata){
+            seatdata = JSON.parse(seatdata);
+            for(var k in seatdata){
+                if(k != "below" && k != "right" && k != "modifytime"){
+                    seatSignData[k] = seatdata[k];
+                }
+            }
+            if(!seatSignData.spin){
+                seatSignData.spin = 1;
+            }
+            if(!seatSignData.zoom){
+                seatSignData.zoom = 1;
+            }
+
+            if(!seatSignData.printname){
+                seatSignData.printname = "打席签";
+            }
+            seatSignData.id = seatdata.id;
+
+            var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
+            $("#fontwh").css({"height":hh+"mm"});
+            seatSignData.domheight = hh;
+
+            $("#fontwh").removeClass("aligncenter");
+            $("#fontwh").removeClass("positioncenter");
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
+        }
+    }
+
+    changeSignHtml();
+    changeSignStyle();
+
+
+    $("#printname").bind("input propertychange",function(){
+        var printname = this.value;
+        printname = printname.split('\n').join('<br />');
+
+        if(printname.length == 2){
+            printname = printname.split("").join("　");
+        }
+        seatSignData.printname = printname;
+        $("#printnametext").html(printname);
+        // changeSignStyle();
+    });
 
     $("#fontwidth").bind("input propertychange",function(){
         var width = this.value;
         var reg = /^\d+$/g;
         if(reg.test(width)){
+
+            var hh = Math.round(+seatSignData.length*200/width);
+
+            $("#fontwh").css({"height":hh+"mm"});
+
             seatSignData.width = width;
+            seatSignData.domheight = hh;
+
+            // changeSignHtml();
             changeSignStyle();
         }
     });
@@ -52,30 +238,182 @@ layui.config({
         var height = this.value;
         var reg = /^\d+$/g;
         if(reg.test(height)){
+            var hh = Math.round(height*200/+seatSignData.width);
+    
+            $("#fontwh").css({"height":hh+"mm"});
+
             seatSignData.length = height;
+            seatSignData.domheight = hh;
+            // changeSignHtml();
+            
             changeSignStyle();
         }
     });
+
+
     $("#fontsize").bind("input propertychange",function(){
-        var size = this.value;
+        var size = +this.value;
         var reg = /^\d+$/g;
         if(reg.test(size)){
+            
+            if(size >= +seatSignData.length){
+                size = +seatSignData.length;
+                $("#fontsize").val(size);
+            }
+
             seatSignData.fontSize = size;
+
             changeSignStyle();
         }
     });
+
+    $("#letterspacing").bind("input propertychange",function(){
+        var level = +this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(level)){
+            
+            seatSignData.level = level;
+
+            changeSignStyle();
+        }
+    });
+
+    $("#vertical").bind("input propertychange",function(){
+        var vertical = +this.value;
+        var reg = /^\d+$/g;
+        if(reg.test(vertical)){
+            if(vertical > 0){
+                seatSignData.vertical = vertical;
+
+                changeSignStyle();
+            }else{
+                $("#vertical").val(0);
+            }
+        }
+    });
+
+    $("#scale").bind("input propertychange",function(){
+        var scale = +this.value;
+        var reg = /^([0-9]*|\d*.\d{1}?\d*)$/g;
+        if(reg.test(scale)){
+            console.log("scale-----",scale)
+            if(scale > 0){
+                seatSignData.zoom = scale;
+
+                changeSignStyle();
+            }else{
+                $("#scale").val(0);
+            }
+        }
+    });
+
+    $("#rotate").bind("input propertychange",function(){
+        var rotate = +this.value;
+        var reg = /^([0-9]*|\d*.\d{1}?\d*)$/g;
+        if(reg.test(rotate)){
+            console.log("rotate-----",rotate)
+            if(rotate > 0){
+                seatSignData.spin = rotate;
+
+                changeSignStyle();
+            }else{
+                $("#rotate").val(0);
+            }
+        }
+    });
+
+    $("#alignbtn img").bind("click",function(){
+        console.log($(this).attr("data"));
+        var data = $(this).attr("data");
+        $("#fontwh").addClass("flex");
+        $("#printnametext").removeClass("border");
+        if(seatSignData.align){
+            $("#fontwh").removeClass(seatSignData.align);
+        }
+        // if(seatSignData.position){
+        //     $("#fontwh").removeClass(seatSignData.position);
+        // }
+        seatSignData.above = 0;
+        seatSignData.left = 0;
+        switch(data){
+            case "left":
+                seatSignData.align = "";
+            break;
+            case "center":
+                seatSignData.align = "aligncenter";
+            break;
+            case "right":
+                seatSignData.align = "alignright";
+            break;
+        }
+        changeSignHtml();
+        changeSignStyle();
+    });
+
+    $("#positionbtn img").bind("click",function(){
+        console.log($(this).attr("data"));
+        var data = $(this).attr("data");
+        $("#fontwh").addClass("flex");
+        $("#printnametext").removeClass("border");
+        if(seatSignData.position){
+            $("#fontwh").removeClass(seatSignData.position);
+        }
+        seatSignData.above = 0;
+        seatSignData.left = 0;
+        switch(data){
+            case "top":
+                seatSignData.position = "";
+            break;
+            case "center":
+                seatSignData.position = "positioncenter";
+            break;
+            case "end":
+                seatSignData.position = "positionend";
+            break;
+        }
+        changeSignHtml();
+        changeSignStyle();
+    });
+
+
     $("#margintop").bind("input propertychange",function(){
         var above = this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
+        
         if(reg.test(above)){
+            $("#fontwh").removeClass("flex");
+            $("#printnametext").addClass("border");
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
+
+            seatSignData.align = "";
+            seatSignData.position = "";
+
+            
             seatSignData.above = above;
+
             changeSignStyle();
         }
     });
     $("#marginleft").bind("input propertychange",function(){
         var left = this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
         if(reg.test(left)){
+            $("#fontwh").removeClass("flex");
+            $("#printnametext").addClass("border");
+            if(seatSignData.align){
+                $("#fontwh").removeClass(seatSignData.align);
+            }
+            if(seatSignData.position){
+                $("#fontwh").removeClass(seatSignData.position);
+            }
+            seatSignData.align = "";
+            seatSignData.position = "";
+
             seatSignData.left = left;
             changeSignStyle();
         }
@@ -84,25 +422,160 @@ layui.config({
     form.on('select(font-form-select)', function(data){
         var font = data.value;
 
-        if(seatSignData.font){
-            $("#fontwh").removeClass(seatSignData.font);
-        }
+        // if(seatSignData.font){
+        //     $("#fontwh").removeClass(seatSignData.font);
+        // }
         seatSignData.font = font;
         changeSignStyle();
     });
+    form.on('select(printtype-form-select)', function(data){
+        var type = data.value;
+        seatSignData.type = type;
+    });
 
 
+    function changeSignHtml(){
+        $("#name").val(seatSignData.name);
+        $("#printname").html(seatSignData.printname);
+        $("#printnametext").html(seatSignData.printname);
+
+        $("#fontwidth").val(seatSignData.width);
+        $("#fontheight").val(seatSignData.length);
+
+        $("#font_list").val(seatSignData.font);
+
+        $("#fontsize").val(seatSignData.fontSize);
+
+        $("#font_list").val(seatSignData.font);
+
+        $("#letterspacing").val(seatSignData.level);
+        $("#vertical").val(seatSignData.vertical);
+
+        $("#scale").val(seatSignData.zoom || 1);
+        $("#rotate").val(seatSignData.spin || 1);
+
+        $("#margintop").val(seatSignData.above);
+        $("#marginleft").val(seatSignData.left);
+
+        $("#printtype_selset").val(seatSignData.type);
+
+        layui.form.render("select");
+    }
     function changeSignStyle(){
-        $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
-        $("#fontwh > p").css({"font-size":seatSignData.fontSize+"mm","margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"});
+        // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
+        // 52 / (最新width *  height / 20000 )
+        // ,"margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"
+
+       
+
+        // var cc = (+seatSignData.width*+seatSignData.length)/coefficient;
+
+        var fontcc = +seatSignData.length/+seatSignData.domheight;
+
+        var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
+        var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
+        var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
+        var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.length);
+        
+        var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.length || 1;
+        var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.length || 1;
+        // var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
+
+        $("#printnametext").css({
+            "font-size":(+seatSignData.fontSize/fontcc)+"mm",
+            "letter-spacing":(+domlevel)+"mm",
+            "line-height":(100+vertical)+"%",
+            "margin-top":(+domabove)+"mm",
+            "margin-left":(+domleft)+"mm",
+            "transform": "scale(" + rotate + "," + scale + ")",
+            "font-family":seatSignData.font || "方正小标宋简体"
+        });
+
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.length+"mm");
+
+        $("#text_padding_top").html((+seatSignData.above)+"mm");
+        $("#m_padding_top").height((+domabove)+"mm");
+
+        $("#text_padding_left").html((+seatSignData.left)+"mm");
+        $("#m_padding_left").width((+domleft)+"mm");
+
         if(seatSignData.font){
             $("#fontwh").addClass(seatSignData.font);
+        }
+        if(seatSignData.align){
+            $("#fontwh").addClass(seatSignData.align);
+        }
+        if(seatSignData.position){
+            $("#fontwh").addClass(seatSignData.position);
         }
     }
 
 
+    function addSeatSign(){
+        seatSignData.name = $("#name").val();
+
+        seatSignData.zoom = +seatSignData.zoom;
+
+        $.ajax({
+            async: false,
+            type: "POST",
+            xhrFields: {
+                withCredentials: true
+            },
+            url: url + "/seatsgin/addseatsgin",
+            dataType: "json",
+            data:seatSignData,
+            success: function(obj) {
+                console.log("--addSeatSign---");
+                if(obj.code == 0){
+                    parent.layer.msg("添加成功");
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads();
+                }else{
+                    layer.msg("添加席签模板错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
+
+    function editSeatSign(){
+        seatSignData.name = $("#name").val();
+
+        seatSignData.zoom = +seatSignData.zoom;
+        
+        console.log(seatSignData)
+        $.ajax({
+            async: false,
+            type: "POST",
+            xhrFields: {
+                withCredentials: true
+            },
+            url: url + "/seatsgin/updateseatsgin",
+            dataType: "json",
+            data:seatSignData,
+            success: function(obj) {
+                console.log("--addSeatSign---");
+                if(obj.code == 0){
+                    parent.layer.msg("修改成功");
+                    var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                    parent.layer.close(index);
+                    parent.reloads();
+                }else{
+                    layer.msg("修改席签模板错误");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
 
 
     window.onkeyup = function(ev) {
@@ -122,47 +595,20 @@ layui.config({
         refresh:function(){
             location.reload();
         },
-        //选择区域打印
-        print: function() {
-            deviceList.length=10;//先定义个假数据
-            if ( deviceList.length == 0 ) {
-                return layer.msg("请选择后再批量打印！")
+        enterbtn: function() {
+            if(pid){
+                editSeatSign();
+            }else{
+                addSeatSign();
             }
-            //获取选中数目
-            layer.confirm('    是否将 12 个桌牌全部打印？',
-            {
-                title:'指定区域打印',
-                skin: '',
-                btn: ['预览','取消'],
-                // 取消
-                btn2: function(){
-                    layer.close();
-                },
-                // 预览
-                yes: function(index){
-                    // layer.open({
-                    //     type: 2,
-                    //     title: '收藏管理 (考生姓名：张无忌)',
-                    //     //title: false,
-                    //     shadeClose: false, //弹出框之外的地方是否可以点击
-                    //     area: ['100%', '100%'],
-                    //     closeBtn: 1,
-                    //     // maxmin: true,
-                    //     closeBtn:false,
-                    //     offset: '0',
-                    //     content: 'seatmap.html',
-                    //     success: function(layero, index) {
-                    //     }
-                    // })
-                }
-            },
-            function(index) {
-                layer.close(index);
-            });
         },
-        search: function() {
-            
-
+        cancel: function() {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭 
+        },
+        close:function(){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭 
         }
     };
 

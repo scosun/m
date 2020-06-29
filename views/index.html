@@ -87,16 +87,6 @@
                             <dd><a lay-href="systemindex/systemindex.html">首页</a></dd>
                         </dl>
                     </li>
-                    <li data-name="home" class="layui-nav-item ">
-                        <a href="javascript:;" lay-tips="我的会议" lay-direction="2">
-                            <i class="layui-icon iconfont icon-wodehuiyi"></i>
-                            <cite>我的会议</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd id="meet"><a lay-href="arrange/meet/meet.html">会议列表</a></dd>
-                            <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>
-                        </dl>
-                    </li>
                     <li data-name="component" class="layui-nav-item ">
                         <a href="javascript:;" lay-tips="我的会场" lay-direction="2">
                             <i class="layui-icon iconfont icon-wodehuichang"></i>
@@ -112,6 +102,26 @@
                         </dl>
                         </dl>
                     </li>
+                    <li data-name="component" class="layui-nav-item ">
+                        <a href="javascript:;" lay-tips="编排规则" lay-direction="2">
+                            <i class="layui-icon iconfont icon-bianpaiguize"></i>
+                            <cite>编排规则</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd id="rules"><a lay-href="arrange/arrangeman/arrangeman.html">规则列表</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="home" class="layui-nav-item ">
+                        <a href="javascript:;" lay-tips="我的会议" lay-direction="2">
+                            <i class="layui-icon iconfont icon-wodehuiyi"></i>
+                            <cite>我的会议</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd id="meet"><a lay-href="arrange/meet/meet.html">会议列表</a></dd>
+                            <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>
+                        </dl>
+                    </li>
+
                     <li data-name="component" class="layui-nav-item ">
                         <a href="javascript:;" lay-tips="参会人员" lay-direction="2">
                             <i class="layui-icon iconfont icon-canhuirenyuan"></i>
@@ -138,15 +148,7 @@
                         </dl>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item ">
-                        <a href="javascript:;" lay-tips="编排规则" lay-direction="2">
-                            <i class="layui-icon iconfont icon-bianpaiguize"></i>
-                            <cite>编排规则</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd id="rules"><a lay-href="arrange/arrangeman/arrangeman.html">规则列表</a></dd>
-                        </dl>
-                    </li>
+
                     <li data-name="component" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="电子桌牌" lay-direction="2">
                             <i class="layui-icon iconfont icon-dianzizhuopai"></i>
@@ -171,6 +173,7 @@
                         <dl class="layui-nav-child">
                             <dd data-name="controlseatlist"><a lay-href="arrange/printtablecards/printtablecardslist.html">打印管理</a></dd>
                             <dd data-name="controlseatlist"><a lay-href="arrange/printtablecards/printseatsgintemplatelist.html">桌牌模版</a></dd>
+                            <dd data-name="controlseatlist"><a lay-href="arrange/printtablecards/signprint.html">手动打印</a></dd>
 
 
                             <!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>-->
@@ -224,20 +227,20 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item" id="avirGroup">
-                        <a href="javascript:;" lay-tips="系统管理" lay-direction="2">
-                            <i class="layui-icon iconfont icon-xitongguanli"></i>
-                            <cite>系统管理</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd data-name="grid" id="user">
-                                <a lay-href="arrange/user/user.html">用户管理</a>
-                            </dd>
-                            <dd data-name="button" id="role">
-                                <a lay-href="arrange/role/role.html">权限组管理</a>
-                            </dd>
-                        </dl>
-                    </li>
+<!--                    <li data-name="component" class="layui-nav-item" id="avirGroup">-->
+<!--                        <a href="javascript:;" lay-tips="系统管理" lay-direction="2">-->
+<!--                            <i class="layui-icon iconfont icon-xitongguanli"></i>-->
+<!--                            <cite>系统管理</cite>-->
+<!--                        </a>-->
+<!--                        <dl class="layui-nav-child">-->
+<!--                            <dd data-name="grid" id="user">-->
+<!--                                <a lay-href="arrange/user/user.html">用户管理</a>-->
+<!--                            </dd>-->
+<!--                            <dd data-name="button" id="role">-->
+<!--                                <a lay-href="arrange/role/role.html">权限组管理</a>-->
+<!--                            </dd>-->
+<!--                        </dl>-->
+<!--                    </li>-->
 
                     <!-- <li data-name="component" class="layui-nav-item">
                             <a href="javascript:;" lay-tips="组件" lay-direction="2">
@@ -475,6 +478,7 @@
             })
         })
     })
+  
 </script>
 </body>
 

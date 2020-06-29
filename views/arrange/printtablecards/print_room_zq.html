@@ -85,13 +85,17 @@
 	<div style="position: fixed;left:0;right: 0;top:0;background-color: #fff;z-index: 99;">
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<!-- <a><cite> &nbsp; &nbsp; &nbsp; 打印</cite></a> -->
-			<a class="layui-ds layui-btn-a-grey" href="javascript:;" style="line-height: 30px;padding: 0 0 0 26px;margin-right: 0px;" data-type="print" >打印</a>
+			<a class="layui-ds layui-btn-a-grey" href="javascript:;" style="line-height: 30px;padding: 0 0 0 26px;margin-right: 0px;" >打印管理</a>
 			<!-- <a onclick="asd()" href="javascript:;"><cite>刷新</cite></a> -->
 			<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
 		</span>
 		<span class="layui-right-nav">
-            <i id="nav-close" data="关闭此窗口"  class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+            <i id="nav-print" data-type="print" class="layui-ds"  data="设定打印区域"><img src="../../../images/print.png"></i>
+           	<i id="drag-container" class="layui-ds" data-type="dragcontainer" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+			<i id="nav-close" class="layui-ds" data-type="close" data="关闭此窗口"  style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		
 		</span>
+		<!-- 右侧菜单 end-->
 	</div>
 	
 	<div class="layui-tab">

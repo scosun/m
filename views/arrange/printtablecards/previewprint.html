@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>批量打印桌牌</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon.ico">
+    <script src="../../../js/jquery-3.1.1.min.js"></script>
+    <script src="../../../js/jquery.jqprint-0.3.js"></script>
+    <style type="text/css">
+        body{
+            margin:0;
+            padding:0;
+        }
+        .preview_left_text{
+            width: 200mm;/*动态数据*/
+            height: 100mm;/*动态数据*/
+            /* border: 1px solid #ccc; */
+            position: relative;
+            background-color: #fff;
+    
+            flex-direction: column;
+    
+            /* text-align: center; */
+            
+            /* justify-content: center; */
+            /* align-items: center;   */
+        }
+        .preview_left_text.flex{
+            display:flex;
+        }
+        .preview_left_text.aligncenter{
+            text-align: center;
+        }
+        .preview_left_text.alignright{
+            text-align: right;
+        }
+        .preview_left_text.positioncenter{
+            justify-content: center;
+        }
+        .preview_left_text.positionend{
+            justify-content: end;
+        }
+        .preview_left_text .printname{
+            line-height: 100%;
+            color: #000;
+            display: inline-block;
+            position: relative;
+            z-index: 9999999;
+        }
+        .preview_left_text .printname.border{ 
+            border: 1px dotted #ccc;
+        }
+        .preview_left_text .printname{ 
+            font-size: 52mm;
+            font-family: "Microsoft Yahei";
+        }
+        .preview_left_text.songti .printname{
+            font-family: "宋体"; 
+        }
+        .preview_left_text.heiti .printname{
+            font-family: "黑体"; 
+        }
+        .preview_left_text.kaiti .printname{
+            font-family: "楷体"; 
+        }
+        .preview_left_text.fangzhengxiaobiaosong .printname{
+            font-family: "方正小标宋简体"; 
+        }
+        .preview_left_text.fangzhengweibei .printname{
+            font-family: "方正魏碑简体";
+        }
+        .preview_left_text.fangzhengyaoti .printname{
+            font-family: "方正姚体"; 
+            font-size: 52mm;
+        }
+        /* 水平 给#fontwh p 设置 letter-spacing: 0mm; */
+        .preview_left_text.letters .printname{
+            letter-spacing: 0mm;
+        }
+        /* 垂直 给#fontwh p 设置 line-height: 100%;*/
+        .preview_left_text.vertical .printname{
+            line-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+
+    </div>
+    <!-- <div>
+        <div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+            <span id="printnametext" class="printname">辛海濤</span>
+        </div>
+    </div>
+    <div>
+        <div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+            <span id="printnametext" class="printname">辛海濤</span>
+        </div>
+    </div>
+    <div>
+        <div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+            <span id="printnametext" class="printname">辛海濤</span>
+        </div>
+    </div> -->
+
+
+    <script type="text/javascript">
+        // function signecho(){
+        //     var textarea=document.getElementById("name");
+        //     var value=textarea.value;
+        //     var name_arr=value.split("\n");
+        //     var loveStr = "";
+        //     for (let i = 0; i < name_arr.length; i++) {
+        //         loveStr += `
+        //         <div class="bigsign"><div class="topname">${name_arr[i]}</div></div>
+        //         <div class="bigsign"><div class="bottomname">${name_arr[i]}</div></div>
+        //         `;
+        //     };
+        //     document.getElementById("list1").innerHTML = loveStr;
+        // }
+        // function signecho1(){
+        //     var textarea=document.getElementById("name");
+        //     var value=textarea.value;
+        //     var name_arr=value.split("\n");
+        //     var loveStr = "";
+        //     for (let i = 0; i < name_arr.length; i++) {
+        //         loveStr += `
+        //         <div class="smallsign"><div class="topname_s">${name_arr[i]}</div></div>
+        //         <div class="smallsign"><div class="bottomname_s">${name_arr[i]}</div></div>
+        //         `;
+        //     };
+        //     document.getElementById("list1").innerHTML = loveStr;
+        // }
+    </script>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="previewprint.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+</html>
