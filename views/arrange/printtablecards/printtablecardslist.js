@@ -130,12 +130,12 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/meeting/findMeetingBylayui" //数据接口
+            url: url + "/printseatsgin/selectSeatsginListPage" //数据接口
             ,
 
             method: 'get',
             page: {
-                layout: ['prev', 'page', 'next', 'count', 'skip']
+                layout: ['prev', 'page', 'next', 'count']
             },
             xhrFields: {
                 withCredentials: true
@@ -152,8 +152,13 @@ layui.config({
                         align: 'left',
                     },
                     {
-                        field: 'name',
-                        title: '会议人员',
+                        field: 'address',
+                        title: '人员数量',
+                        align: 'left',
+                    },
+                    {
+                        field: 'memo',
+                        title: '桌牌模版',
                         align: 'left',
                     },
                     {
