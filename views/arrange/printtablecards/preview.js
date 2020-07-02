@@ -161,6 +161,8 @@ layui.config({
     //打印字面 0:一字两面,1:一字一面 
     seatSignData.type = "0";
 
+    seatSignData.memo = "";
+
 
     //默认 200mm 100mm 字体52mm ,
     //字体 52mm 当做基准值
@@ -459,6 +461,8 @@ layui.config({
 
         $("#printtype_selset").val(seatSignData.type);
 
+        $("#memo").val(seatSignData.memo);
+
         layui.form.render("select");
     }
     function changeSignStyle(){
@@ -501,7 +505,7 @@ layui.config({
         $("#m_padding_left").width((+domleft)+"mm");
 
         if(seatSignData.font){
-            $("#fontwh").addClass(seatSignData.font);
+            // $("#fontwh").addClass(seatSignData.font);
         }
         if(seatSignData.align){
             $("#fontwh").addClass(seatSignData.align);
@@ -514,7 +518,8 @@ layui.config({
 
     function addSeatSign(){
         seatSignData.name = $("#name").val();
-
+        seatSignData.memo = $("#memo").val();
+        
         seatSignData.zoom = +seatSignData.zoom;
 
         $.ajax({
@@ -546,7 +551,8 @@ layui.config({
 
     function editSeatSign(){
         seatSignData.name = $("#name").val();
-
+        seatSignData.memo = $("#memo").val();
+        
         seatSignData.zoom = +seatSignData.zoom;
         
         console.log(seatSignData)
