@@ -77,16 +77,17 @@
                                 <!-- <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button> -->
                                 <!-- <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button> -->
                                 <!-- 新建 -->
-                                <div class="dropdown-menu-warp">
-                                        <div class="dropdown-menu dropdown-hover">
-                                                <button class='layui-ds gradient-block-diagonal'>新建</button>
-                                                <div class="dropdown-menu-nav dropdown-bottom-right">
-                                                        <div class="dropdown-anchor"></div>
-                                                        <a class='layui-ds' href="javascript:;" data-type='add' id='addmeeting'>单会场</a>
-                                                        <a class='layui-ds' href="javascript:;" data-type='addMore' id='addmeeting'>多会场</a>
-                                                </div>
-                                        </div>
-                                </div>
+                                <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建</button>
+<!--                                <div class="dropdown-menu-warp">-->
+<!--                                        <div class="dropdown-menu dropdown-hover">-->
+<!--                                               -->
+<!--                                                <div class="dropdown-menu-nav dropdown-bottom-right">-->
+<!--                                                        <div class="dropdown-anchor"></div>-->
+<!--                                                        <a class='layui-ds' href="javascript:;" data-type='add' id='addmeeting'>单会场</a>-->
+<!--                                                        <a class='layui-ds' href="javascript:;" >多会场</a>-->
+<!--                                                </div>-->
+<!--                                        </div>-->
+<!--                                </div>-->
                                 {{# }}}
                                 <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>
                                 {{#  if($.inArray("emptymeet", d) != -1){ }}
