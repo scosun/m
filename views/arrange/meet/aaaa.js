@@ -38,6 +38,7 @@ layui.config({
     var url = setter.baseUrl;
     var uri = window.location.search;
     var str = uri.substr(1);
+    var roomtemplateid;
     // window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
     // window.meetingid = str.substring(str.lastIndexOf("=")+1)
     // window.roomid = str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
@@ -772,7 +773,7 @@ layui.config({
             return false;
         }else {
             var file = document.getElementById("upload-file").files[0];
-            upload(meetingid,newroomid,file);
+            upload(meetingid,roomId,file);
         }
     });
     
@@ -780,7 +781,7 @@ layui.config({
         var formData = new FormData();
         console.log(meetingid+","+newroomid+","+file);
         formData.append("meetingid",meetingid);
-        formData.append("roomtemplateid",newroomid);
+        formData.append("roomtemplateid",roomId);
         formData.append("file",file);
         $.ajax({
             url:"https://f.longjuli.com/wordtemplate/uploadWordTemplate",
@@ -899,7 +900,7 @@ layui.config({
                     var iframe = window['layui-layer-iframe' + index];
                     // 向子页面的全局函数child传参
                     console.log(meetingid);
-                    iframe.init(meetingid,newroomid);
+                    iframe.init(meetingid,roomId);
                 },
                 yes: function(index, layero) {
                     
