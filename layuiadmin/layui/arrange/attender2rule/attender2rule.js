@@ -7,7 +7,14 @@ layui.config({
 	admin = layui.admin,
 	$ = layui.jquery;
 	// #test-table-operate
-	
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var uri = window.location.search;
+		var r = uri.substr(1).match(reg);  //匹配目标参数
+		if (r != null) return r[2]; return null; //返回参数值
+	}
+	var meetingid =getUrlParam("meetingid")
+	console.log(meetingid)
 	var arrangeList = [];
 
 	getListData();
@@ -19,7 +26,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://m.longjuli.com/v1/attendee2rules?page=1&limit=10&q="+key,//修改为 参会人员和座区规则对应关系方案 表
+			url: "https://m.longjuli.com/v1/attendee2rules?page=1&limit=10&q="+key+"&meeting_id="+meetingid,//修改为 参会人员和座区规则对应关系方案 表
 			dataType: "json",
 			//成功的回调函数
 			// data: {

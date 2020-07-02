@@ -875,7 +875,7 @@ layui.config({
                 closeBtn: 1,
                 closeBtn: false,
                 offset: '0',
-                content: '../attender2rule/attender2rule.html',
+                content: '../attender2rule/attender2rule.html?meetingid='+meetingid,
                 success: function(layero, index) {
                     // var body = layui.layer.getChildFrame('body', index);
                     // var roomid;
