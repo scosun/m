@@ -158,6 +158,8 @@ layui.config({
             dataType: "json",
             success: function(obj) {
                 console.log("--queryAllSeatStatus---");
+                dragSortData = null;
+
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees;
 
@@ -670,6 +672,7 @@ layui.config({
     }
 
     function saveSeats(){
+        
         var seats = $("#seatcontainerId .seatdiv");
         var seatsobj = {
             meeting_id: +meetingid,
@@ -683,9 +686,21 @@ layui.config({
                 ids[item.seatid] = item.id;
                 names[item.seatid] = item.attender;
             }else{
+                //其它会议室的数据
                 seatsobj.attendees.push(item);
             }
         });
+        if(dragSortData){
+            dragSortData.forEach(function(item){
+                if(item.roomtemplate_id == roomId){
+                    ids[item.seatid] = item.id;
+                    names[item.seatid] = item.attender;
+                }else{
+                    //其它会议室的数据
+                    seatsobj.attendees.push(item);
+                }
+            });
+        }
         // console.log(ids,names)
 
         seats.each(function(){
@@ -694,6 +709,7 @@ layui.config({
             var id = this.id;
             if(name != "" && !reg.test(name)){
                 if(ids[id]){
+                    //如果座位的id, 在人员数据里面, 说明这个人员不是新增的
                     if(names[id] == name){
                         seatsobj.attendees.push({id:ids[id],attender:name,seatid:id,roomtemplate_id:+roomId});
                     }else{
