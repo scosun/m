@@ -431,13 +431,15 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(<span>' + list.length + '</span>人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            // li.push('<h4>' + title + '(<span>' + list.length + '</span>人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a>' + title + '(<span>' + list.length + '</span>人)</h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
                 var name2 = item2.name;
                 var id2 = item2.id;
-                li.push('<li id="pa_' + id2 + '">'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
+                // li.push('<li id="pa_' + id2 + '">'+name2+'<a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></li>');
+                li.push('<li id="pa_' + id2 + '"><a id="' + id2 + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a>'+name2+'</li>');
             }
             li.push('</ul>');
             li.push('</li>');
