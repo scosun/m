@@ -96,18 +96,33 @@ layui.config({
 			var index=parent.layer.getFrameIndex(window.name);
 			parent.layer.close(index);
 		});
-		$('#pointname').on('keydown', function (event) {
+		$('#pointname,#xaxis,#yaxis').on('keydown', function (event) {
 			if (event.keyCode == 13) {
 				var layer = layui.layer;
 				var pointname = $("#pointname").val() || "";
 				
+				var xaxis = +$("#xaxis").val();
+				var yaxis = +$("#yaxis").val();
+				if(xaxis <= 0 ){
+					layer.msg('X坐标输入错误');
+					return false;
+				}
+				if(yaxis <= 0 ){
+					layer.msg('Y坐标输入错误');
+					return false;
+				}
+
 				if(pointname == ""){
 					layer.msg('请输入向心点名称');
 					return false;
 				}else{
-					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
-					window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
+					// var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+               		// parent.layer.close(index);		//关闭窗口
+					// window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
+					
+					window.parent.saveRulePointData(pointname,xaxis,yaxis);
+					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+					parent.layer.close(index);
 				}
 				return false
 			}

@@ -127,7 +127,7 @@ layui.config({
 				}
 				
 				if(typeid == 1){
-					window.parent.mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
+					window.parent.seatmaps.mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
 				}else{
 					var ccx = +$("#ccx").val() || 0;
 					var ccy = +$("#ccy").val() || 0;
@@ -140,7 +140,7 @@ layui.config({
 						layer.msg('半径输入错误');
 						return false;
 					}
-					window.parent.createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
+					window.parent.seatmaps.createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
 				}
 				var index = parent.layer.getFrameIndex(window.name);
 				parent.layer.close(index);

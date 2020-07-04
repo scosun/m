@@ -191,6 +191,9 @@
 					<div class="child_cont_li">
 						<a data="selectcol" href="javascript:;" alt="列选中" title="列选中"><img src="../../../images/toolkit/column_selected.svg"><span>列选中</span></a>
 					</div>
+					<!-- <div class="child_cont_li">
+						<a data="selectgroup" href="javascript:;" alt="组选中" title="组选中"><img src="../../../images/toolkit/column_selected.svg"><span>组选中</span></a>
+					</div> -->
 					<div class="child_cont_li">
 						<a data="selectsame" href="javascript:;" alt="类别选中" title="类别选中"><img src="../../../images/toolkit/selectsame.svg"><span>类别选中</span></a>
 					</div>
@@ -251,13 +254,13 @@
 				</div>
 			</div>
 			<div class="toollist_li has_child">
-				<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/transverse.svg"><span>横向分布</span></a>
+				<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/vertical.svg"><span>横向分布</span></a>
 				<div class="child_cont" style="display: none;">
 					<div class="child_cont_li">
-						<a data="nav-horizontal-c" href="javascript:;" alt="垂直分布" title="垂直分布"><img src="../../../images/toolkit/vertical.svg"><span>垂直分布</span></a>
+						<a data="nav-horizontal-c" href="javascript:;" alt="垂直分布" title="垂直分布"><img src="../../../images/toolkit/transverse.svg"><span>垂直分布</span></a>
 					</div>
 					<div class="child_cont_li on">
-						<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/transverse.svg"><span>横向分布</span></a>
+						<a data="nav-vertical-c" href="javascript:;" alt="横向分布" title="横向分布"><img src="../../../images/toolkit/vertical.svg"><span>横向分布</span></a>
 					</div>
 				</div>
 			</div>
@@ -323,7 +326,7 @@
 						<a id="set-centerpoint-down" data="set-centerpoint" href="javascript:;" alt="设置向心点" title="设置向心点"><img src="../../../images/toolkit/prev_step.svg"><span>设置向心点</span></a>
 					</div>
 					<div class="child_cont_li">
-						<a data="close-centerpoint" href="javascript:;" alt="关闭向心点" title="关闭向心点"><img src="../../../images/toolkit/prev_step.svg"><span>关闭向心点</span></a>
+						<a id="close-centerpoint" data="close-centerpoint" href="javascript:;" alt="关闭向心点" title="关闭向心点"><img src="../../../images/toolkit/prev_step.svg"><span>关闭向心点</span></a>
 					</div>
 					<div class="child_cont_li">
 						<a id="centerpoint-list" data="centerpoint-list" href="javascript:;" alt="向心点列表" title="向心点列表"><img src="../../../images/toolkit/restore.svg"><span>向心点列表</span></a>
@@ -379,7 +382,8 @@
 <script src="JSRuler/jquery.event.drag-2.2.js"></script>
 <script src="JSRuler/jquery.event.drop-2.2.js"></script>
 <script src="JSRuler/ruler.js"></script>
-<script src="seatscontrol_temp.js"></script>
+<script src="seatmapseditor.js"></script>
+
 
 <!-- /* dragDiv 拖动工具箱 3.25*/ -->
 <script type="text/javascript">
@@ -447,6 +451,12 @@
 
 <!-- /* 点击、长按事件 3.25*/ -->
 <script>
+	function asd() {
+		location.reload();
+	}
+
+	var seatmaps = new SeatMapsEditor();
+
 	$(document).click(function(){
 		if(!__longEvent){
 			$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
@@ -457,6 +467,7 @@
 		}
 		// $('.toollist .on').removeClass("on");
 	});
+
 	$(".child_cont_li > a").click(function(evt){
 		console.log("child_cont_li-----------click");
 		// evt.stopPropagation();
@@ -504,45 +515,51 @@
 		__keydownMoveDown = false;
 		__keydownMoveLeft = false;
 		__keydownMoveRight = false;
-		unDragMoveSeats();
+		seatmaps.unDragMoveSeats();
 
 		if(data != "rightbtn"){
 			__activeRight = false;
-			removeContextMenu();
+			seatmaps.removeContextMenu();
 		}
 		
 		switch(data){
 			case "nav-radio":
 				//单选
-				bindOneSeats();
+				seatmaps.bindOneSeats();
 			break;
 			case "selectall":
 				//全选
-				selectSeatAll();
+				seatmaps.selectSeatAll();
 			break;
 			case "unselectall":
 				//取消全选
-				unSelectSeatAll();
+				seatmaps.unSelectSeatAll();
 			break;
 			case "selectrow":
 				//行选中
-				selectSeatRow();
+				seatmaps.selectSeatRow();
 			break;
 			case "selectcol":
 				//列选中
-				selectSeatCol();
+				seatmaps.selectSeatCol();
+			break;
+			case "selectgroup":
+				//组选中
+				seatmaps.selectSeatGroup();
 			break;
 			case "selectsame":
 				//类别选中
-				selectSameSeats();
+				seatmaps.selectSameSeats();
 			break;
 
 			case "nav-selection":
 				console.log("nav-selection");
+				//框选
 				selectSeats();
 			break;
 
 			case "nav-down":
+				//矩形座区
 				// setTimeout(function(){
 				// 	$(ele).parent().removeClass("on");
 				// 	$("#nav-selection").addClass("on");
@@ -551,6 +568,7 @@
 
 			case "create-circle-down":
 			case "create-run-down":
+				//环形座区,跑道座区
 				// setTimeout(function(){
 				// 	$(ele).parent().removeClass("on");
 				// 	$("#nav-selection").addClass("on");
@@ -558,7 +576,8 @@
 			break;
 
 			case "nav-add":
-				boxCreateSeats();
+				//鼠标拉宽绘制
+				seatmaps.boxCreateSeats();
 			break;
 			
 			case "keydownmove":
@@ -569,30 +588,30 @@
 			break;
 			case "dleftmovebtn":
 				__keydownMoveLeft = true;
-				leftMoveSeats();
+				seatmaps.leftMoveSeats();
 			break;
 			case "drightmovebtn":
 				__keydownMoveRight = true;
-				rightMoveSeats();
+				seatmaps.rightMoveSeats();
 			break;
 			case "dtopmovebtn":
 				__keydownMoveUp = true;
-				topMoveSeats();
+				seatmaps.topMoveSeats();
 			break;
 			case "dbottommovebtn":
 				__keydownMoveDown = true;
-				bottomMoveSeats();
+				seatmaps.bottomMoveSeats();
 			break;
 
 			case "nav-vertical-c":
-				xAvgSeats();
+				seatmaps.xAvgSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-horizontal-c":
-				yAvgSeats();
+				seatmaps.yAvgSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
@@ -600,50 +619,51 @@
 			break;
 
 			case "nav-align-center":
-				xCenterSeats();
+				seatmaps.xCenterSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-align-center-v":
-				yCenterSeats();
+				seatmaps.yCenterSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-align-left":
-				leftSeats();
+				seatmaps.leftSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-align-right":
-				rightSeats();
+				seatmaps.rightSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-align-up":
-				topSeats();
+				seatmaps.topSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-align-down":
-				bottomSeats();
+				seatmaps.bottomSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 
+
 			case "nav-delete":
-				deleteSeats();
+				seatmaps.deleteSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
@@ -651,14 +671,14 @@
 			break;
 
 			case "nav-forward":
-				revertSeats();
+				seatmaps.revertSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
 			case "nav-rollback":
-				resetSeats();
+				seatmaps.resetSeats();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
@@ -666,7 +686,7 @@
 			break;
 
 			case "nav-mark":
-				setRowNum();
+				seatmaps.setRowNum();
 				setTimeout(function(){
 					$(ele).parent().removeClass("on");
 					$("#nav-selection").addClass("on");
@@ -674,25 +694,25 @@
 			break;
 
 			case "nav-drag":
-				dragMoveSeats();
+				seatmaps.dragMoveSeats();
 			break;
 
 			case "add-height":
-				addSeatContainerHeight();
-				setTimeout(function(){
-					$(ele).parent().removeClass("on");
-					$("#nav-selection").addClass("on");
-				},1000);
+				// addSeatContainerHeight();
+				// setTimeout(function(){
+				// 	$(ele).parent().removeClass("on");
+				// 	$("#nav-selection").addClass("on");
+				// },1000);
 			break;
 
 			case "rightbtn":
 				if(__activeRight){
 					__activeRight = false;
-					removeContextMenu();
+					seatmaps.removeContextMenu();
 					$('.toollist_li').removeClass("on");
 					$("#nav-selection").addClass("on");
 				}else{
-					bindContextMenu();
+					seatmaps.bindContextMenu();
 					__activeRight = true;
 				}
 			break;
@@ -705,80 +725,20 @@
 					$('#seatcontainer').unbind('mousemove');
 					$('.toollist_li').removeClass("on");
 					$("#nav-selection").addClass("on");
-					selectSeats();
+					seatmaps.selectSeats();
 				}else{
-					removeContainerEvent();
-					__handDrag = new Drag();
+					seatmaps.removeContainerEvent();
+					__handDrag = new SeatMapsDrag();
 				}
 			break;
 
-
+			
 			case "close-centerpoint":
 				unbindRulePoint();
 			break;
 		}
 	}
 
-	function Drag(){
-		this.dragWrap = $("#seatcontainer");
-		this.init.apply(this,arguments);
-	};
-	Drag.prototype = {
-		constructor:Drag,
-		_dom : {},
-		_x : 0,
-		_y : 0,
-		_top :0,
-		_left: 0,
-		move : false,
-		down : false,
-		init : function () {
-			this.bindEvent();
-		},
-		bindEvent : function () {
-			var t = this;
-			$('#seatcontainer').bind('mousedown',function(e){
-				e && e.preventDefault();
-				if ( !t.move) {
-					t.mouseDown(e);
-				}
-			});
-			$('#seatcontainer').bind('mouseup',function(e){
-				t.mouseUp(e);
-			});
-
-			$('#seatcontainer').bind('mousemove',function(e){
-				if (t.down) {
-					t.mouseMove(e);
-				}
-			});
-		},
-		mouseMove : function (e) {
-			e && e.preventDefault();
-			this.move = true;
-			var x = this._x - e.clientX,
-				y = this._y - e.clientY,
-				dom = document.documentElement;
-			dom.scrollLeft = (this._left + x);
-			dom.scrollTop = (this._top + y);
-		},
-		mouseUp : function (e) {
-			e && e.preventDefault();
-			this.move = false;
-			this.down = false;
-			this.dragWrap.css('cursor','');
-		},
-		mouseDown : function (e) {
-			this.move = false;
-			this.down = true;
-			this._x = e.clientX;
-			this._y = e.clientY;
-			this._top = document.documentElement.scrollTop;
-			this._left = document.documentElement.scrollLeft;
-			// console.log(this._top,this._left)
-			this.dragWrap.css('cursor','move');
-		}
-	};
 
 	var obj = $('.toollist_li.has_child');
 	for(let i = 0; i<obj.length; i++){
@@ -840,6 +800,15 @@
 </script>
 
 
+
+
+
+
+
+
+
+
+
 <script>
 	$(function(){
 		// $("#rulerOuter").css({"height":"5000px","width":"5000px"});
@@ -854,7 +823,24 @@
 		var rule = new Ruler().wrap('seatcontainer');
 		// console.log(rule)
 	});
+</script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
 	var rulexy = [];
 	var editRuleId = "";
 	function bindRulePoint(editid){
@@ -892,19 +878,19 @@
 				//修改历史记录
 				editRulePointById(editRuleId,xy);
 			}else{
+				console.log(xy)
 				window.sessionStorage.setItem("__rulepoint",xy);
 				$("#xaxis,#yaxis,#xytip").hide();
 				__setCenterPoint();
 			}
 		});
 	}
+	
 	function unbindRulePoint(){
 		$("#rulerOuter").unbind("click");
 		$("#rulerOuter").unbind("mousemove");
 		$("#xaxis,#yaxis,#xytip").hide();
 	}
-	
-
 	
 	function saveRulePointData(name,x,y){
 		//	{
@@ -950,8 +936,10 @@
 				}
 			});
 			
-			showRulePoint(pos);
+			// showRulePoint(pos);
 			unbindRulePoint();
+			// window.sessionStorage.setItem("__rulepoint",pos);
+			// __setCenterPoint();
 			var jsonstr = JSON.stringify(rulepoint);
 			window.localStorage.setItem("__rulepoint",jsonstr);
 			layer.msg("重新定位成功");
@@ -978,89 +966,67 @@
 	}
 </script>
 
+
+
+
+
+
+
+
+
 <script type="text/javascript">
-layui.config({
-	base: '../../../layuiadmin/' //静态资源所在路径
-}).extend({
-	index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'table'], function() {
-	var $ = layui.$,
-		form = layui.form,
-		element = layui.element,
-		table = layui.table,
-		layer = layui.layer,
-		router = layui.router();
+	layui.config({
+		base: '../../../layuiadmin/' //静态资源所在路径
+	}).extend({
+		index: 'lib/index' //主入口模块
+	}).use(['index', 'user', 'table'], function() {
+		var $ = layui.$,
+			form = layui.form,
+			element = layui.element,
+			table = layui.table,
+			layer = layui.layer,
+			router = layui.router();
+			
+			//在这里我想得到页面 二次显示的事件
+	// 		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
+	// 			loadSessionData();
+	//         })
+
+
 		
-		//在这里我想得到页面 二次显示的事件
-// 		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
-// 			loadSessionData();
-//         })
-
-
-		function openRectangleMeeting(){
+		/*右侧菜单 设置行列弹框*/
+		$('#nav-down').on('click', function(){
 			layer.open({
 				type: 2,
 				title: '设置行列',
-				shadeClose: true,
+				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['340px', '230px'],
-				content: 'seatmapseditor_pop.html',
-				btn: ['提交', '取消'],
+				area: ['500px', '260px'],
+				content: 'special_type.html',
+				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
 					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
 					if(rownum > 0 && colnum > 0){
-						creatSeats(rownum,colnum);
+						seatmaps.creatSeats(rownum,colnum);
 						layer.close(index);
 					}else{
 						layer.msg('行，列数字输入错误');
 					}
 				}
 			});
-		}
-		function openSpecialMeeting(){
-			layer.open({
-				type: 2,
-				title: '设置参数',
-				shadeClose: true,
-				offset: '10%',
-				area: ['620px', '380px'],
-				content: 'specialeditor_pop.html',
-				btn: ['提交', '取消'],
-				yes: function(index, layero) {
-					var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
-					var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
-					var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
-					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-					var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
+		});
+		
 
-					if(ccx <= 0 || ccy <= 0){
-						layer.msg('圆心坐标输入错误');
-						return false;
-					}
-					if(r1 <= 0 ){
-						layer.msg('半径输入错误');
-						return false;
-					}
-					if(seatnum <= 0 ){
-						layer.msg('座位数量输入错误');
-						return false;
-					}
-					
-					if(centernum == ""){
-						createCircleSeatMap(ccx,ccy,r1,seatnum);
-						layer.close(index);
-					}else{
-						if(centernum <= 0){
-							layer.msg('中间座位数输入错误');
-							return false;
-						}
-						layer.close(index);		//关闭窗口
-						createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-					}
-				}
-			});
-		}
+		/*环形绘制，跑道绘制*/
+		$('#create-circle-run,#create-circle-down,#create-run-down').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+			var data = $(this).attr("data");
+			circleAndRunCreate(data);
+		});
+
 
 		function circleAndRunCreate(data){
 			if(data == "create-circle-down"){
@@ -1082,7 +1048,8 @@ layui.config({
 						}
 
 						if(typeid == 1){
-							mouseCreateSeatMap(1,seatnum,0,select_ruleid);
+							//鼠标画圆
+							seatmaps.mouseCreateSeatMap(1,seatnum,0,select_ruleid);
 						}else{
 							var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
 							var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
@@ -1095,7 +1062,7 @@ layui.config({
 								layer.msg('半径输入错误');
 								return false;
 							}
-							createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
+							seatmaps.createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
 						}
 						layer.close(index);
 					}
@@ -1125,7 +1092,7 @@ layui.config({
 						}
 
 						if(typeid == 1){
-							mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
+							seatmaps.mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
 						}else{
 							var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
 							var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
@@ -1138,7 +1105,7 @@ layui.config({
 								layer.msg('半径输入错误');
 								return false;
 							}
-							createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
+							seatmaps.createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
 						}
 						layer.close(index);
 					}
@@ -1146,208 +1113,6 @@ layui.config({
 			}
 		}
 
-		/*环形绘制，跑道绘制*/
-		$('#create-circle-run,#create-circle-down,#create-run-down').on('click', function(){
-			if(__longEvent){
-				return;
-			}
-			var data = $(this).attr("data");
-			circleAndRunCreate(data);
-		});
-		
-
-		/*向心点设置*/
-		$('#set-centerpoint,#set-centerpoint-down').on('click', function(){
-			if(__longEvent){
-				return;
-			}
-			
-			var data = $(this).attr("data");
-			if(data == "set-centerpoint"){
-				setCenterPoint();
-			}
-		});
-		
-		window.__setCenterPoint = setCenterPoint;
-		function setCenterPoint(){
-			
-			layer.open({
-				type: 2,
-				title: '设置向心点',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '20%',
-				area: ['500px', '240px'],
-				content: 'set_point.html',
-				resize:false,
-				btn: ['确定', '取消'],
-				yes: function(index, layero) {
-					var xaxis = +layero.find('iframe').contents().find("#xaxis").val() || "";
-					var yaxis = +layero.find('iframe').contents().find("#yaxis").val() || "";
-					var pointname = layero.find('iframe').contents().find("#pointname").val() || "";
-					
-					if(xaxis <= 0 ){
-						layer.msg('X坐标输入错误');
-						return false;
-					}
-					if(yaxis <= 0 ){
-						layer.msg('Y坐标输入错误');
-						return false;
-					}
-					if(pointname == ""){
-						layer.msg('请输入向心点名称');
-						return false;
-					}else{
-						//保存向心点数据到本地
-						saveRulePointData(pointname,xaxis,yaxis);
-					}
-					layer.close(index);
-				}
-			});
-		
-		}
-
-		/*向心点列表*/
-		$("#centerpoint-list").on('click',function(){
-			if(__longEvent){
-				return;
-			}
-			
-			var data = $(this).attr("data");
-			if(data == "centerpoint-list"){
-				openCenterPointList();
-			}
-		});
-		function openCenterPointList(){
-			layer.open({
-				type: 2,
-				title: '向心点列表',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '20%',
-				area: ['500px', '400px'],
-				content: 'point_list.html',
-				resize:false,
-				btn: ['显示','重新定位','删除', '关闭'],
-				yes: function(index, layero) {
-					var point = layero.find('iframe').contents().find(".pointlist > li.on");
-					if(point.length == 0){
-						layer.msg("没有选择数据");
-						return false;
-					}
-					
-					var data = point.attr("data");
-					showRulePoint(data);
-					layer.close(index);
-				}
-				,btn2:function(index,layero){
-					var point = layero.find('iframe').contents().find(".pointlist > li.on");
-					if(point.length == 0){
-						layer.msg("没有选择数据");
-						return false;
-					}
-					var id = point.attr("id");
-					bindRulePoint(id);
-					layer.close(index);
-				}
-				,btn3:function(index,layero){
-					var point = layero.find('iframe').contents().find(".pointlist > li.on");
-					if(point.length == 0){
-						layer.msg("没有选择数据");
-						return false;
-					}
-					var myIframe = window[layero.find('iframe')[0]['name']];
-					
-					var id = point.attr("id");
-					deleteRulePointById(id);
-					myIframe.addPonitList();
-					return false;
-					// layer.close(index);
-				}
-				,btn4:function(index,layero){
-					console.log(4)
-				}
-			});
-		}
-
-
-
-
-
-
-
-
-		/*右侧菜单 设置行列弹框*/
-		$('#nav-down').on('click', function(){
-			layer.open({
-				type: 2,
-				title: '设置行列',
-				shadeClose: true, //弹出框之外的地方是否可以点击
-				offset: '10%',
-				area: ['500px', '260px'],
-				content: 'special_type.html',
-				btn: ['确定', '取消'],
-				yes: function(index, layero) {
-					// var meet_typeid = +layero.find('iframe').contents().find("#meet_typeid").val() || 0;
-
-					// if(meet_typeid == 1){
-						// openRectangleMeeting();
-					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
-					if(rownum > 0 && colnum > 0){
-						creatSeats(rownum,colnum);
-						layer.close(index);
-					}else{
-						layer.msg('行，列数字输入错误');
-					}
-					// }else{
-					// 	// openSpecialMeeting();
-					// 	// var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
-					// 	// var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
-					// 	// var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
-					// 	var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
-					// 	var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
-
-					// 	// if(ccx <= 0 || ccy <= 0){
-					// 	// 	layer.msg('圆心坐标输入错误');
-					// 	// 	return false;
-					// 	// }
-					// 	// if(r1 <= 0 ){
-					// 	// 	layer.msg('半径输入错误');
-					// 	// 	return false;
-					// 	// }
-					// 	if(seatnum <= 0 ){
-					// 		layer.msg('座位数量输入错误');
-					// 		return false;
-					// 	}
-						
-					// 	if(centernum == ""){
-					// 		// createCircleSeatMap(ccx,ccy,r1,seatnum);
-					// 		mouseCreateSeatMap(1,seatnum);
-					// 		layer.close(index);
-					// 	}else{
-					// 		if(centernum <= 0){
-					// 			layer.msg('中间座位数输入错误');
-					// 			return false;
-					// 		}
-					// 		layer.close(index);		//关闭窗口
-					// 		// createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
-					// 		mouseCreateSeatMap(2,seatnum,centernum);
-					// 	}
-					// }
-					// layer.close(index);
-
-					// var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
-					// var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
-					// if(rownum > 0 && colnum > 0){
-					// 	creatSeats(rownum,colnum);
-					// 	layer.close(index);
-					// }else{
-					// 	layer.msg('行，列数字输入错误');
-					// }
-				}
-			});
-			
-		});
-		
 
 		/*多边形绘制，椭圆绘制*/
 		$('#polygonbtn').on('click', function(){
@@ -1421,7 +1186,6 @@ layui.config({
 				}
 			});
 		});
-		
 		function getCustomSeats(condi){
 			// type为0时多边形，type为1是椭圆形；
 			// edges是边数，多边形的话edges>2，椭圆形的话edges=1
@@ -1440,7 +1204,7 @@ layui.config({
 				success: function(obj) {
 					console.log(obj);
 					if(obj && obj.seats){
-						bulidSeverPolygonContainer(obj);
+						seatmaps.bulidSeverPolygonContainer(obj,condi.type);
 					}
 					layer.closeAll();
 				},
@@ -1448,6 +1212,118 @@ layui.config({
 				error: function() {
 					console.log("error");
 					layer.closeAll();
+				}
+			});
+		}
+
+		/*向心点设置*/
+		$('#set-centerpoint,#set-centerpoint-down').on('click', function(){
+			if(__longEvent){
+				return;
+			}
+			
+			var data = $(this).attr("data");
+			if(data == "set-centerpoint"){
+				setCenterPoint();
+			}else if(data == "centerpoint-list"){
+				openCenterPointList();
+			}
+		});
+
+		window.__setCenterPoint = setCenterPoint;
+		function setCenterPoint(){
+			layer.open({
+				type: 2,
+				title: '设置向心点',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '240px'],
+				content: 'set_point.html',
+				resize:false,
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					var xaxis = +layero.find('iframe').contents().find("#xaxis").val() || "";
+					var yaxis = +layero.find('iframe').contents().find("#yaxis").val() || "";
+					var pointname = layero.find('iframe').contents().find("#pointname").val() || "";
+					
+					if(xaxis <= 0 ){
+						layer.msg('X坐标输入错误');
+						return false;
+					}
+					if(yaxis <= 0 ){
+						layer.msg('Y坐标输入错误');
+						return false;
+					}
+					if(pointname == ""){
+						layer.msg('请输入向心点名称');
+						return false;
+					}else{
+						//保存向心点数据到本地
+						saveRulePointData(pointname,xaxis,yaxis);
+					}
+					layer.close(index);
+				}
+			});
+		}
+
+		/*向心点列表*/
+		$("#centerpoint-list").on('click',function(){
+			if(__longEvent){
+				return;
+			}
+			
+			var data = $(this).attr("data");
+			if(data == "centerpoint-list"){
+				openCenterPointList();
+			}
+		});
+		function openCenterPointList(){
+			layer.open({
+				type: 2,
+				title: '向心点列表',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '400px'],
+				content: 'point_list.html',
+				resize:false,
+				btn: ['显示','重新定位','删除', '关闭'],
+				yes: function(index, layero) {
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					
+					var data = point.attr("data");
+					showRulePoint(data);
+					layer.close(index);
+				}
+				,btn2:function(index,layero){
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					var id = point.attr("id");
+					bindRulePoint(id);
+					layer.close(index);
+				}
+				,btn3:function(index,layero){
+					var point = layero.find('iframe').contents().find(".pointlist > li.on");
+					if(point.length == 0){
+						layer.msg("没有选择数据");
+						return false;
+					}
+					var myIframe = window[layero.find('iframe')[0]['name']];
+					
+					var id = point.attr("id");
+					deleteRulePointById(id);
+					myIframe.addPonitList();
+					return false;
+					// layer.close(index);
+				}
+				,btn4:function(index,layero){
+					console.log(4)
 				}
 			});
 		}
@@ -1464,11 +1340,15 @@ layui.config({
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
-					autoCode(ruleid);
+					seatmaps.autoCode(ruleid);
 					layer.close(index);
 				}
 			});
 		});
+		$('#completebtn img').on('click', function(){
+			seatmaps.completeSeats();
+		});
+		
 
 
 
@@ -1489,6 +1369,83 @@ layui.config({
 			}
 		})
 		/*右侧菜单HOVER显示提示文字 end*/
-})
+
+
+
+
+
+
+
+
+
+
+
+		//没用了？
+		function openRectangleMeeting(){
+			layer.open({
+				type: 2,
+				title: '设置行列',
+				shadeClose: true,
+				offset: '10%',
+				area: ['340px', '230px'],
+				content: 'seatmapseditor_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var rownum = +layero.find('iframe').contents().find("#rownum").val() || 0;
+					var colnum = +layero.find('iframe').contents().find("#colnum").val() || 0;
+					if(rownum > 0 && colnum > 0){
+						creatSeats(rownum,colnum);
+						layer.close(index);
+					}else{
+						layer.msg('行，列数字输入错误');
+					}
+				}
+			});
+		}
+		function openSpecialMeeting(){
+			layer.open({
+				type: 2,
+				title: '设置参数',
+				shadeClose: true,
+				offset: '10%',
+				area: ['620px', '380px'],
+				content: 'specialeditor_pop.html',
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
+					var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
+					var r1 = +layero.find('iframe').contents().find("#r1").val() || 0;
+					var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+					var centernum = layero.find('iframe').contents().find("#centernum").val() || "";
+
+					if(ccx <= 0 || ccy <= 0){
+						layer.msg('圆心坐标输入错误');
+						return false;
+					}
+					if(r1 <= 0 ){
+						layer.msg('半径输入错误');
+						return false;
+					}
+					if(seatnum <= 0 ){
+						layer.msg('座位数量输入错误');
+						return false;
+					}
+					
+					if(centernum == ""){
+						createCircleSeatMap(ccx,ccy,r1,seatnum);
+						layer.close(index);
+					}else{
+						if(centernum <= 0){
+							layer.msg('中间座位数输入错误');
+							return false;
+						}
+						layer.close(index);		//关闭窗口
+						createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
+					}
+				}
+			});
+		}
+
+	})
 </script>
 </html>

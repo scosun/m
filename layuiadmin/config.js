@@ -44,8 +44,8 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     ]
     
     //全局配置url
-    // ,baseUrl:'https://f.longjuli.com'
-    ,baseUrl:'http://127.0.0.1:8083'
+    ,baseUrl:'https://f.longjuli.com'
+    // ,baseUrl:'http://127.0.0.1:8083'
     //验证码的url
     ,smsUrl:'https://f.longjuli.com'
   });
