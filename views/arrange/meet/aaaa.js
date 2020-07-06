@@ -791,11 +791,11 @@ layui.config({
             return false;
         }else {
             var file = document.getElementById("upload-file").files[0];
-            upload(meetingid,roomId,file);
+            uploads(meetingid,roomId,file);
         }
     });
     
-    function upload(meetingid,newroomid,file){
+    function uploads(meetingid,newroomid,file){
         var formData = new FormData();
         console.log(meetingid+","+newroomid+","+file);
         formData.append("meetingid",meetingid);
