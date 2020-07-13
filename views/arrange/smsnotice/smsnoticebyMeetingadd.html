@@ -383,7 +383,7 @@
                 },
                 isAll:function () {
                     $.ajax({
-                        url: url + "/Smsperson/findBymeetingid",
+                        url: url + "/Smsperson/isAll",
                         type: "get",
                         dataType: "json",
                         data: {
@@ -395,11 +395,10 @@
                         },
                         success: function (data) {
                             if (data.data != null) {
-                                var personids = data.data.personids;
-                                var personidarr = personids.split(",")
+                                var personids = data.data;
                                 var dataIntArr = []
-                                dataIntArr = personidarr.map(function (data) {
-                                    return +data;
+                                dataIntArr = personids.map(function (data) {
+                                    return data.id;
                                 })
                                 checkedSet = new Set(dataIntArr);
 

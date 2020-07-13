@@ -105,6 +105,25 @@ layui.config({
 
                 },
                 {
+                    field: 'roomid',
+                    title: '会议状态',
+                    align: 'left',
+                    width: 100,
+                    templet: function(data) {
+                        if (data.roomid == 0){
+                            return '<span class="layui-badge layui-bg-orange">未开始</span>'
+                        }
+                        if (data.roomid == 1){
+                            return '<span class="layui-badge">进行中</span>'
+                        }
+                        if (data.roomid == 2){
+                            return '<span class="layui-badge layui-bg-blue">已结束</span>'
+                        }
+                    }
+
+
+                },
+                {
                     width: 100,
                     //align: 'right',
                     //flxed: 'right',
