@@ -191,9 +191,9 @@
 					<div class="child_cont_li">
 						<a data="selectcol" href="javascript:;" alt="列选中" title="列选中"><img src="../../../images/toolkit/column_selected.svg"><span>列选中</span></a>
 					</div>
-					<!-- <div class="child_cont_li">
+					<div class="child_cont_li">
 						<a data="selectgroup" href="javascript:;" alt="组选中" title="组选中"><img src="../../../images/toolkit/column_selected.svg"><span>组选中</span></a>
-					</div> -->
+					</div>
 					<div class="child_cont_li">
 						<a data="selectsame" href="javascript:;" alt="类别选中" title="类别选中"><img src="../../../images/toolkit/selectsame.svg"><span>类别选中</span></a>
 					</div>
@@ -421,7 +421,7 @@
 				var maxT = document.documentElement.clientHeight - oDrag.offsetHeight - 10;
 				
 				iL <= 8 && (iL = 8);
-				iT <= 65 && (iT = 65);
+				iT <= 75 && (iT = 75);
 				iL >= maxL && (iL = maxL);
 				iT >= maxT && (iT = maxT);
 				oDrag.style.left = iL + "px";
@@ -439,7 +439,7 @@
 		//还原到原来位置
 		oJreduction.onclick = function (){
 			oDrag.style.left ='auto';
-			oDrag.style.top = 65 + "px";
+			oDrag.style.top = 75 + "px";
 		};
 	}
 	window.onload = window.onresize = function (){
