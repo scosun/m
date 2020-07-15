@@ -781,40 +781,73 @@ layui.config({
         }
     } */
     
-    $('#upload-file').on('change', function() {
-        var fileName = $("#upload-file").val();
-        var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        console.log(fileType);
-        if(fileType!=".docx" && fileType!=".doc"){
-            /* alert("上传模板类型错误！") */
-            console.log("上传模板类型错误！");
-            return false;
-        }else {
-            var file = document.getElementById("upload-file").files[0];
-            uploads(meetingid,roomId,file);
+    // $('#upload-file').on('change', function() {
+    //     var fileName = $("#upload-file").val();
+    //     var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+    //     console.log(fileType);
+    //     if(fileType!=".docx" && fileType!=".doc"){
+    //         /* alert("上传模板类型错误！") */
+    //         console.log("上传模板类型错误！");
+    //         return false;
+    //     }else {
+    //         var file = document.getElementById("upload-file").files[0];
+    //         uploads(meetingid,roomId,file);
+    //     }
+    // });
+    upload.render({
+        elem: '#nav-upload'
+        , url:  url+"/wordtemplate/uploadWordTemplate",
+        data:{
+            "meetingid":meetingid,
+            "roomtemplateid":roomId
+
+        },
+        // auto: false,
+        exts: 'doc|docx',
+        //bindAction: '#btn99',
+        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+        //     obj.preview(function (index, file, result) {
+        //         // console.log(index); //得到文件索引
+        //         // console.log(file);
+        //         uploadfile = file //得到文件对象
+        //         // console.log(uploadfile)
+        //         // console.log(result); //得到文件base64编码，比如图片
+        //
+        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+        //
+        //         //这里还可以做一些 append 文件列表 DOM 的操作
+        //
+        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+        //     });
+        // },
+        done: function (res) {
+            if (res.code == 200) {
+               parent.layer.msg(res.msg)
+            }
         }
     });
     
-    function uploads(meetingid,newroomid,file){
-        var formData = new FormData();
-        console.log(meetingid+","+newroomid+","+file);
-        formData.append("meetingid",meetingid);
-        formData.append("roomtemplateid",roomId);
-        formData.append("file",file);
-        $.ajax({
-            url:"https://f.longjuli.com/wordtemplate/uploadWordTemplate",
-            type:"post",
-            data:formData,
-            contentType: false,
-            processData: false,
-            success:function(data){
-                if(data.code == 200){
-                    layer.msg("word模板上传成功！")
-                    console.log(data);
-                }
-            }
-        })
-    }
+    // function uploads(meetingid,newroomid,file){
+    //     var formData = new FormData();
+    //     console.log(meetingid+","+newroomid+","+file);
+    //     formData.append("meetingid",meetingid);
+    //     formData.append("roomtemplateid",roomId);
+    //     formData.append("file",file);
+    //     $.ajax({
+    //         url: url+"/wordtemplate/uploadWordTemplate",
+    //         type:"post",
+    //         data:formData,
+    //         contentType: false,
+    //         processData: false,
+    //         success:function(data){
+    //             if(data.code == 200){
+    //                 layer.msg("word模板上传成功！")
+    //                 console.log(data);
+    //             }
+    //         }
+    //     })
+    // }
     
     var __handDrag = null;
     var inde = false;
@@ -904,36 +937,35 @@ layui.config({
             });
         },
         word:function(){
-            /* window.location="https://f.longjuli.com" + "/word/download/"+meetingid; */
-            layer.open({
-                type: 2,
-                title: "下载模板列表",
-                shadeClose: false,
-                area: ['50%', '55%'],
-                btn: ['确定', '取消'],
-                closeBtn: 1,
-                content: 'template_download.html',
-                success: function(layero, index){
-                    // 获取子页面的iframe
-                    var iframe = window['layui-layer-iframe' + index];
-                    // 向子页面的全局函数child传参
-                    console.log(meetingid);
-                    iframe.init(meetingid,roomId);
-                },
-                yes: function(index, layero) {
-                    
-                    /* var url = "http://127.0.0.1:8083"; */
-                    var url = "https://f.longjuli.com";
-                    var body = layer.getChildFrame('body', index);
-                    var wordid = body.find('#wordDown').val();
-                    var wordname = body.find('#wordDown option:selected').text().split('-') || [];
-                    wordname = wordname[0] || "";
-                    if(wordid==''||wordid==null)
-                    {return layer.msg("请选择word模板");}
-                    console.log("meetignid="+meetingid+",wordid="+wordid);
-                    window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
-                }
-            })
+            window.location="https://m.longjuli.com/v1/wordtemplates/download?meeting_id="+meetingid+"&roomtemplate_id="+roomId;
+            // layer.open({
+            //     type: 2,
+            //     title: "下载模板列表",
+            //     shadeClose: false,
+            //     area: ['50%', '55%'],
+            //     btn: ['确定', '取消'],
+            //     closeBtn: 1,
+            //     content: 'template_download.html',
+            //     success: function(layero, index){
+            //         // 获取子页面的iframe
+            //         var iframe = window['layui-layer-iframe' + index];
+            //         // 向子页面的全局函数child传参
+            //         console.log(meetingid);
+            //         iframe.init(meetingid,roomId);
+            //     },
+            //     yes: function(index, layero) {
+            //
+            //         /* var url = "http://127.0.0.1:8083"; */
+            //         var body = layer.getChildFrame('body', index);
+            //         var wordid = body.find('#wordDown').val();
+            //         var wordname = body.find('#wordDown option:selected').text().split('-') || [];
+            //         wordname = wordname[0] || "";
+            //         if(wordid==''||wordid==null)
+            //         {return layer.msg("请选择word模板");}
+            //         console.log("meetignid="+meetingid+",wordid="+wordid);
+            //         window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
+            //     }
+            // })
         },
         importData: function() {
             var condi = {
