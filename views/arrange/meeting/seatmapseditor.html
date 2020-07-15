@@ -159,6 +159,7 @@
 			<a><cite id="refreshbtn" style="cursor: pointer;"><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
 		</span>
 		<span class="layui-right-nav">
+			<i id="rotationbtn" data="旋转座区"><img src="../../../images/completebtn.png"></i>
 			<i id="autocodebtn" data="自动编排座区ID"><img src="../../../images/completebtn.png"></i>
 			<i id="completebtn" data="保存座区图数据"><img src="../../../images/savelocalbtn.png"></i>
 		</span>
@@ -382,7 +383,7 @@
 <script src="JSRuler/jquery.event.drag-2.2.js"></script>
 <script src="JSRuler/jquery.event.drop-2.2.js"></script>
 <script src="JSRuler/ruler.js"></script>
-<script src="seatmapseditor.js"></script>
+<script src="seatmapseditor.bak.js"></script>
 
 
 <!-- /* dragDiv 拖动工具箱 3.25*/ -->
@@ -843,7 +844,7 @@
 <script>
 	var rulexy = [];
 	var editRuleId = "";
-	function bindRulePoint(editid){
+	function bindRulePoint(editid,isrotate){
 		editRuleId = editid;
 		unbindRulePoint();
 		$("#rulerOuter").bind("mousemove",function(){
@@ -881,7 +882,12 @@
 				console.log(xy)
 				window.sessionStorage.setItem("__rulepoint",xy);
 				$("#xaxis,#yaxis,#xytip").hide();
-				__setCenterPoint();
+				if(isrotate){
+					__setRotatePoint();
+					unbindRulePoint();
+				}else{
+					__setCenterPoint();
+				}
 			}
 		});
 	}
@@ -1348,7 +1354,58 @@
 		$('#completebtn img').on('click', function(){
 			seatmaps.completeSeats();
 		});
-		
+
+		$('#rotationbtn img').on('click', function(){
+			__setRotatePoint();
+		});
+		window.__setRotatePoint = function(){
+			layer.open({
+				type: 2,
+				title: '设置旋转中心点',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '400px'],
+				content: 'set_rotatepoint.html',
+				resize:true,
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					var xaxis = +layero.find('iframe').contents().find("#xaxis").val();
+					var yaxis = +layero.find('iframe').contents().find("#yaxis").val();
+					var rotate = +layero.find('iframe').contents().find("#rotate").val();
+					
+					if(xaxis <= 0 ){
+						layer.msg('X坐标输入错误');
+						return false;
+					}
+					if(yaxis <= 0 ){
+						layer.msg('Y坐标输入错误');
+						return false;
+					}
+					if(rotate < 0 || rotate > 360){
+						layer.msg('角度输入错误');
+						return false;
+					}
+
+					var condi = {
+						rotate:rotate,
+						center:{
+							left:xaxis,
+							top:yaxis
+						}
+					};
+					__setRotationSeats(condi);
+
+					layer.close(index);
+				}
+			});
+		}
+		window.__setRotationSeats = function(condi){
+			if(condi){
+				seatmaps.rotationSeats(condi.center,condi.rotate);
+			}else{
+				layer.msg("没有输入旋转中心点和角度");
+			}
+		}
 
 
 

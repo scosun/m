@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>设置旋转参数</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
+	<style type="text/css">
+		.layui-form-label {
+			width: 70px;
+		}
+		.layui-input-block {
+			margin-left: 100px;
+		}
+		.layui-form-item-div{padding-right: 75px;position: relative;}
+		.layui-form-item-w50{float:left;width:50%;clear: none;}
+
+		
+		.iconfont.icon-dingwei {
+			font-size: 19px;
+			margin-left: -2px;
+		}
+		.rightBTN{
+			position:absolute;right:10px;top:7px;
+			height: 20px;
+			line-height: 20px;
+		}
+		.rightBTN i{
+			vertical-align: middle;
+		}.rightBTN span{
+			vertical-align: middle;
+		}
+
+		.layui-form-select dl{
+			max-height: 200px;
+		}
+	</style>
+</head>
+<body>
+<div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
+	
+	<div class="layui-form-item"  id="meet3form" >
+		<label class="layui-form-label">向心点选择</label>
+        <div class="layui-input-block">
+            <select class="dialogRuleSelect" lay-skin="select" lay-filter="point-form-select"  id="select_point">
+                
+            </select>
+        </div>
+	</div>
+	<div class="layui-form-item-div">
+		<div class="layui-form-item layui-form-item-w50">
+			<label class="layui-form-label">X坐标</label>
+			<div class="layui-input-block">
+				<input id="xaxis" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-item-w50">
+			<label class="layui-form-label">Y坐标</label>
+			<div class="layui-input-block">
+				<input id="yaxis" type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input hyname">
+			</div>
+		</div>
+		<a id="mousecheck" href="javascript:;" class="rightBTN">
+			<i class="layui-icon iconfont icon-dingwei"></i>
+			<span>点选</span>
+		</a>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">角度</label>
+		<div class="layui-input-block">
+			<input id="rotate" type="text" name="name" lay-verify="required" placeholder="请输入旋转角度" autocomplete="off" class="layui-input hyname">
+		</div>
+	</div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<!-- <script src="../../../layuiadmin/layui/arrange/meet/meetcreatfrom.js"></script> -->
+<script>
+
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		router = layui.router();
+
+		addPonitList();
+		//加载本地数据
+		function addPonitList(){
+			var rulepoint = window.localStorage.getItem("__rulepoint") || "";
+			if(rulepoint){
+				rulepoint = JSON.parse(rulepoint);
+			}else{
+				rulepoint = [];
+			}
+
+
+			var ul = [];
+			ul.push('<option value="" >请选择</option>');
+			for(var i = 0,len = rulepoint.length; i < len; i++){
+				var item = rulepoint[i] || {};
+				var pos = item.pos;
+
+				ul.push('<option value="' + pos + '" >' + item.name +'</option>');
+
+			}
+			$("#select_point").html(ul.join(''));
+			layui.form.render();
+		}
+		form.on('select(point-form-select)', function(data){
+			var pos = data.value;
+			setPointXy(pos);
+		});
+
+		function setPointXy(pos){
+			var xy = pos.split(',');
+			$("#xaxis").val(xy[0]);
+			$("#yaxis").val(xy[1])
+		}
+		
+		var point = window.sessionStorage.getItem("__rulepoint") || "";
+		window.sessionStorage.setItem("__rulepoint","");
+		if(point){
+			point = point.split(",");
+			$("#xaxis").val(point[0]);
+			$("#yaxis").val(point[1]);
+		}
+
+		$("#mousecheck").bind('click',function(){
+			window.parent.bindRulePoint("",true);
+
+			var index=parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		});
+		$('#rotate,#xaxis,#yaxis').on('keydown', function (event) {
+			if (event.keyCode == 13) {
+				var layer = layui.layer;
+				var rotate = +$("#rotate").val();
+				
+				var xaxis = +$("#xaxis").val();
+				var yaxis = +$("#yaxis").val();
+				if(xaxis <= 0 ){
+					layer.msg('X坐标输入错误');
+					return false;
+				}
+				if(yaxis <= 0 ){
+					layer.msg('Y坐标输入错误');
+					return false;
+				}
+
+				if(rotate < 0 || rotate > 360){
+					layer.msg('角度输入错误');
+					return false;
+				}
+
+				
+				// window.parent.saveRotatePointData(rotate,xaxis,yaxis);
+				var condi = {
+					rotate:rotate,
+					center:{
+						left:xaxis,
+						top:yaxis
+					}
+				};
+				__setRotationSeats(condi);
+
+				var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+				parent.layer.close(index);
+
+				return false
+			}
+		});
+})
+</script>
+</body>
+</html>

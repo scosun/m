@@ -79,6 +79,29 @@ var __handDrag = null;
 		sessionStorage.setItem("_seatscomplete","");
 	}
 
+	seatMapsEditor.prototype.loadSessionData = function(){
+		var html = sessionStorage.getItem("_seatscomplete") || "";
+		// console.log(html)
+		if(html){
+			$("#seatcontainer").prop("outerHTML",html);
+			// var time = new Date().getTime() + "-s";
+			var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+			seats.each(function(){
+				var id = this.id;
+				var ids = id.split('-');
+				var gp = $(this).attr("group") || group;
+				if(ids.length == 2){
+					$(this).attr("id","s-" + gp + "-" + ids[0] + "-" + ids[1]);
+				}else{
+					$(this).attr("id",ids[0] + "-" + gp + "-" + ids[1] + "-" + ids[2]);
+				}
+				
+			});
+			this.clearCompleteSeats();
+			this.hideMeetTitle();
+		}
+	}
+
 	seatMapsEditor.prototype.countMaxWidth = function(issave){
 		this.hideMeetTitle();
 		
@@ -907,6 +930,7 @@ var __handDrag = null;
 				$(clone).removeClass("seled");
 				var id = this.id;
 				var ids = id.split('-');
+				$(clone).attr("group",group);
 				$(clone).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 				$("#seatcontainerId").append(clone);
 			}else{
@@ -1223,7 +1247,7 @@ var __handDrag = null;
 			for(var i = 0; i < +colnum; i ++){
 				// seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 				// id 规则 分类-组-行-列
-				seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 				sleft = sleft + 50;
 			}
 			sleft = this.sLeft;
@@ -1249,7 +1273,7 @@ var __handDrag = null;
 			for(var i = 0; i < +colnum; i ++){
 				// seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 				// id 规则 分类-组-行-列
-				seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 				sleft = sleft + 50;
 			}
 			sleft = mleft;
@@ -1389,7 +1413,7 @@ var __handDrag = null;
 			var j = 1;
 			// row 采用的编号规则id
 			var time = new Date().getTime();
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 			
 			//用来编号
 			ids.push("c-" + time + '-' + (j) + '-' + (i+1));
@@ -1461,7 +1485,6 @@ var __handDrag = null;
 				// seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (__circleRow) + '-' + (i+1) + '-c">' + (i+1) + '辛海涛' + '</div>');
 				// seathtml.push('<div r="' + r1 + '" circle="'+(ccx+"-"+ccy)+'" ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="' + (row) + '-' + (i+1) + '-' + new Date().getTime() + '-c" >' + (i+1) + '</div>');
 				// row 采用的编号规则id
-				
 				seathtml.push('<div ang="'+sang+'" class="seatdiv" style="transform: rotate('+ang+'deg);transform-origin:50% 50%;'+'top:' + y + 'px; left:'+ x + 'px;" id="c-' + time + '-' + (row) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 				
 				//用来编号
@@ -1594,6 +1617,7 @@ var __handDrag = null;
 			// $("#" + oid).css("background","#ff0000");
 			//id="c-' + group + '-' + (row) + '-' + (i+1) + '"
 			// $("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
+			$("#" + oid).attr("group",group);
 			$("#" + oid).attr("id","c-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 		}.bind(this));
 
@@ -1608,6 +1632,7 @@ var __handDrag = null;
 			// var oid = col[ck];
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
+			$("#" + oid).attr("group",group);
 			$("#" + oid).attr("id","c-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 		}.bind(this));
 	}
@@ -1671,7 +1696,7 @@ var __handDrag = null;
 			var j = 1;
 			// row 采用的编号规则id
 			var time = new Date().getTime();
-			seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 			
 			//用来编号
 			ids.push("c-" + time + '-' + (j) + '-' + (i+1));
@@ -1839,7 +1864,7 @@ var __handDrag = null;
 			}else{
 				seat.seatid = "o-" + group + "-" + seat.seatid;
 			}
-			seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '</div>');
 			
 		}
 		group++;
@@ -1904,7 +1929,7 @@ var __handDrag = null;
 			// var oid = col[ck];
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
-
+			$("#" + oid).attr("group",group);
 			$("#" + oid).attr("id","r-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 		}.bind(this));
 
@@ -1919,7 +1944,7 @@ var __handDrag = null;
 			// var oid = col[ck];
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
-
+			$("#" + oid).attr("group",group);
 			$("#" + oid).attr("id","r-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 		}.bind(this));
 	}
@@ -1996,18 +2021,25 @@ var __handDrag = null;
 		seats.each(function(){
 			var id = this.id;
 			var ids = id.split('-');
+			$(this).attr("group",group);
 			$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 		});
 		group++;
 	}
 
-	seatMapsEditor.prototype.rotationSeats = function(center){
+	seatMapsEditor.prototype.rotationSeats = function(center,rotate){
 		if(!center){
 			alert("没有传旋转中心点");
+			return;
+		}
+		if(!rotate && rotate !== 0){
+			alert("没有传旋转角度");
+			return;
 		}
 		var seats = $("#seatcontainerId .seled");
 		if(seats.length == 0){
 			alert("没有选择需要旋转的座区");
+			return;
 		}
 
 		var groupId = [];
@@ -2040,6 +2072,7 @@ var __handDrag = null;
 			console.log(seatsdata);
 			var condi = {};
 			condi.center = center;
+			condi.rotate = rotate;
 			condi.seats = seatsdata;
 			this.getSeatsRotation(condi);
 		}
@@ -2055,6 +2088,20 @@ var __handDrag = null;
 			dataType: "json",
 			success: function(obj) {
 				console.log(obj);
+				if(obj && obj.seats){
+					var seats = obj.seats || [];
+					for (var i = 0,len = seats.length; i < len; i++) {
+						var seat = seats[i] || {};
+						//  分类-组-行-列 s-11-1-4
+						// var seatnum = seat.seatid.split('-')[3];
+						// seathtml.push('<div class="seatdiv" style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + seatnum + '</div>');
+						$("#"+seat.seatid)[0].style.cssText = 'transform: rotate('+(+seat.rotate)+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;';
+						
+						$("#"+seat.seatid).attr("rotate",seat.rotate);
+						$("#"+seat.seatid).removeClass("seled");
+					}
+					// $("#seatcontainerId").html(seathtml.join(''));
+				}
 			},
 			//失败的回调函数
 			error: function() {
@@ -2423,6 +2470,8 @@ var __handDrag = null;
 	}
 	window.SeatMapsEditor = seatMapsEditor;
 	window.SeatMapsDrag = Drag;
+
+	seatMapsEditor.prototype.loadSessionData();
 })();
 
 
