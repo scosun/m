@@ -91,6 +91,12 @@ layui.config({
 
                 },
                 {
+                    field: 'roomname',
+                    title: '会场模板',
+                    align: 'left',
+
+                },
+                {
                    
                     //align: 'center',
                     width: 80,
@@ -190,6 +196,12 @@ layui.config({
                     align: 'left',
 
                 },
+                    {
+                        field: 'roomname',
+                        title: '会场模板',
+                        align: 'left',
+
+                    },
                     {
 
                         //align: 'center',
@@ -661,6 +673,12 @@ layui.config({
                             align: 'left',
 
                         },
+                            {
+                                field: 'roomname',
+                                title: '会场模板',
+                                align: 'left',
+
+                            },
                             {
 
                                 //align: 'center',
