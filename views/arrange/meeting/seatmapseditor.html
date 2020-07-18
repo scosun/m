@@ -383,7 +383,7 @@
 <script src="JSRuler/jquery.event.drag-2.2.js"></script>
 <script src="JSRuler/jquery.event.drop-2.2.js"></script>
 <script src="JSRuler/ruler.js"></script>
-<script src="seatmapseditor.js"></script>
+<script src="seatmapseditor.bak.js"></script>
 
 
 <!-- /* dragDiv 拖动工具箱 3.25*/ -->
@@ -518,6 +518,8 @@
 		__keydownMoveRight = false;
 		seatmaps.unDragMoveSeats();
 
+		unbindRulePoint();
+
 		if(data != "rightbtn"){
 			__activeRight = false;
 			seatmaps.removeContextMenu();
@@ -556,7 +558,7 @@
 			case "nav-selection":
 				console.log("nav-selection");
 				//框选
-				selectSeats();
+				seatmaps.selectSeats();
 			break;
 
 			case "nav-down":
@@ -847,6 +849,9 @@
 	function bindRulePoint(editid,isrotate){
 		editRuleId = editid;
 		unbindRulePoint();
+		if(seatmaps){
+			seatmaps.removeContainerEvent();
+		}
 		$("#rulerOuter").bind("mousemove",function(){
 			evt = window.event || arguments[0];
 			var _x = null;

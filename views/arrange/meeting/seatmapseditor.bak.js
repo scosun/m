@@ -85,18 +85,18 @@ var __handDrag = null;
 		if(html){
 			$("#seatcontainer").prop("outerHTML",html);
 			// var time = new Date().getTime() + "-s";
-			var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-			seats.each(function(){
-				var id = this.id;
-				var ids = id.split('-');
-				var gp = $(this).attr("group") || group;
-				if(ids.length == 2){
-					$(this).attr("id","s-" + gp + "-" + ids[0] + "-" + ids[1]);
-				}else{
-					$(this).attr("id",ids[0] + "-" + gp + "-" + ids[1] + "-" + ids[2]);
-				}
+			// var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+			// seats.each(function(){
+			// 	var id = this.id;
+			// 	var ids = id.split('-');
+			// 	var gp = $(this).attr("group") || group;
+			// 	if(ids.length == 2){
+			// 		$(this).attr("id","s-" + gp + "-" + ids[0] + "-" + ids[1]);
+			// 	}else{
+			// 		$(this).attr("id",ids[0] + "-" + gp + "-" + ids[1] + "-" + ids[2]);
+			// 	}
 				
-			});
+			// });
 			this.clearCompleteSeats();
 			this.hideMeetTitle();
 		}
@@ -2122,18 +2122,18 @@ var __handDrag = null;
 		$("#seatcontainerId .seled").removeClass("seled");
 		
 		var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-		seats.each(function(){
-			var id = this.id;
-			var arr = id.split("-");
-			var nid = arr[2] + "-" + arr[3];
-			var idtype = arr[0] || "";
-			if(idtype && idtype != "s"){
-				nid = idtype + "-" + nid;
-				$(this).attr("id",nid);
-			}else{
-				$(this).attr("id",nid);
-			}
-		});
+		// seats.each(function(){
+		// 	var id = this.id;
+		// 	var arr = id.split("-");
+		// 	var nid = arr[2] + "-" + arr[3];
+		// 	var idtype = arr[0] || "";
+		// 	if(idtype && idtype != "s"){
+		// 		nid = idtype + "-" + nid;
+		// 		$(this).attr("id",nid);
+		// 	}else{
+		// 		$(this).attr("id",nid);
+		// 	}
+		// });
 		var rownum = $("#seatcontainerId .rownumseats");
 		// console.log(seats,seats.html(),rownum,rownum.html())
 		$("#seatcontainerId").html('');
@@ -2471,7 +2471,7 @@ var __handDrag = null;
 	window.SeatMapsEditor = seatMapsEditor;
 	window.SeatMapsDrag = Drag;
 
-	seatMapsEditor.prototype.loadSessionData();
+	// seatMapsEditor.prototype.loadSessionData();
 })();
 
 
