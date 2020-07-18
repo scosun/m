@@ -126,7 +126,8 @@ layui.config({
         //成功的回调函数
         success: function (msg) {
             var data = msg;
-            $.each(data.data, function (idx, con) {
+            console.log(data)
+            $.each(data.data.reverse(), function (idx, con) {
                 $("#select_meets").after("<option value=" + con.id + ">" + con.name +
                     "</option>");
             })
