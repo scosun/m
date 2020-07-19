@@ -147,6 +147,14 @@ var __handDrag = null;
 		}
 		return false;
 	}
+	seatMapsEditor.prototype.isCol = function(seledgroup,d,h){
+		for(var k in seledgroup){
+			if(+k >= d && +k <= h){
+				return k;
+			}
+		}
+		return false;
+	}
 
 	seatMapsEditor.prototype.isLocked = function(el){
 		return $(el).hasClass('locked');
@@ -822,20 +830,272 @@ var __handDrag = null;
 
 	seatMapsEditor.prototype.setRowNum = function(){
 		
-		var seled =  $("#seatcontainerId .seled");
-		if(seled.length == 0){return;}
+		var seleds =  $("#seatcontainerId .seled");
+		if(seleds.length == 0){return;}
 		
-		seled = seled.sort(function(a,b){
-			var topa = parseFloat($(a).css("top"));
-			var topb = parseFloat($(b).css("top"));
-			return topa - topb;
+		// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆) - 分组 - 行 - 列
+
+		var seatsgroup = {
+			"s":[],
+			"c":[],
+			"r":[],
+			"p":[],
+			"o":[]
+		};
+		//先分类
+		seleds.each(function(){
+			var id = this.id;
+			var t = id.split('-')[0];
+			seatsgroup[t].push(id);
 		});
 
-		seled.removeClass("seled");
-		seled.addClass("rownumseats");
-		seled.each(function(_i){
-			$(this).html((_i+1) + "排");
+		for(var sgk in seatsgroup){
+			var seled = seatsgroup[sgk];
+			if(seled.length > 0 && sgk == "s"){
+				//再按left 分组
+				var seledgroup = {};
+				var seledrowv = [];
+				for(var i = 0,len = seled.length; i < len; i++){
+					var ele = $("#"+seled[i]);
+					var sl = ele.position().left;
+					// var st = $(seled[i]).position().top;
+
+					var w = ele.width();
+
+					
+					// var kid = id.split('-')[0]+"-";
+					var kid = this.isCol(seledgroup,(sl - w/2),(sl + w/2));
+					if(kid){
+						seledgroup[kid].push(ele);
+					}else{
+						seledgroup[sl] = [];
+						seledgroup[sl].push(ele);
+						seledrowv.push(sl);
+					}
+				}
+
+				seledrowv.forEach(function(skey){
+					var eles = seledgroup[skey] || [];
+					//分组之后,按top排序
+					eles.sort(function(a,b){
+						var topa = parseFloat(a.css("top"));
+						var topb = parseFloat(b.css("top"));
+						return topa - topb;
+					});
+
+					eles.forEach(function(item,index){
+						item.removeClass("seled");
+						item.addClass("rownumseats");
+						item.html((index+1) + "排");
+					});
+				});
+			}else {
+				//原型 按group 分组
+				var seledgroup = {};
+				var seledrowv = [];
+				for(var i = 0,len = seled.length; i < len; i++){
+					var id = seled[i];
+					var ele = $("#"+seled[i]);
+					var gid = id.split('-')[1];
+					if(seledgroup[gid]){
+						seledgroup[gid].push(ele);
+					}else{
+						seledgroup[gid] = [];
+						seledgroup[gid].push(ele);
+						seledrowv.push(gid);
+					}
+				}
+				seledrowv.forEach(function(skey){
+					var eles = seledgroup[skey] || [];
+					//分组之后,按left排序
+					eles.sort(function(a,b){
+						var lefta = parseFloat(a.css("left"));
+						var leftb = parseFloat(b.css("left"));
+						return lefta - leftb;
+					});
+
+					eles.forEach(function(item,index){
+						item.removeClass("seled");
+						item.addClass("rownumseats");
+						item.html((index+1) + "排");
+					});
+				});
+			}
+		}
+	}
+
+	seatMapsEditor.prototype.setOnlyRowNum = function(){
+		
+		var seleds =  $("#seatcontainerId .seled");
+		if(seleds.length == 0){return;}
+		
+		// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆) - 分组 - 行 - 列
+
+		var seatsgroup = {
+			"s":[],
+			"c":[],
+			"r":[],
+			"p":[],
+			"o":[]
+		};
+		//先分类
+		seleds.each(function(){
+			var id = this.id;
+			var t = id.split('-')[0];
+			seatsgroup[t].push(id);
 		});
+
+		for(var sgk in seatsgroup){
+			var seled = seatsgroup[sgk];
+			if(seled.length > 0 && sgk == "s"){
+				//再按left 分组
+				var seledgroup = {};
+				var seledrowv = [];
+				for(var i = 0,len = seled.length; i < len; i++){
+					var ele = $("#"+seled[i]);
+					var sl = ele.position().left;
+					// var st = $(seled[i]).position().top;
+
+					var w = ele.width();
+
+					
+					// var kid = id.split('-')[0]+"-";
+					var kid = this.isCol(seledgroup,(sl - w/2),(sl + w/2));
+					if(kid){
+						seledgroup[kid].push(ele);
+					}else{
+						seledgroup[sl] = [];
+						seledgroup[sl].push(ele);
+						seledrowv.push(sl);
+					}
+				}
+
+
+				var idrow = 0;
+				function changerow(seledgroup,seledrowv){
+					var eles = seledgroup[seledrowv[idrow]] || null;
+					if(seledrowv.length > idrow){
+						//分组之后,按top排序
+						eles.sort(function(a,b){
+							var topa = parseFloat(a.css("top"));
+							var topb = parseFloat(b.css("top"));
+							return topa - topb;
+						});
+
+						var idx = 0;
+						function change(){
+							var item = eles[idx] || null;
+							if(eles.length > idx){
+								item.removeClass("seled");
+								// item.addClass("onlynum");
+								changeSeatNum(item);
+								idx++;
+							}else{
+								idx = 0;
+								idrow++;
+								changerow(seledgroup,seledrowv);
+							}
+						}
+
+						function changeSeatNum(item){
+							var ids = item.attr("id").split("-");
+							var text = ids[2] + "-" + ids[3];
+							var newno = window.prompt("请输入" + text + "排号");
+							if(newno){
+								item.text(newno);
+								// item.removeClass("onlynum");
+								item.addClass("rownumseats");
+								setTimeout(function(){
+									change();
+								}.bind(this),50);
+							}
+						}
+						change();
+					}else{
+						idrow = 0;
+					}
+				}
+				changerow(seledgroup,seledrowv);
+			}else {
+				//原型 按group 分组
+				var seledgroup = {};
+				var seledrowv = [];
+				for(var i = 0,len = seled.length; i < len; i++){
+					var id = seled[i];
+					var ele = $("#"+seled[i]);
+					var gid = id.split('-')[1];
+					if(seledgroup[gid]){
+						seledgroup[gid].push(ele);
+					}else{
+						seledgroup[gid] = [];
+						seledgroup[gid].push(ele);
+						seledrowv.push(gid);
+					}
+				}
+				// seledrowv.forEach(function(skey){
+				// 	var eles = seledgroup[skey] || [];
+				// 	//分组之后,按left排序
+				// 	eles.sort(function(a,b){
+				// 		var lefta = parseFloat(a.css("left"));
+				// 		var leftb = parseFloat(b.css("left"));
+				// 		return lefta - leftb;
+				// 	});
+
+				// 	eles.forEach(function(item,index){
+				// 		item.removeClass("seled");
+				// 		item.addClass("rownumseats");
+				// 		item.html((index+1) + "排");
+				// 	});
+				// });
+
+				
+				var idrow = 0;
+				function changerow(seledgroup,seledrowv){
+					var eles = seledgroup[seledrowv[idrow]] || null;
+					if(seledrowv.length > idrow){
+						//分组之后,按top排序
+						eles.sort(function(a,b){
+							var lefta = parseFloat(a.css("left"));
+							var leftb = parseFloat(b.css("left"));
+							return lefta - leftb;
+						});
+
+						var idx = 0;
+						function change(){
+							var item = eles[idx] || null;
+							if(eles.length > idx){
+								item.removeClass("seled");
+								// item.addClass("onlynum");
+								changeSeatNum(item);
+								idx++;
+							}else{
+								idx = 0;
+								idrow++;
+								changerow(seledgroup,seledrowv);
+							}
+						}
+
+						function changeSeatNum(item){
+							var ids = item.attr("id").split("-");
+							var text = ids[2] + "-" + ids[3];
+							var newno = window.prompt("请输入" + text + "排号");
+							if(newno){
+								item.text(newno);
+								// item.removeClass("onlynum");
+								item.addClass("rownumseats");
+								setTimeout(function(){
+									change();
+								}.bind(this),50);
+							}
+						}
+						change();
+					}else{
+						idrow = 0;
+					}
+				}
+				changerow(seledgroup,seledrowv);
+			}
+		}
 	}
 	
 	seatMapsEditor.prototype.copySeats = function(){
@@ -950,7 +1210,8 @@ var __handDrag = null;
 		var nums = {
 			odd:[],
 			even:[],
-			desc:[]
+			desc:[],
+			asc:[]
 		};
 		for(var i=n; i>=1; i--){
 			if(i%2!=0){
@@ -960,6 +1221,7 @@ var __handDrag = null;
 			}
 			nums.desc.push(i);
 		}
+		nums.asc = JSON.parse(JSON.stringify(nums.desc)).reverse();
 		nums.odd = str1.substr(0,str1.length-1).split(',');
 		nums.even = str2.substr(0,str2.length-1).split(',');
 		return nums;
@@ -998,10 +1260,10 @@ var __handDrag = null;
 					}
 					this.currseatno = seatno;
 	
-					var idtypes = seatno.split("-")[3];
+					var ids = seatno.split("-");
 	
 					var newno = window.prompt("请输入编号X-Y");
-					var newno2 = newno + "-0-" + idtypes;
+					var newno2 = ids[0] + "-" + ids[1] + "-" + newno;
 					var reg = /^\d+\-\d+$/g;
 					if(newno){
 						if(reg.test(newno)){
@@ -1367,9 +1629,9 @@ var __handDrag = null;
 
 					// $("#seatcontainerId").html('');
 					if(mt == 1){
-						this.createCircleSeatMap(x1 - 18,y1 - 18,r1,seatnum,ruleid,1);
+						this.createCircleSeatMap(x1 - 20,y1 - 18,r1,seatnum,ruleid,1);
 					}else{
-						this.createRunSeatMap(x1 - 18,y1 - 18,r1,seatnum,centernum,ruleid,1);
+						this.createRunSeatMap(x1 - 20,y1 - 18,r1,seatnum,centernum,ruleid,1);
 					}
 					
 				}
@@ -1610,6 +1872,12 @@ var __handDrag = null;
 			seatsnum = oae.odd.concat(oae.even.reverse());
 		}else if(+ruleid == 2){
 			seatsnum = oae.even.concat(oae.odd.reverse());
+		}else if(ruleid == 3){
+			//从左到右
+			seatsnum = oae.asc;
+		}else if(ruleid == 4){
+			//从右到左
+			seatsnum = oae.desc;
 		}
 		up.forEach(function(oid,colid){
 			// var oid = col[ck];
@@ -1627,6 +1895,12 @@ var __handDrag = null;
 			seatsnum = oae.odd.concat(oae.even.reverse());
 		}else if(+ruleid == 2){
 			seatsnum = oae.even.concat(oae.odd.reverse());
+		}else if(ruleid == 3){
+			//从左到右
+			seatsnum = oae.asc;
+		}else if(ruleid == 4){
+			//从右到左
+			seatsnum = oae.desc;
 		}
 		down.forEach(function(oid,colid){
 			// var oid = col[ck];
@@ -1924,6 +2198,12 @@ var __handDrag = null;
 			seatsnum = oae.odd.concat(oae.even.reverse());
 		}else if(ruleid == 2){
 			seatsnum = oae.even.concat(oae.odd.reverse());
+		}else if(ruleid == 3){
+			//从左到右
+			seatsnum = oae.asc;
+		}else if(ruleid == 4){
+			//从右到左
+			seatsnum = oae.desc;
 		}
 		up.forEach(function(oid,colid){
 			// var oid = col[ck];
@@ -1939,6 +2219,12 @@ var __handDrag = null;
 			seatsnum = oae.odd.concat(oae.even.reverse());
 		}else if(ruleid == 2){
 			seatsnum = oae.even.concat(oae.odd.reverse());
+		}else if(ruleid == 3){
+			//从左到右
+			seatsnum = oae.asc;
+		}else if(ruleid == 4){
+			//从右到左
+			seatsnum = oae.desc;
 		}
 		down.forEach(function(oid,colid){
 			// var oid = col[ck];
@@ -1983,6 +2269,7 @@ var __handDrag = null;
 			}
 		}
 
+
 		seledrowv = seledrowv.sort(function(a,b){return a-b;});
 		seledrowv.forEach(function(ik,rowid){
 			var col = seledgroup[ik];
@@ -1991,17 +2278,24 @@ var __handDrag = null;
 				var lb = $("#" + b).position().left;
 				return la - lb;
 			});
+			
 			var oae = this.oddAndEven(col.length);
 			var seatsnum = [];
 			if(ruleid == 1){
 				seatsnum = oae.odd.concat(oae.even.reverse());
 			}else if(ruleid == 2){
 				seatsnum = oae.even.concat(oae.odd.reverse());
+			}else if(ruleid == 3){
+				//从左到右
+				seatsnum = oae.asc;
+			}else if(ruleid == 4){
+				//从右到左
+				seatsnum = oae.desc;
 			}
 			col.forEach(function(oid,colid){
 				// var oid = col[ck];
 				$("#" + oid).html(seatsnum[colid]);
-				var groupid = oid.split('-')[1];
+				var groupid = +oid.split('-')[1] + group;
 				// $("#" + oid).attr("id","s-"+new Date().getTime()+"-"+(rowid+1)+"-"+(seatsnum[colid]));
 				$("#" + oid).attr("id","s-"+groupid+"-"+(rowid+1)+"-"+(seatsnum[colid]));
 			});
@@ -2471,7 +2765,7 @@ var __handDrag = null;
 	window.SeatMapsEditor = seatMapsEditor;
 	window.SeatMapsDrag = Drag;
 
-	// seatMapsEditor.prototype.loadSessionData();
+	seatMapsEditor.prototype.loadSessionData();
 })();
 
 

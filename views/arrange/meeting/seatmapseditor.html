@@ -302,8 +302,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="toollist_li">
-				<a data="nav-mark" href="javascript:;" alt="文字编辑" title="文字编辑"><img src="../../../images/toolkit/copy_editor.svg"></a>
+			<div class="toollist_li has_child">
+				<a data="nav-mark" href="javascript:;" alt="文字编辑" title="文字编辑"><img src="../../../images/toolkit/copy_editor.svg"><span>文字编辑</span></a>
+				<div class="child_cont" style="display: none;">
+					<div class="child_cont_li on">
+						<a data="nav-mark" href="javascript:;" alt="文字编辑" title="文字编辑"><img src="../../../images/toolkit/copy_editor.svg"><span>文字编辑</span></a>
+					</div>
+					<div class="child_cont_li">
+						<a data="nav-mark-only" href="javascript:;" alt="手动编辑" title="手动编辑"><img src="../../../images/toolkit/copy_editor.svg"><span>手动编辑</span></a>
+					</div>
+				</div>
 			</div>
 			<div class="toollist_li">
 				<a data="nav-drag" href="javascript:;" alt="拖拽" title="拖拽"><img src="../../../images/toolkit/drag_drop.svg"></a>
@@ -459,6 +467,7 @@
 	var seatmaps = new SeatMapsEditor();
 
 	$(document).click(function(){
+		console.log("document-----click")
 		if(!__longEvent){
 			$(".child_cont").removeClass("leftSet bottomSet leftbottomSet").hide();
 		}else{
@@ -493,18 +502,20 @@
 		if(!data){
 			return;
 		}
-
-		console.log("data-----",data);
 		
 		if(!__longEvent){
 			$('.toollist_li').removeClass("on");
 			$(this).parent().addClass("on");
+
+			console.log("data-----",data);
+
+			seatMapEvent(data,this);
 		}else{
 			setTimeout(function(){
 				__longEvent = false;
 			},500);
 		}
-		seatMapEvent(data,this);
+		// seatMapEvent(data,this);
 		// return false;
 	});
 
@@ -695,6 +706,9 @@
 					$("#nav-selection").addClass("on");
 				},1000);
 			break;
+			case "nav-mark-only":
+				seatmaps.setOnlyRowNum();
+			break;
 
 			case "nav-drag":
 				seatmaps.dragMoveSeats();
@@ -749,6 +763,10 @@
 		addLongDown(obj[i] , function(evt){
 			console.log("long click-----------")
 			__longEvent = true;
+
+			if(seatmaps){
+				seatmaps.removeContainerEvent();
+			}
 
 			evt.stopPropagation();
 			var _this = obj[i];
@@ -1346,7 +1364,7 @@
 				title: '自动编排',
 				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['500px', '260px'],
+				area: ['500px', '350px'],
 				content: 'seatmapseditor_code.html',
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {

@@ -28,6 +28,9 @@
     justify-content: center;
 }
 .seled{border:1px solid red  !important;background-color:#D6DFF7;}
+.onlynum{
+	background-color:#fff;
+}
 .aisleseats{
 	border:1px dashed #ccc;
 }
