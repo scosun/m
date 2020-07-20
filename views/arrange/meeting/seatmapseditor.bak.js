@@ -2303,6 +2303,79 @@ var __handDrag = null;
 		}.bind(this));
 	}
 
+	seatMapsEditor.prototype.autGroupCode = function(ruleid){
+		//得到矩形座区数据
+		var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
+
+		//首先判断是不是 只选择了一个组,并且只考虑矩形座区
+		var groups = [];
+		seled.each(function(){
+			var id = $(this).attr("id");
+			var ids = id.split("-");
+			var gid = ids[1];
+			if(groups.indexOf(gid) == -1){
+				groups.push(gid);
+			}
+		});
+		if(groups.length > 1){
+			alert("选择了多个组的座区，请重新选择");
+			return;
+		}
+
+		var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id^='s-" + (+groups[0]) + "']");
+		var seledgroup = {};
+		var seledrowv = [];
+		for(var i = 0,len = seled.length; i < len; i++){
+			var sl = $(seled[i]).position().left;
+			var st = $(seled[i]).position().top;
+
+			var h = $(seled[i]).height();
+
+			var id = seled[i].id;
+			// var kid = id.split('-')[0]+"-";
+			var kid = this.isRow(seledgroup,(st - h/2),(st + h/2));
+			if(kid){
+				seledgroup[kid].push(id);
+			}else{
+				seledgroup[st] = [];
+				seledgroup[st].push(id);
+				seledrowv.push(st);
+			}
+		}
+
+
+		seledrowv = seledrowv.sort(function(a,b){return a-b;});
+		seledrowv.forEach(function(ik,rowid){
+			var col = seledgroup[ik];
+			col.sort(function(a,b){
+				var la = $("#" + a).position().left;
+				var lb = $("#" + b).position().left;
+				return la - lb;
+			});
+			
+			var oae = this.oddAndEven(col.length);
+			var seatsnum = [];
+			if(ruleid == 1){
+				seatsnum = oae.odd.concat(oae.even.reverse());
+			}else if(ruleid == 2){
+				seatsnum = oae.even.concat(oae.odd.reverse());
+			}else if(ruleid == 3){
+				//从左到右
+				seatsnum = oae.asc;
+			}else if(ruleid == 4){
+				//从右到左
+				seatsnum = oae.desc;
+			}
+			col.forEach(function(oid,colid){
+				// var oid = col[ck];
+				$("#" + oid).html(seatsnum[colid]);
+				var groupid = +oid.split('-')[1] + group;
+				// $("#" + oid).attr("id","s-"+new Date().getTime()+"-"+(rowid+1)+"-"+(seatsnum[colid]));
+				$("#" + oid).attr("id","s-"+groupid+"-"+(rowid+1)+"-"+(seatsnum[colid]));
+			});
+		}.bind(this));
+	}
+
 	seatMapsEditor.prototype.boxCreateSeats = function(){
 		//鼠标拉宽绘制
 		this.boxCreate = true;

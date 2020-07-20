@@ -1384,9 +1384,26 @@
 				}
 			});
 		});
+		$('#autocodegroupbtn img').on('click', function(){
+			layer.open({
+				type: 2,
+				title: '组座区自动编排',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '10%',
+				area: ['500px', '350px'],
+				content: 'seatmapseditor_code.html',
+				btn: ['确定', '取消'],
+				yes: function(index, layero) {
+					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
+					seatmaps.autGroupCode(ruleid);
+					layer.close(index);
+				}
+			});
+		});
 		$('#completebtn img').on('click', function(){
 			seatmaps.completeSeats();
 		});
+		
 
 		$('#rotationbtn img').on('click', function(){
 			__setRotatePoint();
