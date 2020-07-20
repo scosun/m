@@ -37,7 +37,8 @@ var __handDrag = null;
 	//座区分组
 	var group = 1;
 	
-	var serverUrl = "https://m.longjuli.com";
+	// var serverUrl = "https://m.longjuli.com";
+	var serverUrl = "http://81.70.37.92";
 
 	//id---拼接 含义 分类-组-行-列 s-11-1-4
 	// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆) - 分组 - 行 - 列
@@ -733,7 +734,7 @@ var __handDrag = null;
 		for(var gk in seledgroup){
 			var gids = seledgroup[gk];
 			gids.forEach(function(_id,i){
-				console.log(i)
+				// console.log(i)
 				$("#" + _id).css("top", (t + 50*i) +"px");
 			});
 		}
@@ -1179,7 +1180,7 @@ var __handDrag = null;
 		
 		var iscopy = this.iscopy;
 		
-		console.log(group)
+		// console.log(group)
 		seled.each(function(){
 			var left = parseFloat($(this).css("left"));
 			var top = parseFloat($(this).css("top"));
@@ -1275,7 +1276,7 @@ var __handDrag = null;
 								}
 								$("#"+newno2).text(id[1]);
 	
-								console.log($("[cid=1-1]").length)
+								// console.log($("[cid=1-1]").length)
 							}else{
 								alert("编号已存在");
 							}
@@ -2363,7 +2364,7 @@ var __handDrag = null;
 		if(groupId.length > 1){
 			alert("只能选择一个组");
 		}else{
-			console.log(seatsdata);
+			// console.log(seatsdata);
 			var condi = {};
 			condi.center = center;
 			condi.rotate = rotate;
@@ -2381,7 +2382,7 @@ var __handDrag = null;
 			url: serverUrl + "/v1/editor/rotate",
 			dataType: "json",
 			success: function(obj) {
-				console.log(obj);
+				// console.log(obj);
 				if(obj && obj.seats){
 					var seats = obj.seats || [];
 					for (var i = 0,len = seats.length; i < len; i++) {
@@ -2622,7 +2623,8 @@ var __handDrag = null;
 
 	function keyDownMoveSeats(evt){
 		var keycode = evt.keyCode;
-		
+		console.log("keyDownMoveSeats-----",keycode);
+
 		if(evt.ctrlKey){
 			if(keycode == 67){
 				//ctrl + c
@@ -2630,6 +2632,16 @@ var __handDrag = null;
 			}else if(keycode == 86){
 				//ctrl + v
 			}
+		}
+
+		switch(keycode){
+			case 65:
+				if(evt.ctrlKey){
+					event.preventDefault();
+					event.stopPropagation();
+					keydownToolEvent("selectall");
+				}
+			break;
 		}
 
 		if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){

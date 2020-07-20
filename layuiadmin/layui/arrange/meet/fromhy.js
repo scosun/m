@@ -7,9 +7,12 @@ layui.config({
         admin = layui.admin,
         element = layui.element,
         layer = layui.layer,
+        setter = layui.setter,
         laydate = layui.laydate,
         form = layui.form;
-    var url = "https://f.longjuli.com";
+
+    // var url = "https://f.longjuli.com";
+    var url = setter.baseUrl;
 
     var day2 = new Date();
     day2.setTime(day2.getTime());

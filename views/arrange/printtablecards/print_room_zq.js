@@ -21,6 +21,8 @@ layui.config({
    
 
     var url = setter.baseUrl;
+    var seatUrl = setter.seatBaseUrl;
+    
     var uri = window.location.search;
     var str = uri.substr(1);
     // window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
@@ -166,7 +168,7 @@ layui.config({
         $.ajax({
             async: false,
             type: "get",
-            url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+            url: seatUrl + "/v1/meetings/show?meeting_id="+meetingid,
             dataType: "json",
             success: function(obj) {
                 console.log("--queryAllSeatStatus---");

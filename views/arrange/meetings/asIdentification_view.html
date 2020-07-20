@@ -80,6 +80,7 @@
 			element = layui.element,
 			table = layui.table,
 			layer = layui.layer,
+			setter = layui.setter,
 			router = layui.router();
 		/*右侧菜单HOVER显示提示文字*/
 		$('.layui-right-nav i').each(function () {
@@ -98,7 +99,8 @@
 
 
 
-		var url = 'https://f.longjuli.com';
+		// var url = 'https://f.longjuli.com';
+		var url = setter.baseUrl;
 		var uri = window.location.search;
 		console.log(uri)
                 var str = uri.substr(1);

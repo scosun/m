@@ -46,6 +46,11 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     //全局配置url
     // ,baseUrl:'https://f.longjuli.com'
     ,baseUrl:'http://81.70.37.92:8083'
+
+    
+    // ,seatBaseUrl:'https://m.longjuli.com'
+    ,seatBaseUrl:'http://81.70.37.92:80'
+    
     //验证码的url
     ,smsUrl:'https://f.longjuli.com'
   });

@@ -36,6 +36,8 @@ layui.config({
     var seatsdata = [];
 
     var url = setter.baseUrl;
+    var seatUrl = setter.seatBaseUrl;
+
     var uri = window.location.search;
     var str = uri.substr(1);
     var roomtemplateid;
@@ -154,7 +156,7 @@ layui.config({
         $.ajax({
             async: false,
             type: "get",
-            url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+            url: seatUrl +"/v1/meetings/show?meeting_id="+meetingid,
             dataType: "json",
             success: function(obj) {
                 console.log("--queryAllSeatStatus---");
@@ -223,7 +225,7 @@ layui.config({
     
     $.ajax({
         type: "get",
-        url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
+        url: seatUrl +"/v1/attributes/color?meeting_id="+meetingid,
         dataType: "json",
         success: function(obj) {
             var data = obj.data || [];
@@ -238,7 +240,7 @@ layui.config({
     
     $.ajax({
         type: "get",
-        url: "https://m.longjuli.com/v1/attendees/pending?meeting_id="+meetingid,
+        url: seatUrl +"/v1/attendees/pending?meeting_id="+meetingid,
         dataType: "json",
         success: function(obj) {
             console.log("pending-----",obj)
@@ -268,7 +270,7 @@ layui.config({
             type: "post",
             data: JSON.stringify(condi),
             contentType: 'application/json', 
-            url: "https://m.longjuli.com/v1/meetings/sort",
+            url: seatUrl +"/v1/meetings/sort",
             dataType: "json",
             success: function(obj) {
                 console.log("--importSeatsData---",condi);
@@ -295,7 +297,7 @@ layui.config({
             type: "post",
             data: JSON.stringify(data),
             contentType: 'application/json', 
-            url: "https://m.longjuli.com/v1/meetings/store",
+            url: seatUrl +"/v1/meetings/store",
             dataType: "json",
             success: function(obj) {
                 console.log("--setSeatData---",obj);
@@ -545,7 +547,7 @@ layui.config({
     function saveDragSort(data){
         $.ajax({
             type: "post",
-            url: "https://m.longjuli.com/v1/meetings/drag_sort",
+            url: seatUrl +"/v1/meetings/drag_sort",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify(data),
@@ -937,7 +939,7 @@ layui.config({
             });
         },
         word:function(){
-            window.location="https://m.longjuli.com/v1/wordtemplates/download?meeting_id="+meetingid+"&roomtemplate_id="+roomId;
+            window.location=seatUrl +"/v1/wordtemplates/download?meeting_id="+meetingid+"&roomtemplate_id="+roomId;
             // layer.open({
             //     type: 2,
             //     title: "下载模板列表",

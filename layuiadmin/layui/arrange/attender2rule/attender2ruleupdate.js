@@ -10,7 +10,10 @@ layui.config({
 		layer = layui.layer,
 		tree = layui.tree,
 		util = layui.util,
+		setter = layui.setter,
 		router = layui.router();
+
+		var seatUrl = setter.seatBaseUrl;
 
 	// layer.alert(router.search.comid);//弹出提示 “1”
 	
@@ -37,7 +40,7 @@ layui.config({
 	$.ajax({
 		async: false,
 		type: "get",
-		url: "https://m.longjuli.com/v1/attendee2rules/" + id,
+		url: seatUrl + "/v1/attendee2rules/" + id,
 		dataType: "json",
 		success: function(obj) {
 			if(obj){
@@ -63,7 +66,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://m.longjuli.com/v1/meetings",
+		url: seatUrl + "/v1/meetings",
 		dataType: "json",
 		success: function(obj) {
 			let data = obj.meetings || null;
@@ -97,7 +100,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://m.longjuli.com/v1/attributes",
+		url: seatUrl + "/v1/attributes",
 		dataType: "json",
 		success: function(obj) {
 			// console.log("----",obj)
@@ -140,7 +143,7 @@ layui.config({
 	$.ajax({
 		async: true,
 		type: "get",
-		url: "https://m.longjuli.com/v1/sort_items",
+		url: seatUrl + "/v1/sort_items",
 		dataType: "json",
 		success: function(obj) {
 			console.log("----",obj)
@@ -185,7 +188,7 @@ layui.config({
 		$.ajax({
 			async: false,
 			type: "get",
-			url: "https://m.longjuli.com/v1/roomtemplates?meeting_id="+meeting_id,
+			url: seatUrl + "/v1/roomtemplates?meeting_id="+meeting_id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
@@ -210,7 +213,7 @@ layui.config({
 		$.ajax({
 			async: false,
 			type: "get",
-			url: "https://m.longjuli.com/v1/rulesetups?meeting_id="+meeting_id,
+			url: seatUrl + "/v1/rulesetups?meeting_id="+meeting_id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
@@ -265,7 +268,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://m.longjuli.com/v1/attendees/count?meeting_id="+meeting_id+"&attribute_ids="+attribute_ids.join(','),
+			url: seatUrl + "/v1/attendees/count?meeting_id="+meeting_id+"&attribute_ids="+attribute_ids.join(','),
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);
@@ -731,7 +734,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://m.longjuli.com/v1/attributes?parent_id=" + parent.id,
+			url: seatUrl + "/v1/attributes?parent_id=" + parent.id,
 			dataType: "json",
 			success: function(obj) {
 				console.log("----",obj);

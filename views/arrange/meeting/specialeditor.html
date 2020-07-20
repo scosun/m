@@ -110,8 +110,11 @@ layui.config({
 		element = layui.element,
 		table = layui.table,
 		layer = layui.layer,
+		setter = layui.setter,
 		router = layui.router();
 		
+		var seatUrl = setter.seatBaseUrl;
+
 		//在这里我想得到页面 二次显示的事件
 		parent.element.on('tab(layadmin-layout-tabs)',function(a,b,c,data){
 			loadSessionData();
@@ -259,7 +262,7 @@ layui.config({
 				type: "post",
 				data: JSON.stringify(condi),
 				contentType: 'application/json', 
-				url: "https://m.longjuli.com/v1/editor",
+				url: seatUrl + "/v1/editor",
 				dataType: "json",
 				success: function(obj) {
 					console.log(obj);
@@ -287,7 +290,7 @@ layui.config({
 				type: "post",
 				data: JSON.stringify(condi),
 				contentType: 'application/json', 
-				url: "https://m.longjuli.com/v1/editor",
+				url: seatUrl + "/v1/editor",
 				dataType: "json",
 				success: function(obj) {
 					console.log(obj);

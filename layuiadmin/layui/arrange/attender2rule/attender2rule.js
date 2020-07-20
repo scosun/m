@@ -5,7 +5,11 @@ layui.config({
 }).use(['index', 'table', 'jquery'], function() {
 	var table = layui.table,
 	admin = layui.admin,
+	setter = layui.setter,
 	$ = layui.jquery;
+
+	var seatUrl = setter.seatBaseUrl;
+
 	// #test-table-operate
 	function getUrlParam(name) {
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -26,7 +30,7 @@ layui.config({
 		$.ajax({
 			async: true,
 			type: "get",
-			url: "https://m.longjuli.com/v1/attendee2rules?page=1&limit=10&q="+key+"&meeting_id="+meetingid,//修改为 参会人员和座区规则对应关系方案 表
+			url: seatUrl + "/v1/attendee2rules?page=1&limit=10&q="+key+"&meeting_id="+meetingid,//修改为 参会人员和座区规则对应关系方案 表
 			dataType: "json",
 			//成功的回调函数
 			// data: {
@@ -118,7 +122,7 @@ layui.config({
 			type: "post",
 			data: JSON.stringify(condi),
 			contentType: 'application/json', 
-			url: "https://m.longjuli.com/v1/attendee2rules",
+			url: seatUrl + "/v1/attendee2rules",
 			dataType: "json",
 			success: function(obj) {
 				// console.log("--saveAttendee2rules---",condi);
@@ -253,7 +257,7 @@ layui.config({
 			};
 			layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除对应绑定关系操作,执行删除操作后，与其相关联的座区自动编排数也将一并被删除,是否确认继续进行该操作？', {title:'温馨提示'},function() {
 				$.ajax({
-					url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
+					url: seatUrl + "/v1/attendee2rules/batch_delete",
 					type: "POST",
 					data: JSON.stringify(condi),
 					contentType: 'application/json', 
@@ -328,7 +332,7 @@ layui.config({
 				};
 				layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除对应绑定关系操作,执行删除操作后，与其相关联的座区自动编排数也将一并被删除,是否确认继续进行该操作？', {title:'温馨提示'},function() {
 					$.ajax({
-						url: "https://m.longjuli.com/v1/attendee2rules/batch_delete",
+						url: seatUrl + "/v1/attendee2rules/batch_delete",
 						type: "POST",
 						data: JSON.stringify(condi),
 						contentType: 'application/json', 

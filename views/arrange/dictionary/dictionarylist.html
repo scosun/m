@@ -109,6 +109,7 @@
             setter = layui.setter,
             $ = layui.jquery;
         var url = setter.baseUrl;
+        var seatUrl = setter.seatBaseUrl;
         // 20.04.06 dh 原来按钮
         // $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
         // $('#group').append('<button class="layui-btn layui-ds layui-hide" data-type="goback" id="goback">返回上一级</button>')
@@ -173,11 +174,11 @@
         window.i = 0;
         var gobackid = 0;
         window.gobackArr = []
-        var uri = "https://m.longjuli.com/v1//attributes?parent_id=" + i;
+        var uri = seatUrl + "/v1//attributes?parent_id=" + i;
         //删除接口
-        var add = "https://m.longjuli.com/v1/attributes";
-        var find = "https://m.longjuli.com/v1//attributes";
-        var dele = "https://m.longjuli.com/v1//attributes/batch_delete"
+        var add = seatUrl + "/v1/attributes";
+        var find = seatUrl + "/v1//attributes";
+        var dele = seatUrl + "/v1//attributes/batch_delete"
 
         table.render({
             elem: '#test-table-operate',
@@ -541,7 +542,7 @@
                     btn: ['确定', '取消'],
                     yes: function(index, layero) {
                         var body = layui.layer.getChildFrame('body', index);
-                        var updateurl = "https://m.longjuli.com/v1//attributes/" +
+                        var updateurl = seatUrl + "/v1//attributes/" +
                             obj.data.id
                         $.ajax({
                             async: false,
@@ -768,7 +769,7 @@
                         url: url + "/attribute/selectSeatch" //数据接口
                         ,
                         where: {
-                            url: 'https://m.longjuli.com/v1/attributes?q='+demoReload
+                            url: seatUrl + '/v1/attributes?q='+demoReload
                         },
 
                         method: 'get',
@@ -849,7 +850,7 @@
                     });
                 } else {
                     console.log( gobackArr[i-1])
-                    u = "https://m.longjuli.com/v1/attributes?q="+demoReload +"&parent_id="+
+                    u = seatUrl + "/v1/attributes?q="+demoReload +"&parent_id="+
                         gobackArr[i-1]
                     $('#goback').removeClass('layui-hide');
                     console.log(gobackArr)
@@ -1128,7 +1129,7 @@
                     });
                 } else {
 
-                    u = "https://m.longjuli.com/v1/attributes/cur_level?attribute_id=" +
+                    u = seatUrl + "/v1/attributes/cur_level?attribute_id=" +
 
                     $('#goback').removeClass('layui-hide');
                     console.log(gobackArr)

@@ -7,9 +7,11 @@ layui.config({
         admin = layui.admin,
         element = layui.element,
         layer = layui.layer,
+        setter = layui.setter,
         laydate = layui.laydate,
         form = layui.form;
-    var url = "https://f.longjuli.com";
+    // var url = "https://f.longjuli.com";
+    var url = setter.baseUrl;
     // var url="http://127.0.0.1:8083"
     console.log()
 

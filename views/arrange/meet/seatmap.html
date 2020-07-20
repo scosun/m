@@ -139,6 +139,7 @@
 			}
 		});
 		var url = setter.baseUrl;
+		var seatUrl = setter.seatBaseUrl;
 		var uri = window.location.search;
         var str = uri.substr(1);
         window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
@@ -212,7 +213,7 @@
 
 		$.ajax({
 			type: "get",
-			url: "https://m.longjuli.com/v1/attributes/color?meeting_id="+meetingid,
+			url: seatUrl +"/v1/attributes/color?meeting_id="+meetingid,
 			dataType: "json",
 			success: function(obj) {
 				var data = obj.data || [];
@@ -246,7 +247,7 @@
 			$.ajax({
 				async: false,
 				type: "get",
-				url: "https://m.longjuli.com/v1/meetings/show?meeting_id="+meetingid,
+				url: seatUrl +"/v1/meetings/show?meeting_id="+meetingid,
 				dataType: "json",
 				success: function(obj) {
 					console.log("--queryAllSeatStatus---");
@@ -268,7 +269,7 @@
 				type: "post",
 				data: JSON.stringify(condi),
 				contentType: 'application/json', 
-				url: "https://m.longjuli.com/v1/meetings/sort",
+				url: seatUrl +"/v1/meetings/sort",
 				dataType: "json",
 				success: function(obj) {
 					console.log("--importSeatsData---",condi);
@@ -291,7 +292,7 @@
 				type: "post",
 				data: JSON.stringify(data),
 				contentType: 'application/json', 
-				url: "https://m.longjuli.com/v1/meetings/store",
+				url: seatUrl +"/v1/meetings/store",
 				dataType: "json",
 				success: function(obj) {
 					console.log("--setSeatData---",obj);

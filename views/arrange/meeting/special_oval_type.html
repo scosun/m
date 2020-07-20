@@ -43,8 +43,9 @@ layui.config({
 		element = layui.element,
 		table = layui.table,
 		layer = layui.layer,
+		setter = layui.setter,
 		router = layui.router();
-		
+		var seatUrl = setter.seatBaseUrl;
 
 	$('#seatnum').on('keydown', function (event) {
 		if (event.keyCode == 13) {
@@ -80,7 +81,7 @@ layui.config({
 			type: "post",
 			data: JSON.stringify(condi),
 			contentType: 'application/json', 
-			url: "https://m.longjuli.com/v1/editor",
+			url: seatUrl +"/v1/editor",
 			dataType: "json",
 			success: function(obj) {
 				console.log(obj);

@@ -11,6 +11,7 @@ layui.config({
 
     // #test-table-operate
     var url = setter.baseUrl;
+    var seatUrl = setter.seatBaseUrl;
     //  var url = "http://127.0.0.1:8083"
     var devices = {};
     var arrangeList = [];
@@ -73,7 +74,7 @@ layui.config({
             // height: 'full-200',
             //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
             method: 'get',
-            url: 'https://m.longjuli.com/v1/attendees',
+            url: seatUrl + '/v1/attendees',
             where: {
                 meeting_id: value,
 
@@ -414,7 +415,8 @@ layui.config({
                     return layer.msg("请选择会议后再筛选")
                 }
                 var id = $('#select-room').val();
-                window.location="https://f.longjuli.com" + "/excel/personSignin/"+id;
+                // window.location="https://f.longjuli.com" + "/excel/personSignin/"+id;
+                window.location = url + "/excel/personSignin/"+id;
             },
             detailedinfo: function () {
                 if ($('#select-room').val() == -1) {
@@ -449,7 +451,7 @@ layui.config({
                     // height: 'full-200',
                     //url: url + "/ruletemplate/findAlllayuiBystatus", //数据接口
                     method: 'get',
-                    url: 'https://m.longjuli.com/v1/attendees',
+                    url: seatUrl + '/v1/attendees',
                     where: {
                         meeting_id: $('#select-room').val(),
                         q: $('#searchinput').val()
@@ -630,8 +632,11 @@ layui.config({
                     body.find("#roomid").text(obj.data.roomnum);
                     body.find("#company").text(obj.data.company);
                     body.find("#duties").text(obj.data.duties);
-                    if(obj.data.image_url != ""){  var img = "https://f.longjuli.com/upload" + obj.data.image_url
-                    body.find("#img").attr("src", img);}
+                    if(obj.data.image_url != ""){
+                        // var img = "https://f.longjuli.com/upload" + obj.data.image_url;
+                        var img = url + "/upload" + obj.data.image_url;
+                        body.find("#img").attr("src", img);
+                    }
                     body.find("#phone1").val(obj.data.phone1);
                     body.find("#phone2").val(obj.data.phone2);
                     body.find("#groups").text(obj.data.attributes.组别.name);
