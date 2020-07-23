@@ -325,6 +325,43 @@ var __handDrag = null;
 		});
 	}
 
+	seatMapsEditor.prototype.mergeSeatsGrop = function(){
+		var seled = $("#seatcontainerId .seled");
+
+		var iss = true;
+		//首先判断是不是 只选择了非矩形区域,只考虑矩形座区
+		for(let i = 0,len = seled.length; i < len; i++){
+			var id = $(seled[0]).attr("id");
+			var ids = id.split("-");
+			var tid = ids[0];
+			if(tid != "s"){
+				iss = false;
+				alert("合并组只能选择矩形座区");
+				break;
+			}
+		}
+		if(!iss){
+			return;
+		}
+
+		//得到矩形座区数据
+		// var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
+
+		
+
+		// var idtype = [];
+		// seled.each(function(){
+		// 	var id = this.id.split("-")[0];
+		// 	if(idtype.indexOf(id) == -1){
+		// 		idtype.push(id);
+		// 	}
+		// });
+		// idtype.forEach(function(item){
+		// 	var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id^='" + item + "']");
+		// 	seled.addClass("seled");
+		// });
+	}
+
 
 	seatMapsEditor.prototype.hiddenScorll = function(){
 		$("body").css("overflow","hidden");

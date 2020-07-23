@@ -199,6 +199,9 @@
 					<div class="child_cont_li">
 						<a data="selectsame" href="javascript:;" alt="类别选中" title="类别选中"><img src="../../../images/toolkit/selectsame.svg"><span>类别选中</span></a>
 					</div>
+					<div class="child_cont_li">
+						<a data="mergegroup" href="javascript:;" alt="合并组" title="合并组"><img src="../../../images/toolkit/selectsame.svg"><span>合并组</span></a>
+					</div>
 				</div>
 			</div>
 			<div id="nav-selection" class="toollist_li">
@@ -573,6 +576,10 @@
 			case "selectsame":
 				//类别选中
 				seatmaps.selectSameSeats();
+			break;
+			case "mergegroup":
+				//合并组
+				seatmaps.mergeSeatsGrop();
 			break;
 
 			case "nav-selection":

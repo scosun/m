@@ -672,12 +672,16 @@
 
             if (isaddrule) {
                 var count = 0;
-                var ckids_now = $("#seatcontainerId .seled");
+                // var ckids_now = $("#seatcontainerId .seled");
+                
+                var ckids_now = seatsIdSort();
+                
                 if (ckids_now && ckids_now.length > 0) {
                     var rule = [];
                     for (var i = 0, len = ckids_now.length; i < len; i++) {
                         rule.push({
-                            "seatid": ckids_now[i].id,
+                            // "seatid": ckids_now[i].id,
+                            "seatid": ckids_now[i],
                             "attender": "",
                             "ruleid":rule_id
                         });
@@ -687,12 +691,15 @@
                     layer.msg("没有选中座区");
                 }
             } else {
-                var ckids_now = $("#seatcontainerId .seled");
+                // var ckids_now = $("#seatcontainerId .seled");
+                var ckids_now = seatsIdSort();
+
                 if (ckids_now && ckids_now.length > 0) {
                     var rule = [];
                     for (var i = 0, len = ckids_now.length; i < len; i++) {
                         rule.push({
-                            "seatid": ckids_now[i].id,
+                            // "seatid": ckids_now[i].id,
+                            "seatid": ckids_now[i],
                             "attender": "",
                             "ruleid":rule_id
                         });
@@ -703,6 +710,98 @@
                     this.resetChangeSeartIds();
                 }
             }
+        }
+
+        function seatsIdSort(){
+            var seled1 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
+            var seled2 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='c']");
+            var seled3 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='r']");
+
+            var seleds = [seled1,seled2,seled3];
+            var seatsdata = {
+                "s":{},
+                "c":{},
+                "r":{}
+            }
+            for(var i = 0,len = seleds.length; i < len; i++){
+                var seats = seleds[i] || [];
+                if(seats.length > 0){
+                    seats.each(function(){
+                        var id = $(this).attr("id");
+                        var ids = id.split("-");
+                        if(!seatsdata[ids[0]][("_")+ids[1]]){
+                            seatsdata[ids[0]][("_")+ids[1]] = [];
+                        }
+                        seatsdata[ids[0]][("_")+ids[1]].push(id);
+                    });
+                }
+            }
+
+            var seatsids = [];
+
+            for(var stype in seatsdata){
+                var gseats = seatsdata[stype] || {};
+                for(var gid in gseats){
+                    var seatids = gseats[gid];
+                    if(stype == "s"){
+                        var seledgroup = {};
+                        var seledrowv = [];
+                        for(var i = 0,len = seatids.length; i < len; i++){
+                            var id = seatids[i];
+                            var st = $("#"+id).position().top;
+                            var h = $("#"+id).height();
+                            
+                            var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+                            if(kid){
+                                seledgroup[kid].push(id);
+                            }else{
+                                seledgroup[st] = [];
+                                seledgroup[st].push(id);
+                                seledrowv.push(st);
+                            }
+                        }
+
+                        seledrowv = seledrowv.sort(function(a,b){return a-b;});
+                        seledrowv.forEach(function(ik,rowid){
+                            var col = seledgroup[ik];
+                            col.sort(function(a,b){
+                                var la = $("#" + a).position().left;
+                                var lb = $("#" + b).position().left;
+                                return la - lb;
+                            });
+                            seatsids = seatsids.concat(col);
+                        });
+                    }else if(stype == "c" || stype == "r"){
+                        var up = [];
+                        var down = [];
+                        seatids.forEach(function(seatid){
+                            var ang = +$("#"+seatid).attr("ang");
+                            // console.log(ang)
+                            if(ang > 360 && ang < 540){
+                                down.push(seatid);
+                            }else{
+                                up.push(seatid);
+                            }
+                        });
+                        // console.log(up,down,seatids)
+
+                        up.sort(function(a,b){
+                            var la = $("#" + a).position().left;
+                            var lb = $("#" + b).position().left;
+                            return la - lb;
+                        });
+
+                        down.sort(function(a,b){
+                            var la = $("#" + a).position().left;
+                            var lb = $("#" + b).position().left;
+                            return la - lb;
+                        });
+
+                        seatsids = seatsids.concat(up.concat(down));
+                    }
+                }
+            }
+            return seatsids;
         }
 
         function saveSeatRule(rulename,rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
