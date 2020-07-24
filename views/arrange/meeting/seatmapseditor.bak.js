@@ -98,6 +98,18 @@ var __handDrag = null;
 			// 	}
 				
 			// });
+
+			//恢复之后计算一下groupid不能从1开始
+			var seats = $("#seatcontainer .seatdiv:not(.rownumseats)");
+			seats.each(function(){
+				var id = this.id;
+				var ids = id.split('-');
+				var gp = +ids[1];
+				if(gp >= group){
+					group++;
+				}
+			});
+
 			this.clearCompleteSeats();
 			this.hideMeetTitle();
 		}
@@ -345,9 +357,16 @@ var __handDrag = null;
 		}
 
 		//得到矩形座区数据
-		// var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
-
-		
+		var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
+		seled.each(function(){
+			var ids = this.id.split("-");
+			$(this).attr("group",group);
+			$(this).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
+			$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
+		});
+		seled.removeClass("seled");
+		group++;
+		alert("合并完成");
 
 		// var idtype = [];
 		// seled.each(function(){
