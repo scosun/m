@@ -1229,6 +1229,7 @@ var __handDrag = null;
 				var id = this.id;
 				var ids = id.split('-');
 				$(clone).attr("group",group);
+				$(clone).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 				$(clone).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 				$("#seatcontainerId").append(clone);
 			}else{
@@ -1547,7 +1548,7 @@ var __handDrag = null;
 			for(var i = 0; i < +colnum; i ++){
 				// seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 				// id 规则 分类-组-行-列
-				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '"  title="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 				sleft = sleft + 50;
 			}
 			sleft = this.sLeft;
@@ -1573,7 +1574,7 @@ var __handDrag = null;
 			for(var i = 0; i < +colnum; i ++){
 				// seathtml.push('<div class="seatdiv" style="top:' + stop + 'px; left:'+ sleft + 'px;" id="' + (j) + '-' + (i+1) + '-' + new Date().getTime() +'-' + 's" >' + (i+1) + '</div>');
 				// id 规则 分类-组-行-列
-				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+				seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" title="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 				sleft = sleft + 50;
 			}
 			sleft = mleft;
@@ -1713,7 +1714,7 @@ var __handDrag = null;
 			var j = 1;
 			// row 采用的编号规则id
 			var time = new Date().getTime();
-			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" title="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 			
 			//用来编号
 			ids.push("c-" + time + '-' + (j) + '-' + (i+1));
@@ -1924,6 +1925,7 @@ var __handDrag = null;
 			//id="c-' + group + '-' + (row) + '-' + (i+1) + '"
 			// $("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
 			$("#" + oid).attr("group",group);
+			$("#" + oid).attr("title","c-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 			$("#" + oid).attr("id","c-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 		}.bind(this));
 
@@ -1945,6 +1947,7 @@ var __handDrag = null;
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
 			$("#" + oid).attr("group",group);
+			$("#" + oid).attr("title","c-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 			$("#" + oid).attr("id","c-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 		}.bind(this));
 	}
@@ -2008,7 +2011,7 @@ var __handDrag = null;
 			var j = 1;
 			// row 采用的编号规则id
 			var time = new Date().getTime();
-			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="top:' + stop + 'px; left:'+ sleft + 'px;" id="s-' + group + '-' + (j) + '-' + (i+1) + '" title="s-' + group + '-' + (j) + '-' + (i+1) + '" >' + (i+1) + '</div>');
 			
 			//用来编号
 			ids.push("c-" + time + '-' + (j) + '-' + (i+1));
@@ -2176,7 +2179,7 @@ var __handDrag = null;
 			}else{
 				seat.seatid = "o-" + group + "-" + seat.seatid;
 			}
-			seathtml.push('<div class="seatdiv" group='+group+' style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '">' + (i+1) + '</div>');
+			seathtml.push('<div class="seatdiv" group='+group+' style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '" title="' + seat.seatid + '" >' + (i+1) + '</div>');
 			
 		}
 		group++;
@@ -2248,6 +2251,7 @@ var __handDrag = null;
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+1)+"-"+(seatsnum[colid])+"-0-c");
 			$("#" + oid).attr("group",group);
+			$("#" + oid).attr("title","r-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 			$("#" + oid).attr("id","r-" + group + "-" + (rowid+1) + "-" + (seatsnum[colid]));
 		}.bind(this));
 
@@ -2269,6 +2273,7 @@ var __handDrag = null;
 			$("#" + oid).html(seatsnum[colid]);
 			// $("#" + oid).attr("id",(rowid+2)+"-"+(seatsnum[colid])+"-0-c");
 			$("#" + oid).attr("group",group);
+			$("#" + oid).attr("title","r-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 			$("#" + oid).attr("id","r-" + group + "-" + (rowid+2) + "-" + (seatsnum[colid]));
 		}.bind(this));
 	}
@@ -2427,6 +2432,7 @@ var __handDrag = null;
 			var id = this.id;
 			var ids = id.split('-');
 			$(this).attr("group",group);
+			$(this).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 			$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 		});
 		group++;
