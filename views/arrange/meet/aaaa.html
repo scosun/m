@@ -122,6 +122,44 @@
         .drag-hide{
             display: none;
         }
+
+        .setpop{
+            position:absolute;
+            right: -1px;
+            top: 40px;
+            border:1px solid #ccc;
+            background-color: #fff;
+            
+        }
+        .setpop .layui-form-item{
+            margin: 10px 0;
+            
+        }
+        .setpop .layui-form-item input{
+            vertical-align: middle;
+        } 
+        .setpop .layui-form-item label{
+            display: inline-block;
+            vertical-align: -2px;
+        } 
+        .settoparr{
+            position:absolute;
+            top: -10px;
+            right: 17px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: #ccc;
+            z-index: 2;
+        }
+        .radiodiv{
+            position: relative;
+            z-index: 3;
+            padding:10px 20px;
+            background-color: #fff;
+        }
+
+
 	</style>
 	<script type="text/javascript">  
 		function doNothing(){  
@@ -259,6 +297,27 @@
             <!-- 未导入人员列表 -->
             <div class="float-right" style="display: none;" id="notImport">
                 <h3 id="notImportTitle" class="dragh3" >未导入人员列表<span class="iconfont icon-xitongguanli"></span></h3>
+                <div class="setpop">
+                    <div class="settoparr"></div>
+                    <div class="radiodiv">
+                        <div class="layui-form-item">
+                                <input type="radio" id="0" name="sex" value="男" title="男" checked="">
+                                <label for="0">框框框框框框框框</label>
+                        </div>
+                        <div class="layui-form-item">
+                                <input type="radio" id="1" name="sex" value="男" title="男" checked="">
+                                <label for="1">单选框</label>
+                        </div>
+                        <div class="layui-form-item">
+                                <input type="radio" id="2" name="sex" value="男" title="男" checked="">
+                                <label for="2">单选框</label>
+                        </div>
+                        <div class="layui-form-item">
+                                <input type="radio" id="3" name="sex" value="男" title="男" checked="">
+                                <label for="3">单选框</label>
+                        </div>
+                    </div>
+                </div>
                 <ul id="notImportList" class="float-right-list">
                     <!-- <li>
                         <h4>特邀出席领导同志(10人)<span><img height="16" src="../../../images/toolkit/hand.svg"></span></h4>
