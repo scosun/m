@@ -33,6 +33,7 @@ layui.config({
     });
 
     var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+    // 座区数据
     var seatsdata = [];
 
     var url = setter.baseUrl;
@@ -93,7 +94,6 @@ layui.config({
             }else{
                 str.push('<li id="' + item.roomid + '">' + item.name + '</li>');
             }
-            
         });
         $(".layui-tab-title").html(str);
 
@@ -112,7 +112,6 @@ layui.config({
         roomId = roomid;
 
         layer.load(2);
-    
         $.ajax({
             url: url+"/roomtemplate/findByIdTemplatecode",
             type: "post",
@@ -163,7 +162,7 @@ layui.config({
                 dragSortData = null;
 
                 if(obj && obj.attendees){
-                    seatsdata = obj.attendees;
+                    seatsdata = obj.attendees || [];
 
                     changeSeatColor(obj.attendees);
                 }
@@ -217,7 +216,7 @@ layui.config({
         function openMsg() {
             subtips = layer.tips(_data, '#'+_id,{tips:[3,'#666'],time: 30000});
         }
-    })
+    });
     /*右侧菜单HOVER显示提示文字 end*/
 
     
@@ -258,8 +257,28 @@ layui.config({
 
 
 
-    
+    // var deleteSeats = [];
+    function deleteBingName(){
+        var names = [];
+        var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
+        seled.each(function(){
+            var id = $(this).attr("id");
+            
+            var seat = seatsdata.filter(function(item){
+                return item.seatid == id;
+            })[0] || null;
 
+            if(seat){
+                names.push(seled);
+                var num = id.split('-')[3];
+                $(this).html(num);
+                $(this).css("background-color","");
+            }
+        });
+        seled.removeClass("seled");
+        // deleteSeats = names;
+        // console.log(names);
+    }
 
 
 
@@ -676,7 +695,6 @@ layui.config({
     }
 
     function saveSeats(){
-        
         var seats = $("#seatcontainerId .seatdiv");
         var seatsobj = {
             meeting_id: +meetingid,
@@ -743,6 +761,11 @@ layui.config({
         */
         setSeatData(seatsobj);
     }
+
+
+    
+
+
     /**
      * 打印局部div
      * @param printpage 局部div的ID
@@ -989,6 +1012,9 @@ layui.config({
         },
         bindContextMenu:function(){
             bindContextMenu();
+        },
+        navDelete:function(){
+            deleteBingName();
         },
         removeContextMenu:function(){
             removeContextMenu();
