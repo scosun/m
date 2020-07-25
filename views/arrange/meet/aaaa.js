@@ -237,16 +237,23 @@ layui.config({
         }
     });
     
-    $.ajax({
-        type: "get",
-        url: seatUrl +"/v1/attendees/pending?meeting_id="+meetingid,
-        dataType: "json",
-        success: function(obj) {
-            console.log("pending-----",obj)
-            getAskLeaveData(obj.leave);
-            getNotImportData(obj.pending);
-        }
-    });
+    function getPending(attr){
+        attr = attr || "";
+        $.ajax({
+            type: "get",
+            url: seatUrl +"/v1/attendees/pending?meeting_id="+meetingid+"&filter_attribute="+attr,
+            dataType: "json",
+            success: function(obj) {
+                console.log("pending-----",obj)
+                getAskLeaveData(obj.leave);
+                getNotImportData(obj.pending);
+
+                var attribute_kinds = obj.attribute_kinds || [];
+                setAttributeHtml(attribute_kinds);
+            }
+        });
+    }
+    getPending();
 
     form.on('select(component-ruleselect)', function(data){
         var id = +data.value;
@@ -255,6 +262,17 @@ layui.config({
         changeSeatColor(seatsdata);
     });
 
+    var attributestatus = false;
+    var attrcurrent = "";
+    $("#setattribute").bind("click",function(){
+        if(attributestatus){
+            $("#attributelist").hide();
+            attributestatus = false;
+        }else{
+            $("#attributelist").show();
+            attributestatus = true;
+        }
+    });
 
 
     // var deleteSeats = [];
@@ -262,20 +280,25 @@ layui.config({
         var names = [];
         var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
         seled.each(function(){
-            var id = $(this).attr("id");
+            // var id = $(this).attr("id");
             
-            var seat = seatsdata.filter(function(item){
-                return item.seatid == id;
-            })[0] || null;
+            // var seat = seatsdata.filter(function(item){
+            //     return item.seatid == id;
+            // })[0] || null;
 
-            if(seat){
-                names.push(seled);
-                var num = id.split('-')[3];
-                $(this).html(num);
-                $(this).css("background-color","");
-            }
+            // if(seat){
+            //     names.push(seled);
+            //     var num = id.split('-')[3];
+            //     $(this).html(num);
+            //     $(this).css("background-color","");
+            // }
+
+            $(this).css("background-color","");
+            var ids = $(this).attr("id").split("-");
+            $(this).text(ids[3]);
         });
         seled.removeClass("seled");
+        saveSeats();
         // deleteSeats = names;
         // console.log(names);
     }
@@ -323,6 +346,9 @@ layui.config({
                 if(obj && obj.attendees){
                     //保存完之后，要重新查一下吗
                     queryAllSeatStatus();
+
+                    //保存完之后，要重新查一下未导入人员列表
+                    getPending(attrcurrent);
 
                     layer.msg("保存成功");
                 }else{
@@ -472,6 +498,29 @@ layui.config({
         bindStaffListEvent();
     }
     
+    function setAttributeHtml(data){
+        var html = [];
+        data.forEach(function(item,index){
+            html.push('<div class="layui-form-item">');
+            if(item == attrcurrent || (index == 0 && !attrcurrent)){
+                html.push('<input id="_attr' + index + '" type="radio" name="attrkinds" value="' + item + '" checked >');
+            }else{
+                html.push('<input id="_attr' + index + '" type="radio" name="attrkinds" value="' + item + '" >');
+            }
+            html.push('<label for="_attr' + index + '" >' + item + '</label>');
+            html.push('</div>');
+        });
+        $("#radiolist").html(html.join(''));
+
+        $("[type='radio'][name='attrkinds']").bind("change",function(){
+            var attr = $(this).val();
+            attrcurrent = attr;
+            getPending(attr);
+            $("#attributelist").hide();
+            attributestatus = false;
+        });
+    }
+
     function bindStaffListEvent(){
         $("#askLeaveTitleList>li>h4").unbind('click');
         $("#askLeaveTitleList>li>h4").on("click",function(){
@@ -691,6 +740,13 @@ layui.config({
                     }
                 });
             }
+        }else{
+            var seats = $("#seatcontainerId .seatdiv");
+            seats.css("background-color","");
+            seats.each(function(){
+                var ids = $(this).attr("id").split("-");
+                $(this).text(ids[3]);
+            });
         }
     }
 
@@ -1015,6 +1071,13 @@ layui.config({
         },
         navDelete:function(){
             deleteBingName();
+        },
+        navClear:function(){
+            var condi = {
+                "meeting_id": meetingid,
+                "attendees": []
+            }
+            setSeatData(condi);
         },
         removeContextMenu:function(){
             removeContextMenu();

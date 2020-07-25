@@ -152,6 +152,18 @@ var __handDrag = null;
 		$("#seatcontainer").height(height + 250);
 	}
 
+
+	seatMapsEditor.prototype.setSeatsScale = function(){
+		var seatsele = $("#seatcontainerId").children();
+		seatsele.each(function(){
+			var left = Math.ceil(Math.ceil(parseInt($(this).css("left"))) / 4);
+			var top = Math.ceil(Math.ceil(parseInt($(this).css("top"))) / 4);
+			$(this).css({"width":"10px","height":"10px","left":left+"px","top":top+"px"});
+			$(this).text("");
+		})
+	}
+
+
 	seatMapsEditor.prototype.isRow = function(seledgroup,d,h){
 		for(var k in seledgroup){
 			if(+k >= d && +k <= h){

@@ -198,6 +198,7 @@
 			<i id="cancelrightbtn" data-type="removeContextMenu" data="取消右键"><img src="../../../images/cancelrightbtn.png"></i>
 			<!-- <i id="nav-vacancy" data="空置"><img src="../../../images/vacancy.png"></i> -->
 			<i id="nav-delete" data-type="navDelete" data="删除"><img src="../../../images/delete.png"></i>
+			<i id="nav-clear" data-type="navClear" data="清空"><img src="../../../images/delete.png"></i>
 			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
 			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
 			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
@@ -296,26 +297,30 @@
             </div>
             <!-- 未导入人员列表 -->
             <div class="float-right" style="display: none;" id="notImport">
-                <h3 id="notImportTitle" class="dragh3" >未导入人员列表<span class="iconfont icon-xitongguanli"></span></h3>
-                <div class="setpop">
+                <h3 id="notImportTitle" class="dragh3" >未导入人员列表</h3>
+                <span id="setattribute" class="iconfont icon-xitongguanli" style="position: absolute;top: 8px;right: 10px;"></span>
+                
+                <div id="attributelist" class="setpop" style="display: none;">
                     <div class="settoparr"></div>
-                    <div class="radiodiv">
+                    <div id="radiolist" class="radiodiv">
+                        <!--
                         <div class="layui-form-item">
-                                <input type="radio" id="0" name="sex" value="男" title="男" checked="">
-                                <label for="0">框框框框框框框框</label>
+                            <input type="radio" id="0" name="sex" value="男" title="男" checked="">
+                            <label for="0">框框框框框框框框</label>
                         </div>
                         <div class="layui-form-item">
-                                <input type="radio" id="1" name="sex" value="男" title="男" checked="">
-                                <label for="1">单选框</label>
+                            <input type="radio" id="1" name="sex" value="男" title="男" checked="">
+                            <label for="1">单选框</label>
                         </div>
                         <div class="layui-form-item">
-                                <input type="radio" id="2" name="sex" value="男" title="男" checked="">
-                                <label for="2">单选框</label>
+                            <input type="radio" id="2" name="sex" value="男" title="男" checked="">
+                            <label for="2">单选框</label>
                         </div>
                         <div class="layui-form-item">
-                                <input type="radio" id="3" name="sex" value="男" title="男" checked="">
-                                <label for="3">单选框</label>
+                            <input type="radio" id="3" name="sex" value="男" title="男" checked="">
+                            <label for="3">单选框</label>
                         </div>
+                        -->
                     </div>
                 </div>
                 <ul id="notImportList" class="float-right-list">

@@ -159,6 +159,7 @@
 			<a><cite id="refreshbtn" style="cursor: pointer;"><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
 		</span>
 		<span class="layui-right-nav">
+			<i id="setscale" data="缩小"><img src="../../../images/rotationbtn.svg"></i>
 			<i id="rotationbtn" data="旋转座区"><img src="../../../images/rotationbtn.svg"></i>
 			<i id="autocodegroupbtn" data="自动编排组座区ID"><img src="../../../images/autocodegroupbtn.svg"></i>
 			<i id="autocodebtn" data="自动编排全部座区ID"><img src="../../../images/completebtn.svg"></i>
@@ -1464,7 +1465,10 @@
 			}
 		}
 
-
+		$('#setscale img').on('click', function(){
+			seatmaps.setSeatsScale();
+		});
+		
 
 		/*右侧菜单HOVER显示提示文字*/
 		var subtips;
