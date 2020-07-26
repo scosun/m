@@ -507,7 +507,7 @@ layui.config({
             }else{
                 html.push('<input id="_attr' + index + '" type="radio" name="attrkinds" value="' + item + '" >');
             }
-            html.push('<label for="_attr' + index + '" >' + item + '</label>');
+            html.push('<label for="_attr' + index + '" style="margin-left: 5px;">' + item + '</label>');
             html.push('</div>');
         });
         $("#radiolist").html(html.join(''));

@@ -154,13 +154,35 @@ var __handDrag = null;
 
 
 	seatMapsEditor.prototype.setSeatsScale = function(){
+		var ele = $("#seatcontainer").children();
+		$(ele[0]).hide();
+
+		var seatcontainer = $("#seatcontainer");
+		var width = seatcontainer.width();
+		var height = seatcontainer.height();
+		seatcontainer.css({"width":Math.ceil(width/3.8)+"px","height":Math.ceil(height/3.8)+"px"})
+
 		var seatsele = $("#seatcontainerId").children();
+
 		seatsele.each(function(){
-			var left = Math.ceil(Math.ceil(parseInt($(this).css("left"))) / 4);
-			var top = Math.ceil(Math.ceil(parseInt($(this).css("top"))) / 4);
+			var left = Math.ceil(Math.ceil(parseInt($(this).css("left"))) / 3.8);
+			var top = Math.ceil(Math.ceil(parseInt($(this).css("top"))) / 3.8);
 			$(this).css({"width":"10px","height":"10px","left":left+"px","top":top+"px"});
-			$(this).text("");
-		})
+			// if(!$(this).hasClass("rownumseats")){
+				$(this).text("");
+			// }
+		});
+
+
+		$("#meetingname").hide();
+		$("#meetingaddress").hide();
+		$("#meetingtime").hide();
+		$("#meetingremark").hide();
+
+		// $("#meetingname").css({"padding-top":"10px","font-size":"12px"});
+		// $("#meetingaddress").css({"bottom":"30px","left":"10px","font-size":"12px"});
+		// $("#meetingtime").css({"bottom":"30px","right":"10px","font-size":"12px"});
+		// $("#meetingremark").css({"bottom":"10px","left":"10px","font-size":"12px"});
 	}
 
 
