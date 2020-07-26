@@ -167,7 +167,7 @@ var __handDrag = null;
 		seatsele.each(function(){
 			var left = Math.ceil(Math.ceil(parseInt($(this).css("left"))) / 3.8);
 			var top = Math.ceil(Math.ceil(parseInt($(this).css("top"))) / 3.8);
-			$(this).css({"width":"10px","height":"10px","left":left+"px","top":top+"px"});
+			$(this).css({"width":"10px","height":"10px","left":left+"px","top":top+"px","border":"","background-color":"#ccc"});
 			// if(!$(this).hasClass("rownumseats")){
 				$(this).text("");
 			// }
