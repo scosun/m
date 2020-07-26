@@ -84,7 +84,11 @@ var __handDrag = null;
 		var html = sessionStorage.getItem("_seatscomplete") || "";
 		// console.log(html)
 		if(html){
+			html = html.replace('style="position: fixed;left: 25px;top: 15px;"','style="position: fixed;left: 25px;top: 80px;"')
+		
 			$("#seatcontainer").prop("outerHTML",html);
+
+			$("#seatcontainer").css({"width":"3000px","height":"3000px"});
 			// var time = new Date().getTime() + "-s";
 			// var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 			// seats.each(function(){
@@ -2610,6 +2614,7 @@ var __handDrag = null;
 	seatMapsEditor.prototype.saveCompleteSeats = function(){
 		// var seathtml = $("#seatcontainer").html().trim();
 		var copyhtml = $("#seatcontainer").prop("outerHTML").trim();
+		copyhtml = copyhtml.replace('style="position: fixed;left: 25px;top: 80px;"','style="position: fixed;left: 25px;top: 15px;"')
 		// var flag = copyText(copyhtml); //传递文本
 		// alert(flag ? "复制成功！" : "复制失败！");
 		var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");

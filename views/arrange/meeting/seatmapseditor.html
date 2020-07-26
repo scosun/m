@@ -362,7 +362,7 @@
 
 	<div id="rulerOuter" style="margin-top:56px">
 		<div id="seatcontainer" class="seatcontainer" style="width: 3000px; height: 3000px;">
-			<div style="position:absolute;left:10px;top:15px;">
+			<div style="position: fixed;left: 25px;top: 80px;">
 				<img style="height:20px;" src="../../../images/leftright-ts.svg">
 			</div>
 			<div id="meetingname" style="display:none;font-family: 'FZXiaoBiaoSong-B05S','方正小标宋简体' !important;font-size: 18px;text-align: center;padding-top:60px;">[#会议名称#]座区图</div>
@@ -528,6 +528,23 @@
 	function keydownToolEvent(key){
 		switch(key){
 			case "selectall":
+
+				// <a data="nav-radio" href="javascript:;" alt="单选" title="单选"><img src="../../../images/toolkit/the_radio.svg"><span>单选</span></a>
+				// <div class="child_cont" style="display: none;">
+				// 	<div class="child_cont_li">
+				// 		<a data="selectall" href="javascript:;" alt="全选" title="全选"><img src="../../../images/toolkit/check_all.svg"><span>全选</span></a>
+				// 	</div>
+				// </div>
+				// $('.child_cont_li').removeClass("on");
+				// $(this).parent().addClass("on");
+				
+				// var src = $(this).find("img").attr("src");
+				// var data = $(this).attr("data");
+				// var title = $(this).attr("title");
+				// $(this).parent().parent().prev().attr({"data":data,"title":title,"alt":title});
+				// $(this).parent().parent().prev().find("img").attr("src",src);
+
+				// seatMapEvent(data,this);
 			break;
 		}
 	}
