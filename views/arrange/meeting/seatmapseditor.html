@@ -159,7 +159,7 @@
 			<a><cite id="refreshbtn" style="cursor: pointer;"><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
 		</span>
 		<span class="layui-right-nav">
-			<i id="setscale" data="缩小"><img src="../../../images/rotationbtn.svg"></i>
+			<!-- <i id="setscale" data="缩小"><img src="../../../images/rotationbtn.svg"></i> -->
 			<i id="rotationbtn" data="旋转座区"><img src="../../../images/rotationbtn.svg"></i>
 			<i id="autocodegroupbtn" data="自动编排组座区ID"><img src="../../../images/autocodegroupbtn.svg"></i>
 			<i id="autocodebtn" data="自动编排全部座区ID"><img src="../../../images/completebtn.svg"></i>
@@ -528,23 +528,31 @@
 	function keydownToolEvent(key){
 		switch(key){
 			case "selectall":
+				var ele = $("[data=nav-radio]")[0];
+				$(ele).attr({"data":key,"title":"全选","alt":"全选"});
+				$(ele).find("img").attr("src","../../../images/toolkit/check_all.svg");
 
-				// <a data="nav-radio" href="javascript:;" alt="单选" title="单选"><img src="../../../images/toolkit/the_radio.svg"><span>单选</span></a>
-				// <div class="child_cont" style="display: none;">
-				// 	<div class="child_cont_li">
-				// 		<a data="selectall" href="javascript:;" alt="全选" title="全选"><img src="../../../images/toolkit/check_all.svg"><span>全选</span></a>
-				// 	</div>
-				// </div>
-				// $('.child_cont_li').removeClass("on");
-				// $(this).parent().addClass("on");
-				
-				// var src = $(this).find("img").attr("src");
-				// var data = $(this).attr("data");
-				// var title = $(this).attr("title");
-				// $(this).parent().parent().prev().attr({"data":data,"title":title,"alt":title});
-				// $(this).parent().parent().prev().find("img").attr("src",src);
+				seatMapEvent(key,ele);
+				$('.toollist_li').removeClass("on");
+				$(ele).parent().addClass("on");
+			break;
+			case "nav-radio":
+				var ele = $("[data=nav-radio]")[0];
+				$(ele).attr({"data":key,"title":"单选","alt":"单选"});
+				$(ele).find("img").attr("src","../../../images/toolkit/the_radio.svg");
 
-				// seatMapEvent(data,this);
+				seatMapEvent(key,ele);
+				$('.toollist_li').removeClass("on");
+				$(ele).parent().addClass("on");
+			break;
+			case "selectrow":
+				var ele = $("[data=nav-radio]")[0];
+				$(ele).attr({"data":key,"title":"行选中","alt":"行选中"});
+				$(ele).find("img").attr("src","../../../images/toolkit/line_selected.svg");
+
+				seatMapEvent(key,ele);
+				$('.toollist_li').removeClass("on");
+				$(ele).parent().addClass("on");
 			break;
 		}
 	}

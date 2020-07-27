@@ -159,7 +159,7 @@ layui.config({
             dataType: "json",
             success: function(obj) {
                 console.log("--queryAllSeatStatus---");
-                dragSortData = null;
+                dragSortData = [];
 
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees || [];
@@ -610,7 +610,7 @@ layui.config({
     }
 
 
-    dragSortData=null;
+    dragSortData=[];
 
     function saveDragSort(data){
         $.ajax({
@@ -624,7 +624,8 @@ layui.config({
                 // getAskLeaveData(obj.leave);
                 // getNotImportData(obj.pending);
                 if(obj && obj.attendees){
-                    dragSortData = obj.attendees;
+                    // dragSortData = obj.attendees;
+                    dragSortData.push(obj.attendees);
 
                     changeDragSeatColor(obj.attendees);
 
@@ -656,7 +657,8 @@ layui.config({
     }
 
     function cancelDragSort(){
-        var attendees = dragSortData;
+        // var attendees = dragSortData;
+        var attendees = dragSortData.pop() || [];
         if(attendees && attendees.length > 0){
             // serverSeatIds = [];
             for(var i = 0,len = attendees.length; i < len; i++){
@@ -769,14 +771,16 @@ layui.config({
             }
         });
         if(dragSortData){
-            dragSortData.forEach(function(item){
-                if(item.roomtemplate_id == roomId){
-                    ids[item.seatid] = item.id;
-                    names[item.seatid] = item.attender;
-                }else{
-                    //其它会议室的数据
-                    seatsobj.attendees.push(item);
-                }
+            dragSortData.forEach(function(sort){
+                sort.forEach(function(item){
+                    if(item.roomtemplate_id == roomId){
+                        ids[item.seatid] = item.id;
+                        names[item.seatid] = item.attender;
+                    }else{
+                        //其它会议室的数据
+                        seatsobj.attendees.push(item);
+                    }
+                });
             });
         }
         // console.log(ids,names)
