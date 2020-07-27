@@ -2,10 +2,11 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery'], function() {
+}).use(['index', 'table', 'jquery','laytpl'], function() {
     var table = layui.table,
         admin = layui.admin,
         setter = layui.setter,
+        tpl = layui.laytpl;
         $ = layui.jquery;
 
     // #test-table-operate
@@ -15,7 +16,6 @@ layui.config({
     var arrangeList = [];
     // 20.04.06 dh 现在按钮
     // $('#group').append('<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>')
-    $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
     $.ajax({
         async: false,
         type: "get",
@@ -31,22 +31,12 @@ layui.config({
             if (msg.code != 0) {
                 location.href = "user/login.html"
             }
-                window.a = data
-                if ($.inArray("addrule", data) != -1) {
-                    // $('#buttongroup').before("<button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>")
-                    // 20.04.06 dh 下行有修改 
-					$('#buttongroup').before("<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>")
-				}
-                if ($.inArray("emptyroom", data) != -1) {
-                    // $('#buttongroup').after("<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>清空</button>");
-                	// 20.04.06 dh 下行有修改 
-					$('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>');
-				}
-                if ($.inArray("batchroom", data) != -1) {
-                    // $('#buttongroup').before('<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button>');
-                	// 20.04.06 dh 下行有修改 
-					$('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
-				}
+            window.a = data;
+            var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+                console.log(grouphtml)
+                document.getElementById("group").innerHTML= html;
+            })
+
         },
         error: function(error) {
             console.log(error)
@@ -384,6 +374,9 @@ layui.config({
                 })
 
 
+            },
+            refresh:function(){
+                    location.reload();
             },
             getCheckLength: function() { //获取选中数目
                 layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除规则列表操作，是否继续进行该操作？',{title:'温馨提示'}, function () {

@@ -4,7 +4,7 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'form', 'table','upload'], function () {
+}).use(['index', 'user', 'form', 'table','upload','laytpl'], function () {
     var a = {};
     var b = {};
 
@@ -14,6 +14,7 @@ layui.config({
         form = layui.form,
         element = layui.element,
         table = layui.table,
+        tpl = layui.laytpl;
         layer = layui.layer,
         upload = layui.upload,
         datas = null,
@@ -25,11 +26,6 @@ layui.config({
     var attenderList = [];
     var ids = -1
     layer.msg("上方下拉框选择会议后自动加载相关人员");
-    $('#group').append('<button class="layui-btn layui-ds btncheckall" data-type="getCheckData" id="buttongroup" data="全选">全选</button>')
-    $('#group').append(' <button class="layui-btn layui-ds btnupload" data-type="upload" data="批量导入" id="buttonupload">批量导入</button>')
-    $('#group').append(' <button class="layui-btn layui-ds btnuploadimg" data-type="uploadphoto" data="批量导入人员图片" id="buttonuploadimg">批量导入人员图片</button>')
-    $('#group').append('<button class="layui-btn layui-ds btndow" data-type="download" id="buttondow" data="下载模板">下载模板</button>')
-    $('#group').append('<button class="layui-btn layui-ds leave" data-type="leave" id="leave" data="批量修改请假">批量修改请假</button>')
     $.ajax({
         async: false,
         type: "get",
@@ -49,16 +45,10 @@ layui.config({
             if (isEmptyObject(data) != 0) {
 
                 window.a = data
-
-                if ($.inArray("addperson", data) != -1) {
-                    $('#buttongroup').before("<button class='layui-btn layui-ds btnadd' data-type='add' id='addmeeting' data='增加'>新增</button>")
-                }
-                if ($.inArray("emptyperson", data) != -1) {
-                    $('#buttongroup').after("<button class='layui-btn layui-ds btnempty' data-type='isAll' id='emptymeet' data='清空'>清空</button>");
-                }
-                if ($.inArray("batchperson", data) != -1) {
-                    $('#buttongroup').before('<button class="layui-btn layui-ds btndel" data-type="getCheckLength" id="batchmeet" data="批量删除">批量删除</button>');
-                }
+                var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+                    console.log(grouphtml)
+                    document.getElementById("group").innerHTML= html;
+                })
 
             } else {
 

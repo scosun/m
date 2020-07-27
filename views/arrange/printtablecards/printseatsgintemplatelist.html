@@ -41,17 +41,17 @@
                     <table id="test-table-operate" lay-filter="test-table-operate"></table>
                     <!-- 查看 -->
                     <script type="text/html" id="groups">
-                        {{#  if($.inArray("addmeet", d) != -1){ }}
+                        {{#  if($.inArray("addseatsgin", d) != -1){ }}
                         <!-- <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button> -->
                         <!-- <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button> -->
                         <!-- 新建 -->
                                 <button class='layui-ds gradient-block-diagonal' data-type="add">新建</button>
                         {{# }}}
-                        <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>
-                        {{#  if($.inArray("emptymeet", d) != -1){ }}
-                        <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>
+                        <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选</a>
+                        {{#  if($.inArray("emptyseatsign", d) != -1){ }}
+                        <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet"><s></s>清空<s></s></a>
                         {{# }}}
-                        {{#  if($.inArray("batchmeet", d) != -1){ }}
+                        {{#  if($.inArray("batchseatsig", d) != -1){ }}
                         <a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除</a>
                         {{# }}}
                         <a class="layui-ds layui-btn-a-grey" href="javascript:;" id="1" style="padding:0">
@@ -62,8 +62,20 @@
 
                     </script>
                     <script type="text/html" id="test-table-operate-barDemo">
+                        {{#  if($.inArray("upseatsgin", a) != -1){ }}
+                        <!-- <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button> -->
+                        <!-- <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button> -->
+                        <!-- 新建 -->
                         <a class="layui-btn  layui-btn-xs" lay-event="setup">修改</a>
+                        {{# }}}
+                        {{#  if($.inArray("delseatsgin", a) != -1){ }}
+                        <!-- <button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button> -->
+                        <!-- <button class='layui-ds gradient-block-diagonal' data-type='addMore' id='addmeeting'>新建多会场</button> -->
+                        <!-- 新建 -->
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                        {{# }}}
+
+
                     </script>
                 </div>
             </div>
