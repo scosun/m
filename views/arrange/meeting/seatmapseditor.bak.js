@@ -2808,29 +2808,29 @@ var __handDrag = null;
 			}
 		}
 
-		switch(keycode){
-			case 65:
-				if(evt.ctrlKey){
-					event.preventDefault();
-					event.stopPropagation();
-					keydownToolEvent("selectall");
-				}
-			break;
-			case 82:
-				if(evt.ctrlKey){
-					event.preventDefault();
-					event.stopPropagation();
-					keydownToolEvent("nav-radio");
-				}
-			break;
-			case 32:
-				if(evt.shiftKey){
-					event.preventDefault();
-					event.stopPropagation();
-					keydownToolEvent("selectrow");
-				}
-			break;
-		}
+		// switch(keycode){
+		// 	case 65:
+		// 		if(evt.ctrlKey){
+		// 			event.preventDefault();
+		// 			event.stopPropagation();
+		// 			keydownToolEvent("selectall");
+		// 		}
+		// 	break;
+		// 	case 82:
+		// 		if(evt.ctrlKey){
+		// 			event.preventDefault();
+		// 			event.stopPropagation();
+		// 			keydownToolEvent("nav-radio");
+		// 		}
+		// 	break;
+		// 	case 32:
+		// 		if(evt.shiftKey){
+		// 			event.preventDefault();
+		// 			event.stopPropagation();
+		// 			keydownToolEvent("selectrow");
+		// 		}
+		// 	break;
+		// }
 
 		if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){
 			return;
