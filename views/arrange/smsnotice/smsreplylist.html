@@ -185,31 +185,50 @@
         },
         
         cols: [
-            [ //表头
-                // {
-                //     field: 'id',
-                //     title: 'ID',
-                //     width:60,
-                //     align: 'center',
-                //     unresize: 'false',
-                // },
-                {
-                    field: 'mobile',
-                    title: '手机号',
-                    align: 'left',
-                }, {
-                    field: 'content',
-                    title: '内容',
-                    align: 'left',
+			[ //表头
+				// {
+				//     field: 'id',
+				//     title: 'ID',
+				//     width:60,
+				//     align: 'center',
+				//     unresize: 'false',
+				// },
+				{
+					field: 'mobile',
+					title: '手机号',
+					align: 'left',
+				}, {
+				field: 'content',
+				title: '请假状态',
+				align: 'left',
+				templet: function(data) {
+					var result = data.content.substring(0,1)
+					if(result == "1"){
+						return '参会'
+					} else if(result = "2"){
+						return '请假'
+					}else{
+						return '未识别'
+					}
 				},
-				, {
-                    field: 'receivetime',
-                    title: '回复时间',
-                    align: 'left',
-                },
-                
-                 
-            ]
+			},
+				{
+					field: 'contents',
+					title: '原因',
+					align: 'left',
+					templet: function(data) {
+						var result = data.content.substring(1,data.content.length)
+						return result;
+					},
+				},
+				{
+					field: 'receivetime',
+					title: '回复时间',
+					align: 'left',
+				},
+
+
+			]
         ],
 
         event: true,

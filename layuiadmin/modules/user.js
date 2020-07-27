@@ -16,7 +16,7 @@ layui.define("form", function(e) {
 		elemPhone: "#LAY-user-login-cellphone",
 		elemVercode: "#LAY-user-login-vercode",
 		ajax: {
-			url: b.smsUrl+"/code/getsmscode",
+			url: b.baseUrl+"/code/getsmscode",
 			type:'post',
 			xhrFields: {
 				withCredentials: true

@@ -2,7 +2,7 @@ layui.config({
 	base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
 	index: 'lib/index' //主入口模块
-}).use(['index', 'user', 'table'], function() {
+}).use(['index', 'user', 'table','laytpl'], function() {
 	var a = {};
 	var b = {};
  var devices = {};
@@ -14,49 +14,40 @@ layui.config({
 		element = layui.element,
 		table = layui.table,
 		layer = layui.layer,
+		tpl = layui.laytpl,
 		datas = null,
 		router = layui.router();
 	element.render();
 	var url = setter.baseUrl;
 	// var url="http://127.0.0.1:8083"
 
-	// 20.04.06 dh 下行有修改 
-	$('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>')
+	// 20.04.06 dh 下行有修改
 	$.ajax({
-	    async: false,
-	    type: "get",
-	    url: url + "/permission/getpremission",
-	    datatype: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-	    //成功的回调函数
-	    success: function(msg) {
-	        var data = msg.data;
-	        if (msg.code != 0) {
-	            location.href = "user/login.html"
-	        }
-	        
-	          
-	            window.a = data
-	            if ($.inArray("addroom", data) != -1) {
-					// 20.04.06 dh 下行有修改 
-					$('#buttongroup').before("<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>")
-				}
-	            if ($.inArray("emptyroom", data) != -1) {
-					// 20.04.06 dh 下行有修改 
-					$('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>');
-				}
-	            if ($.inArray("batchroom", data) != -1) {
-					// 20.04.06 dh 下行有修改 
-					$('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
-				}
-	
-	        
-	    },
-	    error: function(error) {
-	        console.log(error)
-	    },
+		async: false,
+		type: "get",
+		url:url + "/permission/getpremission",
+		datatype: 'json',
+
+		xhrFields: {
+			withCredentials: true
+		},
+		//成功的回调函数
+		success: function(msg) {
+			var data = msg.data;
+
+			if (msg.code != 0) {
+				location.href = "user/login.html"
+			}
+			window.a = data
+			var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+				console.log(grouphtml)
+				document.getElementById("group").innerHTML= html;
+			})
+
+		},
+		error: function(error) {
+			console.log(error)
+		},
 	})
     function isEmptyObject(obj) {
     
@@ -524,6 +515,9 @@ layui.config({
 					})
 				}
 			});
+		},
+		refresh:function(){
+			location.reload();
 		},
 		search: function(){
 		 table.render({

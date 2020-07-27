@@ -51,6 +51,9 @@
 					url: url+"/roomtemplate/findByIdTemplatecode",
 					type: "post",
 					async: true,
+					xhrFields: {
+						withCredentials: true
+					},
 					data: {
 						"id": roomid
 					},

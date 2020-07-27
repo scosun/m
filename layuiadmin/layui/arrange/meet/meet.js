@@ -125,6 +125,9 @@ layui.config({
                         if (data.roomid == 2){
                             return '<span class="layui-badge layui-bg-blue">已结束</span>'
                         }
+                        if (data.roomid == 3){
+                            return '<span class="layui-badge">未设定时间</span>'
+                        }
                     }
 
 

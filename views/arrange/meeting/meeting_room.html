@@ -63,6 +63,25 @@
                                          				{{#  } }}
                                         								  
             						</script>
+									<script type="text/html" id="groups">
+										{{#  if($.inArray("addroom", d) != -1){ }}
+										<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>
+
+										{{# }}}
+										<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckData" id="buttongroup">全选<s></s></a>
+										{{#  if($.inArray("emptyroom", d) != -1){ }}
+										<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>										{{# }}}
+										{{#  if($.inArray("batchroom", d) != -1){ }}
+										<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除</a>
+										{{# }}}
+
+										<a class="layui-ds layui-btn-a-grey" href="javascript:;" id="1" style="padding:0">
+											<span style="margin-left: 3px"> /</span>
+										</a>
+										<div class="assistBtn" style="margin-top: 10px"><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh" ></i></i></div>
+
+
+									</script>
 								</div>
 							</div>
 						</div>

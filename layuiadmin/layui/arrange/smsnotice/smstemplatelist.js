@@ -161,7 +161,7 @@ layui.config({
             page: {
                 layout: ['prev', 'page', 'next', 'count', 'skip']
             },
-            
+
             cols: [
                 [ //表头
                     {
@@ -172,18 +172,19 @@ layui.config({
                     //     field: 'smsTemplateId',
                     //     title: 'ID',
                     //     width:60,
-                    //     align: 'center',
+                    //     //align: 'center',
                     //     unresize: 'false',
                     // },
                     {
                         field: 'smsTemplateName',
                         title: '模版名称',
                         align: 'left',
+                        width: 150,
                     }, {
-                        field: 'smsTemplateContent',
-                        title: '模版内容',
-                        align: 'left',
-                    },
+                    field: 'smsTemplateContent',
+                    title: '模版内容',
+                    align: 'left',
+                },
                     {
                         field: 'smsTemplateType',
                         title: '模版类型',
@@ -198,23 +199,26 @@ layui.config({
                                 return ''
                             }
                         },
+                        width:100,
                     },
                     {
+                        width: 100,
                         title: '操作',
                         align: 'left',
                         toolbar: '#test-table-operate-barDemo'
                     },
-                    
+
                 ]
             ],
             event: true,
             page: true,
             limit: 15,
-            skin: 'nob',
+            skin: 'line',
+            even: true,
             limits: [5, 10, 15],
             done: function(res, curr, count) {
                 table_data = res.data;
-    
+
                 layer.closeAll('loading');
                 deviceList.length = 0;
                 // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
