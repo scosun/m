@@ -128,7 +128,26 @@
         </div>
     </div>
 
+    <script type="text/html" id="groups">
+        {{#  if($.inArray("addperson", d) != -1){ }}
+        <button class='layui-btn layui-ds btnadd' data-type='add' id='addmeeting' data='增加'>新增</button>
+        {{# }}}
+        <button class="layui-btn layui-ds btncheckall" data-type="getCheckData" id="buttongroup" data="全选">全选</button>
+        {{#  if($.inArray("addperson", d) != -1){ }}
+        <button class="layui-btn layui-ds btnupload" data-type="upload" data="批量导入" id="buttonupload">批量导入</button>
+        <button class="layui-btn layui-ds btnuploadimg" data-type="uploadphoto" data="批量导入人员图片" id="buttonuploadimg">批量导入人员图片</button>
+        <button class="layui-btn layui-ds btndow" data-type="download" id="buttondow" data="下载模板">下载模板</button>
+        <button class="layui-btn layui-ds leave" data-type="leave" id="leave" data="批量修改请假">批量修改请假</button>
+        {{# }}}
+        {{#  if($.inArray("emptyperson", d) != -1){ }}
+        <button class='layui-btn layui-ds btnempty' data-type='isAll' id='emptymeet' data='清空'>清空</button>
+        {{# }}}
+        {{#  if($.inArray("batchperson", d) != -1){ }}
+        <button class="layui-btn layui-ds btndel" data-type="getCheckLength" id="batchmeet" data="批量删除">批量删除</button>
+        {{# }}}
 
+
+    </script>
     <script type="text/html" id="table-content-list">
         {{#  if($.inArray("delperson", a) != -1){ }}<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="jia" data-type="delete">请假</a>{{#  } }}
         {{#  if($.inArray("upperson", a) != -1){ }}<a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>{{#  } }}
