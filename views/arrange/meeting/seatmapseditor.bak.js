@@ -37,8 +37,8 @@ var __handDrag = null;
 	//座区分组
 	var group = 1;
 	
-	// var serverUrl = "https://m.longjuli.com";
-	var serverUrl = "http://81.70.37.92";
+	var serverUrl = "https://m.longjuli.com";
+	// var serverUrl = "http://81.70.37.92";
 
 	//id---拼接 含义 分类-组-行-列 s-11-1-4
 	// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆) - 分组 - 行 - 列

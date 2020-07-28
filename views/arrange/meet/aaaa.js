@@ -763,7 +763,6 @@ layui.config({
             meeting_id: +meetingid,
             attendees:[]
         };
-
         var ids = {};
         var names = {};
         seatsdata.forEach(function(item){
