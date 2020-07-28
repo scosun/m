@@ -748,7 +748,7 @@ layui.config({
                 });
             }
         }else{
-            var seats = $("#seatcontainerId .seatdiv");
+            var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
             seats.css("background-color","");
             seats.each(function(){
                 var ids = $(this).attr("id").split("-");
@@ -758,7 +758,7 @@ layui.config({
     }
 
     function saveSeats(){
-        var seats = $("#seatcontainerId .seatdiv");
+        var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
         var seatsobj = {
             meeting_id: +meetingid,
             attendees:[]
