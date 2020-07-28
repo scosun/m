@@ -128,6 +128,8 @@ layui.config({
                 if(code == 0){
                     var datas = obj.data || {};
                     // $("#seatsbody").append(datas.templatecode);
+                    datas.templatecode = datas.templatecode.replace('style="position: fixed;left: 25px;top: 15px;"','style="position: fixed;left: 25px;top: 125px;"')
+
                     $("#seatsbody").html(datas.templatecode);
                     
                     selectSeats();
@@ -515,6 +517,9 @@ layui.config({
         $("[type='radio'][name='attrkinds']").bind("change",function(){
             var attr = $(this).val();
             attrcurrent = attr;
+
+            saveSeats();
+
             getPending(attr);
             $("#attributelist").hide();
             attributestatus = false;
@@ -647,8 +652,8 @@ layui.config({
                 var item = attendees[i] || {};
                 //多会场判断只加载当前会议室的数据
                 if(item.roomtemplate_id == roomId){
-
-                    $("#" + item.seatid).css("background-color",item.bgcolor);
+                    // 拖拽完不显示颜色
+                    // $("#" + item.seatid).css("background-color",item.bgcolor);
                     $("#" + item.seatid).html(item.attender);
                     // serverSeatIds.push(item.seatid);
                 }
