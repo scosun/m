@@ -682,7 +682,7 @@
                         rule.push({
                             // "seatid": ckids_now[i].id,
                             "seatid": ckids_now[i],
-                            "attender": "",
+                            // "attender": "",
                             "ruleid":rule_id
                         });
                     }
@@ -700,7 +700,7 @@
                         rule.push({
                             // "seatid": ckids_now[i].id,
                             "seatid": ckids_now[i],
-                            "attender": "",
+                            // "attender": "",
                             "ruleid":rule_id
                         });
                     }
@@ -801,7 +801,21 @@
                     }
                 }
             }
-            return seatsids;
+
+            // seatsid 按dom 顺序排序
+            var domids = "";
+            seatsids.forEach(function(item){
+                domids += "#"+item+","
+            });
+            domids = domids.substr(0,domids.length-1);
+            var eles = $(domids);
+            var newseatsids = [];
+            eles.each(function(){
+                var id = $(this).attr("id");
+                newseatsids.push(id);
+            });
+
+            return newseatsids;
         }
 
         function saveSeatRule(rulename,rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
