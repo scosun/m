@@ -54,8 +54,10 @@ layui.config({
         if (r != null) return r[2]; return null; //返回参数值
     }
     var meetingid = +getUrlParam("meetingid") || null;
-    var roomId = 0;
-
+    var meetingname = +getUrlParam("name") || null;
+    $("#meetingname").val(meetingname)
+    var roomId = 0
+ 
     if(!meetingid){
         layer.msg("没有获取到会议id");
         return;
