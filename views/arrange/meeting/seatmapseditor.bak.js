@@ -23,6 +23,8 @@ var __handDrag = null;
 	var seatWidth = 40;
 	var seatHeight = 40;
 
+	var keyDownSelectAll = true;
+
 	//座区
 	var selList = [];
 	//选中ids
@@ -2797,7 +2799,7 @@ var __handDrag = null;
 
 	function keyDownMoveSeats(evt){
 		var keycode = evt.keyCode;
-		console.log("keyDownMoveSeats-----",keycode);
+		console.log("keyDownMoveSeats-----",keycode,evt.ctrlKey,evt.altKey);
 
 		if(evt.ctrlKey){
 			if(keycode == 67){
@@ -2808,29 +2810,199 @@ var __handDrag = null;
 			}
 		}
 
-		// switch(keycode){
-		// 	case 65:
-		// 		if(evt.ctrlKey){
-		// 			event.preventDefault();
-		// 			event.stopPropagation();
-		// 			keydownToolEvent("selectall");
-		// 		}
-		// 	break;
-		// 	case 82:
-		// 		if(evt.ctrlKey){
-		// 			event.preventDefault();
-		// 			event.stopPropagation();
-		// 			keydownToolEvent("nav-radio");
-		// 		}
-		// 	break;
-		// 	case 32:
-		// 		if(evt.shiftKey){
-		// 			event.preventDefault();
-		// 			event.stopPropagation();
-		// 			keydownToolEvent("selectrow");
-		// 		}
-		// 	break;
-		// }
+		
+		if(keycode != 65){
+			keyDownSelectAll = true;
+		}
+		switch(keycode){
+			case 65:
+				if(evt.ctrlKey){
+					// 全选/取消全选	Ctrl+A/Ctrl+A
+					evt.preventDefault();
+					evt.stopPropagation();
+					if(keyDownSelectAll){
+						keydownToolEvent("selectall");
+						keyDownSelectAll = false;
+					}else{
+						keydownToolEvent("unselectall");
+						// console.log(00000,keyDownSelectAll)
+						keyDownSelectAll = true;
+					}
+				}
+			break;
+			case 82:
+				if(evt.ctrlKey){
+					// 单选	Ctrl+R
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-radio");
+				}
+			break;
+			case 32:
+				if(evt.shiftKey && evt.ctrlKey){
+					// 拖拽画布	space
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("drag-container");
+				}
+			break;
+			case 76:
+				if(evt.shiftKey){
+					// 行选	Shift+space
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("selectrow");
+				}else if(evt.ctrlKey){
+					// 列选	Ctrl+space
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("selectcol");
+				}
+			break;
+			case 70:
+				if(evt.ctrlKey){
+					// 框选	Ctrl+F
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-selection");
+				}
+			break;
+			case 78:
+				if(evt.ctrlKey && evt.altKey){
+					evt.preventDefault();
+					evt.stopPropagation();
+					
+					// 圆形座区	Ctrl+alt+N
+					keydownToolEvent("create-circle-down");
+				}else if(evt.shiftKey && evt.altKey){
+					evt.preventDefault();
+					evt.stopPropagation();
+					
+					// 跑道座区	Ctrl+Shift+N 有冲突
+					keydownToolEvent("create-run-down");
+				}else if(evt.shiftKey){
+					evt.preventDefault();
+					evt.stopPropagation();
+					// 矩形座区	Ctrl+N  有冲突
+					keydownToolEvent("nav-down");
+				}
+			break;
+			case 81:
+				if(evt.ctrlKey){
+					// 快速绘制	Ctrl+Q
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-add");
+				}
+			break;
+			case 87:
+				if(evt.shiftKey){
+					// 多边形绘制	Ctrl+W 有冲突
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("polygonbtn");
+				}
+			break;
+			case 69:
+				if(evt.ctrlKey){
+					// 椭圆形	Ctrl+E
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("ovalbtn");
+				}
+			break;
+			case 83:
+				if(evt.ctrlKey){
+					// 位移	Ctrl+S
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("keydownmove");
+				}
+			break;
+			case 71:
+				if(evt.ctrlKey){
+					// 垂直分布	Ctrl+G
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-horizontal-c");
+				}
+			break;
+			case 72:
+				if(evt.ctrlKey){
+					// 横向分布	Ctrl+H
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-vertical-c");
+				}
+			break;
+			case 68:
+				if(evt.ctrlKey){
+					// 删除	Ctrl+D
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-delete");
+				}
+			break;
+			case 90:
+				if(evt.ctrlKey){
+					// 恢复删除	Ctrl+Z
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-rollback");
+				}
+			break;
+			case 66:
+				if(evt.ctrlKey){
+					// 恢复座区	Ctrl+B
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-forward");
+				}
+			break;
+			case 84:
+				if(evt.shiftKey){
+					// 文字编辑	Ctrl+T
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-mark");
+				}else if(evt.altKey){
+					// 手动文字编辑	Alt+T
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-mark-only");
+				}
+			break;
+			case 89:
+				if(evt.ctrlKey){
+					// 拖拽	Ctrl+Y
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-drag");
+				}
+			break;
+			case 77:
+				if(evt.ctrlKey){
+					// 鼠标右键	Ctrl+M
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("rightbtn");
+				}
+			break;
+			case 74:
+				if(evt.ctrlKey && evt.altKey){
+					// 向心点列表	Ctrl+Alt+J
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("centerpoint-list");
+				}else if(evt.ctrlKey){
+					// 向心点设置	Ctrl+J
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("set-centerpoint");
+				}
+			break;
+		}
+
 
 		if(!__keydownMoveUp && !__keydownMoveDown && !__keydownMoveLeft && !__keydownMoveRight){
 			return;
