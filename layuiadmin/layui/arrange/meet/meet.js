@@ -464,7 +464,7 @@ layui.config({
                 closeBtn:false,
                 offset: '0',
                 // content: 'aaaa.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
-                content: 'aaaa.html?meetingid=' + data.id,
+                content: 'aaaa.html?meetingid=' + data.id+"&name="+data.name,
                 success: function(layero, index) {
                 
                 }
