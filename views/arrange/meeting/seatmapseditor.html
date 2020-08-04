@@ -271,7 +271,7 @@
 				</div>
 			</div>
 			<div class="toollist_li has_child">
-				<a data="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/toolkit/left.svg"><span>左对齐</span></a>
+				<a id="toollist10" data="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/toolkit/left.svg"><span>左对齐</span></a>
 				<div class="child_cont" style="display: none;">
 					<div class="child_cont_li on">
 						<a data="nav-align-left" href="javascript:;" alt="左对齐" title="左对齐"><img src="../../../images/toolkit/left.svg"><span>左对齐</span></a>
@@ -526,6 +526,19 @@
 
 
 	function keydownToolEvent(key){
+		if(key == "rotationbtn"){
+			__setRotatePoint();
+			return;
+		}else if(key == "autocodegroupbtn"){
+			__autoGroupCode();
+			return;
+		}else if(key == "autocodebtn"){
+			__autoCode();
+			return;
+		}else if(key == "completebtn"){
+			seatmaps.completeSeats();
+			return;
+		}
 		var ele = "";
 		switch(key){
 			case "selectall":
@@ -552,6 +565,21 @@
 				ele = $("#toollist1");
 				$(ele).attr({"data":key,"title":"列选中","alt":"列选中"});
 				$(ele).find("img").attr("src","../../../images/toolkit/column_selected.svg");
+			break;
+			case "selectgroup":
+				ele = $("#toollist1");
+				$(ele).attr({"data":key,"title":"组选中","alt":"组选中"});
+				$(ele).find("img").attr("src","../../../images/toolkit/column_selected.svg");
+			break;
+			case "selectsame":
+				ele = $("#toollist1");
+				$(ele).attr({"data":key,"title":"类别选中","alt":"类别选中"});
+				$(ele).find("img").attr("src","../../../images/toolkit/selectsame.svg");
+			break;
+			case "mergegroup":
+				ele = $("#toollist1");
+				$(ele).attr({"data":key,"title":"合并组","alt":"合并组"});
+				$(ele).find("img").attr("src","../../../images/toolkit/selectsame.svg");
 			break;
 			case "nav-selection":
 				ele = $("#toollist2");
@@ -601,6 +629,36 @@
 				ele = $("#toollist9");
 				$(ele).attr({"data":key,"title":"横向分布","alt":"横向分布"});
 				$(ele).find("img").attr("src","../../../images/toolkit/vertical.svg");
+			break;
+			case "nav-align-left":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"左对齐","alt":"左对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/left.svg");
+			break;
+			case "nav-align-right":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"右对齐","alt":"右对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/right.svg");
+			break;
+			case "nav-align-center":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"左右对齐","alt":"左右对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/or_so.svg");
+			break;
+			case "nav-align-up":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"上对齐","alt":"上对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/up.svg");
+			break;
+			case "nav-align-down":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"下对齐","alt":"下对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/down.svg");
+			break;
+			case "nav-align-center-v":
+				ele = $("#toollist10");
+				$(ele).attr({"data":key,"title":"上下对齐","alt":"上下对齐"});
+				$(ele).find("img").attr("src","../../../images/toolkit/up_down.svg");
 			break;
 			case "nav-delete":
 				ele = $("#toollist11");
@@ -660,7 +718,10 @@
 		__keydownMoveRight = false;
 		seatmaps.unDragMoveSeats();
 
-		unbindRulePoint();
+		if(data != "set-centerpoint"){
+			unbindRulePoint();
+		}
+		
 
 		if(data != "rightbtn"){
 			__activeRight = false;
@@ -906,7 +967,12 @@
 				if(__longEvent){
 					return;
 				}
-				__setCenterPoint();
+				if($("#xytip").is(':visible')){
+					unbindRulePoint();
+				}else{
+					bindRulePoint();
+				}
+				// __setCenterPoint();
 			break;
 
 			case "centerpoint-list":
@@ -1086,7 +1152,7 @@
 	}
 	
 	function unbindRulePoint(){
-		$("#rulerOuter").unbind("click");
+		$("#rulerOuter").unbind("mousedown");
 		$("#rulerOuter").unbind("mousemove");
 		$("#xaxis,#yaxis,#xytip").hide();
 	}
@@ -1426,18 +1492,18 @@
 		}
 
 		/*向心点设置*/
-		// $('#set-centerpoint,#set-centerpoint-down').on('click', function(){
-		// 	if(__longEvent){
-		// 		return;
-		// 	}
+		$('#set-centerpoint').on('click', function(){
+			if(__longEvent){
+				return;
+			}
 			
-		// 	var data = $(this).attr("data");
-		// 	if(data == "set-centerpoint"){
-		// 		setCenterPoint();
-		// 	}else if(data == "centerpoint-list"){
-		// 		openCenterPointList();
-		// 	}
-		// });
+			var data = $(this).attr("data");
+			if(data == "set-centerpoint"){
+				setCenterPoint();
+			}else if(data == "centerpoint-list"){
+				openCenterPointList();
+			}
+		});
 
 		window.__setCenterPoint = setCenterPoint;
 		function setCenterPoint(){
@@ -1540,6 +1606,9 @@
 
 
 		$('#autocodebtn img').on('click', function(){
+			__autoCode();
+		});
+		window.__autoCode = function(){
 			layer.open({
 				type: 2,
 				title: '自动编排',
@@ -1554,8 +1623,12 @@
 					layer.close(index);
 				}
 			});
-		});
+		}
+
 		$('#autocodegroupbtn img').on('click', function(){
+			__autoGroupCode();
+		});
+		window.__autoGroupCode = function(){
 			layer.open({
 				type: 2,
 				title: '组座区自动编排',
@@ -1566,11 +1639,12 @@
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					var ruleid = +layero.find('iframe').contents().find("#select_ruleid").val() || 0;
-					seatmaps.autGroupCode(ruleid);
+					seatmaps.autoGroupCode(ruleid);
 					layer.close(index);
 				}
 			});
-		});
+		}
+
 		$('#completebtn img').on('click', function(){
 			seatmaps.completeSeats();
 		});

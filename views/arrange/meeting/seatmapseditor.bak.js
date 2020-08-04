@@ -2404,7 +2404,7 @@ var __handDrag = null;
 		}.bind(this));
 	}
 
-	seatMapsEditor.prototype.autGroupCode = function(ruleid){
+	seatMapsEditor.prototype.autoGroupCode = function(ruleid){
 		//得到矩形座区数据
 		var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
 
@@ -2799,7 +2799,7 @@ var __handDrag = null;
 
 	function keyDownMoveSeats(evt){
 		var keycode = evt.keyCode;
-		console.log("keyDownMoveSeats-----",keycode,evt.ctrlKey,evt.altKey);
+		// console.log("keyDownMoveSeats-----",evt,keycode,evt.ctrlKey,evt.altKey);
 
 		if(evt.ctrlKey){
 			if(keycode == 67){
@@ -2857,6 +2857,89 @@ var __handDrag = null;
 					evt.preventDefault();
 					evt.stopPropagation();
 					keydownToolEvent("selectcol");
+				}
+			break;
+			case 49:
+				if(evt.ctrlKey && evt.shiftKey){
+					// 组选	Ctrl+Shift+1
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("selectgroup");
+				}else if(evt.ctrlKey){
+					// 左对齐	Ctrl+1
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-left");
+				}else if(evt.altKey){
+					// 旋转	alt + 1
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("rotationbtn");
+				}
+			break;
+			case 50:
+				if(evt.ctrlKey && evt.shiftKey){
+					// 组选	Ctrl+Shift+2
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("selectsame");
+				}else if(evt.ctrlKey){
+					// 右对齐	Ctrl+2
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-right");
+				}else if(evt.altKey){
+					// 旋转	alt + 2
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("autocodegroupbtn");
+				}
+			break;
+			case 51:
+				if(evt.ctrlKey && evt.shiftKey){
+					// 组选	Ctrl+Shift+3
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("mergegroup");
+				}else if(evt.ctrlKey){
+					// 左右对齐	Ctrl+3
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-center");
+				}else if(evt.altKey){
+					// 旋转	alt + 3
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("autocodebtn");
+				}
+			break;
+			case 52:
+				if(evt.ctrlKey){
+					// 上对齐	Ctrl+4
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-up");
+				}else if(evt.altKey){
+					// 旋转	alt + 4
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("completebtn");
+				}
+			break;
+			case 53:
+				if(evt.ctrlKey){
+					// 下对齐	Ctrl+5
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-down");
+				}
+			break;
+			case 54:
+				if(evt.ctrlKey){
+					// 上下对齐	Ctrl+6
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("nav-align-center-v");
 				}
 			break;
 			case 70:
