@@ -398,12 +398,55 @@ var __handDrag = null;
 
 		//得到矩形座区数据
 		var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
-		seled.each(function(){
-			var ids = this.id.split("-");
-			$(this).attr("group",group);
-			$(this).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
-			$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
-		});
+
+		if(seled.length == 0){
+			return;
+		}
+
+		var seledgroup = {};
+		var seledrowv = [];
+		for(var i = 0,len = seled.length; i < len; i++){
+			var st = $(seled[i]).position().top;
+			var h = $(seled[i]).height();
+			var id = seled[i].id;
+			var kid = this.isRow(seledgroup,(st - h/2),(st + h/2));
+			if(kid){
+				seledgroup[kid].push(id);
+			}else{
+				seledgroup[st] = [];
+				seledgroup[st].push(id);
+				seledrowv.push(st);
+			}
+		}
+
+		seledrowv = seledrowv.sort(function(a,b){return a-b;});
+		seledrowv.forEach(function(ik,rowid){
+			var col = seledgroup[ik];
+			col.sort(function(a,b){
+				var la = $("#" + a).position().left;
+				var lb = $("#" + b).position().left;
+				return la - lb;
+			});
+			
+			var oae = this.oddAndEven(col.length);
+			var seatsnum = [];
+			seatsnum = oae.asc;
+
+			col.forEach(function(oid,colid){
+				// var oid = col[ck];
+				$("#" + oid).html(seatsnum[colid]);
+				$("#" + oid).attr("group",group);
+				$("#" + oid).attr("title","s-"+group+"-"+(rowid+1)+"-"+(seatsnum[colid]));
+				$("#" + oid).attr("id","s-"+group+"-"+(rowid+1)+"-"+(seatsnum[colid]));
+			});
+		}.bind(this));
+
+		// seled.each(function(){
+		// 	var ids = this.id.split("-");
+		// 	$(this).attr("group",group);
+		// 	$(this).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
+		// 	$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
+		// });
 		seled.removeClass("seled");
 		group++;
 		alert("合并完成");
