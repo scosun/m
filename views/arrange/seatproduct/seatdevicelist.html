@@ -82,8 +82,7 @@
                                 <button class='layui-btn layui-ds' data-type='download' id='emptymeet'>模版下载</button>
                                 -->
                                 <!-- // 20.04.06 dh 修改为以下-->
-                                <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
-                                <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckData" id="importb">导入<s></s></a>
+                                
                                 <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="download" id='emptymeet'>模版下载<s></s></a>
                                 <!--                            <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
                                 <!--                            <button class="layui-btn" data-type="isAll">验证是否全选</button> &ndash;&gt;-->
@@ -94,7 +93,7 @@
                                 <form class="layui-form" action="">
                                     <select name="interest" lay-skin="select" lay-filter="component-form-select"
                                             id="devices">
-                                        <option value="-1">选择产品</option>
+                                        <option value="">选择产品</option>
                                         <option value="" id="select_meets"></option>
                                     </select>
                                 </form>
@@ -135,6 +134,7 @@
 <script type="text/html" id="table-content-list">
     <!--   <a class="layui-btn layui-btn-xs layui-dd" lay-event="edit" data-type="edit" id="edit">编辑</a>-->
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-type="delete">删除</a>
+	<a class="layui-btn layui-dd layui-btn-xs" lay-event="blind" data-type="blind">绑定平台</a>
 </script>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -155,9 +155,9 @@
             table = layui.table,
             layer = layui.layer,
             upload = layui.upload
-        datas = null,
-            router = layui.router();
-        element.render();
+			datas = null,
+			router = layui.router();
+			element.render();
         //初次渲染表格
         var url = setter.baseUrl;
         //    var url="http://127.0.0.1:8083";
@@ -190,7 +190,7 @@
 
             }
         });
-        layer.msg("上方下拉框选择产品后自动加载相关设备");
+        //layer.msg("上方下拉框选择产品后自动加载相关设备");
         // $.ajax({
         //     async: false,
         //     type: "get",
@@ -230,6 +230,14 @@
         //         console.log(error)
         //     },
         // })
+		
+		
+		var deviceType = getUrlParam("deviceType");
+		function getUrlParam(name) {
+		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		    if (r != null) return decodeURI(r[2]); return null; //返回参数值
+		}
 
         function isEmptyObject(obj) {
 
@@ -265,10 +273,9 @@
                 console.log("error")
             }
         })
-
+		
         //选中以后更新表的ajax
-        window.ajaxs = function (value) {
-
+        window.ajaxs = function (deviceType,productKey) {
             table.render({
                 elem: '#test-table-operate',
                 // height: 'full-200',
@@ -278,7 +285,8 @@
                     withCredentials: true
                 },
                 where: {
-                    "productKey": value
+                    "productKey": productKey,
+					"deviceType": deviceType
                 },
 
                 method: 'get',
@@ -315,24 +323,26 @@
                             title: '所属产品',
                             templet: function(data) {
                                 var productName = "";
-                                $.ajax({
-                                    async: false,
-                                    type: "get",
-                                    url: url + "/tablesignproduct/selectByPrimaryKey",
-                                    data:{"productkey":data.productKey},
-                                    dataType: "json",
-                                    xhrFields: {
-                                        withCredentials: true
-                                    },
-                                    //成功的回调函数
-                                    success: function (date) {
-                                        productName = date.data.productName;
-                                    },
-                                    //失败的回调函数
-                                    error: function () {
-                                        console.log("error")
-                                    }
-                                })
+								if(data.productKey != null && data.productKey != ""){
+									$.ajax({
+									    async: false,
+									    type: "get",
+									    url: url + "/tablesignproduct/selectByPrimaryKey",
+									    data:{"productkey":data.productKey},
+									    dataType: "json",
+									    xhrFields: {
+									        withCredentials: true
+									    },
+									    //成功的回调函数
+									    success: function (date) {
+									        productName = date.data.productName;
+									    },
+									    //失败的回调函数
+									    error: function () {
+									        console.log("error")
+									    }
+									})
+								}
                                 return productName;
                             }
                         },
@@ -426,7 +436,7 @@
                 limits: [5, 10, 15],
                 done: function (res, curr, count) {
                     table_data = res.data;
-
+					
                     layer.closeAll('loading');
                     attenderList.length = 0;
                     // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
@@ -434,6 +444,9 @@
                 },
             });
         }
+		
+		ajaxs(deviceType,"");
+		
         window.onkeyup = function(ev) {
             var key = ev.keyCode || ev.which;
             if (key == 27) { //按下Escape
@@ -447,8 +460,7 @@
         }
         //监听下拉框选中
         form.on('select(component-form-select)', function (data) {
-
-            ajaxs(data.value)
+            ajaxs(deviceType,data.value)
             window.indexs = data.value;
         });
         //监听选中的复选框
@@ -490,9 +502,10 @@
                         url: url + "/tablesigndevice/delect",
                         type: "get",
                         data: {
-
                             "productKey": age.productKey,
-                            "deviceName": age.deviceName
+                            "deviceName": age.deviceName,
+							"bindingState": age.bindingState,
+							"id": age.id
                         },
                         xhrFields: {
                             withCredentials: true
@@ -522,38 +535,33 @@
                     })
 
                 });
-            }
+            }else if(obj.event === 'blind'){
+				console.log("blind:"+age.id);
+				
+				layer.open({
+				    type: 2,
+				    title: '<p style="">绑定平台</p>',
+				    content: 'seatdeviceblind.html?id='+age.id,
+				    maxmin: true,
+				    area: ['45%', '30%'],
+				    btn: ['确定', '取消'],
+				    yes: function (index, layero) {
+				        var submit = layero.find('iframe').contents().find("#click");
+				        submit.click();
+				    },
+				    success: function (layero, index) {
+				        var body = layui.layer.getChildFrame('body', index);
+				        //var a = indexs + "";
+				        //body.find('#meetingid').val(indexs)
+				    }
+				});
+			}
 
         })
 
         //弹出层区
 
         var active = {
-            add: function () {
-                //  console.log($('#select-room').val())
-                if ($('#select-room').val() == '-1') {
-                    return layer.msg("请选择产品后再添加设备")
-                }
-
-                layer.open({
-                    type: 2,
-                    title: '<p style="">新增设备</p>',
-                    content: 'seatdeviceadd.html?productKey='+$('#select-room').val(),
-                    maxmin: true,
-                    area: ['60%', '60%'],
-                    btn: ['确定', '取消'],
-                    yes: function (index, layero) {
-                        var submit = layero.find('iframe').contents().find("#click");
-                        submit.click();
-                    },
-                    success: function (layero, index) {
-                        var body = layui.layer.getChildFrame('body', index);
-                        var a = indexs + "";
-                        body.find('#meetingid').val(indexs)
-                    }
-                });
-
-            },
             search: function () {
                 if ($('#devices').val() == -1){
                     return layer.msg("请选择产品")
@@ -567,7 +575,8 @@
                     ,
                     where: {
                         "deviceName": search,
-                        "productKey":$('#devices').val()
+                        "productKey":$('#devices').val(),
+						"deviceType": deviceType
                     },
 
                     method: 'get',
@@ -607,24 +616,26 @@
                                 title: '所属产品',
                                 templet: function(data) {
                                     var productName = "";
-                                    $.ajax({
-                                        async: false,
-                                        type: "get",
-                                        url: url + "/tablesignproduct/selectByPrimaryKey",
-                                        data:{"productkey":data.productKey},
-                                        dataType: "json",
-                                        xhrFields: {
-                                            withCredentials: true
-                                        },
-                                        //成功的回调函数
-                                        success: function (date) {
-                                            productName = date.data.productName;
-                                        },
-                                        //失败的回调函数
-                                        error: function () {
-                                            console.log("error")
-                                        }
-                                    })
+									if(data.productKey != null && data.productKey != ""){
+										$.ajax({
+											async: false,
+											type: "get",
+											url: url + "/tablesignproduct/selectByPrimaryKey",
+											data:{"productkey":data.productKey},
+											dataType: "json",
+											xhrFields: {
+												withCredentials: true
+											},
+											//成功的回调函数
+											success: function (date) {
+												productName = date.data.productName;
+											},
+											//失败的回调函数
+											error: function () {
+												console.log("error")
+											}
+										})
+									}
                                     return productName;
                                 }
                             },

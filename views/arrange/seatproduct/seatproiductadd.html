@@ -59,6 +59,16 @@
                        id="productname" class="layui-input">
             </div>
         </div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label"><span>*</span>产品基站类型</label>
+		    <div class="layui-input-block">
+		        <select name="type" lay-skin="select">
+		            <option value="">请选择产品类型</option>
+		            <option value="0">阿里云LoRa基站</option>
+		            <option value="1">其他品牌LoRa基站</option>
+		        </select>
+		    </div>
+		</div>
         <div class="layui-form-item">
             <label class="layui-form-label"><span>*</span>节点类型</label>
             <div class="layui-input-block">
@@ -215,8 +225,8 @@
         $.ajax({
             async: false,
             type: "get",
-            // url: url + "/roomtemplate/findByroomtemplate",
-            url: "https://f.longjuli.com" + "/roomtemplate/findByroomtemplate",
+            url: url + "/roomtemplate/findByroomtemplate",
+            //url: "https://f.longjuli.com" + "/roomtemplate/findByroomtemplate",
             dataType: "json",
             xhrFields: {
                 withCredentials: true
@@ -270,19 +280,23 @@
             data.resourcegroupid=== '' ? data.resourcegroupid = undefined: data.resourcegroupid = data.resourcegroupid
             data.categorykey=== '' ? data.categorykey = undefined: data.categorykey = data.categorykey
             data.publishauto=== '' ? data.publishauto = undefined: data.publishauto = data.publishauto
-            console.log(data)
+            data.type=== '' ? data.type = undefined:data.type = data.type
+			console.log(data)
             if (data.meetingid === ''){
-            return parent.layer.msg("请选择会议室")
+				return parent.layer.msg("请选择会议室")
             }
             if (data.nettype ==='LORA'&&data.joinpermissionid === undefined){
                 return parent.layer.msg("请填写LoRaWAN入网凭证ID")
             }
+			if (data.type === undefined){
+				return parent.layer.msg("请选择产品类型")
+			}
             $.ajax({
                 url: url + "/tablesignproduct/insertSelective",
                 type: "post",
                 dataType: "json",
                 data: {
-                  meetingid:data.meetingid,
+					meetingid:data.meetingid,
                     productName:data.productname,
                     nodeType:data.nodetype,
                     aliyunCommodityCode:data.aliyuncommoditycode,
@@ -294,7 +308,8 @@
                     joinPermissionId:data.joinpermissionid,
                     resourceGroupId:data.resourcegroupid,
                     categoryKey:data.categorykey,
-                    publishAuto:data.publishauto
+                    publishAuto:data.publishauto,
+					type:type
                 },
                 async: false,
                 xhrFields: {
@@ -305,7 +320,7 @@
                         parent.layer.msg("添加成功")
                         var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                         parent.layer.close(index);
-                        parent.reloads();
+                        parent.ajaxs("","");
                     }else{
                         parent.layer.msg(data.msg)
                     }

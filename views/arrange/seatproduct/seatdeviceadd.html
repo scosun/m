@@ -36,13 +36,13 @@
 <body>
 <div class="layui-card-body" style="padding: 20px 20px 0 0;">
     <form class="layui-form" action="" lay-filter="component-form-group">
-        <div class="layui-form-item">
+        <!--<div class="layui-form-item">
             <label class="layui-form-label">所属产品</label>
             <div class="layui-input-block">
                 <input type="text" name="productName" lay-verify="required" autocomplete="off"
                        id="productName" class="layui-input" disabled="disabled">
             </div>
-        </div>
+        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label"><span>*</span>设备名称</label>
             <div class="layui-input-block">
@@ -53,7 +53,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">备注名称</label>
             <div class="layui-input-block">
-                <input type="text" name="nickname" lay-verify="required" placeholder="请输入备注名称" autocomplete="off"
+                <input type="text" name="nickname" placeholder="请输入备注名称" autocomplete="off"
                        id="nickname" class="layui-input">
             </div>
         </div>
@@ -71,22 +71,30 @@
                        id="deveui" class="layui-input">
             </div>
         </div>
-
-        <!--        <div class="layui-form-item">-->
-        <!--            <label class="layui-form-label"><span>*</span>设备类型</label>-->
-        <!--            <div class="layui-input-block">-->
-        <!--                <input type="text" name="categoryId" lay-verify="required" placeholder="请输入" autocomplete="off"-->
-        <!--                       id="categoryId" class="layui-input">-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <div class="layui-form-item layui-layout-admin layui-hide">
-            <div class="layui-input-block">
-                <div style="position: absolute;right: 0px;bottom: 0px;">
-                    <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>设备通讯类型</label>
+			<div class="layui-input-block">
+				<select name="communication" id="communication" lay-verify="required" lay-filter="component-form-select">
+					<option value="">请选择设备通讯类型</option>
+					<option value=0>LoRa通讯</option>
+					<option value=1>蓝牙通讯</option>
+				</select>
+			</div>
+		</div>
+        <div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>设备型号</label>
+			<div class="layui-input-block">
+				<select name="deviceType" lay-verify="required" id="deviceType"></select>
+			</div>
         </div>
+		<div class="layui-form-item layui-layout-admin layui-hide">
+		    <div class="layui-input-block">
+		        <div style="position: absolute;right: 0px;bottom: 0px;">
+		            <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+		            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		        </div>
+		    </div>
+		</div>
     </form>
 </div>
 <script src="../../../layuiadmin/layui/layui.js"></script>
@@ -99,35 +107,14 @@
         var $ = layui.$,
             setter = layui.setter,
             form = layui.form;
-        var productKey = getUrlParam("productKey");
+        /*var productKey = getUrlParam("productKey");
         function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return decodeURI(r[2]); return null; //返回参数值
-        }
+        }*/
         var url = setter.baseUrl;
-        //var url = "http://127.0.0.1:8083"
-        console.log(productKey)
         var uploadfile = null;
-        $.ajax({
-            type: "get",
-            url: url + "/tablesignproduct/selectByPrimaryKey",
-            data: {"productkey":productKey},
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            },
-            //成功的回调函数
-            success: function (res) {
-                //console.log(res);
-                $("#productName").val(res.data.productName);
-                form.render();
-            },
-            //失败的回调函数
-            error: function () {
-                console.log("error")
-            }
-        })
         $.ajax({
             async: false,
             type: "get",
@@ -151,6 +138,22 @@
                 console.log("error")
             }
         })
+		//监听下拉框选中
+		form.on('select(component-form-select)', function (data) {
+			console.log(data.value)
+		   if(data.value == 0){
+			   var deviceTypes = '<option value=0>阿里电子墨水瓶桌牌</option><option value=2>龙居里三角电子桌牌</option>';
+			   $("#deviceType").html("");
+			   $("#deviceType").append(deviceTypes);
+			   form.render();
+		   }
+		   if(data.value == 1){
+			   var deviceTypes = '<option value=1>龙居里RinLink电子墨水瓶桌牌</option>';
+			   $("#deviceType").html("");
+			   $("#deviceType").append(deviceTypes);
+			   form.render();
+		   }
+		});
         form.on('submit(addsms)', function (data) {
             var data = data.field;
             //data.iotid=== '' ? data.iotid = undefined:data.iotid = data.iotid
@@ -159,33 +162,30 @@
             data.pincode=== '' ? data.pincode = undefined:data.pincode = data.pincode
             data.deveui=== '' ? data.deveui = undefined:data.deveui = data.deveui
             console.log(data)
-            if (data.meetingid === ''){
-                return parent.layer.msg("请选择会议室")
-            }
-            if (data.nettype ==='LORA'&&data.joinpermissionid === undefined){
-                return parent.layer.msg("请填写LoRaWAN入网凭证ID")
-            }
             $.ajax({
-                url: url + "/tablesigndevice/insertSelective",
+                url: url + "/tablesigndevice/insert",
                 type: "post",
                 dataType: "json",
                 data: {
-                    productKey:productKey,
+                    //productKey:productKey,
                     //iotId:data.iotid,
                     deviceName:data.devicename,
                     pinCode:data.pincode,
                     devEui:data.deveui,
+					communication:data.communication,
+					deviceType:data.deviceType
                 },
                 async: false,
                 xhrFields: {
                     withCredentials: true
                 },
                 success: function (data) {
+					console.log(data.code)
                     if (data.code == 0) {
                         parent.layer.msg("添加成功")
                         var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                         parent.layer.close(index);
-                        parent.ajaxs(window.indexs);
+                        //parent.ajaxs(window.indexs);
                     }else{
                         parent.layer.msg(data.msg)
                     }
