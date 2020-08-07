@@ -105,6 +105,19 @@
               <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
 
             </div>
+			
+			<div class="layui-input-inline"
+			     style="margin-bottom:10px;margin-left:10px;width: 25%">
+			    <form class="layui-form" action="">
+			        <select name="interest" lay-skin="select" lay-filter="component-form-select"
+			                id="devices">
+			            <option value="-1">选择产品类型</option>
+			            <option value="0">阿里云LoRa基站</option>
+						<option value="1">其他品牌LoRa基站</option>
+			        </select>
+			    </form>
+			</div>
+			
             <!-- 右侧筛选条件 -->
             <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
               <div class="layui-inline">
@@ -136,12 +149,16 @@
     var table = layui.table,
             setter = layui.setter,
             $ = layui.jquery,
+			form = layui.form,
             dropdown = 'dropdown';
     // dropdown = layui.dropdown;
     var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
+	
+	layer.msg("上方下拉框选择产品型号后自动加载相关产品");
+	
     // #test-table-operate
     //渲染表格
 
@@ -155,412 +172,214 @@
       };
       return jlength
     };
-    table.render({
-      elem: '#test-table-operate',
-      // height: 'full-200',
-      //url: url + "/meeting/findAllBylayui", //数据接口
-      method: 'get',
-      xhrFields: {
-        withCredentials: true
-      },
-      url: url + "/tablesignproduct/selectSeletive", //数据接口
-      page: {
-        layout: ['prev', 'page', 'next', 'count', 'skip']
-      },
-
-      cols: [
-        [ //表头
-          {
-            type: 'checkbox',
-            fixed: 'left'
-          },
-          {
-            field: 'productKey',
-            title: '产品ID',
-            width: '10%',
-            //align: 'center',
-            unresize: 'false',
-          },
-          {
-            field: 'productName',
-            title: '产品名字',
-            align: 'left',
-          },
-          {
-            field: 'nodeType',
-            title: '节点类型',
-            align: 'left',
-            templet: function(data) {
-              if (data.nodeType == 0) {
-                return '设备'
-              }
-              if (data.nodeType == 1) {
-                return '网关'
-              }
-            },
-          },
-          //   {
-          //     field: 'aliyunCommodityCode',
-          //     title: '产品版本类型',
-          //     align: 'left',
-          //     templet: function(data) {
-          //       if (data.aliyunCommodityCode == 'iothub_senior') {
-          //         return '使用物模型'
-          //       }
-          //       if (data.aliyunCommodityCode == 'iothub') {
-          //         return '不使用物模型'
-          //       }
-          //     },
-          //   },
-          {
-            field: 'dataFormat',
-            title: '产品数据格式',
-            align: 'left',
-            templet: function(data) {
-              if (data.dataFormat == 0) {
-                return '透传/自定义格式'
-              }
-              if (data.dataFormat == 1) {
-                return 'Alink协议'
-              }
-            },
-          },
-          //   {
-          //     field: 'categoryId',
-          //     title: '设备类型',
-          //     align: 'left',
-          //   },
-          // {
-          //   field: 'description',
-          //   title: '描述信息',
-          //   align: 'left',
-          // },
-          // {
-          //   field: 'protocolType',
-          //   title: '设备接入网关的协议类型',
-          //   align: 'left',
-          // },
-          {
-            field: 'netType',
-            title: '连网方式',
-            align: 'left',
-            templet: function(data) {
-              if (data.netType == "WIFI") {
-                return 'WiFi'
-              }
-              if (data.netType == "CELLULAR") {
-                return '蜂窝网'
-              }
-              if (data.netType == "ETHERNET") {
-                return '以太网'
-              }
-              if (data.netType == "LORA") {
-                return 'LoRaWAN'
-              }
-              if (data.netType == "OTHER") {
-                return '其他'
-              }
-            },
-          },
-          // {
-          //   field: 'authType',
-          //   title: '设备接入物联网平台认证方式',
-          //   align: 'left',
-          //   templet: function(data) {
-          //     if (data.authType == 'secret') {
-          //       return '使用设备密钥进行设备身份认证'
-          //     }
-          //     if (data.authType == 'id2') {
-          //       return '使用物联网设备身份认证ID²'
-          //     }
-          //     if (data.authType == 'x509') {
-          //       return '使用设备X.509证书进行设备身份认证²'
-          //     }
-          //   },
-          // },
-          // {
-          //   field: 'id2',
-          //   title: '是否使用ID²认证。',
-          //   align: 'left',
-          // },
-          {
-            field: 'deviceCount',
-            title: '设备数量',
-            align: 'left',
-          },
-          {
-            field: 'gmtCreate',
-            title: '创建时间',
-            align: 'left',
-            templet: function(data) {
-              console.log(data.gmtCreate);
-              var date = new Date();
-              if(data.gmtCreate.length > 10){
-                date.setTime(data.gmtCreate);
-              }else{
-                date.setTime(data.gmtCreate * 1000);
-              }
-              var Y = date.getFullYear() + '-';
-              var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-              var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
-              var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
-              var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
-              var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
-              return Y+M+D+h+m+s;
-            }
-          },
-          {
-            field: 'productStatus',
-            title: '产品状态',
-            align: 'left',
-            templet: function(data) {
-              if (data.productStatus == 'DEVELOPMENT_STATUS') {
-                return '开发中'
-              }
-              if (data.productStatus == 'RELEASE_STATUS') {
-                return '产品已发布'
-              }
-            }
-          },
-          // {
-          //   field: 'joinPermissionId',
-          //   title: 'LoRaWAN入网凭证ID',
-          //   align: 'left',
-          // },
-          // {
-          //   field: 'iotInstanceId',
-          //   title: '公共实例不传此参数',
-          //   align: 'left',
-          // },
-          {
-            title: '操作',
-            align: 'left',
-            width: 140,
-            toolbar: '#test-table-operate-barDemo'
-          },
-
-        ]
-      ],
-      event: true,
-      page: true,
-      limit: 15,
-      skin: 'line',
-      even: true,
-      limits: [5, 10, 15],
-      done: function (res, curr, count) {
-        table_data = res.data;
-
-        layer.closeAll('loading');
-        deviceList.length = 0;
-        // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
-        // layer.close(index);    //返回数据关闭loading
-      },
-    });
-    //刷新表格
-    window.reloads = function () {
-      table.render({
-        elem: '#test-table-operate',
-        // height: 'full-200',
-        //url: url + "/meeting/findAllBylayui", //数据接口
-        method: 'get',
-        xhrFields: {
-          withCredentials: true
-        },
-        url: url + "/tablesignproduct/selectSeletive", //数据接口
-        page: {
-          layout: ['prev', 'page', 'next', 'count', 'skip']
-        },
-
-        cols: [
-          [ //表头
-            {
-              type: 'checkbox',
-              fixed: 'left'
-            },
-            {
-              field: 'productKey',
-              title: '产品key',
-              width: '10%',
-              //align: 'center',
-              unresize: 'false',
-            },
-            {
-              field: 'productName',
-              title: '产品名字',
-              align: 'left',
-            },
-            {
-              field: 'nodeType',
-              title: '节点类型',
-              align: 'left',
-              templet: function(data) {
-                if (data.nodeType == 0) {
-                  return '设备'
-                }
-                if (data.nodeType == 1) {
-                  return '网关'
-                }
-              },
-            },
-            //   {
-            //     field: 'aliyunCommodityCode',
-            //     title: '产品版本类型',
-            //     align: 'left',
-            //     templet: function(data) {
-            //       if (data.aliyunCommodityCode == 'iothub_senior') {
-            //         return '使用物模型'
-            //       }
-            //       if (data.aliyunCommodityCode == 'iothub') {
-            //         return '不使用物模型'
-            //       }
-            //     },
-            //   },
-            {
-              field: 'dataFormat',
-              title: '产品数据格式',
-              align: 'left',
-              templet: function(data) {
-                if (data.dataFormat == 0) {
-                  return '透传/自定义格式'
-                }
-                if (data.dataFormat == 1) {
-                  return 'Alink协议'
-                }
-              },
-            },
-            //   {
-            //     field: 'categoryId',
-            //     title: '设备类型',
-            //     align: 'left',
-            //   },
-            // {
-            //   field: 'description',
-            //   title: '描述信息',
-            //   align: 'left',
-            // },
-            // {
-            //   field: 'protocolType',
-            //   title: '设备接入网关的协议类型',
-            //   align: 'left',
-            // },
-            {
-              field: 'netType',
-              title: '连网方式',
-              align: 'left',
-              templet: function(data) {
-                if (data.netType == "WIFI") {
-                  return 'WiFi'
-                }
-                if (data.netType == "CELLULAR") {
-                  return '蜂窝网'
-                }
-                if (data.netType == "ETHERNET") {
-                  return '以太网'
-                }
-                if (data.netType == "LORA") {
-                  return 'LoRaWAN'
-                }
-                if (data.netType == "OTHER") {
-                  return '其他'
-                }
-              },
-            },
-            // {
-            //   field: 'authType',
-            //   title: '设备接入物联网平台认证方式',
-            //   align: 'left',
-            //   templet: function(data) {
-            //     if (data.authType == 'secret') {
-            //       return '使用设备密钥进行设备身份认证'
-            //     }
-            //     if (data.authType == 'id2') {
-            //       return '使用物联网设备身份认证ID²'
-            //     }
-            //     if (data.authType == 'x509') {
-            //       return '使用设备X.509证书进行设备身份认证²'
-            //     }
-            //   },
-            // },
-            // {
-            //   field: 'id2',
-            //   title: '是否使用ID²认证。',
-            //   align: 'left',
-            // },
-            {
-              field: 'deviceCount',
-              title: '设备数量',
-              align: 'left',
-            },
-            {
-              field: 'gmtCreate',
-              title: '创建时间',
-              align: 'left',
-              templet: function(data) {
-                console.log(data.gmtCreate);
-                var date = new Date();
-                if(data.gmtCreate.length > 10){
-                  date.setTime(data.gmtCreate);
-                }else{
-                  date.setTime(data.gmtCreate * 1000);
-                }
-                var Y = date.getFullYear() + '-';
-                var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-                var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
-                var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
-                var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
-                var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
-                return Y+M+D+h+m+s;
-              }
-            },
-            {
-              field: 'productStatus',
-              title: '产品状态',
-              align: 'left',
-              templet: function(data) {
-                if (data.productStatus == 'DEVELOPMENT_STATUS') {
-                  return '开发中'
-                }
-                if (data.productStatus == 'RELEASE_STATUS') {
-                  return '产品已发布'
-                }
-              }
-            },
-            // {
-            //   field: 'joinPermissionId',
-            //   title: 'LoRaWAN入网凭证ID',
-            //   align: 'left',
-            // },
-            // {
-            //   field: 'iotInstanceId',
-            //   title: '公共实例不传此参数',
-            //   align: 'left',
-            // },
-            {
-              title: '操作',
-              align: 'left',
-              width: 140,
-              toolbar: '#test-table-operate-barDemo'
-            },
-
-          ]
-        ],
-        event: true,
-        page: true,
-        limit: 15,
-        skin: 'line',
-        even: true,
-        limits: [5, 10, 15],
-        done: function (res, curr, count) {
-          table_data = res.data;
-
-          layer.closeAll('loading');
-          deviceList.length = 0;
-          // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
-          // layer.close(index);    //返回数据关闭loading
-        },
-      });
-
-    }
+	
+	//选中以后更新表的ajax
+	window.ajaxs = function (type,name) {
+		table.render({
+		  elem: '#test-table-operate',
+		  // height: 'full-200',
+		  //url: url + "/meeting/findAllBylayui", //数据接口
+		  method: 'get',
+		  xhrFields: {
+		    withCredentials: true
+		  },
+		  url: url + "/tablesignproduct/selectSeletive", //数据接口
+		  page: {
+		    layout: ['prev', 'page', 'next', 'count', 'skip']
+		  },
+		  where: {
+		      "type": type,
+			  "productName": name
+		  },
+		  cols: [
+		    [ //表头
+		      {
+		        type: 'checkbox',
+		        fixed: 'left'
+		      },
+		      {
+		        field: 'productKey',
+		        title: '产品ID',
+		        width: '10%',
+		        //align: 'center',
+		        unresize: 'false',
+		      },
+		      {
+		        field: 'productName',
+		        title: '产品名字',
+		        align: 'left',
+		      },
+		      {
+		        field: 'nodeType',
+		        title: '节点类型',
+		        align: 'left',
+		        templet: function(data) {
+		          if (data.nodeType == 0) {
+		            return '设备'
+		          }
+		          if (data.nodeType == 1) {
+		            return '网关'
+		          }
+		        },
+		      },
+		      //   {
+		      //     field: 'aliyunCommodityCode',
+		      //     title: '产品版本类型',
+		      //     align: 'left',
+		      //     templet: function(data) {
+		      //       if (data.aliyunCommodityCode == 'iothub_senior') {
+		      //         return '使用物模型'
+		      //       }
+		      //       if (data.aliyunCommodityCode == 'iothub') {
+		      //         return '不使用物模型'
+		      //       }
+		      //     },
+		      //   },
+		      {
+		        field: 'dataFormat',
+		        title: '产品数据格式',
+		        align: 'left',
+		        templet: function(data) {
+		          if (data.dataFormat == 0) {
+		            return '透传/自定义格式'
+		          }
+		          if (data.dataFormat == 1) {
+		            return 'Alink协议'
+		          }
+		        },
+		      },
+		      //   {
+		      //     field: 'categoryId',
+		      //     title: '设备类型',
+		      //     align: 'left',
+		      //   },
+		      // {
+		      //   field: 'description',
+		      //   title: '描述信息',
+		      //   align: 'left',
+		      // },
+		      // {
+		      //   field: 'protocolType',
+		      //   title: '设备接入网关的协议类型',
+		      //   align: 'left',
+		      // },
+		      {
+		        field: 'netType',
+		        title: '连网方式',
+		        align: 'left',
+		        templet: function(data) {
+		          if (data.netType == "WIFI") {
+		            return 'WiFi'
+		          }
+		          if (data.netType == "CELLULAR") {
+		            return '蜂窝网'
+		          }
+		          if (data.netType == "ETHERNET") {
+		            return '以太网'
+		          }
+		          if (data.netType == "LORA") {
+		            return 'LoRaWAN'
+		          }
+		          if (data.netType == "OTHER") {
+		            return '其他'
+		          }
+		        },
+		      },
+		      // {
+		      //   field: 'authType',
+		      //   title: '设备接入物联网平台认证方式',
+		      //   align: 'left',
+		      //   templet: function(data) {
+		      //     if (data.authType == 'secret') {
+		      //       return '使用设备密钥进行设备身份认证'
+		      //     }
+		      //     if (data.authType == 'id2') {
+		      //       return '使用物联网设备身份认证ID²'
+		      //     }
+		      //     if (data.authType == 'x509') {
+		      //       return '使用设备X.509证书进行设备身份认证²'
+		      //     }
+		      //   },
+		      // },
+		      // {
+		      //   field: 'id2',
+		      //   title: '是否使用ID²认证。',
+		      //   align: 'left',
+		      // },
+		      {
+		        field: 'deviceCount',
+		        title: '设备数量',
+		        align: 'left',
+		      },
+		      {
+		        field: 'gmtCreate',
+		        title: '创建时间',
+		        align: 'left',
+		        templet: function(data) {
+		          console.log(data.gmtCreate);
+		          var date = new Date();
+		          if(data.gmtCreate.length > 10){
+		            date.setTime(data.gmtCreate);
+		          }else{
+		            date.setTime(data.gmtCreate * 1000);
+		          }
+		          var Y = date.getFullYear() + '-';
+		          var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		          var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+		          var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+		          var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+		          var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+		          return Y+M+D+h+m+s;
+		        }
+		      },
+		      {
+		        field: 'productStatus',
+		        title: '产品状态',
+		        align: 'left',
+		        templet: function(data) {
+		          if (data.productStatus == 'DEVELOPMENT_STATUS') {
+		            return '开发中'
+		          }
+		          if (data.productStatus == 'RELEASE_STATUS') {
+		            return '产品已发布'
+		          }
+		        }
+		      },
+		      // {
+		      //   field: 'joinPermissionId',
+		      //   title: 'LoRaWAN入网凭证ID',
+		      //   align: 'left',
+		      // },
+		      // {
+		      //   field: 'iotInstanceId',
+		      //   title: '公共实例不传此参数',
+		      //   align: 'left',
+		      // },
+		      {
+		        title: '操作',
+		        align: 'left',
+		        width: 140,
+		        toolbar: '#test-table-operate-barDemo'
+		      },
+		
+		    ]
+		  ],
+		  event: true,
+		  page: true,
+		  limit: 15,
+		  skin: 'line',
+		  even: true,
+		  limits: [5, 10, 15],
+		  done: function (res, curr, count) {
+		    table_data = res.data;
+		
+		    layer.closeAll('loading');
+		    deviceList.length = 0;
+		    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+		    // layer.close(index);    //返回数据关闭loading
+		  },
+		});
+	}
 
     window.onkeyup = function(ev) {
       var key = ev.keyCode || ev.which;
@@ -573,6 +392,13 @@
 
       }
     }
+	
+	//监听下拉框选中
+	form.on('select(component-form-select)', function (data) {
+	    ajaxs(data.value,"")
+	    window.indexs = data.value;
+		//console.log(data.value)
+	});
 
     //监听表格复选框选择
     table.on('checkbox(test-table-operate)', function (obj) {
@@ -653,7 +479,7 @@
                 layer.msg(msg.msg)
                 // var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                 // layer.close(index);
-                reloads();
+                ajaxs("","");
               } else {
                 layer.msg(msg.msg)
               }
@@ -718,7 +544,7 @@
                     success: function (msg) {
                       if (msg.code == 0) {
                         layer.msg("删除成功");
-                        reloads(); // 父页面刷新
+                        ajaxs("",""); // 父页面刷新
 
                       } else {
                         layer.msg(msg.msg);
@@ -753,7 +579,7 @@
                     success: function (msg) {
                       if (msg.code == 0) {
                         layer.msg("清空成功");
-                        reloads(); // 父页面刷新
+                        ajaxs("",""); // 父页面刷新
 
                       } else {
                         layer.msg(msg.msg);

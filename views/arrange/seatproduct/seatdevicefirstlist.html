@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>设备管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+    <style type="text/css">
+        .layui-btn {background-color: #666;}
+        .layui-btn-danger {background-color: #FF5722;}
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+        html{background-color: #fff;}
+        .layui-btn+.layui-btn {
+            margin-left: 0
+        }
+        .btnsearch {
+            background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+            background-size: 1.2rem 1.2rem;
+            text-indent: -9999px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="layui-fluid" style="padding:0">
+    <div class="layui-col-md12">
+        <div class="layui-row grid-demo grid-demo-bg1">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body" style="border-bottom: 1px solid #f6f6f6;padding:10px 15px 0;">
+						<span class="layui-breadcrumb">
+                            <a><cite>桌签管理列表</cite></a>
+                            <!-- <a  href="javascript:;" onclick="asd()"><cite>刷新</cite></a> -->
+                            <div class="assistBtn" style="margin-left:10px"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+							<!-- <a href="javascript:;"><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh" ></i></a> -->
+						</span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div>
+                            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+
+                                <!-- // 20.04.06 dh
+                                    <button class="layui-btn layui-ds" data-type="add">新增</button>
+                                -->
+                                <!-- // 20.04.06 dh 修改为以下-->
+                                <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+                                <a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckData" id="importb">导入</a>
+                                <!-- <button class="layui-btn" data-type="add">增加</button>
+                                <button class="layui-btn" data-type="dels">批量删除</button>
+                                <button class="layui-btn" data-type="allcheck">全选</button>
+                                <button class="layui-btn" data-type="delall">清空</button> -->
+                            </div>
+							<div class="layui-input-inline"
+							     style="margin-bottom:10px;margin-left:10px;width: 25%">
+							    <form class="layui-form" action="">
+							        <select name="interest" lay-skin="select" lay-filter="component-form-select"
+							                id="devices">
+							            <option value="-1">选择通讯类型</option>
+							            <option value="0">LoRa通讯</option>
+										<option value="1">蓝牙通讯</option>
+							        </select>
+							    </form>
+							</div>
+                        </div>
+
+                        <table class="layui-hide" id="test-table-operate" lay-filter="test-table-operate"></table>
+                        <script type="text/html" id="table-content-list">
+                            <!--<a class="layui-btn layui-btn-xs layui-dd" lay-event="setUp" data-type="setUp">编辑</a>-->
+                            <a class="layui-btn layui-btn-danger layui-btn-xs"
+                               lay-event="bindingList" data-type="bindingList">查看列表</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+    var tablezonetable;
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' ,//主入口模块
+        dropdown: '/dropdown/dropdown'
+    }).use(['index', 'user', 'form', 'table','dropdown','upload'], function() {
+        var $ = layui.$,
+            setter = layui.setter,
+            table = layui.table,
+			form = layui.form,
+            layer = layui.layer,
+            dropdown = 'dropdown',
+			upload = layui.upload,
+            router = layui.router();
+        // var url = "http://127.0.0.1:8083"
+        var url = setter.baseUrl;
+		
+		layer.msg("上方下拉框选择通讯类型后自动加载相关设备");
+		
+		upload.render({
+		    elem: '#importb'
+		    , url: url+'/tablesigndevice/excelDeviceToList',
+		    // auto: false,
+		    exts:'xls|xlsx',
+		    //bindAction: '#btn99',
+		    //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+		    //     obj.preview(function (index, file, result) {
+		    //         // console.log(index); //得到文件索引
+		    //         // console.log(file);
+		    //         uploadfile = file //得到文件对象
+		    //         // console.log(uploadfile)
+		    //         // console.log(result); //得到文件base64编码，比如图片
+		    //
+		    //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+		    //
+		    //         //这里还可以做一些 append 文件列表 DOM 的操作
+		    //
+		    //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+		    //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+		    //     });
+		    // },
+		    done: function (res) {
+		        reloads();
+		    }
+		});
+		//选中以后更新表的ajax
+		window.ajaxs = function (value) {
+			table.render({
+				elem: '#test-table-operate',
+				method: 'get',
+				xhrFields: {
+					withCredentials: true
+				},
+				url: url + "/tablesigndevice/findDeviceTypeList", //数据接口
+				page: {
+					layout: ['prev', 'page', 'next', 'count', 'skip']
+				},
+				where: {
+					"communication": value
+				},
+				cols: [
+					[{
+                    type: 'checkbox',
+                    fixed: 'left'
+                }, {
+                    field: 'deviceType',
+                    width: '40%',
+                    title: '席签型号',
+                    templet: function(data) {
+                        if (data.deviceType == 0){
+                            return '阿里电子墨水瓶桌牌'
+                        }else  if (data.deviceType == 1){
+                            return '龙居里RinLink电子墨水瓶桌牌'
+                        }else  if (data.deviceType == 2){
+                            return '龙居里三角电子桌牌'
+                        }
+                    }
+                }, {
+                    field: 'num',
+                    width: '30%',
+                    title: '席签数量'
+                }, {
+                    width: '25%',
+                    //align: 'center',
+                    title: '操作',
+                    toolbar: '#table-content-list'
+                }
+                ]
+            ],
+            event: true,
+            page: true,
+            limit: 15,
+            skin: 'line',
+            even: true,
+            limits: [5, 10, 15],
+            done: function (res, curr, count) {
+                table_data = res.data;
+
+                layer.closeAll('loading');
+                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                // layer.close(index);    //返回数据关闭loading
+            },
+        });
+		}
+		
+		//监听下拉框选中
+		form.on('select(component-form-select)', function (data) {
+		    ajaxs(data.value);
+		    window.indexs = data.value;
+		});
+		
+        window.onkeyup = function(ev) {
+            var key = ev.keyCode || ev.which;
+            if (key == 27) { //按下Escape
+                layer.closeAll('iframe'); //关闭所有的iframe层
+
+            }
+            if (key == 13) { //按下Escape
+                $('#search').click();
+
+            }
+        }
+        window.reloads = function(){
+            table.render({
+                elem: '#test-table-operate',
+                // height: 'full-200',
+                //url: url + "/meeting/findAllBylayui", //数据接口
+                method: 'get',
+                where: {
+                    status: 0
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                url: url + "/tablesigndevice/findDeviceTypeList", //数据接口
+                page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                },
+
+                cols: [
+                    [{
+                        type: 'checkbox',
+                        fixed: 'left'
+                    }, {
+                        field: 'deviceType',
+                        width: '40%',
+                        title: '席签型号',
+                        templet: function(data) {
+                            if (data.deviceType == 0){
+                                return '阿里电子墨水瓶桌牌'
+                            }else  if (data.deviceType == 1){
+                                return '龙居里RinLink电子墨水瓶桌牌'
+                            }else  if (data.deviceType == 2){
+                                return '龙居里三角电子桌牌'
+                            }
+                        }
+                    }, {
+                        field: 'num',
+                        width: '30%',
+                        title: '席签数量'
+                    }, {
+                        width: '25%',
+                        //align: 'center',
+                        title: '操作',
+                        toolbar: '#table-content-list'
+                    }
+                    ]
+                ],
+                event: true,
+                page: true,
+                limit: 15,
+                skin: 'line',
+                even: true,
+                limits: [5, 10, 15],
+                done: function (res, curr, count) {
+                    table_data = res.data;
+
+                    layer.closeAll('loading');
+                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                    // layer.close(index);    //返回数据关闭loading
+                },
+            });
+        }
+        var $ = layui.$,
+
+        active = {
+            //全选
+            getCheckData: function () { //获取选中数据
+                // var checkStatus = table.checkStatus('test-table-operate'),
+                //     data = checkStatus.data;
+                // layer.alert(JSON.stringify(data));
+                // console.log(checkStatus.data)
+                var cb = $(".layui-form-checkbox");
+                // $('.layui-cell-checkbox').click();
+
+                $(".layui-form-checkbox").each(function () {
+                    // if (flag) {
+
+                    $(this).click();
+
+                    // } else {
+                    //     $(this).removeClass('layui-form-checked')
+                    // }
+                })
+
+
+            },
+            add: function () {
+                //  console.log($('#select-room').val())
+                if ($('#select-room').val() == '-1') {
+                    return layer.msg("请选择产品后再添加设备")
+                }
+            
+                layer.open({
+                    type: 2,
+                    title: '<p style="">新增设备</p>',
+                    content: 'seatdeviceadd.html',
+                    maxmin: true,
+                    area: ['60%', '60%'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success: function (layero, index) {
+                        var body = layui.layer.getChildFrame('body', index);
+                        //var a = indexs + "";
+                        //body.find('#meetingid').val(indexs)
+                    }
+                });
+            }
+        };
+
+        table.on('tool(test-table-operate)', function(obj) {
+            var age = obj.data;
+            if (obj.event === 'setUp') {
+                layer.open({
+                    type: 2,
+                    title: '编辑',
+                    content: 'roomseatupdate.html?id='+obj.data.id+'&seattype='+obj.data.seattype+'&communicationtype='+obj.data.communicationtype+'&roomid='+obj.data.roomid,
+                    maxmin: true,
+                    area: ['500px', '340px'],
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success: function(layero, index) {
+                    }
+                });
+            } else if (obj.event === 'bindingList') {
+				//查看列表
+                layer.open({
+                    type: 2,
+                    title: false,
+                    content: 'seatdevicelist.html?deviceType='+obj.data.deviceType
+                    // ,maxmin: true
+                    ,
+                    area: ['100%', '100%'],
+                    scrollbar: false,
+                    closeBtn:false,
+                    offset: '0',
+                    yes: function(index, layero) {
+                    },
+                    success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        //body.find('#roomid').val(age.roomid)
+                    }
+                });
+            }
+        })
+        $('.layui-ds').on('click', function () {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+
+    })
+    function asd() {
+        location.reload();
+    }
+</script>
+</body>
+</html>
