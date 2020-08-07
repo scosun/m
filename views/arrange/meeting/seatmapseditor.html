@@ -396,7 +396,7 @@
 <script src="JSRuler/jquery.event.drag-2.2.js"></script>
 <script src="JSRuler/jquery.event.drop-2.2.js"></script>
 <script src="JSRuler/ruler.js"></script>
-<script src="seatmapseditor.js"></script>
+<script src="seatmapseditor.bak.js"></script>
 
 
 <!-- /* dragDiv 拖动工具箱 3.25*/ -->
@@ -1396,7 +1396,7 @@
 				title: '设置多边形参数',
 				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['500px', '260px'],
+				area: ['550px', '460px'],
 				content: 'special_polygon_type.html',
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {
@@ -1404,6 +1404,13 @@
 					var edges = +layero.find('iframe').contents().find("#edges").val() || "";
 					var seat_nums = layero.find('iframe').contents().find("#seat_nums").val() || "";
 					
+					var select_ruleid = +layero.find('iframe').contents().find("#select_ruleid").val();
+
+					var startxaxis = +layero.find('iframe').contents().find("#startxaxis").val() || "";
+					var startyaxis = +layero.find('iframe').contents().find("#startyaxis").val() || "";
+					var endxaxis = +layero.find('iframe').contents().find("#endxaxis").val() || "";
+					var endyaxis = +layero.find('iframe').contents().find("#endyaxis").val() || "";
+
 					if(edges == "" || edges < 3){
 						layer.msg('请输入边数，必须大于3');
 						return false;
@@ -1412,8 +1419,20 @@
 						layer.msg('请输入座位数');
 						return false;
 					}
+					if(!startxaxis || !startyaxis || !endxaxis || !endyaxis){
+						layer.msg("请输入起点和终点");
+						return;
+					}
+
 					var condi = {};
 					condi.type = 0;
+
+					condi.sort_rule = select_ruleid;
+					condi.rect_left_x = startxaxis;
+					condi.rect_left_y = startyaxis;
+					condi.rect_right_x = endxaxis;
+					condi.rect_right_y = endyaxis;
+					
 					condi.edges = +edges;
 					condi.seat_nums = seat_nums.split(",");
 					condi.seat_nums = condi.seat_nums.map(function(n){
@@ -1439,20 +1458,39 @@
 				title: '设置椭圆参数',
 				shadeClose: true, //弹出框之外的地方是否可以点击
 				offset: '10%',
-				area: ['500px', '220px'],
+				area: ['550px', '410px'],
 				content: 'special_oval_type.html',
 				btn: ['确定', '取消'],
 				yes: function(index, layero) {
 					// var typeid = +layero.find('iframe').contents().find("#select_typeid").val() || 0;
 					// var edges = +layero.find('iframe').contents().find("#edges").val() || "";
 					var seat_nums = layero.find('iframe').contents().find("#seatnum").val() || "";
+					var select_ruleid = +layero.find('iframe').contents().find("#select_ruleid").val();
+
+					var startxaxis = +layero.find('iframe').contents().find("#startxaxis").val() || "";
+					var startyaxis = +layero.find('iframe').contents().find("#startyaxis").val() || "";
+					var endxaxis = +layero.find('iframe').contents().find("#endxaxis").val() || "";
+					var endyaxis = +layero.find('iframe').contents().find("#endyaxis").val() || "";
 					
 					if(seat_nums == ""){
 						layer.msg('请输入座位数');
 						return false;
 					}
+
+					if(!startxaxis || !startyaxis || !endxaxis || !endyaxis){
+						layer.msg("请输入起点和终点");
+						return;
+					}
+
 					var condi = {};
 					condi.type = 1;
+
+					condi.sort_rule = select_ruleid;
+					condi.rect_left_x = startxaxis;
+					condi.rect_left_y = startyaxis;
+					condi.rect_right_x = endxaxis;
+					condi.rect_right_y = endyaxis;
+
 					condi.edges = 1;
 					condi.seat_nums = [+seat_nums];
 					getCustomSeats(condi);
@@ -1468,6 +1506,19 @@
 			// seat_nums是从里到外嵌套排列，每一层的座位数
 			var condi = condi;
 			console.log(condi,$);
+			
+			// {
+			// 	"type": 1,
+			// 	"rect_left_x": 1.0,
+			// 	"rect_left_y": 2.0,
+			// 	"rect_right_x": 3.0,
+			// 	"rect_right_y": 4.0,
+			// 	"seat_nums": [
+			// 		1
+			// 	],
+			// 	"sort_rule": 1
+			// }
+
 			layer.load(2);
 			$.ajax({
 				async: true,
@@ -1475,6 +1526,7 @@
 				data: JSON.stringify(condi),
 				contentType: 'application/json', 
 				url: seatUrl +"/v1/editor",
+				// url: "http://m.lomgjuli.com/v1/editor",
 				dataType: "json",
 				success: function(obj) {
 					console.log(obj);

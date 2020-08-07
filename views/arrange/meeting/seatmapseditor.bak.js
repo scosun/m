@@ -1710,6 +1710,70 @@ var __handDrag = null;
 		}.bind(this));
 	}
 
+	seatMapsEditor.prototype.mouseCreateMapAxis = function(mt){
+		this.removeContainerEvent();
+		$("#circlemousexyId").show();
+
+		var hasPoint = false;
+		$("#seatcontainer").bind({
+			dblclick:function(e){
+				this.removeContainerEvent();
+				
+				var sl = $("#seatcontainer").offset().left - 18;
+				var st = $("#seatcontainer").offset().top - 18;
+
+				var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+				var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+				var x = event.x - sl + scrollX - 3;
+				var y = event.y - st + scrollY - 3;
+				var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
+				var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
+				var point = {x1:x1,y1:y1,x:x,y:y};
+				if(mt=="oval"){
+					window.sessionStorage.setItem("__ovalaxisxy",JSON.stringify(point));
+					window.__createOval();
+				}else if(mt=="polygon"){
+					window.sessionStorage.setItem("__polygonaxisxy",JSON.stringify(point));
+					window.__createPolygon();
+				}
+				// callback.call(x1,y1,x,y);
+				// console.log(x1,y1,x,y)
+			}.bind(this),
+			click:function(e){
+				if(!hasPoint){
+					hasPoint = true;
+				}
+			},
+			mousemove:function(e){
+				var sl = $("#seatcontainer").offset().left - 18;
+				var st = $("#seatcontainer").offset().top - 18;
+
+				var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+				var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+				var x = event.x - sl + scrollX - 3;
+				var y = event.y - st + scrollY - 3;
+				if(!hasPoint){
+					$("#circlemousexyId").css({"top":y+"px","left":x+"px"});
+				}else{
+					var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
+					var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
+					$("#circlemouseline").attr({"x1":x1,"y1":y1,"x2":x,"y2":y});
+
+					// var angle = Math.atan2((y1-y), (x1-x)) //弧度  0.6435011087932844
+					// var theta = Math.abs(angle*(180/Math.PI));
+
+					// var r1 = Math.sqrt(Math.pow(x-x1,2) + Math.pow(y-y1,2));
+					// if(mt == 1){
+					// 	this.createCircleSeatMap(x1 - 20,y1 - 18,r1,seatnum,ruleid,1);
+					// }else{
+					// 	this.createRunSeatMap(x1 - 20,y1 - 18,r1,seatnum,centernum,ruleid,1);
+					// }
+					
+				}
+			}.bind(this)
+		});
+	}
+
 	seatMapsEditor.prototype.mouseCreateSeatMap = function(mt,seatnum,centernum,ruleid){
 		this.removeContainerEvent();
 		$("#circlemousexyId").show();
