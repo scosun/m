@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>字体添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .layui-form-label span {
+            color: #f00;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .layui-input-block span,
+        p span {
+            color: #f00;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span>*</span>字体名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="fontname" lay-verify="required" placeholder="请输入字体名称" autocomplete="off"
+                       id="fontname" class="layui-input">
+            </div>
+        </div>
+		<div class="layui-input-block inputStyle">
+		  <button type="button" class="layui-btn" id="uploadFont"><i class="layui-icon"></i>上传字体</button>
+		</div>
+		<div class="layui-form-item layui-layout-admin layui-hide">
+		    <div class="layui-input-block">
+		        <div style="position: absolute;right: 0px;bottom: 0px;">
+		            <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+		            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		        </div>
+		    </div>
+			<button id="hideUpload" type="button" style="display: none"></button>
+		</div>
+    </form>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+        var $ = layui.$,
+            setter = layui.setter,
+            form = layui.form;
+        /*var productKey = getUrlParam("productKey");
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }*/
+		var upload = layui.upload;
+		var url = setter.baseUrl;
+		var dataList = null;
+		//拖拽上传
+		upload.render({
+		  elem: '#uploadFont'
+		  ,url: url+'/tablesignfont/uploadFont'//改成您自己的上传接口
+		  ,accept: 'file'
+		  ,exts: 'ttf|TTF'
+		  ,auto: false //是否选完文件后自动上传。如果设定 false，那么需要设置 bindAction 参数来指向一个其它按钮提交上传
+		  ,bindAction:'#hideUpload' //指向一个按钮触发上传，一般配合 auto: false 来使用。值为选择器或DOM对象
+		  ,done: function(res){
+			  console.log(res.data);
+			if(dataList == null){
+				return layer.msg('请填写相关选项！');
+			}else{
+				$.ajax({
+				    url: url + "/tablesignfont/insert",
+				    type: "get",
+				    data: {
+				        fontname:dataList.fontname,
+				        fontsize:res.data.fileSize,
+				        fontpath:res.data.uploadPath
+				    },
+				    async: false,
+				    xhrFields: {
+				        withCredentials: true
+				    },
+				    success: function (data) {
+						console.log(data.code)
+				        if (data.code == 0) {
+				            parent.layer.msg("添加成功")
+				            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+				            parent.layer.close(index);
+				            parent.reloads();
+				        }else{
+				            parent.layer.msg(data.msg)
+				        }
+				    },
+				    error: function (error) {
+				        console.log(error)
+				    }
+				})
+			}
+		  }
+		  ,error: function(index, upload){
+		      //当上传失败时，你可以生成一个“重新上传”的按钮，点击该按钮时，执行 upload() 方法即可实现重新上传
+		  }
+		});
+		
+		
+        form.on('submit(addsms)', function (data) {	
+            dataList = data.field;
+			console.log(data.field);
+			$("#hideUpload").click();
+            return false;
+        })
+    });
+</script>
+</body>
+
+</html>

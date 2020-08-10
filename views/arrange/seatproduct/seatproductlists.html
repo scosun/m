@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>短信通知</title>
+  <title>桌签产品管理</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -437,9 +437,9 @@
     table.on('tool(test-table-operate)', function (obj) {
       var data = obj.data;
       if (obj.event === 'edit') {
-        if (data.issendmail == 1) {
+        /*if (data.issendmail == 1) {
           return layer.msg('当前短信已发送无法修改')
-        }
+        }*/
         layer.open({
           type: 2,
           //title: '收藏管理 (考生姓名：张无忌)',
@@ -449,8 +449,6 @@
           area: ['40%', '40%'],
           btn: ['确定', '取消'],
           closeBtn: 1,
-          //offset: '-43px',
-          //  content: $('#show-view'),
           content: 'seatproductupdate.html?productKey=' + obj.data.productKey,
           success: function (layero, index) {
           },
@@ -494,9 +492,7 @@
 
       }
     });
-    // form.on('submit(component-form-search)', function(data) {
-    //     alert(1);
-    // })
+
     var $ = layui.$,
 
             active = {
@@ -518,8 +514,6 @@
                   //     $(this).removeClass('layui-form-checked')
                   // }
                 })
-
-
               },
               //批量删除
               getCheckLength: function () {
@@ -602,7 +596,7 @@
                 layer.open({
                   type: 2,
                   //title: '收藏管理 (考生姓名：张无忌)',
-                  title: '新建短信通知',
+                  title: '新建产品',
                   // maxmin: true,
                   shadeClose: false, //弹出框之外的地方是否可以点击
                   area: ['100%', '100%'],
