@@ -122,12 +122,21 @@ layui.config({
 		$("#startyaxis").val(axisxy.y1);
 		$("#endxaxis").val(axisxy.x);
 		$("#endyaxis").val(axisxy.y);
+
+		$("#seatnum").val(axisxy.seatnum||"");
+		$("#select_ruleid").val(axisxy.select_ruleid||"1");
+
+		layui.form.render("select");
+		
 		window.sessionStorage.setItem("__ovalaxisxy","");
 	}
 
 	$("#mousecheck").bind('click',function(){
 		// window.parent.bindRulePoint();
-		window.parent.seatmaps.mouseCreateMapAxis("oval");
+		var seatnum = $("#seatnum").val() || "";
+		var select_ruleid = $("#select_ruleid").val() || "";
+
+		window.parent.seatmaps.mouseCreateMapAxis("oval",seatnum,select_ruleid);
 
 		var index = parent.layer.getFrameIndex(window.name);
 		parent.layer.close(index);

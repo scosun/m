@@ -126,12 +126,23 @@ layui.config({
 		$("#startyaxis").val(axisxy.y1);
 		$("#endxaxis").val(axisxy.x);
 		$("#endyaxis").val(axisxy.y);
+
+		$("#edges").val(axisxy.edges||"")
+		$("#seat_nums").val(axisxy.seatnum||"");
+		$("#select_ruleid").val(axisxy.select_ruleid||"1");
+
+		layui.form.render("select");
+		
 		window.sessionStorage.setItem("__polygonaxisxy","");
 	}
 
 	$("#mousecheck").bind('click',function(){
+		var edges = $("#edges").val() || "";
+		var seat_nums = $("#seat_nums").val() || "";
+		var select_ruleid = $("#select_ruleid").val() || "";
+
 		// window.parent.bindRulePoint();
-		window.parent.seatmaps.mouseCreateMapAxis("polygon");
+		window.parent.seatmaps.mouseCreateMapAxis("polygon",seat_nums,select_ruleid,edges);
 
 		var index = parent.layer.getFrameIndex(window.name);
 		parent.layer.close(index);

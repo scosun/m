@@ -1710,7 +1710,7 @@ var __handDrag = null;
 		}.bind(this));
 	}
 
-	seatMapsEditor.prototype.mouseCreateMapAxis = function(mt){
+	seatMapsEditor.prototype.mouseCreateMapAxis = function(mt,seatnum,select_ruleid,edges){
 		this.removeContainerEvent();
 		$("#circlemousexyId").show();
 
@@ -1729,6 +1729,9 @@ var __handDrag = null;
 				var x1 = parseInt($("#circlemousexyId").css("left")) + 3;
 				var y1 = parseInt($("#circlemousexyId").css("top")) + 3;
 				var point = {x1:x1,y1:y1,x:x,y:y};
+				point.seatnum = seatnum;
+				point.select_ruleid = select_ruleid;
+				point.edges = edges;
 				if(mt=="oval"){
 					window.sessionStorage.setItem("__ovalaxisxy",JSON.stringify(point));
 					window.__createOval();
@@ -2312,15 +2315,12 @@ var __handDrag = null;
 		
 	seatMapsEditor.prototype.bulidSeverPolygonContainer = function(data,type){
 		
-		// var maxwidth = data.width/2 || 1000;
-		// var maxheight = data.height/2 || 500;
-		var maxwidth = data.width || 1000;
-		var maxheight = data.height || 500;
+		// var maxwidth = data.width || 1000;
+		// var maxheight = data.height || 500;
 
-		// $("#seatcontainer").width(maxwidth + 100);
-		// $("#seatcontainer").height(maxheight + 150);
-		$("#seatcontainer").width(maxwidth);
-		$("#seatcontainer").height(maxheight);
+
+		// $("#seatcontainer").width(maxwidth);
+		// $("#seatcontainer").height(maxheight);
 
 		var seatw = 40;
 		var seath = 40;
@@ -2345,11 +2345,12 @@ var __handDrag = null;
 			}else{
 				seat.seatid = "o-" + group + "-" + seat.seatid;
 			}
-			seathtml.push('<div class="seatdiv" group='+group+' style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '" title="' + seat.seatid + '" >' + (i+1) + '</div>');
+			var text = seat.seatid.split('-')[3];
+			seathtml.push('<div class="seatdiv" group='+group+' style="transform: rotate('+seat.rotate+'deg);transform-origin:50% 50%;'+'top:' + seat.top + 'px; left:'+ seat.left + 'px;" id="' + seat.seatid + '" title="' + seat.seatid + '" >' + text + '</div>');
 			
 		}
 		group++;
-		$("#seatcontainerId").html(seathtml.join(''));
+		$("#seatcontainerId").append(seathtml.join(''));
 	}
 
 	seatMapsEditor.prototype.autoRunCode = function(ruleid,seatids){
