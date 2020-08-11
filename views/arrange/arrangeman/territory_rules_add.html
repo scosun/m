@@ -658,12 +658,14 @@
 				var seled1 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
 				var seled2 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='c']");
 				var seled3 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='r']");
+				var seled4 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='o']");
 
-				var seleds = [seled1,seled2,seled3];
+				var seleds = [seled1,seled2,seled3,seled4];
 				var seatsdata = {
 					"s":{},
 					"c":{},
-					"r":{}
+					"r":{},
+					"o":{}
 				}
 				for(var i = 0,len = seleds.length; i < len; i++){
 					var seats = seleds[i] || [];
@@ -726,18 +728,30 @@
 								var id = $(this).attr("id");
 								seatsids.push(id);
 							});
-						}else if(stype == "c" || stype == "r"){
+						}else if(stype == "c" || stype == "r" || style == "o"){
 							var up = [];
 							var down = [];
-							seatids.forEach(function(seatid){
-								var ang = +$("#"+seatid).attr("ang");
-								// console.log(ang)
-								if(ang > 360 && ang < 540){
-									down.push(seatid);
-								}else{
-									up.push(seatid);
-								}
-							});
+							if(stype == "c" || stype == "r"){
+								seatids.forEach(function(seatid){
+									var ang = +$("#"+seatid).attr("ang");
+									// console.log(ang)
+									if(ang > 360 && ang < 540){
+										down.push(seatid);
+									}else{
+										up.push(seatid);
+									}
+								});
+							}else if(stype == "o"){
+								seatids.forEach(function(seatid){
+									var ids = seatid.split("-");
+									// console.log(ang)
+									if(ids[2] == 2){
+										down.push(seatid);
+									}else{
+										up.push(seatid);
+									}
+								});
+							}
 							// console.log(up,down,seatids)
 
 							up.sort(function(a,b){
