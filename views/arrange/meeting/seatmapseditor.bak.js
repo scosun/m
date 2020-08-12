@@ -141,11 +141,15 @@ var __handDrag = null;
 		var width = lefts[lefts.length - 1];
 		var height = tops[tops.length - 1];
 
-
+		//可视区域 宽高，如果座区图比 可视区域还小，就用可视区域作为宽高
 		var clientwidth = document.documentElement.clientWidth - 100;
-		var clientheight = document.documentElement.clientHeight - 306;
+		var clientheight = document.documentElement.clientHeight - 290;
 		if(width < clientwidth){
 			width = clientwidth;
+
+			$("#meetingaddress").css({"bottom":"","top":height+150+"px"});
+			$("#meetingtime").css({"bottom":"","top":height+150+"px"});
+			$("#meetingremark").css({"bottom":"","top":height+180+"px"});
 		}
 		if(height < clientheight){
 			height = clientheight;
@@ -155,7 +159,8 @@ var __handDrag = null;
 		// if(issave){
 			$("#seatcontainer").width(width + 100);
 		// }
-		$("#seatcontainer").height(height + 250);
+		// $("#seatcontainer").height(height + 250);
+		$("#seatcontainer").height(height + 210);
 	}
 
 
