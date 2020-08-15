@@ -14,54 +14,107 @@ layui.config({
     var b = {};
     var $ = layui.$,
         setter = layui.setter,
-        admin = layui.admin,
+        // admin = layui.admin,
         form = layui.form,
-        element = layui.element,
-        table = layui.table,
+        // element = layui.element,
+        // table = layui.table,
         layer = layui.layer,
         upload = layui.upload,
-        laypage = layui.laypage,
-        laydate = layui.laydate,
-        datas = null,
-        soulTable = layui.soulTable,
+        // laypage = layui.laypage,
+        // laydate = layui.laydate,
+        // datas = null,
+        // soulTable = layui.soulTable,
         router = layui.router();
-    element.render();
+    // element.render();
 
-    $('.layui-ds').on('click', function() {
+    $('.layui-ds,.layui-right-nav i').on('click', function() {
         var type = $(this).data('type');
         active[type] && active[type].call(this);
     });
 
-    var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
-    // 座区数据
-    var seatsdata = [];
+    upload.render({
+        elem: '#nav-upload'
+        , url:  url+"/wordtemplate/uploadWordTemplate",
+        data:{
+            "meetingid":meetingid,
+            "roomtemplateid":roomId
+        },
+        // auto: false,
+        exts: 'doc|docx',
+        //bindAction: '#btn99',
+        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+        //     obj.preview(function (index, file, result) {
+        //         // console.log(index); //得到文件索引
+        //         // console.log(file);
+        //         uploadfile = file //得到文件对象
+        //         // console.log(uploadfile)
+        //         // console.log(result); //得到文件base64编码，比如图片
+        //
+        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+        //
+        //         //这里还可以做一些 append 文件列表 DOM 的操作
+        //
+        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+        //     });
+        // },
+        done: function (res) {
+            if (res.code == 200) {
+               parent.layer.msg(res.msg)
+            }
+        }
+    });
+
+   
 
     var url = setter.baseUrl;
     var seatUrl = setter.seatBaseUrl;
 
-    var uri = window.location.search;
-    var str = uri.substr(1);
-    var roomtemplateid;
-    // window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
-    // window.meetingid = str.substring(str.lastIndexOf("=")+1)
-    // window.roomid = str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
-    // window.newroomid = roomid.substring(roomid.indexOf("=")+1,roomid.length);
+    // var uri = window.location.search;
+    // var str = uri.substr(1);
+    // var roomtemplateid;
     
     function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-         var uri = window.location.search;
-        var r = uri.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return r[2]; return null; //返回参数值
+        //构造一个含有目标参数的正则表达式对象
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var uri = window.location.search;
+        //匹配目标参数
+        var r = uri.substr(1).match(reg);
+        //返回参数值
+        if (r != null) return r[2]; return null;
     }
     var meetingid = +getUrlParam("meetingid") || null;
     var meetingname = +getUrlParam("name") || null;
-    $("#meetingname").val(meetingname)
-    var roomId = 0
+    $("#meetingname").val(meetingname);
+
+    var roomId = 0;
  
     if(!meetingid){
         layer.msg("没有获取到会议id");
         return;
     }
+
+    var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
+    // 座区数据
+    var showSeatsData = [];
+
+    var dragSortData=[];
+
+    $.ajax({
+        type: "get",
+        url: seatUrl +"/v1/attributes/color?meeting_id="+meetingid,
+        dataType: "json",
+        success: function(obj) {
+            var data = obj.data || [];
+            if(data && data.length > 0){
+                $.each(data, function (index, item) {
+                    // 下拉菜单里添加元素
+                    $('#ruleselect').append(new Option(item.name, item.id));
+                });
+                layui.form.render("select");
+            }
+        }
+    });
 
     $.ajax({
         url: url+"/meeting/findroomBymeetingid?id=" + meetingid,
@@ -109,7 +162,6 @@ layui.config({
         });
     }
 
-
     function getRoomTemplateCode(roomid){
         roomId = roomid;
 
@@ -134,14 +186,17 @@ layui.config({
 
                     $("#seatsbody").html(datas.templatecode);
                     
+                    // 激活框选功能
                     selectSeats();
 
+                    //获取 会议 名称
                     getMeetInfo();
 
-                    if(seatsdata.length == 0){
-                        queryAllSeatStatus();
+                    if(showSeatsData.length == 0){
+                        // 初始化没有数据，查询show接口查名字
+                        queryAllSeatStatusByShow();
                     }else{
-                        changeSeatColor(seatsdata);
+                        changeSeatColor(showSeatsData);
                     }
                 }else{
                     layer.msg("获取会议室模板错误");
@@ -155,30 +210,6 @@ layui.config({
         });
     }
 
-    function queryAllSeatStatus(){
-        $.ajax({
-            async: false,
-            type: "get",
-            url: seatUrl +"/v1/meetings/show?meeting_id="+meetingid,
-            dataType: "json",
-            success: function(obj) {
-                console.log("--queryAllSeatStatus---");
-                dragSortData = [];
-
-                if(obj && obj.attendees){
-                    seatsdata = obj.attendees || [];
-
-                    changeSeatColor(obj.attendees);
-                }
-            },
-            //失败的回调函数
-            error: function() {
-                console.log("error")
-            }
-        });
-    }
-
-    
     function getMeetInfo(){
         $.ajax({
             url: url+"/meeting/findByMeeting",
@@ -205,6 +236,103 @@ layui.config({
         });
     }
 
+    function queryAllSeatStatusByShow(){
+        $.ajax({
+            async: false,
+            type: "get",
+            url: seatUrl +"/v1/meetings/show?meeting_id="+meetingid,
+            dataType: "json",
+            success: function(obj) {
+                console.log("--queryAllSeatStatusByShow---");
+                // 清空拖拽排序的数据
+                dragSortData = [];
+
+                if(obj && obj.attendees){
+                    // 保存show接口返回的人名数据
+                    showSeatsData = obj.attendees || [];
+
+                    changeSeatColor(obj.attendees);
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    }
+
+    // window.serverSeatIds = [];
+    function changeSeatColor(attendees){
+        // debugger
+        if(attendees.length > 0){
+            var ruleselect = $("#ruleselect").val() || "";
+            // serverSeatIds = [];
+
+            if(ruleselect == ""){
+                for(var i = 0,len = attendees.length; i < len; i++){
+                    // {"seatid":"1-1","attender":"028","id":"39"}
+                    var item = attendees[i] || {};
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        $("#" + item.seatid).css("background-color","");
+                        $("#" + item.seatid).html(item.attender);
+                    }
+                }
+            }else if(ruleselect == 1){
+                for(var i = 0,len = attendees.length; i < len; i++){
+                    // {"seatid":"1-1","attender":"028","id":"39"}
+                    var item = attendees[i] || {};
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        $("#" + item.seatid).css("background-color",item.bgcolor);
+                        $("#" + item.seatid).html(item.attender);
+                        // serverSeatIds.push(item.seatid);
+                    }
+                }
+            }else{
+                var colorsids = [];
+                attendees.forEach(function(item){
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        if(colorsids.indexOf(cid) == -1){
+                            colorsids.push(cid);
+                        }
+                    }
+                });
+                var colorsobj = {};
+                var cli = 0;
+                colorsids.forEach(function(item){
+                    colorsobj[item] = seatcolors[cli];
+                    cli++;
+                    if(cli==5){
+                        cli=0;
+                    }
+                });
+
+                attendees.forEach(function(item){
+                    //多会场判断只加载当前会议室的数据
+                    if(item.roomtemplate_id == roomId){
+                        var colors = item.colors;
+                        var cid = colors[ruleselect];
+                        var cc = colorsobj[cid];
+                        $("#" + item.seatid).css("background-color",cc);
+                    }
+                });
+            }
+        }else{
+            var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+            seats.css("background-color","");
+            seats.each(function(){
+                var ids = $(this).attr("id").split("-");
+                $(this).text(ids[3]);
+            });
+        }
+    }
+
+    
+
     /*右侧菜单HOVER显示提示文字*/
     var subtips;
     $('.layui-right-nav i').each(function(){
@@ -224,48 +352,15 @@ layui.config({
     /*右侧菜单HOVER显示提示文字 end*/
 
     
-    
-    
-    $.ajax({
-        type: "get",
-        url: seatUrl +"/v1/attributes/color?meeting_id="+meetingid,
-        dataType: "json",
-        success: function(obj) {
-            var data = obj.data || [];
-            if(data && data.length > 0){
-                $.each(data, function (index, item) {
-                    $('#ruleselect').append(new Option(item.name, item.id));// 下拉菜单里添加元素
-                });
-                layui.form.render("select");
-            }
-        }
-    });
-    
-    function getPending(attr){
-        attr = attr || "";
-        $.ajax({
-            type: "get",
-            url: seatUrl +"/v1/attendees/pending?meeting_id="+meetingid+"&filter_attribute="+attr,
-            dataType: "json",
-            success: function(obj) {
-                console.log("pending-----",obj)
-                getAskLeaveData(obj.leave);
-                getNotImportData(obj.pending);
-
-                var attribute_kinds = obj.attribute_kinds || [];
-                setAttributeHtml(attribute_kinds);
-            }
-        });
-    }
-    getPending();
-
     form.on('select(component-ruleselect)', function(data){
-        var id = +data.value;
+        // var id = +data.value;
         // meetingId = id;
         // getRuleSetups(id);
-        changeSeatColor(seatsdata);
+        changeSeatColor(showSeatsData);
     });
-
+    
+    
+    
     var attributestatus = false;
     var attrcurrent = "";
     $("#setattribute").bind("click",function(){
@@ -286,7 +381,7 @@ layui.config({
         seled.each(function(){
             // var id = $(this).attr("id");
             
-            // var seat = seatsdata.filter(function(item){
+            // var seat = showSeatsData.filter(function(item){
             //     return item.seatid == id;
             // })[0] || null;
 
@@ -308,8 +403,6 @@ layui.config({
     }
 
 
-
-
     function importSeatsData(condi){
         $.ajax({
             async: true,
@@ -321,7 +414,7 @@ layui.config({
             success: function(obj) {
                 console.log("--importSeatsData---",condi);
                 if(obj && obj.attendees){
-                    seatsdata = obj.attendees;
+                    showSeatsData = obj.attendees;
                     
                     //导入数据是全部的数据，重新获取模板加载人员
                     getRoomTemplateCode(roomId);
@@ -349,11 +442,13 @@ layui.config({
                 console.log("--setSeatData---",obj);
                 if(obj && obj.attendees){
                     //保存完之后，要重新查一下吗
-                    queryAllSeatStatus();
+                    queryAllSeatStatusByShow();
 
                     //保存完之后，要重新查一下未导入人员列表
                     getPending(attrcurrent);
 
+                    // 激活框选功能
+                    selectSeats();
                     layer.msg("保存成功");
                 }else{
                     layer.msg("保存错误");
@@ -367,8 +462,31 @@ layui.config({
     }
 
 
+    getPending();
     
     var groupids = {};
+
+    // 获取未导入人员列表
+    function getPending(attr){
+        attr = attr || "";
+        $.ajax({
+            type: "get",
+            url: seatUrl +"/v1/attendees/pending?meeting_id="+meetingid+"&filter_attribute="+attr,
+            dataType: "json",
+            success: function(obj) {
+                console.log("pending-----",obj)
+                getAskLeaveData(obj.leave);
+                getNotImportData(obj.pending);
+
+                //分类
+                var attribute_kinds = obj.attribute_kinds || [];
+                setAttributeHtml(attribute_kinds);
+
+
+                // $($("#notImportList > li")[1]).find("h4").trigger("click");
+            }
+        });
+    }
 
     //获取请假人员列表
     function getAskLeaveData(obj){
@@ -407,10 +525,7 @@ layui.config({
                 groupids[k].push(item.id);
             });
         }
-        
-
         addAskLeaveHtml(data);
-
     }
     function addAskLeaveHtml(data){
 
@@ -420,7 +535,7 @@ layui.config({
             var title = item.title;
             var list = item.list;
             li.push('<li>');
-            li.push('<h4>' + title + '(<span>' + list.length + '人)</span><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
+            li.push('<h4 >' + title + '(<span>' + list.length + '人)</span><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -485,7 +600,7 @@ layui.config({
             var list = item.list;
             li.push('<li>');
             // li.push('<h4>' + title + '(<span>' + list.length + '</span>人)<a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a></h4>')
-            li.push('<h4><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a>' + title + '(<span>' + list.length + '</span>人)</h4>')
+            li.push('<h4 ><a data="' + title + '" class="drag-staff" href="javascript:;"><img height="16" src="../../../images/toolkit/hand.svg"></a>' + title + '(<span>' + list.length + '</span>人)</h4>')
             li.push('<ul class="list-body">')
             for(var j = 0,len2 = list.length; j < len2; j++){
                 var item2 = list[j];
@@ -553,12 +668,12 @@ layui.config({
             item.ondragstart = function(evt){
                 // evt.preventDefault();
                 // evt.stopPropagation();
-                console.log("dragstart-----------------")
+                // console.log("dragstart-----------------")
                 bindStaffDrap();
                 // return false;
             }
             item.ondragend = function(evt){
-                console.log("ondragend-----------------",evt,this.id);
+                // console.log("ondragend-----------------",evt,this.id);
                 
                 unbindStaffDrap();
                 if($(".R99").length > 0){
@@ -579,7 +694,7 @@ layui.config({
                     }else{
                         condi.attendee_ids = [+pid];
                     }
-                    console.log(id,pid,condi);
+                    // console.log(id,pid,condi);
                     saveDragSort(condi);
                 }
             }
@@ -617,7 +732,7 @@ layui.config({
     }
 
 
-    dragSortData=[];
+    
 
     function saveDragSort(data){
         $.ajax({
@@ -630,11 +745,15 @@ layui.config({
                 console.log("pending-----",obj)
                 // getAskLeaveData(obj.leave);
                 // getNotImportData(obj.pending);
+                // debugger
                 if(obj && obj.attendees){
                     // dragSortData = obj.attendees;
                     dragSortData.push(obj.attendees);
 
                     changeDragSeatColor(obj.attendees);
+
+                    //每次拖拽都保存一下数据, 不保存也行
+                    // saveSeats();
 
                     dragSaveChangeStaffHtml(obj.attendees);
                 }
@@ -656,6 +775,7 @@ layui.config({
                 if(item.roomtemplate_id == roomId){
                     // 拖拽完不显示颜色
                     // $("#" + item.seatid).css("background-color",item.bgcolor);
+                    $("#" + item.seatid).css("background-color","");
                     $("#" + item.seatid).html(item.attender);
                     // serverSeatIds.push(item.seatid);
                 }
@@ -699,66 +819,7 @@ layui.config({
     }
 
 
-    window.serverSeatIds = [];
-    function changeSeatColor(attendees){
-        if(attendees.length > 0){
-            var ruleselect = $("#ruleselect").val() - 0;
-            serverSeatIds = [];
-            if(ruleselect == 1){
-                for(var i = 0,len = attendees.length; i < len; i++){
-                    // {"seatid":"1-1","attender":"028","id":"39"}
-                    var item = attendees[i] || {};
-                    //多会场判断只加载当前会议室的数据
-                    if(item.roomtemplate_id == roomId){
-
-                        $("#" + item.seatid).css("background-color",item.bgcolor);
-                        $("#" + item.seatid).html(item.attender);
-                        
-                        serverSeatIds.push(item.seatid);
-                    }
-                }
-            }else{
-                var colorsids = [];
-                attendees.forEach(function(item){
-                    //多会场判断只加载当前会议室的数据
-                    if(item.roomtemplate_id == roomId){
-                        var colors = item.colors;
-                        var cid = colors[ruleselect];
-                        if(colorsids.indexOf(cid) == -1){
-                            colorsids.push(cid);
-                        }
-                    }
-                });
-                var colorsobj = {};
-                var cli = 0;
-                colorsids.forEach(function(item){
-                    colorsobj[item] = seatcolors[cli];
-                    cli++;
-                    if(cli==5){
-                        cli=0;
-                    }
-                });
-
-                attendees.forEach(function(item){
-                    //多会场判断只加载当前会议室的数据
-                    if(item.roomtemplate_id == roomId){
-                        var colors = item.colors;
-                        var cid = colors[ruleselect];
-                        var cc = colorsobj[cid];
-                        $("#" + item.seatid).css("background-color",cc);
-                    }
-                });
-            }
-        }else{
-            var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-            seats.css("background-color","");
-            seats.each(function(){
-                var ids = $(this).attr("id").split("-");
-                $(this).text(ids[3]);
-            });
-        }
-    }
-
+    
     function saveSeats(){
         var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
         var seatsobj = {
@@ -767,7 +828,8 @@ layui.config({
         };
         var ids = {};
         var names = {};
-        seatsdata.forEach(function(item){
+        
+        showSeatsData.forEach(function(item){
             if(item.roomtemplate_id == roomId){
                 ids[item.seatid] = item.id;
                 names[item.seatid] = item.attender;
@@ -802,7 +864,15 @@ layui.config({
                         seatsobj.attendees.push({id:ids[id],attender:name,seatid:id,roomtemplate_id:+roomId});
                     }else{
                         //挪动名字之后  原来的位置名字跟id对不上，就没传id
-                        seatsobj.attendees.push({attender:name,seatid:id,roomtemplate_id:+roomId});
+                        // seatsobj.attendees.push({attender:name,seatid:id,roomtemplate_id:+roomId});
+                        var sid = $(this).attr("sid");
+                        if(ids[sid]){
+                            // 挪动名字需要把原来的id带回去
+                            seatsobj.attendees.push({id:ids[sid],attender:name,seatid:id,roomtemplate_id:+roomId});
+                        }else{
+                            // 右键添加名字没有id
+                            seatsobj.attendees.push({attender:name,seatid:id,roomtemplate_id:+roomId});
+                        }
                     }
                 }else{
                     // 新加名字  或者 挪动
@@ -821,9 +891,10 @@ layui.config({
         座区图保存规则
         1.当名字和位置都没有变化，传递原来的id,name,seatid;
         2.当把名字挪动到其它空白位置，不修改原来的名字，传递名字原来的座位id,name,新的seatid;
-        3.当修改座位上原有名字（直接拖拽其它座区名字覆盖当前名字和通过右键改名字），传递新的name 和 seatid;
-        4.当使用右键在空间座区添加新名字，传递新建的name 和 seatid
-        ps: 当前的座区图不支持交换操作，如需交换 可以 先把名字拖拽到空白座区，然后再做交换。
+        3.当进行座区交换名字，应该也是传递名字原来的座位id,name,新的seatid;同2一样;
+
+        4.当修改座位上原有名字 传递新的name 和 seatid;
+        5.当使用右键在空间座区添加新名字，传递新建的name 和 seatid
         */
         setSeatData(seatsobj);
     }
@@ -831,93 +902,8 @@ layui.config({
 
     
 
-
-    /**
-     * 打印局部div
-     * @param printpage 局部div的ID
-     */
-    function printdiv(printpage) {
-        // var headhtml = "<html><head><title></title></head><body>";
-        // var foothtml = "</body>";
-        // // 获取div中的html内容
-        // // var newhtml = document.all.item(printpage).innerHTML;
-        // // 获取div中的html内容，jquery写法如下
-        // var newhtml= $("#" + printpage).html();
-
-        // // 获取原来的窗口界面body的html内容，并保存起来
-        // var oldhtml = document.body.innerHTML;
-
-        // // 给窗口界面重新赋值，赋自己拼接起来的html内容
-        // document.body.innerHTML = headhtml + newhtml + foothtml;
-        // // 调用window.print方法打印新窗口
-        // window.print();
-
-        // // 将原来窗口body的html值回填展示
-        // document.body.innerHTML = oldhtml;
-        // return false;
-    }
     
-    //上传模板文件的类型判断
-    /* function uploadFile(){
-        var fileName = $("#upload-file").val();
-        var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        console.log(fileType);
-        if(fileType!=".docx" && fileType!=".doc"){
-            alert("上传模板类型错误！")
-            console.log("上传模板类型错误！");
-            return false;
-        }else {
-            var file = document.getElementById("upload-file").files[0];
-            upload(meetingid,newroomid,file);
-        }
-    } */
     
-    // $('#upload-file').on('change', function() {
-    //     var fileName = $("#upload-file").val();
-    //     var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-    //     console.log(fileType);
-    //     if(fileType!=".docx" && fileType!=".doc"){
-    //         /* alert("上传模板类型错误！") */
-    //         console.log("上传模板类型错误！");
-    //         return false;
-    //     }else {
-    //         var file = document.getElementById("upload-file").files[0];
-    //         uploads(meetingid,roomId,file);
-    //     }
-    // });
-    upload.render({
-        elem: '#nav-upload'
-        , url:  url+"/wordtemplate/uploadWordTemplate",
-        data:{
-            "meetingid":meetingid,
-            "roomtemplateid":roomId
-
-        },
-        // auto: false,
-        exts: 'doc|docx',
-        //bindAction: '#btn99',
-        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-        //     obj.preview(function (index, file, result) {
-        //         // console.log(index); //得到文件索引
-        //         // console.log(file);
-        //         uploadfile = file //得到文件对象
-        //         // console.log(uploadfile)
-        //         // console.log(result); //得到文件base64编码，比如图片
-        //
-        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
-        //
-        //         //这里还可以做一些 append 文件列表 DOM 的操作
-        //
-        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
-        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
-        //     });
-        // },
-        done: function (res) {
-            if (res.code == 200) {
-               parent.layer.msg(res.msg)
-            }
-        }
-    });
     
     // function uploads(meetingid,newroomid,file){
     //     var formData = new FormData();
@@ -1027,6 +1013,56 @@ layui.config({
                 }
             });
         },
+        bindLockSeats:function(){
+            bindLockSeats();
+        },
+        bindOneSeats:function(){
+            bindOneSeats();
+        },
+        selectSeats:function(){
+            selectSeats();
+        },
+        dragSeats:function(){
+            dragSeats(saveSeats);
+        },
+        bindContextMenu:function(){
+            bindContextMenu();
+        },
+        removeContextMenu:function(){
+            removeContextMenu();
+        },
+        navDelete:function(){
+            deleteBingName();
+        },
+        navClear:function(){
+            var condi = {
+                "meeting_id": meetingid,
+                "attendees": []
+            }
+            setSeatData(condi);
+        },
+        saveseats:function(){
+            saveSeats();
+        },
+        importData: function() {
+            var condi = {
+                "meeting_id": +meetingid
+            };
+            importSeatsData(condi);
+        },
+        print:function(){
+            // printJS('seatcontainer', 'html');
+            // printdiv("seatcontainer");
+            $("#seatcontainer").jqprint({
+                debug: false, 
+                importCSS: true, 
+                printContainer: true, 
+                operaSupport: false
+            });
+        },
+        upload:function() {
+            $("#upload-file").trigger("click");
+        },
         word:function(){
             window.location=seatUrl +"/v1/wordtemplates/download?meeting_id="+meetingid+"&roomtemplate_id="+roomId;
             // layer.open({
@@ -1058,69 +1094,12 @@ layui.config({
             //     }
             // })
         },
-        importData: function() {
-            var condi = {
-                "meeting_id": +meetingid
-            };
-            importSeatsData(condi);
-        },
-        bindLockSeats:function(){
-            bindLockSeats();
-        },
-        selectSeats:function(){
-            selectSeats();
-        },
-        dragSeats:function(){
-            dragSeats();
-        },
-        bindOneSeats:function(){
-            bindOneSeats();
-        },
-        bindContextMenu:function(){
-            bindContextMenu();
-        },
-        navDelete:function(){
-            deleteBingName();
-        },
-        navClear:function(){
-            var condi = {
-                "meeting_id": meetingid,
-                "attendees": []
-            }
-            setSeatData(condi);
-        },
-        removeContextMenu:function(){
-            removeContextMenu();
-        },
-        print:function(){
-            // printJS('seatcontainer', 'html');
-            // printdiv("seatcontainer");
-            $("#seatcontainer").jqprint({
-                debug: false, 
-                importCSS: true, 
-                printContainer: true, 
-                operaSupport: false
-            });
-        },
-        saveseats:function(){
-            saveSeats();
-        },
-        upload:function() {
-            $("#upload-file").trigger("click");
-        },
         close: function() {
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
             parent.layer.close(index); //再执行关闭 
             // parent.reloads()
         }
     };
-
-    $('.layui-right-nav i').on('click', function() {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
-
-
     
     function Drag(){
         this.dragWrap = $("#seatcontainer");

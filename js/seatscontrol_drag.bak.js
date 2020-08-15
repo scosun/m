@@ -280,13 +280,13 @@ function unbindOneSeats(){
 function bindContainerEvent(){
 	unbindOneSeats();
 
-	var $events = $("." + seatContainerClass).data("events");
+	var $events = $(".seatcontainer").data("events");
 	if($events && $events["mousedown"]){
 		
 	}else{
-		$("." + seatContainerClass).bind("mousedown",containerMouseDown);
-		$("." + seatContainerClass).bind("mousemove",containerMouseMove);
-		$("." + seatContainerClass).bind("mouseup",containerMouseUp);
+		$(".seatcontainer").bind("mousedown",containerMouseDown);
+		$(".seatcontainer").bind("mousemove",containerMouseMove);
+		$(".seatcontainer").bind("mouseup",containerMouseUp);
 	}
 }
 
@@ -311,15 +311,17 @@ function cancelDragSeats(){
 	$("#" + dragcontainerId).unbind("mousedown");
 	$("#" + dragcontainerId).unbind("mouseup");
 	$("#" + dragcontainerId).unbind("dblclick");
-
+	
+	$(".dragbg").removeAttr("did");
 	$(".dragbg").removeClass("dragbg");
+	
 
 	bindContainerEvent();
 }
 
 //拖拽选区
-function dragSeats(){
-	var seled = $("#seatcontainerId ."+seledClass);
+function dragSeats(callback){
+	var seled = $("#seatcontainerId .seled");
 
 	var lefts = [];
 	var tops = [];
@@ -347,21 +349,25 @@ function dragSeats(){
 		$(dragseats[j]).css({"left":sl-lefts[0],"top":st-tops[0]});
 	}
 
-	$("#" + dragcontainerId).css({"width":w+"px","height":h+"px","left":l+"px","top":t+"px"});
+	$("#dragcontainerId").css({"width":w+"px","height":h+"px","left":l+"px","top":t+"px"});
 	// $("#"+selDivId).append(seled);
 
 	removeContainerEvent();
 
 	// seled.removeClass
-	$("#" + dragcontainerId).html(dragseats);
-	$("#" + dragcontainerId).show();
+	$("#dragcontainerId").html(dragseats);
+	$("#dragcontainerId").show();
 
 
 
-	$("#" + dragcontainerId).on({
+	$("#dragcontainerId").on({
 		dblclick:function(e){
 			// console.log("drag dblclick");
 			dblclickDragSeats();
+
+			if(callback){
+				callback.call(this);
+			}
 		},
 		mousedown:function(e){
 			var el=$(this);
@@ -371,69 +377,79 @@ function dragSeats(){
 				dragContainerMove(e);
 			});
 		},
-	   	mouseup: function(e){ 
+	   	mouseup: function(e){
 		   $(document).off('mousemove.drag');
 		}
-	})
+	});
 }
 
 function dragContainerMove(e){
 	//获取推拽框位置
-	var container = $("#" + dragcontainerId);
-	// var cx = container.position().left;
-	// var cy = container.position().top;
+	var container = $("#dragcontainerId");
+
 	var cx = parseInt(container.css("left"));
 	var cy = parseInt(container.css("top"));
 
-	//获取框内方框位置
+	//获取拖拽层 所有座位位置
 	var seledPos = [];
 	var seledIds = [];
-	var seled = container.find("."+seledClass);
+	var seled = container.find(".seled");
 	// console.log("seled------",seled)
 	for(var n = 0,len = seled.length; n < len; n++){
-		// var x = $(seled[n]).position().left;
-		// var y = $(seled[n]).position().top;
 		var x = parseInt($(seled[n]).css("left"));
 		var y = parseInt($(seled[n]).css("top"));
 
+		//相加 为了正好匹配上 原始的座区图 位置
 		seledPos.push([cx+x,cy+y]);
 		seledIds.push(seled[n].id);
 	}
 	for (var i = 0,ilen = selList.length; i < ilen; i++) {
 		var sel = $(selList[i]);
-		// var sl = sel.position().left;
-		// var st = sel.position().top;
 		var sl = parseInt(sel.css("left"));
 		var st = parseInt(sel.css("top"));
 
 		if(isLocked(sel)){
 			continue;
 		}
-
+		
+		//是否匹配上
 		var sbl = false;
+
 		var did = "";
+		// 每一个座位都跟拖拽框做匹配
 		for(var j = 0, jlen = seledPos.length; j < jlen; j++){
 			var xy = seledPos[j];
-			if(serverSeatIds && serverSeatIds.length > 0){
-				if(serverSeatIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
-					sbl = true;
-					did = seledIds[j];
-					break;
-				}else{
-					sbl = false;
-				}
+			// serverSeatIds , 以前有逻辑，不能匹配上 有人的座区，现在改成 如果有人就做交换
+			// 唯一不能匹配的 自己那个座位
+			// if(serverSeatIds && serverSeatIds.length > 0){
+			// 	if(serverSeatIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
+			// 		sbl = true;
+			// 		did = seledIds[j];
+			// 		break;
+			// 	}else{
+			// 		sbl = false;
+			// 	}
+			// }else{
+			// 	if(seledIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
+			// 		sbl = true;
+			// 		did = seledIds[j];
+			// 		break;
+			// 	}else{
+			// 		sbl = false;
+			// 	}
+			// }
+
+			if(seledIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
+				sbl = true;
+				did = seledIds[j];
+				break;
 			}else{
-				if(seledIds.indexOf(sel.attr("id")) == -1 && Math.abs(sl-xy[0]) >= 0 && Math.abs(sl-xy[0]) <= 20 && Math.abs(st-xy[1]) >= 0 && Math.abs(st-xy[1]) <= 20){
-					sbl = true;
-					did = seledIds[j];
-					break;
-				}else{
-					sbl = false;
-				}
+				sbl = false;
 			}
 		}
 		if(sbl){
 			sel.addClass("dragbg");
+			//匹配上的座区，就是历史那个座区的id，赋值给did
 			sel.attr("did",did);
 		}else{
 			sel.removeClass("dragbg");
@@ -443,6 +459,7 @@ function dragContainerMove(e){
 }
 
 function dblclickDragSeats(){
+	// dragbg 匹配上的座区
 	var dragmatch = $(".dragbg");
 	var ids = [];
 	for(var i = 0,len = dragmatch.length; i < len; i++){
@@ -458,36 +475,44 @@ function dblclickDragSeats(){
 	ids.forEach(function(item){
 		var dname = $("#" + item.did).html();
 		if(reg.test(dname)){
-			//空座位不做交换
+			//空座位不做交换, 如果选中要拖拽的是空座，拖拽匹配后不做处理
 			reg.lastIndex = 0;
 			return;
 		}
+
+
+		// 先，获取拖拽 匹配上座区的 名称 用来做交换备用
 		var nname = $("#" + item.nid).html();
 
+		// 拖拽的名字，赋值给座区，并且给绑定一个把原来座区的id，绑定到sid
 		$("#" + item.nid).html(dname);
 		$("#" + item.nid).attr("sid",item.did);
+		
+		
 		if(!reg.test(nname)){
-			// 有人名, 交换
+			// 有人名, 把当前座区的名字赋值给拖拽的座区
+			// 然后把这个座区的id, 赋值给拖拽座区 sid
 			$("#" + item.did).html(nname);
 			$("#" + item.did).attr("sid",item.nid);
 		}else{
-			$("#" + item.did).html(item.did.split('-')[1]);
+			// 如果匹配是的空座，直接原来的座区 置空
+			$("#" + item.did).html(item.did.split('-')[3]);
 		}
 		reg.lastIndex = 0;
 		
 
-		if(serverSeatIds && serverSeatIds.length > 0){
-			serverSeatIds.splice(serverSeatIds.indexOf(item.did),1);
-		}
-		serverSeatIds.push(item.nid);
+		// if(serverSeatIds && serverSeatIds.length > 0){
+		// 	serverSeatIds.splice(serverSeatIds.indexOf(item.did),1);
+		// }
+		// serverSeatIds.push(item.nid);
 	});
 
 	
-	var seled = $("#seatcontainerId ."+seledClass);
-	seled.removeClass(seledClass);
+	var seled = $("#seatcontainerId .seled");
+	seled.removeClass("seled");
 
 	cancelDragSeats();
-	
+
 }
 
 var seatContainerClass = "seatcontainer";
@@ -517,7 +542,7 @@ var startY;
 
 
 function getAllSeatsNode(){
-	selList = $("#" + seatcontainerId).find("."+seatNodeClass).not(".rownumseats");
+	selList = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 	// var fileNodes = $("#" + seatcontainerId).find("."+seatNodeClass);
 	// for (var i = 0,len = fileNodes.length; i < len; i++) {
 	// 	if (fileNodes[i].className.indexOf(seatNodeClass) != -1) {
