@@ -77,8 +77,8 @@
 </head>
 <body>
 <header>
-		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
-				<a><cite> &nbsp; &nbsp; &nbsp; 座区图生成管理</cite></a>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;margin-left: 15px">
+				<a><cite id="name"></cite></a>
 
 				<a  href="javascript:;"><cite><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
             <!-- <a>
@@ -160,7 +160,11 @@
                 });
             }
         });
-
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }
         var areaIndex = 0;
         var colors = [
             "#FFC0CB",
@@ -178,7 +182,8 @@
         //    var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var str = uri.substr(1);
-        window.roomid = str.substring(str.indexOf("=")+1);
+        window.roomid = getUrlParam("roomid")
+        $('#name').text(getUrlParam("name"))
         window.ruleid = 0;
 
         console.log(roomid);
