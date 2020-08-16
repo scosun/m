@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<link rel="stylesheet" href="meeting_room_zq.css" />
-		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-		<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
-		<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
-		<script src="../../../js/scosun.js"></script>
-		<link rel="stylesheet" href="../../../css/seat.css" media="all">
-		<script type="text/javascript">  
-			function doNothing(){  
-				window.event.returnValue=false;  
-				return false;  
-			}
-		</script>
-	</head>
-	<body oncontextmenu="doNothing()">
-		<div class="layui-form-item">
-			<div class="layui-input-block">
-				<input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
-				 id="roomid" style="display: none;">
-			</div>
+<head>
+	<meta charset="utf-8">
+	<title>会场列表座区图</title>
+	<link rel="stylesheet" href="meeting_room_zq.css" />
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+	<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<script src="../../../js/scosun.js"></script>
+	<link rel="stylesheet" href="../../../css/seat.css" media="all">
+	<script type="text/javascript">  
+		function doNothing(){  
+			window.event.returnValue=false;  
+			return false;  
+		}
+	</script>
+</head>
+<body oncontextmenu="doNothing()">
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
+				id="roomid" style="display: none;">
 		</div>
-	</body>
+	</div>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 	<script type="text/javascript">
 		layui.config({
-		 	base: '../../../layuiadmin/' //静态资源所在路径
-		 }).extend({
-		 	index: 'lib/index' //主入口模块
-		 }).use(['index', 'user', 'table'], function() {
-			 var $ = layui.$,
-			 	form = layui.form,
-			 	element = layui.element,
-			 	table = layui.table,
-				setter = layui.setter,
-			 	layer = layui.layer,
-				 router = layui.router();
-				 var url = setter.baseUrl;
-				 var uri = window.location.search;
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'user', 'table'], function() {
+			var $ = layui.$,
+			form = layui.form,
+			element = layui.element,
+			table = layui.table,
+			setter = layui.setter,
+			layer = layui.layer,
+			router = layui.router();
+			var url = setter.baseUrl;
+			var uri = window.location.search;
 			var str = uri.substr(1);
 			window.roomid = str.substring(str.indexOf("=")+1,str.length);
 			// console.log(roomid)
 
-				layer.load(2);
+			layer.load(2);
+			
+			$.ajax({
+				url: url+"/roomtemplate/findByIdTemplatecode",
+				type: "post",
+				async: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"id": roomid
+				},
+				success: function(data) {
+					var datas = data.data
+					// console.log(datas)
+					$("body").html(datas.templatecode);
+					layer.closeAll();
+				},
+				error:function(){
+					layer.closeAll();
+				}
 				
-				$.ajax({
-					url: url+"/roomtemplate/findByIdTemplatecode",
-					type: "post",
-					async: true,
-					xhrFields: {
-						withCredentials: true
-					},
-					data: {
-						"id": roomid
-					},
-					success: function(data) {
-						var datas = data.data
-						console.log(datas)
-						$("body").html(datas.templatecode);
-						layer.closeAll();
-					},
-					error:function(){
-						layer.closeAll();
-					}
-					
-				})
-		 })
+			});
+		});
 	</script>
 	<script src="jquery-3.1.1.min.js"></script>
 	<script src="meeting_room_zq.js" type="text/javascript" charset="utf-8"></script>
+</body>
 </html>
