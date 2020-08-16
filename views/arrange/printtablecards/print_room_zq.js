@@ -276,6 +276,10 @@ layui.config({
             },
             //选择区域打印
             print: function() {
+                if(!isgrouplist){
+                    layer.msg("没有设置席签模板");
+                    return;
+                }
                 var deviceList = getSelectedSeat();
                 console.log(deviceList)
                 // debugger
