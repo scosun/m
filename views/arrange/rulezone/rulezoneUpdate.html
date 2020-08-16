@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>会场片区设定座区图</title>
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
     <link rel="stylesheet" href="rule_zq.css" media="all">
@@ -77,28 +77,29 @@
 </head>
 <body>
 <header>
-		<span class="layui-breadcrumb" style="line-height: 3.5rem;margin-left: 15px">
-				<a><cite id="name"></cite></a>
+    <span class="layui-breadcrumb" style="line-height: 3.5rem;margin-left: 15px">
+        <a><cite id="name"></cite></a>
 
-				<a  href="javascript:;"><cite><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
-            <!-- <a>
-                <cite>
-                    <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-ds" data-type="add">座区设置</button>
-                        <button type="button" class="layui-btn layui-ds" data-type="reseled">重选座区</button>
-                        <button type="button" class="layui-btn layui-ds" data-type="hidden" id="hidden">关闭座区列表</button>
-                        <button type="button" class="layui-btn layui-ds" data-type="close">关闭</button>
-                    </div>
-                </cite>
-            </a> -->
-		</span>
+        <a  href="javascript:;"><cite><i class="layui-icon layui-icon-refresh-3" onclick="asd()" ></i></cite></a>
+        <!-- <a>
+            <cite>
+                <div class="layui-btn-group">
+                    <button type="button" class="layui-btn layui-ds" data-type="add">座区设置</button>
+                    <button type="button" class="layui-btn layui-ds" data-type="reseled">重选座区</button>
+                    <button type="button" class="layui-btn layui-ds" data-type="hidden" id="hidden">关闭座区列表</button>
+                    <button type="button" class="layui-btn layui-ds" data-type="close">关闭</button>
+                </div>
+            </cite>
+        </a> -->
+    </span>
     <span class="layui-right-nav">
-			<i id="nav-Setuptheg" data-type="add" class="layui-ds" data="会场片区设定"><img src="../../../images/set_rules.svg"></i>
-			<i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
-			<i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
-			<i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
-			<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
-		</span>
+        <i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+        <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="会场片区设定"><img src="../../../images/set_rules.svg"></i>
+        <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
+        <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
+        <i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
+        <i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+    </span>
     <span class="hint">
         设置完成后即保存成功
     </span>
@@ -128,7 +129,7 @@
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
-<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 <script type="text/javascript">
     var tablezonetable;
     layui.config({
@@ -160,11 +161,17 @@
                 });
             }
         });
+
         function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return decodeURI(r[2]); return null; //返回参数值
         }
+
+
+        var seatMapsControl = new SeatMapsControl();
+
+
         var areaIndex = 0;
         var colors = [
             "#FFC0CB",
@@ -178,12 +185,15 @@
             "#8A2BE2",
             "#FF4500"
         ];
+
         var url = setter.baseUrl;
         //    var url = "http://127.0.0.1:8083"
         var uri = window.location.search;
         var str = uri.substr(1);
-        window.roomid = getUrlParam("roomid")
-        $('#name').text(getUrlParam("name"))
+
+        window.roomid = getUrlParam("roomid");
+        $('#name').text(getUrlParam("name"));
+
         window.ruleid = 0;
 
         console.log(roomid);
@@ -277,7 +287,8 @@
             error: function() {
                 console.log("error")
             }
-        })
+        });
+
         //绘制座区图方法
         layer.load(2);
         $.ajax({
@@ -288,15 +299,14 @@
                 withCredentials: true
             },
             data: {
-                "id": roomid,
-
+                "id": roomid
             },
             success: function(data) {
                 var datas = data.data;
                 if(datas.templatecode !=null){
                     $("body").append(datas.templatecode);
 
-                    selectSeats();
+                    seatMapsControl.selectSeats();
 
                     queryAllSeatStatus(roomid, ruleid);
                     layer.closeAll();
@@ -507,6 +517,8 @@
 
         var editObj
         var inde = true;
+        var __handDrag = null;
+
         var active = {
             reseled:function(){
                 layer.open({
@@ -530,6 +542,20 @@
                         var ruleselect = body.find('#areaname').val(editObj.data.rulename);
                     }
                 })
+            },
+            dragcontainer:function(){
+                if(__handDrag){
+                    __handDrag = null;
+                    $('#seatcontainer').unbind('mousedown');
+                    $('#seatcontainer').unbind('mouseup');
+                    $('#seatcontainer').unbind('mousemove');
+                    $('.toollist_li').removeClass("on");
+                    $("#nav-selection").addClass("on");
+                    seatMapsControl.selectSeats();
+                }else{
+                    seatMapsControl.removeContainerEvent();
+                    __handDrag = new SeatMapsDrag();
+                }
             },
             add: function() {
                 layer.open({
@@ -688,7 +714,7 @@
                 dataType: 'json',
                 success: function(data) {
                     var datas= data.data;
-                    console.log("queryAllSeatStatus---",data.data)
+                    // console.log("queryAllSeatStatus---",data.data)
                     if (datas && datas instanceof Array) {
                         setSeatStatus(datas);
                     }
@@ -745,7 +771,7 @@
                         });
                     }
                     updateSeatRule(JSON.stringify(rule), rulename, editObj.data.id, isincrement, oldruleid);
-                    this.resetChangeSeartIds();
+                    resetChangeSeartIds();
                 }
             }
         }
