@@ -35,7 +35,7 @@ layui.config({
             }
                 window.a = data
                 var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
-                    console.log(grouphtml)
+                    // console.log(grouphtml)
                 document.getElementById("group").innerHTML= html;
             })
 
