@@ -42,31 +42,29 @@ layui.config({
 
     if(!meetingid){
         layer.msg("没有获取到会议id");
-        return;
-    }
-
-    $.ajax({
-        url: url+"/meeting/findroomBymeetingid?id=" + meetingid,
-        type: "get",
-        async: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        success: function(obj) {
-            console.log("findroomBymeetingid-----",data);
-            var code = obj.code;
-            if(code == 0){
-                var data = obj.data || [];
-                buildMeetTabHtml(data);
-            }else{
-                layer.msg("获取会议会议室数据错误");
+    }else{
+        $.ajax({
+            url: url+"/meeting/findroomBymeetingid?id=" + meetingid,
+            type: "get",
+            async: false,
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(obj) {
+                console.log("findroomBymeetingid-----",data);
+                var code = obj.code;
+                if(code == 0){
+                    var data = obj.data || [];
+                    buildMeetTabHtml(data);
+                }else{
+                    layer.msg("获取会议会议室数据错误");
+                }
+            },
+            error:function(){
+                layer.closeAll();
             }
-        },
-        error:function(){
-            layer.closeAll();
-        }
-    });
-
+        });
+    }
 
     function buildMeetTabHtml(data){
         var str = [];

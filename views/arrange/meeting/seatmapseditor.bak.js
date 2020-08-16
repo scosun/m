@@ -138,26 +138,32 @@ var __handDrag = null;
 
 		// var width = lefts[lefts.length - 1] - lefts[0];
 		// var height = tops[tops.length - 1] - tops[0];
-		var width = lefts[lefts.length - 1];
+		var width = lefts[lefts.length - 1] + 42;
 		var height = tops[tops.length - 1];
 
+		var minwidth = lefts[0];
+
 		//可视区域 宽高，如果座区图比 可视区域还小，就用可视区域作为宽高
-		var clientwidth = document.documentElement.clientWidth - 100;
+		var clientwidth = document.documentElement.clientWidth;
 		var clientheight = document.documentElement.clientHeight - 290;
-		if(width < clientwidth){
+		if(clientwidth > (width + minwidth)){
 			width = clientwidth;
+		}
+		if(height < clientheight){
+			height = clientheight;
 
 			$("#meetingaddress").css({"bottom":"","top":height+150+"px"});
 			$("#meetingtime").css({"bottom":"","top":height+150+"px"});
 			$("#meetingremark").css({"bottom":"","top":height+180+"px"});
 		}
-		if(height < clientheight){
-			height = clientheight;
-		}
 		
 		// __maxWidth = width + 150;
 		// if(issave){
-			$("#seatcontainer").width(width + 100);
+		if(width == clientwidth){
+			$("#seatcontainer").width(width);
+		}else{
+			$("#seatcontainer").width(width + minwidth);
+		}
 		// }
 		// $("#seatcontainer").height(height + 250);
 		$("#seatcontainer").height(height + 210);

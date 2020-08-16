@@ -40,7 +40,6 @@ layui.config({
 			}
 			window.a = data
 			var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
-				// console.log(grouphtml)
 				document.getElementById("group").innerHTML= html;
 			})
 
@@ -131,7 +130,7 @@ layui.config({
     
                 }, 
                 {
-                    width: 100,
+                    width: '10%',
                     align: 'left',
                     title: '操作',
                     toolbar: '#table-content-list',
@@ -156,7 +155,7 @@ layui.config({
     
     
     });
-    function reloaddata(){
+    window.reloaddata = function (){
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
@@ -229,7 +228,7 @@ layui.config({
 
 				},
 					{
-						width: 100,
+						width: 200,
 						align: 'left',
 						title: '操作',
 						toolbar: '#table-content-list',
@@ -442,6 +441,49 @@ layui.config({
 				success: function(layero, index) {
 					var body = layer.getChildFrame('body', index);
 					
+				}
+			});
+		} else  if(obj.event === "pulish"){
+			layer.open({
+				type: 2,
+				title: '发布共享',
+				//content: 'meeting_room_zq.html?roomid='+age.id
+				content: 'pulishroomtemplate.html?roomid='+age.id
+				,maxmin: true
+				,
+				area: ['70%', '60%'],
+				skin: 'layer-ext-greytitle',//添加自定义样式
+				btn: ['确定','取消'],
+				scrollbar: false,
+				yes: function(index, layero) {
+					var submit = layero.find('iframe').contents().find("#addmeeting");
+					submit.click();
+				},
+				success: function(layero, index) {
+					var body = layer.getChildFrame('body', index);
+
+				}
+			});
+		}
+		else  if(obj.event === "republish"){
+			layer.open({
+				type: 2,
+				title: '重新发布',
+				//content: 'meeting_room_zq.html?roomid='+age.id
+				content: 'republish.html?roomid='+age.id
+				,maxmin: true
+				,
+				area: ['70%', '60%'],
+				skin: 'layer-ext-greytitle',//添加自定义样式
+				btn: ['确定','取消'],
+				scrollbar: false,
+				yes: function(index, layero) {
+					var submit = layero.find('iframe').contents().find("#addmeeting");
+					submit.click();
+				},
+				success: function(layero, index) {
+					var body = layer.getChildFrame('body', index);
+
 				}
 			});
 		}
