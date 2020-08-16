@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>发布共享</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/template.css" media="all">
+    <style>
+        .upload {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list"
+     style="padding: 20px 30px 0 0; ">
+    <div class="layui-form-item">
+        <label class="layui-form-label">会场描述</label>
+        <div class="layui-input-block">
+            <textarea type="text" name="description" lay-verify="required" placeholder="请输入" autocomplete="off"
+                      class="layui-textarea" id="description"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品状态</label>
+        <div class="layui-input-block">
+            <select name="label" lay-verify="required" id="status">
+                <option selected="selected" value="">请选择</option>
+                <option  value= 0 >发布</option>
+                <option value= 1>下架</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开放克隆</label>
+        <div class="layui-input-block">
+            <select name="roomstatus" lay-verify="required" lay-filter="isconvenor" id="seatrule">
+                <option selected="selected" value="">请选择</option>
+                <option  value= 0>免费克隆</option>
+                <option value= 1 >收费克隆</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" id="price" style="display: none">
+        <label class="layui-form-label">克隆价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input" id="roomprice"
+                   name="ids">
+        </div>
+    </div>
+    <div class="layui-form-item upload" style="position: relative;">
+        <label class="layui-form-label">会场图</label>
+        <div class="layui-col-md2 layui-col-sm4">
+            <div class="cmdlist-container">
+                <a href="javascript:;">
+                    <img src="" id="images">
+                </a>
+            </div>
+        </div>
+        <div class="layui-card-body" style="position: absolute;left: 200px;">
+            <!-- <div id="test-upload-image" style="float: left;"><img src="https://f.longjuli.com/upload/269/f50ad4b6b31a46afaa5324ca29d10de8.png" style="width: 130px; height: 150px;"></div> -->
+            <div id="test-upload-image" style="float: right;"></div>
+            <div class="layui-upload-drag" id="test-upload-drag" style="margin-left: 150px">
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+                <div class="layui-hide" id="uploadDemoView">
+                    <hr>
+                    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-layout-admin layui-hide">
+        <div class="layui-input-block">
+            <div style="position: absolute;right: 0px;bottom: 0px;">
+                <button class="layui-btn" lay-submit="" lay-filter="addmeeting" id="addmeeting">增加</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript" charset="utf-8">
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload'], function () {
+        var $ = layui.$
+            , form = layui.form,
+            setter = layui.setter,
+            upload = layui.upload,
+            router = layui.router();
+        var url = setter.baseUrl;
+        var uploadfile = undefined;
+        var roomid = getUrlParam("roomid");
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]);
+            return null; //返回参数值
+        }
+        function clear(str) {
+            str = str.replace(/,/g, "");//取消字符串中出现的所有逗号
+            return str;
+        }
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/roomshop/QueryByid",
+            data: {
+                "id": roomid
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+
+                if (msg.code == 0) {
+                   $("#description").val(msg.data.description);
+                   $("#status").val(msg.data.stauts);
+                    $("#seatrule").val(msg.data.roomstatus);
+
+                    if (msg.data.roomstatus == 1){
+                        $("#price").show();
+                    }
+
+                    if (msg.data.price !=undefined){
+                        $("#roomprice").val(clear(msg.data.price))
+                    }
+
+                    $("#images").attr("src",url+"/shop"+msg.data.imageurl);
+                    form.render()
+                } else {
+                    // parent.layer.msg(msg.msg)
+                    // var index = parent.layer.getFrameIndex(window.name)
+                    // parent.layer.close(index)
+                }
+
+            },
+            error: function (error) {
+                console.log(error)
+            },
+        })
+        form.render()
+        upload.render({
+            elem: '#test-upload-drag'
+            , url: '/upload/',
+            auto: false,
+            bindAction: '#btn99'
+            , choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                obj.preview(function (index, file, result) {
+                    // console.log(index); //得到文件索引
+                    // console.log(file);
+                    uploadfile = file //得到文件对象
+                    // console.log(uploadfile)
+                    // console.log(result); //得到文件base64编码，比如图片
+
+                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+
+                    //这里还可以做一些 append 文件列表 DOM 的操作
+
+                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                });
+            }
+            , done: function (res) {
+                console.log(res)
+            }
+        });
+        form.on('select(isconvenor)', function (data) {
+            if (data.value == 1) {
+                $("#price").show();
+
+            }
+            if (data.value == 0) {
+                $("#price").css("display", "none");
+            }
+        });
+
+        form.on('submit(addmeeting)', function (data) {
+            var formdata = new FormData();
+            if (uploadfile != undefined) {
+                formdata.append('file', uploadfile);
+            }
+            formdata.append('id', roomid);
+            formdata.append('description', data.field.description);
+            formdata.append('stauts', data.field.label);
+            formdata.append('price', data.field.price);
+            formdata.append('roomstatus',data.field.roomstatus);
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url + "/roomshop/modifyroomshop",
+                contentType: false,
+                processData: false,
+                data: formdata,
+                xhrFields: {
+                    withCredentials: true
+                },
+                //成功的回调函数
+                success: function (msg) {
+
+                    if (msg.code == 0) {
+                        parent.layer.msg(msg.msg)
+                        var index = parent.layer.getFrameIndex(window.name)
+                        parent.layer.close(index)
+                        parent.reloaddata()
+                    } else {
+
+                    }
+
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+            })
+
+            return false;
+        });
+        //监听提交
+    })
+</script>
+</body>
+</html>
