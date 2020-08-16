@@ -301,6 +301,8 @@ function removeContainerEvent(){
 	$("#seatcontainer").unbind("dblclick");
 	$("#seatcontainer").unbind("click");
 
+	selList.unbind("click");
+
 	$("#seatcontainer").unbind("dragover");
 }
 

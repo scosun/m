@@ -793,7 +793,7 @@ layui.config({
                 var item = attendees[i] || {};
 
                 $("#" + item.seatid).css("background-color","");
-                $("#" + item.seatid).html(item.seatid.split('-')[1]);
+                $("#" + item.seatid).html(item.seatid.split('-')[3]);
                 
                 $("#pa_" + item.id).removeClass("drag-hide");
             }
