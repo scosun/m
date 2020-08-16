@@ -1,4 +1,4 @@
-var indexs = 0;
+// var indexs = 0;
 
 layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
@@ -10,8 +10,8 @@ layui.config({
     tableChild: '/sourtable/tableChild',
     tableMerge: '/sourtable/tableMerge'
 }).use(['index', 'user', 'form', 'table', 'layedit', 'laydate', 'upload', 'soulTable', 'laypage'], function () {
-    var a = {};
-    var b = {};
+    // var a = {};
+    // var b = {};
     var $ = layui.$,
         setter = layui.setter,
         // admin = layui.admin,
@@ -65,7 +65,7 @@ layui.config({
         }
     });
 
-   
+    var seatMapsControl = new SeatMapsControl();
 
     var url = setter.baseUrl;
     var seatUrl = setter.seatBaseUrl;
@@ -187,7 +187,7 @@ layui.config({
                     $("#seatsbody").html(datas.templatecode);
                     
                     // 激活框选功能
-                    selectSeats();
+                    seatMapsControl.selectSeats();
 
                     //获取 会议 名称
                     getMeetInfo();
@@ -403,7 +403,7 @@ layui.config({
     }
 
 
-    function importSeatsData(condi){
+    function importSeatsDataBySort(condi){
         $.ajax({
             async: true,
             type: "post",
@@ -412,7 +412,7 @@ layui.config({
             url: seatUrl +"/v1/meetings/sort",
             dataType: "json",
             success: function(obj) {
-                console.log("--importSeatsData---",condi);
+                console.log("--importSeatsDataBySort---",condi);
                 if(obj && obj.attendees){
                     showSeatsData = obj.attendees;
                     
@@ -448,7 +448,7 @@ layui.config({
                     getPending(attrcurrent);
 
                     // 激活框选功能
-                    selectSeats();
+                    seatMapsControl.selectSeats();
                     layer.msg("保存成功");
                 }else{
                     layer.msg("保存错误");
@@ -669,13 +669,13 @@ layui.config({
                 // evt.preventDefault();
                 // evt.stopPropagation();
                 // console.log("dragstart-----------------")
-                bindStaffDrap();
+                seatMapsControl.bindStaffDrap();
                 // return false;
             }
             item.ondragend = function(evt){
                 // console.log("ondragend-----------------",evt,this.id);
                 
-                unbindStaffDrap();
+                seatMapsControl.unbindStaffDrap();
                 if($(".R99").length > 0){
                     var id = $(".R99").attr("id");
                     $(".R99").removeClass("R99");
@@ -793,7 +793,7 @@ layui.config({
                 var item = attendees[i] || {};
 
                 $("#" + item.seatid).css("background-color","");
-                $("#" + item.seatid).html(item.seatid.split('-')[1]);
+                $("#" + item.seatid).html(item.seatid.split('-')[3]);
                 
                 $("#pa_" + item.id).removeClass("drag-hide");
             }
@@ -987,10 +987,10 @@ layui.config({
                 $('#seatcontainer').unbind('mousemove');
                 $('.toollist_li').removeClass("on");
                 $("#nav-selection").addClass("on");
-                selectSeats();
+                seatMapsControl.selectSeats();
             }else{
-                removeContainerEvent();
-                __handDrag = new Drag();
+                seatMapsControl.removeContainerEvent();
+                __handDrag = new SeatMapsDrag();
             }
         },
         parallelism:function(){
@@ -1014,22 +1014,22 @@ layui.config({
             });
         },
         bindLockSeats:function(){
-            bindLockSeats();
+            seatMapsControl.bindLockSeats();
         },
         bindOneSeats:function(){
-            bindOneSeats();
+            seatMapsControl.bindOneSeats();
         },
         selectSeats:function(){
-            selectSeats();
+            seatMapsControl.selectSeats();
         },
         dragSeats:function(){
-            dragSeats(saveSeats);
+            seatMapsControl.dragSeats(saveSeats);
         },
         bindContextMenu:function(){
-            bindContextMenu();
+            seatMapsControl.bindContextMenu();
         },
         removeContextMenu:function(){
-            removeContextMenu();
+            seatMapsControl.removeContextMenu();
         },
         navDelete:function(){
             deleteBingName();
@@ -1048,7 +1048,7 @@ layui.config({
             var condi = {
                 "meeting_id": +meetingid
             };
-            importSeatsData(condi);
+            importSeatsDataBySort(condi);
         },
         print:function(){
             // printJS('seatcontainer', 'html');
@@ -1101,66 +1101,66 @@ layui.config({
         }
     };
     
-    function Drag(){
-        this.dragWrap = $("#seatcontainer");
-        this.init.apply(this,arguments);
-    };
-    Drag.prototype = {
-        constructor:Drag,
-        _dom : {},
-        _x : 0,
-        _y : 0,
-        _top :0,
-        _left: 0,
-        move : false,
-        down : false,
-        init : function () {
-            this.bindEvent();
-        },
-        bindEvent : function () {
-            var t = this;
-            $('#seatcontainer').bind('mousedown',function(e){
-                e && e.preventDefault();
-                if ( !t.move) {
-                    t.mouseDown(e);
-                }
-            });
-            $('#seatcontainer').bind('mouseup',function(e){
-                t.mouseUp(e);
-            });
+    // function Drag(){
+    //     this.dragWrap = $("#seatcontainer");
+    //     this.init.apply(this,arguments);
+    // };
+    // Drag.prototype = {
+    //     constructor:Drag,
+    //     _dom : {},
+    //     _x : 0,
+    //     _y : 0,
+    //     _top :0,
+    //     _left: 0,
+    //     move : false,
+    //     down : false,
+    //     init : function () {
+    //         this.bindEvent();
+    //     },
+    //     bindEvent : function () {
+    //         var t = this;
+    //         $('#seatcontainer').bind('mousedown',function(e){
+    //             e && e.preventDefault();
+    //             if ( !t.move) {
+    //                 t.mouseDown(e);
+    //             }
+    //         });
+    //         $('#seatcontainer').bind('mouseup',function(e){
+    //             t.mouseUp(e);
+    //         });
 
-            $('#seatcontainer').bind('mousemove',function(e){
-                if (t.down) {
-                    t.mouseMove(e);
-                }
-            });
-        },
-        mouseMove : function (e) {
-            e && e.preventDefault();
-            this.move = true;
-            var x = this._x - e.clientX,
-                y = this._y - e.clientY,
-                dom = document.documentElement;
-            dom.scrollLeft = (this._left + x);
-            dom.scrollTop = (this._top + y);
-        },
-        mouseUp : function (e) {
-            e && e.preventDefault();
-            this.move = false;
-            this.down = false;
-            this.dragWrap.css('cursor','');
-        },
-        mouseDown : function (e) {
-            this.move = false;
-            this.down = true;
-            this._x = e.clientX;
-            this._y = e.clientY;
-            this._top = document.documentElement.scrollTop;
-            this._left = document.documentElement.scrollLeft;
-            // console.log(this._top,this._left)
-            this.dragWrap.css('cursor','move');
-        }
-    };
+    //         $('#seatcontainer').bind('mousemove',function(e){
+    //             if (t.down) {
+    //                 t.mouseMove(e);
+    //             }
+    //         });
+    //     },
+    //     mouseMove : function (e) {
+    //         e && e.preventDefault();
+    //         this.move = true;
+    //         var x = this._x - e.clientX,
+    //             y = this._y - e.clientY,
+    //             dom = document.documentElement;
+    //         dom.scrollLeft = (this._left + x);
+    //         dom.scrollTop = (this._top + y);
+    //     },
+    //     mouseUp : function (e) {
+    //         e && e.preventDefault();
+    //         this.move = false;
+    //         this.down = false;
+    //         this.dragWrap.css('cursor','');
+    //     },
+    //     mouseDown : function (e) {
+    //         this.move = false;
+    //         this.down = true;
+    //         this._x = e.clientX;
+    //         this._y = e.clientY;
+    //         this._top = document.documentElement.scrollTop;
+    //         this._left = document.documentElement.scrollLeft;
+    //         // console.log(this._top,this._left)
+    //         this.dragWrap.css('cursor','move');
+    //     }
+    // };
 });
 
 
