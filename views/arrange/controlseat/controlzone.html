@@ -218,9 +218,12 @@
             form = layui.form,
             element = layui.element,
             table = layui.table,
+            setter = layui.setter,
             layer = layui.layer,
             router = layui.router(),
             dropdown = 'dropdown';
+
+        var url = setter.baseUrl;
         var uri = window.location.search;
         var roomid = uri.substr(4);
 
@@ -444,7 +447,7 @@
         // https://f.longjuli.com/seatmac/delmacByroomid
         function setNameBySeatid(name,seatid){
             $.ajax({
-                url: "https://f.longjuli.com/tableSign/sendOneTableSign",
+                url: url + "/tableSign/sendOneTableSign",
                 type: "GET",
                 async: true,
                 data: {

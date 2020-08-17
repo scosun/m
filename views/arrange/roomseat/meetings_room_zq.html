@@ -138,10 +138,12 @@
 		form = layui.form,
 		element = layui.element,
 		table = layui.table,
+		setter = layui.setter,
 		layer = layui.layer,
 		router = layui.router();
 		var roomid = $("#roomid").val();
 
+		var url = setter.baseUrl;
 
 		form.on('select(component-ruleselect)', function(data){
 			var id = +data.value;
@@ -183,7 +185,8 @@
 
 		function getFindByseatmac(){
 			$.ajax({
-				url: "https://f.longjuli.com/seatmac/findByseatmac",
+				// url: "https://f.longjuli.com/seatmac/findByseatmac",
+				url: url + "/seatmac/findByseatmac",
 				type: "GET",
 				async: true,
 				data: {
@@ -200,7 +203,8 @@
 
 		function setmacByroomid(mac){
 			$.ajax({
-				url: "https://f.longjuli.com/seatmac/setmacByroomid",
+				// url: "https://f.longjuli.com/seatmac/setmacByroomid",
+				url: url + "/seatmac/setmacByroomid",
 				type: "POST",
 				async: true,
 				data: {
@@ -226,7 +230,7 @@
 				btn: ['确定', '取消']
 			}, function (index) {
 				$.ajax({
-					url: "https://f.longjuli.com/seatmac/delmacByroomid",
+					url: url + "/seatmac/delmacByroomid",
 					type: "GET",
 					async: true,
 					data: {
