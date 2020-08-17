@@ -29,7 +29,6 @@ layui.config({
             withCredentials: true
         },
         success: function(obj) {
-            debugger
             console.log("findseatsginByid-----",obj);
             if(obj.code == 0){
                 var styles = obj.data || {};
