@@ -467,7 +467,8 @@
 			formData.append("roomtemplateid",newroomid);
 			formData.append("file",file);
 			$.ajax({
-				url:"https://f.longjuli.com/wordtemplate/uploadWordTemplate",
+				// url:"https://f.longjuli.com/wordtemplate/uploadWordTemplate",
+				url:url + "/wordtemplate/uploadWordTemplate",
 				type:"post",
 				data:formData,
 				contentType: false,
@@ -538,7 +539,8 @@
 					yes: function(index, layero) {
 						
 						/* var url = "http://127.0.0.1:8083"; */
-						var url = "https://f.longjuli.com";
+						// var url = "https://f.longjuli.com";
+						// var url = "https://f.longjuli.com";
 						var body = layer.getChildFrame('body', index);
 						var wordid = body.find('#wordDown').val();
 						var wordname = body.find('#wordDown option:selected').text().split('-') || [];
@@ -546,7 +548,8 @@
 						if(wordid==''||wordid==null)
 						{return layer.msg("请选择word模板");}
 						console.log("meetignid="+meetingid+",wordid="+wordid);
-						window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
+						// window.location="https://f.longjuli.com" + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
+						window.location=url + "/word/download/"+meetingid+"?wordTemplateid="+wordid;
 					}
 				})
 			},

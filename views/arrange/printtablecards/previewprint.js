@@ -22,7 +22,7 @@ layui.config({
     var isgrouplist = +getUrlParam("isgrouplist") || null;
 
     $.ajax({
-        url: "https://f.longjuli.com/seatsgin/findseatsginByid?id=" + isgrouplist,
+        url: url + "/seatsgin/findseatsginByid?id=" + isgrouplist,
         type: "get",
         async: false,
         xhrFields: {
