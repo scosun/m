@@ -95,12 +95,13 @@
         </a> -->
             </span>
     <span class="layui-right-nav">
-                <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设定"><img src="../../../images/set_rules.svg"></i>
-                <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
-                <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
-                <i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
-                <i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
-            </span>
+        <i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+        <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设定"><img src="../../../images/set_rules.svg"></i>
+        <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
+        <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
+        <i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
+        <i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+    </span>
 
 </header>
 
@@ -133,7 +134,7 @@
 <!--      <div class="noData noData2 layui-hide" id="noData"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>-->
 <!--</body>-->
 <script src="../../../layuiadmin/layui/layui.js"></script>
-<script src="../../../js/seatscontrol_drag.js"></script>
+<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 <script type="text/javascript">
     var tablezonetable;
     layui.config({
@@ -149,6 +150,7 @@
             layer = layui.layer,
             router = layui.router();
 
+        var seatMapsControl = new SeatMapsControl();
 
         /*右侧菜单HOVER显示提示文字*/
         $('.layui-right-nav i').each(function() {
@@ -315,7 +317,9 @@
                 // layer.closeAll();
                 if(datas.templatecode !=null){
                     $("body").append(datas.templatecode);
-                    selectSeats();
+                    
+                    seatMapsControl.selectSeats();
+                    
                     queryAllSeatStatus(roomid, ruleid);
                     layer.closeAll();
                 }else{
@@ -523,9 +527,28 @@
 
         var inde = true;
         var editObj;
+        var __handDrag = null;
 
         var active = {
+            dragcontainer:function(){
+                if(__handDrag){
+                    __handDrag = null;
+                    $('#seatcontainer').unbind('mousedown');
+                    $('#seatcontainer').unbind('mouseup');
+                    $('#seatcontainer').unbind('mousemove');
+                    // $('.toollist_li').removeClass("on");
+                    // $("#nav-selection").addClass("on");
+                    seatMapsControl.selectSeats();
+                }else{
+                    seatMapsControl.removeContainerEvent();
+                    __handDrag = new SeatMapsDrag();
+                }
+            },
             reseled:function(){
+                if(!editObj){
+                    layer.msg("请先选择列表修改座区");
+                    return;
+                }
                 layer.open({
                     type: 2,
                     title: '<p style="">重选座区</p>',
@@ -707,7 +730,7 @@
                     console.log(rule, ruleid)
                     // this.updateSeatRule(rule, ruleid, isincrement);
                     updateSeatRule(rulename,JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
-                    this.resetChangeSeartIds();
+                    resetChangeSeartIds();
                 }
             }
         }
@@ -753,7 +776,7 @@
                             var st = $("#"+id).position().top;
                             var h = $("#"+id).height();
                             
-                            var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+                            var kid = seatMapsControl.isRow(seledgroup,(st - h/2),(st + h/2));
                             if(kid){
                                 seledgroup[kid].push(id);
                             }else{

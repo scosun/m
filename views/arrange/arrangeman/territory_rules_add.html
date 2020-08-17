@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>规则列表座区图</title>
 		<link rel="stylesheet" href="rule_zq.css" />
 		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
@@ -89,6 +89,7 @@
 				</a> -->
 			</span>
 			<span class="layui-right-nav">
+				<i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
                 <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设置"><img src="../../../images/set_rules.svg"></i>
                 <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
                 <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
@@ -122,7 +123,7 @@
 	</body>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 <!--	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">-->
-	<script src="../../../js/seatscontrol_drag.js"></script>
+	<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		var tablezonetable;
 		layui.config({
@@ -138,19 +139,24 @@
 				layer = layui.layer,
 				router = layui.router();
 			//全局变量编排规则id
-		
+			
+
+			var seatMapsControl = new SeatMapsControl();
+
 			//全局变量会议室规则id
 			var url = setter.baseUrl;
 			var uri = window.location.search;
 			var str = uri.substr(1);
 			window.ruleid = getUrlParam("ruleid");
 			window.roomid=getUrlParam("roomid");
+
 			function getUrlParam(name) {
 				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 				var r = window.location.search.substr(1).match(reg);//匹配目标参数
 				if (r != null) return decodeURI(r[2]); return null; //返回参数值
 			}
-			console.log(getUrlParam("name"))
+			// console.log(getUrlParam("name"))
+
 			$('#rulename').text(getUrlParam("name"))
 			//规则列表表格调用方法
 			$.ajax({
@@ -267,7 +273,9 @@
 				success: function(data) {
 					var datas = data.data;
 					$("body").append(data.data.templatecode);
-					selectSeats();
+
+					seatMapsControl.selectSeats();
+
 					queryAllSeatStatus(roomid, ruleid);
 					layer.closeAll();
 				},
@@ -453,9 +461,28 @@
 			});
 			var inde = true;
 			var editObj;
+			var __handDrag = null;
 
 			var active = {
+				dragcontainer:function(){
+					if(__handDrag){
+						__handDrag = null;
+						$('#seatcontainer').unbind('mousedown');
+						$('#seatcontainer').unbind('mouseup');
+						$('#seatcontainer').unbind('mousemove');
+						// $('.toollist_li').removeClass("on");
+						// $("#nav-selection").addClass("on");
+						seatMapsControl.selectSeats();
+					}else{
+						seatMapsControl.removeContainerEvent();
+						__handDrag = new SeatMapsDrag();
+					}
+				},
 				reseled:function(){
+					if(!editObj){
+						layer.msg("请先选择列表修改座区");
+						return;
+					}
 					layer.open({
 						type: 2,
 						title: '<p style="">重选座区</p>',
@@ -649,7 +676,7 @@
 						console.log(rule, ruleid)
 						// this.updateSeatRule(rule, ruleid, isincrement);
 						updateSeatRule(rulename,JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
-						this.resetChangeSeartIds();
+						resetChangeSeartIds();
 					}
 				}
 			}
@@ -666,7 +693,7 @@
 					"c":{},
 					"r":{},
 					"o":{}
-				}
+				};
 				for(var i = 0,len = seleds.length; i < len; i++){
 					var seats = seleds[i] || [];
 					if(seats.length > 0){
@@ -695,7 +722,7 @@
 								var st = $("#"+id).position().top;
 								var h = $("#"+id).height();
 								
-								var kid = isRow(seledgroup,(st - h/2),(st + h/2));
+								var kid = seatMapsControl.isRow(seledgroup,(st - h/2),(st + h/2));
 								if(kid){
 									seledgroup[kid].push(id);
 								}else{

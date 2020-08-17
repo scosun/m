@@ -27,6 +27,15 @@
 
 		}
 	}
+	
+	seatMapsControl.prototype.isRow = function(seledgroup,d,h){
+		for(var k in seledgroup){
+			if(+k >= d && +k <= h){
+				return k;
+			}
+		}
+		return false;
+	}
 
 	seatMapsControl.prototype.unbindStaffDrap = function(){
 		this.removeContainerEvent();

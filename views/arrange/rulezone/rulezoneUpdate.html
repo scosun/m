@@ -521,6 +521,10 @@
 
         var active = {
             reseled:function(){
+                if(!editObj){
+                    layer.msg("请先选择列表修改座区");
+                    return;
+                }
                 layer.open({
                     type: 2,
                     title: '<p style="">重选座区</p>',

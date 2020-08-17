@@ -18,7 +18,8 @@ layui.config({
     // $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="print" id="batchmeet">打印<s></s></a>');
     // $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
     
-   
+
+    var seatMapsControl = new SeatMapsControl();
 
     var url = setter.baseUrl;
     var seatUrl = setter.seatBaseUrl;
@@ -115,7 +116,7 @@ layui.config({
                     $("#seatsbody").html(datas.templatecode);
 
                     //注册框选事件
-                    selectSeats();
+                    seatMapsControl.selectSeats();
 
                     //加载会议标题
                     getMeetInfo();
@@ -336,74 +337,74 @@ layui.config({
                     $('#seatcontainer').unbind('mousemove');
                     // $('.toollist_li').removeClass("on");
                     // $("#nav-selection").addClass("on");
-                    selectSeats();
+                    seatMapsControl.selectSeats();
                 }else{
-                    removeContainerEvent();
-                    __handDrag = new Drag();
+                    seatMapsControl.removeContainerEvent();
+                    __handDrag = new SeatMapsDrag();
                 }
             }
         };
 
-        function Drag(){
-            this.dragWrap = $("#seatcontainer");
-            this.init.apply(this,arguments);
-        };
-        Drag.prototype = {
-            constructor:Drag,
-            _dom : {},
-            _x : 0,
-            _y : 0,
-            _top :0,
-            _left: 0,
-            move : false,
-            down : false,
-            init : function () {
-                this.bindEvent();
-            },
-            bindEvent : function () {
-                var t = this;
-                $('#seatcontainer').bind('mousedown',function(e){
-                    e && e.preventDefault();
-                    if ( !t.move) {
-                        t.mouseDown(e);
-                    }
-                });
-                $('#seatcontainer').bind('mouseup',function(e){
-                    t.mouseUp(e);
-                });
+        // function Drag(){
+        //     this.dragWrap = $("#seatcontainer");
+        //     this.init.apply(this,arguments);
+        // };
+        // Drag.prototype = {
+        //     constructor:Drag,
+        //     _dom : {},
+        //     _x : 0,
+        //     _y : 0,
+        //     _top :0,
+        //     _left: 0,
+        //     move : false,
+        //     down : false,
+        //     init : function () {
+        //         this.bindEvent();
+        //     },
+        //     bindEvent : function () {
+        //         var t = this;
+        //         $('#seatcontainer').bind('mousedown',function(e){
+        //             e && e.preventDefault();
+        //             if ( !t.move) {
+        //                 t.mouseDown(e);
+        //             }
+        //         });
+        //         $('#seatcontainer').bind('mouseup',function(e){
+        //             t.mouseUp(e);
+        //         });
     
-                $('#seatcontainer').bind('mousemove',function(e){
-                    if (t.down) {
-                        t.mouseMove(e);
-                    }
-                });
-            },
-            mouseMove : function (e) {
-                e && e.preventDefault();
-                this.move = true;
-                var x = this._x - e.clientX,
-                    y = this._y - e.clientY,
-                    dom = document.documentElement;
-                dom.scrollLeft = (this._left + x);
-                dom.scrollTop = (this._top + y);
-            },
-            mouseUp : function (e) {
-                e && e.preventDefault();
-                this.move = false;
-                this.down = false;
-                this.dragWrap.css('cursor','');
-            },
-            mouseDown : function (e) {
-                this.move = false;
-                this.down = true;
-                this._x = e.clientX;
-                this._y = e.clientY;
-                this._top = document.documentElement.scrollTop;
-                this._left = document.documentElement.scrollLeft;
-                // console.log(this._top,this._left)
-                this.dragWrap.css('cursor','move');
-            }
-        };
+        //         $('#seatcontainer').bind('mousemove',function(e){
+        //             if (t.down) {
+        //                 t.mouseMove(e);
+        //             }
+        //         });
+        //     },
+        //     mouseMove : function (e) {
+        //         e && e.preventDefault();
+        //         this.move = true;
+        //         var x = this._x - e.clientX,
+        //             y = this._y - e.clientY,
+        //             dom = document.documentElement;
+        //         dom.scrollLeft = (this._left + x);
+        //         dom.scrollTop = (this._top + y);
+        //     },
+        //     mouseUp : function (e) {
+        //         e && e.preventDefault();
+        //         this.move = false;
+        //         this.down = false;
+        //         this.dragWrap.css('cursor','');
+        //     },
+        //     mouseDown : function (e) {
+        //         this.move = false;
+        //         this.down = true;
+        //         this._x = e.clientX;
+        //         this._y = e.clientY;
+        //         this._top = document.documentElement.scrollTop;
+        //         this._left = document.documentElement.scrollLeft;
+        //         // console.log(this._top,this._left)
+        //         this.dragWrap.css('cursor','move');
+        //     }
+        // };
 
     $('.layui-ds').on('click', function() {
         var type = $(this).data('type');
