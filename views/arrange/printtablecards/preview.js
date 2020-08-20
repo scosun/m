@@ -146,6 +146,8 @@ layui.config({
     seatSignData.zoom = 1;
     seatSignData.spin = 1;
 
+    seatSignData.fontweight = false;
+
     seatSignData.align = "aligncenter";
     seatSignData.position = "positioncenter";
 
@@ -271,7 +273,8 @@ layui.config({
 
     $("#letterspacing").bind("input propertychange",function(){
         var level = +this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
+        
         if(reg.test(level)){
             
             seatSignData.level = level;
@@ -322,6 +325,13 @@ layui.config({
                 $("#rotate").val(0);
             }
         }
+    });
+
+    form.on('checkbox(weight-form-checkbox)', function(data){
+        var b = $("#fontweight").is(":checked");
+        seatSignData.fontweight = b;
+
+        changeSignStyle();
     });
 
     $("#alignbtn img").bind("click",function(){
@@ -456,6 +466,8 @@ layui.config({
         $("#scale").val(seatSignData.zoom || 1);
         $("#rotate").val(seatSignData.spin || 1);
 
+        $("#fontweight").attr("checked",seatSignData.fontweight);
+
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
 
@@ -463,7 +475,7 @@ layui.config({
 
         $("#memo").val(seatSignData.memo);
 
-        layui.form.render("select");
+        layui.form.render();
     }
     function changeSignStyle(){
         // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
@@ -488,6 +500,7 @@ layui.config({
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
+            "font-weight":seatSignData.fontweight ? "bold" : "normal",
             "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
             "margin-left":(+domleft)+"mm",
