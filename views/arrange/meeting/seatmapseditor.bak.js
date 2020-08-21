@@ -1402,7 +1402,7 @@ var __handDrag = null;
 	seatMapsEditor.prototype.bindMenu = function(seatno){
 		var menuJson = [
 			{
-				name:"编号",
+				name:"修改行列号",
 				id:"menu0",
 				seatno:seatno,
 				callback: function(seatno) {
@@ -1425,6 +1425,7 @@ var __handDrag = null;
 								if(!cid){
 									$("#"+newno2).attr("cid",seatno);
 								}
+								$("#"+newno2).attr("title",newno2);
 								$("#"+newno2).text(id[1]);
 	
 								// console.log($("[cid=1-1]").length)
@@ -1437,23 +1438,23 @@ var __handDrag = null;
 					}
 				}.bind(this)
 			},
-			{
-				name:"编排",
-				id:"menu4",
-				seatno:seatno,
-				callback: function(seatno) {
-					var cid = $("[cid="+seatno+"]").attr("cid") || "";
-					if(cid){
-						seatno = $("[cid="+seatno+"]").attr("id");
-					}
-					this.currseatno = seatno;
-					var newno = window.prompt("请输入排号");
-					if(newno){
-						$("#"+seatno).text(newno);
-						$("#"+seatno).addClass("rownumseats");
-					}
-				}.bind(this)
-			}
+			// {
+			// 	name:"编排",
+			// 	id:"menu4",
+			// 	seatno:seatno,
+			// 	callback: function(seatno) {
+			// 		var cid = $("[cid="+seatno+"]").attr("cid") || "";
+			// 		if(cid){
+			// 			seatno = $("[cid="+seatno+"]").attr("id");
+			// 		}
+			// 		this.currseatno = seatno;
+			// 		var newno = window.prompt("请输入排号");
+			// 		if(newno){
+			// 			$("#"+seatno).text(newno);
+			// 			$("#"+seatno).addClass("rownumseats");
+			// 		}
+			// 	}.bind(this)
+			// }
 		];
 		
 		if($("#"+seatno).length > 0){
