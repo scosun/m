@@ -16,16 +16,219 @@
         body{
             background-color: #F2F2F2;
         }
+        .mt10{
+            margin-top:10px
+        }
+        .box_shadow{
+            background-color: #fff;
+            border-radius: 3px;
+            padding: 0;
+            border: 0px solid transparent;
+            -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            margin-right: 0px;
+            text-align: center;
+            height: 240px;
+        }
+        .img_box{
+            height: 180px;
+            display:table-cell;
+            vertical-align: middle;
+            line-height: 180px;
+        }
+        .img_box img{
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 3px;
+        }
+        .card_style h3{
+            text-align: left;
+            font-size: 14px;
+            padding:5px 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .card_style p{
+            text-align: left;
+            font-size: 14px;
+            padding:0 10px 10px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+        .layui-col-md2 {
+                width: 50%;
+                transition: all 0 ease 0s;
+            }
+        @media screen and (min-width: 600px){
+            .layui-col-md2 {
+                width: 33.3%;
+            }
+        }
+        @media screen and (min-width: 992px){
+            .layui-col-md2 {
+                width: 16.66666667%;
+            }
+        }
+        @media screen and (min-width:1200px) {
+            .layui-col-md2 {
+                width: 14.26%;
+            }
+        }
+        @media screen and (min-width:1400px) {
+            .layui-col-md2 {
+                width: 12.46%;
+            }
+        }
+
     </style>
 </head>
 <body>
-
-
-<div class="layui-fluid layadmin-cmdlist-fluid">
+<div class="layui-fluid layadmin-cmdlist-fluid" style="background-color: #F2F2F2;">
     <div class="layui-row layui-col-space30" id="shop">
     </div>
     <div class="layui-col-md12 layui-col-sm12" >
         <div id="demo0"></div>
+    </div>
+
+    <div class="mt10">
+        <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/wechatapp.jpg"/></div>
+                            <h3>标题标题标题标题标题标题标题标题标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/a.jpg"/></div>
+                            <h3>标题标题标题标题标题标题标题标题标题标题</h3>
+                            <!-- <p>￥<cite>425</cite></p> -->
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/b.jpg"/></div>
+                            <h3>标题标题标题标题标题标题标题标题标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/c.jpg"/></div>
+                            <h3>标题标题标题标题标题标题标题标题标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/d.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/e.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/a.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/b.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/wechatapp.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/c.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/d.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/e.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/wechatapp.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/a.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+                <li class="layui-col-md2 layui-col-xs6 ">
+                    <div class="box_shadow card_style">
+                        <a href="javascript:;" class="x-admin-backlog-body">
+                            <div class="img_box"><img src="../../../images/test/b.jpg"/></div>
+                            <h3>标题标题</h3>
+                            <p>￥<cite>425</cite></p>
+                        </a>
+                    </div>
+                </li>
+        </ul>
     </div>
 </div>
 
