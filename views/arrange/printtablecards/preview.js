@@ -146,7 +146,7 @@ layui.config({
     seatSignData.zoom = 1;
     seatSignData.spin = 1;
 
-    seatSignData.fontweight = false;
+    seatSignData.fontweight = "0";
 
     seatSignData.align = "aligncenter";
     seatSignData.position = "positioncenter";
@@ -329,7 +329,8 @@ layui.config({
 
     form.on('checkbox(weight-form-checkbox)', function(data){
         var b = $("#fontweight").is(":checked");
-        seatSignData.fontweight = b;
+        var fw = b ? "1" : "0";
+        seatSignData.fontweight = fw;
 
         changeSignStyle();
     });
@@ -466,7 +467,7 @@ layui.config({
         $("#scale").val(seatSignData.zoom || 1);
         $("#rotate").val(seatSignData.spin || 1);
 
-        $("#fontweight").attr("checked",seatSignData.fontweight);
+        $("#fontweight").attr("checked",+seatSignData.fontweight ? true : false);
 
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
@@ -500,7 +501,7 @@ layui.config({
         $("#printnametext").css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
-            "font-weight":seatSignData.fontweight ? "bold" : "normal",
+            "font-weight":+seatSignData.fontweight ? "bold" : "normal",
             "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
             "margin-left":(+domleft)+"mm",
