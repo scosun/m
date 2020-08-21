@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>商品列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<style type="text/css">
+.sort_table{
+	margin-top:10px;
+}
+.sort_table th{
+	text-align: left;
+	padding-top:5px;
+	padding-bottom:5px
+}
+.sort_table td{
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px
+}
+</style>
+</head>
+<body>
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
+	<div class="img_box"><img src="../../../images/test/wechatapp.jpg" width="100%"/></div>
+	<p style="padding:20px 0 0 20px">图片标题标题标题标题标题标题标题标题标题标题：</p>
+	<p style="padding:5px 0 0 20px;line-height: 160%;">图片描述图片图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述描述图片描述图片描述图片描述图片描述图片描述图片描述</p>
+	<p style="padding:10px 0 10px 20px"><button class="layui-btn" data-type="reload">克隆</button></p>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'user', 'table','tree', 'util'], function() {
+	var $ = layui.$,
+		form = layui.form,
+		element = layui.element,
+		table = layui.table,
+		layer = layui.layer,
+		tree = layui.tree,
+		util = layui.util,
+		router = layui.router();
+})
+</script>
+</body>
+</html>

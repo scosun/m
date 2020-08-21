@@ -124,6 +124,9 @@ layui.config({
             if(styles.font){
                 namestyle += " font-family:" +styles.font +";";
             }
+            if(+styles.fontweight){
+                namestyle += " font-weight:" + (+styles.fontweight ? "bold" : "normal") +";";
+            }
             if(styles.zoom || styles.spin){
                 namestyle += (" transform:scale(" + (styles.spin || 1) + "," + (styles.zoom || 1) + ");");
             }
