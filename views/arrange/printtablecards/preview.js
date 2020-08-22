@@ -137,7 +137,8 @@ layui.config({
     seatSignData.font = "黑体";
     // seatSignData.font = "方正小标宋简体";
 
-    seatSignData.fontSize = "51";
+    seatSignData.fontSize = "16";
+    // seatSignData.fontSize = "51";
     
 
     seatSignData.level = "5";
@@ -338,14 +339,16 @@ layui.config({
     $("#alignbtn img").bind("click",function(){
         console.log($(this).attr("data"));
         var data = $(this).attr("data");
-        $("#fontwh").addClass("flex");
+        // $("#fontwh").addClass("flex");
         $("#printnametext").removeClass("border");
+        debugger
         if(seatSignData.align){
-            $("#fontwh").removeClass(seatSignData.align);
+            $("#printnametext").removeClass(seatSignData.align);
         }
         // if(seatSignData.position){
         //     $("#fontwh").removeClass(seatSignData.position);
         // }
+        
         seatSignData.above = 0;
         seatSignData.left = 0;
         switch(data){
@@ -505,6 +508,19 @@ layui.config({
             "line-height":(100+vertical)+"%",
             "margin-top":(+domabove)+"mm",
             "margin-left":(+domleft)+"mm",
+            // "transform": "scale(" + rotate + "," + scale + ")",
+            "font-family":seatSignData.font || "方正小标宋简体"
+        });
+
+        // $("")
+
+        $("#printnametext2").css({
+            "font-size":(+seatSignData.fontSize/fontcc)+"mm",
+            "letter-spacing":(+domlevel)+"mm",
+            "font-weight":+seatSignData.fontweight ? "bold" : "normal",
+            "line-height":(100+vertical)+"%",
+            "margin-top":(+domabove)+"mm",
+            "margin-left":(+domleft)+"mm",
             "transform": "scale(" + rotate + "," + scale + ")",
             "font-family":seatSignData.font || "方正小标宋简体"
         });
@@ -521,11 +537,12 @@ layui.config({
         if(seatSignData.font){
             // $("#fontwh").addClass(seatSignData.font);
         }
+
         if(seatSignData.align){
-            $("#fontwh").addClass(seatSignData.align);
+            $("#printnametext").addClass(seatSignData.align);
         }
         if(seatSignData.position){
-            $("#fontwh").addClass(seatSignData.position);
+            $("#printnametext").addClass(seatSignData.position);
         }
     }
 
