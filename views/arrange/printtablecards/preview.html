@@ -91,17 +91,39 @@
 	.preview_left_text.flex{
 		display:flex;
 	}
+
+	/*
 	.preview_left_text.aligncenter{
 		text-align: center;
 	}
 	.preview_left_text.alignright{
 		text-align: right;
-		/* justify-content: right;; */
 	}
 	.preview_left_text.positioncenter{
 		justify-content: center;
 	}
 	.preview_left_text.positionend{
+		justify-content:flex-end;
+	}
+	*/
+	.printname.aligncenter{
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.printname.alignright{
+		text-align: right;
+	}
+	.printname.aligncenter.positioncenter{
+		left: 50%;
+		top:50%;
+		transform: translate(-50%,-50%);
+	}
+	.printname.positioncenter{
+		left: 0;
+		top:50%;
+		transform: translate(0%,-50%);
+	}
+	.printname.positionend{
 		justify-content:flex-end;
 	}
 
@@ -110,7 +132,8 @@
 		line-height: 100%;
 		color: #000;
 		display: inline-block;
-		position: relative;
+		/* position: relative; */
+		position: absolute;
 		z-index: 9999999;
 	}
 	.preview_left_text .printname.border{ 
@@ -535,25 +558,22 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 						</div>
-						<!-- <span class="layui-right-nav">
-							<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
-						</span> -->
+						<span class="layui-right-nav" style="padding-right: 10px;cursor: pointer;">
+							新建文本
+						</span>
 					</div>
 					<div style="border-top:1px solid #ccc">
 						<div class="preview_left">
-							<div id="fontwh" class="preview_left_text flex aligncenter positioncenter" style="width: 200mm;height: 100mm;">
+							<div id="fontwh" class="preview_left_text " style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
-								<span id="printnametext" class="printname">打席签</span>
+								<span id="printnametext" class="printname ">打席签</span>
+								<!-- <span id="printnametext2" class="printname">打席签123</span> -->
+								<!-- <span id="printnametext" class="printname">打席签123</span> -->
 								<div class="bjmm"></div>
-								<!-- <p>张&emsp;三</p> -->
-								<!-- <p>张三李四</p> -->
-								<!-- <p>杜红</p> -->
 								<div class="text_width"><span id="text_width">200mm</span></div>
 								<div id="m_padding_left" class="text_width padding_left"><span id="text_padding_left">0mm</span></div>
-								<!-- <div class="text_width padding_right"><span id="text_padding_right">0mm</span></div> -->
 								<div class="text_height"><span id="text_height">100mm</span></div>
 								<div id="m_padding_top" class="text_height padding_top"><span id="text_padding_top">0mm</span></div>
-								<!-- <div class="text_height padding_bottom"><span>21mm</span></div> -->
 							</div>
 						</div>
 
