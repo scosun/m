@@ -444,13 +444,17 @@
 		$("#seatcontainer").unbind("dblclick");
 		$("#seatcontainer").unbind("click");
 		
-		this.selList.unbind("click");
+		if(this.selList && this.selList.length > 0){
+			this.selList.unbind("click");
+		}
 
 		$("#seatcontainer").unbind("dragover");
 	}
 
 	seatMapsControl.prototype.unbindOneSeats = function(){
-		this.selList.unbind("click");
+		if(this.selList && this.selList.length > 0){
+			this.selList.unbind("click");
+		}
 	}
 
 	seatMapsControl.prototype.containerMouseDown = function(){
