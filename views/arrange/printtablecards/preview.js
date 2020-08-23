@@ -11,8 +11,6 @@ layui.config({
         $ = layui.jquery;
     var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
-    var devices = {};
-    var deviceList = [];
     // #test-table-operate
     //渲染表格
 
@@ -124,6 +122,9 @@ layui.config({
     var pid = +getUrlParam("id") || null;
 
 
+    var seatSignIndex = 0;
+    var seatSignArray = [];
+
     var seatSignData = {};
     seatSignData.name = "主席会议室桌牌";
     seatSignData.printname = "打席签";
@@ -137,8 +138,7 @@ layui.config({
     seatSignData.font = "黑体";
     // seatSignData.font = "方正小标宋简体";
 
-    seatSignData.fontSize = "16";
-    // seatSignData.fontSize = "51";
+    seatSignData.fontSize = "51";
     
 
     seatSignData.level = "5";
@@ -169,6 +169,7 @@ layui.config({
 
     //默认 200mm 100mm 字体52mm ,
     //字体 52mm 当做基准值
+
 
     //编辑
     if(pid){
@@ -205,10 +206,49 @@ layui.config({
                 $("#fontwh").removeClass(seatSignData.position);
             }
         }
+    }else{
+        newFont();
     }
 
-    changeSignHtml();
-    changeSignStyle();
+
+    // $("#fontweight").attr("checked",true);
+    // $("#fontweight").attr("checked",false);
+
+    // layui.form.render();
+    
+    function newFont(){
+        var font = {};
+        font.id = "print_" + seatSignIndex;
+        font.style = JSON.parse(JSON.stringify(seatSignData));
+        
+        if(seatSignIndex > 0){
+            font.style.align = "";
+            font.style.position = "";
+        }
+
+        seatSignArray.push(font);
+
+        changeSignHtml(true);
+        changeSignStyle();
+    }
+
+    function bindFontClick(){
+        $(".printname").unbind("click");
+        $(".printname").bind("click",function(){
+            var id = this.id;
+            var idx = +id.split("_")[1];
+            
+            seatSignIndex = idx;
+
+            changeSignHtml(false);
+            changeSignStyle();
+        });
+    }
+    
+    $("#newfontbtn").bind("click",function(){
+        seatSignIndex++;
+        newFont();
+    });
 
 
     $("#printname").bind("input propertychange",function(){
@@ -218,8 +258,12 @@ layui.config({
         if(printname.length == 2){
             printname = printname.split("").join("　");
         }
+
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+
         seatSignData.printname = printname;
-        $("#printnametext").html(printname);
+        $("#" + obj.id).html(printname);
         // changeSignStyle();
     });
 
@@ -227,6 +271,8 @@ layui.config({
         var width = this.value;
         var reg = /^\d+$/g;
         if(reg.test(width)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
 
             var hh = Math.round(+seatSignData.length*200/width);
 
@@ -235,23 +281,50 @@ layui.config({
             seatSignData.width = width;
             seatSignData.domheight = hh;
 
-            // changeSignHtml();
             changeSignStyle();
+
+            if(seatSignArray.length > 1){
+                for(var i = 0; i < seatSignArray.length; i++){
+                    if(i != seatSignIndex){
+                        var seatSignData = seatSignArray[i].style || null;
+                        var hh = Math.round(+seatSignData.length*200/width);
+                        seatSignData.width = width;
+                        seatSignData.domheight = hh;
+
+                        changeSignStyle(i);
+                    }
+                }
+            }
         }
     });
     $("#fontheight").bind("input propertychange",function(){
         var height = this.value;
         var reg = /^\d+$/g;
         if(reg.test(height)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             var hh = Math.round(height*200/+seatSignData.width);
     
             $("#fontwh").css({"height":hh+"mm"});
 
             seatSignData.length = height;
             seatSignData.domheight = hh;
-            // changeSignHtml();
             
             changeSignStyle();
+
+            if(seatSignArray.length > 1){
+                for(var i = 0; i < seatSignArray.length; i++){
+                    if(i != seatSignIndex){
+                        var seatSignData = seatSignArray[i].style || null;
+                        var hh = Math.round(height*200/+seatSignData.width);
+                        seatSignData.length = height;
+                        seatSignData.domheight = hh;
+
+                        changeSignStyle(i);
+                    }
+                }
+            }
         }
     });
 
@@ -260,7 +333,9 @@ layui.config({
         var size = +this.value;
         var reg = /^\d+$/g;
         if(reg.test(size)){
-            
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             if(size >= +seatSignData.length){
                 size = +seatSignData.length;
                 $("#fontsize").val(size);
@@ -277,7 +352,9 @@ layui.config({
         var reg = /^-?\d+$/g;
         
         if(reg.test(level)){
-            
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             seatSignData.level = level;
 
             changeSignStyle();
@@ -288,6 +365,9 @@ layui.config({
         var vertical = +this.value;
         var reg = /^\d+$/g;
         if(reg.test(vertical)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             if(vertical > 0){
                 seatSignData.vertical = vertical;
 
@@ -302,7 +382,9 @@ layui.config({
         var scale = +this.value;
         var reg = /^([0-9]*|\d*.\d{1}?\d*)$/g;
         if(reg.test(scale)){
-            console.log("scale-----",scale)
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             if(scale > 0){
                 seatSignData.zoom = scale;
 
@@ -317,7 +399,9 @@ layui.config({
         var rotate = +this.value;
         var reg = /^([0-9]*|\d*.\d{1}?\d*)$/g;
         if(reg.test(rotate)){
-            console.log("rotate-----",rotate)
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             if(rotate > 0){
                 seatSignData.spin = rotate;
 
@@ -331,19 +415,25 @@ layui.config({
     form.on('checkbox(weight-form-checkbox)', function(data){
         var b = $("#fontweight").is(":checked");
         var fw = b ? "1" : "0";
+
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+
         seatSignData.fontweight = fw;
 
         changeSignStyle();
     });
 
     $("#alignbtn img").bind("click",function(){
-        console.log($(this).attr("data"));
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+
         var data = $(this).attr("data");
         // $("#fontwh").addClass("flex");
-        $("#printnametext").removeClass("border");
-        debugger
+        $("#" + obj.id).removeClass("border");
+        
         if(seatSignData.align){
-            $("#printnametext").removeClass(seatSignData.align);
+            $("#" + obj.id).removeClass(seatSignData.align);
         }
         // if(seatSignData.position){
         //     $("#fontwh").removeClass(seatSignData.position);
@@ -362,18 +452,25 @@ layui.config({
                 seatSignData.align = "alignright";
             break;
         }
-        changeSignHtml();
+
         changeSignStyle();
     });
 
     $("#positionbtn img").bind("click",function(){
-        console.log($(this).attr("data"));
+         var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+
         var data = $(this).attr("data");
-        $("#fontwh").addClass("flex");
-        $("#printnametext").removeClass("border");
+        // $("#fontwh").addClass("flex");
+        $("#" + obj.id).removeClass("border");
+
+        // if(seatSignData.position){
+        //     $("#fontwh").removeClass(seatSignData.position);
+        // }
         if(seatSignData.position){
-            $("#fontwh").removeClass(seatSignData.position);
+            $("#" + obj.id).removeClass(seatSignData.position);
         }
+
         seatSignData.above = 0;
         seatSignData.left = 0;
         switch(data){
@@ -387,7 +484,7 @@ layui.config({
                 seatSignData.position = "positionend";
             break;
         }
-        changeSignHtml();
+
         changeSignStyle();
     });
 
@@ -397,13 +494,16 @@ layui.config({
         var reg = /^-?\d+$/g;
         
         if(reg.test(above)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             $("#fontwh").removeClass("flex");
-            $("#printnametext").addClass("border");
+            $("#" + obj.id).addClass("border");
             if(seatSignData.align){
-                $("#fontwh").removeClass(seatSignData.align);
+                $("#" + obj.id).removeClass(seatSignData.align);
             }
             if(seatSignData.position){
-                $("#fontwh").removeClass(seatSignData.position);
+                $("#" + obj.id).removeClass(seatSignData.position);
             }
 
             seatSignData.align = "";
@@ -419,13 +519,16 @@ layui.config({
         var left = this.value;
         var reg = /^-?\d+$/g;
         if(reg.test(left)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
             $("#fontwh").removeClass("flex");
-            $("#printnametext").addClass("border");
+            $("#" + obj.id).addClass("border");
             if(seatSignData.align){
-                $("#fontwh").removeClass(seatSignData.align);
+                $("#" + obj.id).removeClass(seatSignData.align);
             }
             if(seatSignData.position){
-                $("#fontwh").removeClass(seatSignData.position);
+                $("#" + obj.id).removeClass(seatSignData.position);
             }
             seatSignData.align = "";
             seatSignData.position = "";
@@ -434,9 +537,17 @@ layui.config({
             changeSignStyle();
         }
     });
+    $("#memo").bind("input propertychange",function(){
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+        seatSignData.memo = this.value;;
+    });
 
     form.on('select(font-form-select)', function(data){
         var font = data.value;
+
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
 
         // if(seatSignData.font){
         //     $("#fontwh").removeClass(seatSignData.font);
@@ -445,15 +556,29 @@ layui.config({
         changeSignStyle();
     });
     form.on('select(printtype-form-select)', function(data){
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+
         var type = data.value;
         seatSignData.type = type;
     });
 
 
-    function changeSignHtml(){
+    function changeSignHtml(create){
+        var obj = seatSignArray[seatSignIndex]||{};
+        var seatSignData = obj.style || null;
+        if(!seatSignData){
+            return;
+        }
+
+        
+        if(create){
+            $("#fontwh").append('<span id="' + obj.id + '" class="printname ">'+seatSignData.printname+'</span>');
+        }
+
         $("#name").val(seatSignData.name);
         $("#printname").html(seatSignData.printname);
-        $("#printnametext").html(seatSignData.printname);
+        // $("#printnametext").html(seatSignData.printname);
 
         $("#fontwidth").val(seatSignData.width);
         $("#fontheight").val(seatSignData.length);
@@ -470,7 +595,7 @@ layui.config({
         $("#scale").val(seatSignData.zoom || 1);
         $("#rotate").val(seatSignData.spin || 1);
 
-        $("#fontweight").attr("checked",+seatSignData.fontweight ? true : false);
+        $("#fontweight").prop("checked",+seatSignData.fontweight ? true : false);
 
         $("#margintop").val(seatSignData.above);
         $("#marginleft").val(seatSignData.left);
@@ -480,15 +605,20 @@ layui.config({
         $("#memo").val(seatSignData.memo);
 
         layui.form.render();
+
+        bindFontClick();
     }
-    function changeSignStyle(){
-        // $("#fontwh").css({"width":seatSignData.width+"mm","height":seatSignData.length+"mm"});
-        // 52 / (最新width *  height / 20000 )
-        // ,"margin-left":seatSignData.left+"mm","margin-top":seatSignData.above+"mm"
-
-       
-
-        // var cc = (+seatSignData.width*+seatSignData.length)/coefficient;
+    function changeSignStyle(index){
+        var obj = seatSignArray[seatSignIndex]||{};
+        if(index != undefined){
+            obj = seatSignArray[index]||{};
+        }
+        
+        var seatSignData = obj.style || null;
+        if(!seatSignData){
+            return;
+        }
+        var fontId =  $("#" + obj.id);
 
         var fontcc = +seatSignData.length/+seatSignData.domheight;
 
@@ -501,7 +631,7 @@ layui.config({
         var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.length || 1;
         // var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
 
-        $("#printnametext").css({
+        fontId.css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
             "font-weight":+seatSignData.fontweight ? "bold" : "normal",
@@ -512,18 +642,23 @@ layui.config({
             "font-family":seatSignData.font || "方正小标宋简体"
         });
 
-        // $("")
+        if(seatSignData.align){
+            fontId.addClass(seatSignData.align);
+        }
+        if(seatSignData.position){
+            fontId.addClass(seatSignData.position);
+        }
 
-        $("#printnametext2").css({
-            "font-size":(+seatSignData.fontSize/fontcc)+"mm",
-            "letter-spacing":(+domlevel)+"mm",
-            "font-weight":+seatSignData.fontweight ? "bold" : "normal",
-            "line-height":(100+vertical)+"%",
-            "margin-top":(+domabove)+"mm",
-            "margin-left":(+domleft)+"mm",
-            "transform": "scale(" + rotate + "," + scale + ")",
-            "font-family":seatSignData.font || "方正小标宋简体"
-        });
+        
+        if(fontId.hasClass("aligncenter") && fontId.hasClass("positioncenter")){
+            fontId.css("transform","translate(-50%,-50%) " + "scale(" + rotate + "," + scale + ")");
+        }else if(fontId.hasClass("aligncenter")){
+            fontId.css("transform","translateX(-50%) " + "scale(" + rotate + "," + scale + ")");
+        }else if(fontId.hasClass("positioncenter")){
+            fontId.css("transform","translateY(-50%) " + "scale(" + rotate + "," + scale + ")");
+        }else{
+            fontId.css("transform","scale(" + rotate + "," + scale + ")");
+        }
 
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.length+"mm");
@@ -537,13 +672,7 @@ layui.config({
         if(seatSignData.font){
             // $("#fontwh").addClass(seatSignData.font);
         }
-
-        if(seatSignData.align){
-            $("#printnametext").addClass(seatSignData.align);
-        }
-        if(seatSignData.position){
-            $("#printnametext").addClass(seatSignData.position);
-        }
+        
     }
 
 
@@ -654,8 +783,6 @@ layui.config({
         var type = $(this).data('type');
         active[type] && active[type].call(this);
     });
-
-
 
     /*右侧菜单HOVER显示提示文字*/
     $('.layui-right-nav i').each(function() {

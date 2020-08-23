@@ -106,26 +106,33 @@
 		justify-content:flex-end;
 	}
 	*/
+
+	.printname{
+		word-break: keep-all;
+		white-space: nowrap;
+		cursor:default;
+	}
 	.printname.aligncenter{
 		left: 50%;
 		transform: translateX(-50%);
 	}
 	.printname.alignright{
-		text-align: right;
+		right: 0px;
+	}
+	.printname.positioncenter{
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.printname.positionend{
+		bottom: 0px;
 	}
 	.printname.aligncenter.positioncenter{
 		left: 50%;
 		top:50%;
 		transform: translate(-50%,-50%);
 	}
-	.printname.positioncenter{
-		left: 0;
-		top:50%;
-		transform: translate(0%,-50%);
-	}
-	.printname.positionend{
-		justify-content:flex-end;
-	}
+
+
 
 
 	.preview_left_text .printname{
@@ -558,7 +565,7 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 						</div>
-						<span class="layui-right-nav" style="padding-right: 10px;cursor: pointer;">
+						<span id="newfontbtn" class="layui-right-nav" style="padding-right: 10px;cursor: pointer;">
 							新建文本
 						</span>
 					</div>
@@ -566,7 +573,7 @@
 						<div class="preview_left">
 							<div id="fontwh" class="preview_left_text " style="width: 200mm;height: 100mm;">
 								<!-- <p>辛海涛</p> -->
-								<span id="printnametext" class="printname ">打席签</span>
+								<!-- <span id="printnametext" class="printname ">打席签</span> -->
 								<!-- <span id="printnametext2" class="printname">打席签123</span> -->
 								<!-- <span id="printnametext" class="printname">打席签123</span> -->
 								<div class="bjmm"></div>
