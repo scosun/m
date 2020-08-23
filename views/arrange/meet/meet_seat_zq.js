@@ -4,28 +4,20 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index',//主入口模块
-    soulTable: '/sourtable/soulTable',
-    tableFilter: '/sourtable/tableFilter',
-    excel: '/sourtable/excel',
-    tableChild: '/sourtable/tableChild',
-    tableMerge: '/sourtable/tableMerge'
-}).use(['index', 'user', 'form', 'table', 'layedit', 'laydate', 'upload', 'soulTable', 'laypage'], function () {
+    // soulTable: '/sourtable/soulTable',
+    // tableFilter: '/sourtable/tableFilter',
+    // excel: '/sourtable/excel',
+    // tableChild: '/sourtable/tableChild',
+    // tableMerge: '/sourtable/tableMerge'
+}).use(['index', 'form', 'upload'], function () {
     // var a = {};
     // var b = {};
     var $ = layui.$,
         setter = layui.setter,
-        // admin = layui.admin,
         form = layui.form,
-        // element = layui.element,
-        // table = layui.table,
         layer = layui.layer,
         upload = layui.upload,
-        // laypage = layui.laypage,
-        // laydate = layui.laydate,
-        // datas = null,
-        // soulTable = layui.soulTable,
         router = layui.router();
-    // element.render();
 
     $('.layui-ds,.layui-right-nav i').on('click', function() {
         var type = $(this).data('type');
@@ -116,6 +108,7 @@ layui.config({
         }
     });
 
+    layer.load(2);
     $.ajax({
         url: url+"/meeting/findroomBymeetingid?id=" + meetingid,
         type: "get",
@@ -169,7 +162,7 @@ layui.config({
         $.ajax({
             url: url+"/roomtemplate/findByIdTemplatecode",
             type: "post",
-            async: false,
+            async: true,
             xhrFields: {
                 withCredentials: true
             },
@@ -214,7 +207,7 @@ layui.config({
         $.ajax({
             url: url+"/meeting/findByMeeting",
             type: "get",
-            async: false,
+            async: true,
             xhrFields: {
                 withCredentials: true
             },
@@ -238,7 +231,7 @@ layui.config({
 
     function queryAllSeatStatusByShow(){
         $.ajax({
-            async: false,
+            async: true,
             type: "get",
             url: seatUrl +"/v1/meetings/show?meeting_id="+meetingid,
             dataType: "json",
@@ -430,16 +423,16 @@ layui.config({
     }
 
     function setSeatData(data){
-        console.log(data)
+        // console.log(data)
         $.ajax({
-            async: false,
+            async: true,
             type: "post",
             data: JSON.stringify(data),
             contentType: 'application/json', 
             url: seatUrl +"/v1/meetings/store",
             dataType: "json",
             success: function(obj) {
-                console.log("--setSeatData---",obj);
+                // console.log("--setSeatData---",obj);
                 if(obj && obj.attendees){
                     //保存完之后，要重新查一下吗
                     queryAllSeatStatusByShow();
