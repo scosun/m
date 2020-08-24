@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>会场商店座区图</title>
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+	<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+	<script src="../../../js/scosun.js"></script>
+	<link rel="stylesheet" href="../../../css/seat.css" media="all">
+	<script src="../../../js/jquery-3.1.1.min.js"></script>
+	<style type="text/css">
+        header {
+            box-shadow: 0px 0px 5px gray;
+            height: 3.5rem;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            z-index: 9999;
+            background-color: white;
+        }
+
+        body {
+            padding-bottom: 50px;
+        }
+
+        footer {
+            position: fixed;
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            height: 240px;
+            background-color: white;
+            z-index: 9999;
+        }
+        .layui-btn {background-color: #666;}
+        .layui-btn-danger {background-color: #FF5722;}
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+        /*右侧菜单*/
+        .layui-right-nav {
+            position: absolute;
+            right: 5px;
+            top: 0;
+            height: 3.5rem;
+            line-height: 3.5rem;
+            background-color: #fff;
+        }
+
+        .layui-right-nav i {
+            display: block;
+            height: 20px;
+            width: 20px;
+            float: left;
+            margin-top: 18px;
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        .layui-right-nav i img {
+            width: 100%;
+            display: block;
+        }
+
+    </style>
+	<script type="text/javascript">  
+		function doNothing(){  
+			window.event.returnValue=false;  
+			return false;  
+		}
+	</script>
+</head>
+<body oncontextmenu="doNothing()">
+	
+	<header>
+		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+			<a style="margin-left: 10px"><cite id="rulename"></cite></a>
+			<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+		</span>
+		<span class="layui-right-nav">
+			<i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+			<i id="clonetemp" data-type="clonetemp" class="layui-ds" data="克隆会场"><img src="../../../images/set_rules.svg"></i>
+			<i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+		</span>
+	</header>
+
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+	
+	<script type="text/javascript">
+		function asd() {
+			location.reload();
+		}
+	
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'user', 'table'], function() {
+			var $ = layui.$,
+			form = layui.form,
+			element = layui.element,
+			table = layui.table,
+			setter = layui.setter,
+			layer = layui.layer,
+			router = layui.router();
+
+
+			var seatMapsControl = new SeatMapsControl();
+
+			var url = setter.baseUrl;
+			var uri = window.location.search;
+
+			function getUrlParam(name) {
+            	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+				var r = window.location.search.substr(1).match(reg);//匹配目标参数
+				if (r != null) return decodeURI(r[2]); return null; //返回参数值
+			}
+			var roomid = getUrlParam("roomid");
+			var name = getUrlParam("name");
+			//0 收费  1免费
+			var roomstatus = 1;
+
+			$('#rulename').text(name);
+			layer.load(2);
+			
+			$.ajax({
+				url: url+"/roomshop/QueryByid",
+				type: "get",
+				async: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"id": roomid
+				},
+				success: function(data) {
+					if(data.code == 0){
+						var datas = data.data;
+						var temp = datas.templatecode;
+						roomstatus = +datas.roomstatus;
+
+						temp = temp.replace('style="position: fixed;left: 25px;top: 15px;"','style="position: fixed;left: 25px;top: 75px;"')
+						$("body").append(temp);
+					}
+					layer.closeAll();
+				},
+				error:function(){
+					layer.closeAll();
+				}
+				
+			});
+
+			
+			function cloneTemp(){
+				$.ajax({
+					url: url+"/roomshop/clone",
+					type: "post",
+					async: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					data: {
+						"id": roomid
+					},
+					success: function(data) {
+						if(data.code == 0){
+							layer.msg("会场克隆成功");
+						}else{
+							layer.msg("会场克隆错误");
+						}
+					},
+					error:function(){
+						layer.msg("会场克隆错误");
+					}
+					
+				});
+			}
+
+			var __handDrag = null;
+			var active = {
+				dragcontainer:function(){
+					if(__handDrag){
+						__handDrag = null;
+						$('#seatcontainer').unbind('mousedown');
+						$('#seatcontainer').unbind('mouseup');
+						$('#seatcontainer').unbind('mousemove');
+						// $('.toollist_li').removeClass("on");
+						// $("#nav-selection").addClass("on");
+						// seatMapsControl.selectSeats();
+					}else{
+						seatMapsControl.removeContainerEvent();
+						__handDrag = new SeatMapsDrag();
+					}
+				},
+				clonetemp:function(){
+					if(roomstatus){
+						cloneTemp();
+					}else{
+						layer.msg("收费会场不能克隆");
+					}
+				},
+				close: function() {
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭
+					parent.reloads();
+				}
+			}
+
+			$('.layui-ds').on('click', function() {
+				var type = $(this).data('type');
+				active[type] && active[type].call(this);
+			});
+		});
+	</script>
+	
+</body>
+</html>
