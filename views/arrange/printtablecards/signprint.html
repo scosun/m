@@ -49,25 +49,40 @@
     .preview_left_text.flex{
         display:flex;
     }
-    .preview_left_text.aligncenter{
-        text-align: center;
-    }
-    .preview_left_text.alignright{
-        text-align: right;
-    }
-    .preview_left_text.positioncenter{
-        justify-content: center;
-    }
-    .preview_left_text.positionend{
-		justify-content:flex-end;
+    
+    .printname{
+		word-break: keep-all;
+		white-space: nowrap;
+		cursor:default;
 	}
+	.printname.aligncenter{
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.printname.alignright{
+		right: 0px;
+	}
+	.printname.positioncenter{
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.printname.positionend{
+		bottom: 0px;
+	}
+	.printname.aligncenter.positioncenter{
+		left: 50%;
+		top:50%;
+		transform: translate(-50%,-50%);
+	}
+
     .preview_left_text .printname{
-        line-height: 100%;
-        color: #000;
-        display: inline-block;
-        position: relative;
-        z-index: 9999999;
-    }
+		line-height: 100%;
+		color: #000;
+		display: inline-block;
+		/* position: relative; */
+		position: absolute;
+		z-index: 9999999;
+	}
     .preview_left_text .printname.border{ 
         border: 1px dotted #ccc;
     }
