@@ -122,6 +122,7 @@ layui.config({
     var pid = +getUrlParam("id") || null;
 
 
+    
     var seatSignIndex = 0;
     var seatSignArray = [];
 
@@ -228,6 +229,7 @@ layui.config({
 
         seatSignArray.push(font);
 
+        
         changeSignHtml(true);
         changeSignStyle();
     }
@@ -272,11 +274,14 @@ layui.config({
         var reg = /^\d+$/g;
         if(reg.test(width)){
             var obj = seatSignArray[seatSignIndex]||{};
-            var seatSignData = obj.style || null;
+            var style = obj.style || null;
 
-            var hh = Math.round(+seatSignData.length*200/width);
+            var hh = Math.round(+style.length*200/width);
 
             $("#fontwh").css({"height":hh+"mm"});
+
+            style.width = width;
+            style.domheight = hh;
 
             seatSignData.width = width;
             seatSignData.domheight = hh;
@@ -286,10 +291,10 @@ layui.config({
             if(seatSignArray.length > 1){
                 for(var i = 0; i < seatSignArray.length; i++){
                     if(i != seatSignIndex){
-                        var seatSignData = seatSignArray[i].style || null;
-                        var hh = Math.round(+seatSignData.length*200/width);
-                        seatSignData.width = width;
-                        seatSignData.domheight = hh;
+                        var data = seatSignArray[i].style || null;
+                        var hh = Math.round(+data.length*200/width);
+                        data.width = width;
+                        data.domheight = hh;
 
                         changeSignStyle(i);
                     }
@@ -302,24 +307,27 @@ layui.config({
         var reg = /^\d+$/g;
         if(reg.test(height)){
             var obj = seatSignArray[seatSignIndex]||{};
-            var seatSignData = obj.style || null;
+            var style = obj.style || null;
 
-            var hh = Math.round(height*200/+seatSignData.width);
+            var hh = Math.round(height*200/+style.width);
     
             $("#fontwh").css({"height":hh+"mm"});
 
+            style.length = height;
+            style.domheight = hh;
+            
             seatSignData.length = height;
             seatSignData.domheight = hh;
-            
+
             changeSignStyle();
 
             if(seatSignArray.length > 1){
                 for(var i = 0; i < seatSignArray.length; i++){
                     if(i != seatSignIndex){
-                        var seatSignData = seatSignArray[i].style || null;
-                        var hh = Math.round(height*200/+seatSignData.width);
-                        seatSignData.length = height;
-                        seatSignData.domheight = hh;
+                        var data = seatSignArray[i].style || null;
+                        var hh = Math.round(height*200/+data.width);
+                        data.length = height;
+                        data.domheight = hh;
 
                         changeSignStyle(i);
                     }
@@ -537,10 +545,36 @@ layui.config({
             changeSignStyle();
         }
     });
+    $("#name").bind("input propertychange",function(){
+        var obj = seatSignArray[seatSignIndex]||{};
+        var style = obj.style || null;
+        style.name = this.value;
+
+        if(seatSignArray.length > 1){
+            for(var i = 0; i < seatSignArray.length; i++){
+                if(i != seatSignIndex){
+                    var data = seatSignArray[i].style || null;
+                    data.name = this.value;
+                }
+            }
+        }
+        seatSignData.name = this.value;
+    });
     $("#memo").bind("input propertychange",function(){
         var obj = seatSignArray[seatSignIndex]||{};
-        var seatSignData = obj.style || null;
-        seatSignData.memo = this.value;;
+        var style = obj.style || null;
+        style.memo = this.value;
+
+        if(seatSignArray.length > 1){
+            for(var i = 0; i < seatSignArray.length; i++){
+                if(i != seatSignIndex){
+                    var data = seatSignArray[i].style || null;
+                    data.memo = this.value;
+                }
+            }
+        }
+
+        seatSignData.memo = this.value;
     });
 
     form.on('select(font-form-select)', function(data){
@@ -557,9 +591,20 @@ layui.config({
     });
     form.on('select(printtype-form-select)', function(data){
         var obj = seatSignArray[seatSignIndex]||{};
-        var seatSignData = obj.style || null;
+        var style = obj.style || null;
 
         var type = data.value;
+        style.type = type;
+
+        if(seatSignArray.length > 1){
+            for(var i = 0; i < seatSignArray.length; i++){
+                if(i != seatSignIndex){
+                    var data = seatSignArray[i].style || null;
+                    data.type = type;
+                }
+            }
+        }
+
         seatSignData.type = type;
     });
 
@@ -571,7 +616,7 @@ layui.config({
             return;
         }
 
-        
+        console.log("------",seatSignData)
         if(create){
             $("#fontwh").append('<span id="' + obj.id + '" class="printname ">'+seatSignData.printname+'</span>');
         }
@@ -677,10 +722,18 @@ layui.config({
 
 
     function addSeatSign(){
-        seatSignData.name = $("#name").val();
-        seatSignData.memo = $("#memo").val();
+        // seatSignData.name = $("#name").val();
+        // seatSignData.memo = $("#memo").val();
         
-        seatSignData.zoom = +seatSignData.zoom;
+        // seatSignData.zoom = +seatSignData.zoom;
+        var printtemplate = {};
+        printtemplate.name = seatSignData.name;
+        printtemplate.length = seatSignData.length;
+        printtemplate.width = seatSignData.width;
+        printtemplate.type = seatSignData.type;
+        printtemplate.memo = seatSignData.memo;
+        printtemplate.style = JSON.stringify(seatSignArray);
+
 
         $.ajax({
             async: false,
@@ -688,9 +741,11 @@ layui.config({
             xhrFields: {
                 withCredentials: true
             },
-            url: url + "/seatsgin/addseatsgin",
+            // url: url + "/seatsgin/addseatsgin",
+            url: url + "/printtemplate/save",
             dataType: "json",
-            data:seatSignData,
+            // data:seatSignData,
+            data:printtemplate,
             success: function(obj) {
                 console.log("--addSeatSign---");
                 if(obj.code == 0){
