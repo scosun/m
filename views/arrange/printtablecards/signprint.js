@@ -53,13 +53,13 @@ layui.config({
 
     var signData;
     function setSeatsign(){
-        var data = {};
-        data.id = 123;
-        data.isgrouplist = 3
+        // var data = {};
+        // data.id = 123;
+        // data.isgrouplist = 3;
         layer.open({
             type: 2,
             title: '设置',
-            area: ['50%', '40%'],
+            area: ['550px', '360px'],
             btn: ['确定', '取消'],
             maxmin: true,
             content: 'setup_pop.html',

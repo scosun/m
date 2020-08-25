@@ -119,7 +119,7 @@ layui.config({
         var r = uri.substr(1).match(reg);  //匹配目标参数
         if (r != null) return r[2]; return null; //返回参数值
     }
-    var pid = +getUrlParam("id") || null;
+    var pid = getUrlParam("id") || null;
 
 
     
@@ -178,34 +178,42 @@ layui.config({
         if(seatdata){
             seatdata = JSON.parse(seatdata);
             for(var k in seatdata){
-                if(k != "below" && k != "right" && k != "modifytime"){
+                if(k == "name" || k == "length" || k == "width" || k == "type" || k == "memo"){
                     seatSignData[k] = seatdata[k];
+                    if(k == "length"){
+                        var hh = Math.round(seatdata[k]*200/+seatdata.width);
+                        seatSignData.domheight = hh;
+                    }
+                    if(k == "width"){
+                        var hh = Math.round(+seatdata.length*200/seatdata[k]);
+                        seatSignData.domwidth = hh;
+                    }
                 }
             }
-            if(!seatSignData.spin){
-                seatSignData.spin = 1;
-            }
-            if(!seatSignData.zoom){
-                seatSignData.zoom = 1;
-            }
 
-            if(!seatSignData.printname){
-                seatSignData.printname = "打席签";
-            }
             seatSignData.id = seatdata.id;
 
-            var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
-            $("#fontwh").css({"height":hh+"mm"});
-            seatSignData.domheight = hh;
+            var styles = seatdata.style;
+            if(styles){
+                seatSignArray = JSON.parse(styles);
+            }
 
-            $("#fontwh").removeClass("aligncenter");
-            $("#fontwh").removeClass("positioncenter");
-            if(seatSignData.align){
-                $("#fontwh").removeClass(seatSignData.align);
-            }
-            if(seatSignData.position){
-                $("#fontwh").removeClass(seatSignData.position);
-            }
+            // if(!seatSignData.printname){
+            //     seatSignData.printname = "打席签";
+            // }
+
+            // var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
+            // $("#fontwh").css({"height":hh+"mm"});
+            // seatSignData.domheight = hh;
+
+            // $("#fontwh").removeClass("aligncenter");
+            // $("#fontwh").removeClass("positioncenter");
+            // if(seatSignData.align){
+            //     $("#fontwh").removeClass(seatSignData.align);
+            // }
+            // if(seatSignData.position){
+            //     $("#fontwh").removeClass(seatSignData.position);
+            // }
         }
     }else{
         newFont();
@@ -765,21 +773,30 @@ layui.config({
     }
 
     function editSeatSign(){
-        seatSignData.name = $("#name").val();
-        seatSignData.memo = $("#memo").val();
+        // seatSignData.name = $("#name").val();
+        // seatSignData.memo = $("#memo").val();
         
-        seatSignData.zoom = +seatSignData.zoom;
+        // seatSignData.zoom = +seatSignData.zoom;
         
-        console.log(seatSignData)
+        var printtemplate = {};
+        printtemplate.name = seatSignData.name;
+        printtemplate.length = seatSignData.length;
+        printtemplate.width = seatSignData.width;
+        printtemplate.type = seatSignData.type;
+        printtemplate.memo = seatSignData.memo;
+        printtemplate.style = JSON.stringify(seatSignArray);
+
+        console.log(printtemplate)
         $.ajax({
             async: false,
             type: "POST",
             xhrFields: {
                 withCredentials: true
             },
-            url: url + "/seatsgin/updateseatsgin",
+            // url: url + "/seatsgin/updateseatsgin",
+            url: url + "/printtemplate/modify",
             dataType: "json",
-            data:seatSignData,
+            data:printtemplate,
             success: function(obj) {
                 console.log("--addSeatSign---");
                 if(obj.code == 0){

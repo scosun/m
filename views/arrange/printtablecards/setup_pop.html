@@ -1,149 +1,146 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>表单组合</title>
-		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-		<style>
-			html{
-				background-color: white;
-			}
-		</style>
-	</head>
-	<body>
+<head>
+	<meta charset="utf-8">
+	<title>席签模板列表</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<style>
+		html{
+			background-color: white;
+		}
+	</style>
+</head>
+<body>
 
-		<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
-            <form class="layui-form" action="" >
-				<div class="layui-form-item">
-				<label class="layui-form-label">桌牌规格</label>
-				<div class="layui-input-block">
-					<select class="dialogRuleSelect" lay-filter="component-form-select" name="ruleselect" id="ruleselect">
-						<option value="" id="select_meet"></option>
-					</select>
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0; ">
+	<form class="layui-form" action="" >
+		<div class="layui-form-item">
+		<label class="layui-form-label">桌牌规格</label>
+		<div class="layui-input-block">
+			<select class="dialogRuleSelect" lay-filter="component-form-select" name="ruleselect" id="ruleselect">
+				<option value="" id="select_meet"></option>
+			</select>
+		</div>
+	</div>
+		<div class="layui-form-item layui-layout-admin layui-hide">
+			<div class="layui-input-block">
+				<div style="position: absolute;right: 0px;bottom: 0px;">
+					<button class="layui-btn" lay-submit="" lay-filter="component-form-group" id="click">增加</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
-				<div class="layui-form-item layui-layout-admin layui-hide">
-					<div class="layui-input-block">
-						<div style="position: absolute;right: 0px;bottom: 0px;">
-							<button class="layui-btn" lay-submit="" lay-filter="component-form-group" id="click">增加</button>
-							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-						</div>
-					</div>
-				</div>
-            </form>
-        </div>
+		</div>
+	</form>
+</div>
 
-		<script src="../../../layuiadmin/layui/layui.js"></script>
-		<script type="text/javascript">
-			layui.config({
-				base: '../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-				index: 'lib/index' //主入口模块
-			}).use(['index', 'user', 'table', 'form'], function() {
-				var $ = layui.$,
-					form = layui.form,
-						setter = layui.setter,
-					element = layui.element;
-				var url = setter.baseUrl;
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript">
+	layui.config({
+		base: '../../../layuiadmin/' //静态资源所在路径
+	}).extend({
+		index: 'lib/index' //主入口模块
+	}).use(['index', 'user', 'table', 'form'], function() {
+		var $ = layui.$,
+			form = layui.form,
+				setter = layui.setter,
+			element = layui.element;
+		var url = setter.baseUrl;
 
-				var meetid = getUrlParam("meetid") || ""
-				var templateid = getUrlParam("templateid") || "";
-				console.log(meetid);
+		var meetid = getUrlParam("meetid") || ""
+		var templateid = getUrlParam("templateid") || "";
+		console.log(meetid);
 
-				function getUrlParam(name) {
-					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-					var uri = window.location.search;
-					var r = uri.substr(1).match(reg);  //匹配目标参数
-					if (r != null) return decodeURI(r[2]) ; return null; //返回参数值
+		function getUrlParam(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+			var uri = window.location.search;
+			var r = uri.substr(1).match(reg);  //匹配目标参数
+			if (r != null) return decodeURI(r[2]) ; return null; //返回参数值
+		}
+
+		var signData;
+		var selectSign;
+
+		/* 监听提交 */
+		$.ajax({
+			async: false,
+			type: "get",
+			url: url + "/printtemplate/list",
+			dataType: "json",
+			data: {},
+			xhrFields: {
+				withCredentials: true
+			},
+			//成功的回调函数
+			success: function(msg) {
+				console.log(msg)
+				var data = msg.data;
+				signData = data;
+				$.each(data, function(idx, con) {
+					$("#select_meet").after("<option class='selectOp' value=" + con.id + ">" + con.name + "</option>");
+				});
+
+				$("#ruleselect").val(templateid);
+
+				layui.form.render("select");
+			},
+			//失败的回调函数
+			error: function() {
+				console.log("error")
+			}
+		});
+
+		form.on('select(component-form-select)', function(data){
+			var id = data.value;
+			selectSign = signData.filter(item=>item.id == id)[0] || "";
+
+			window.sessionStorage.setItem("__selectsign",JSON.stringify(selectSign));
+		});
+
+		form.on('submit(component-form-group)', function(data) {
+			if (data.field.ruleselect ==""){
+				return parent.layer.msg("请选择桌牌模版");
+			}
+			console.log(data.field.ruleselect)
+			$.ajax({
+				async: false,
+				type: "post",
+				url: url + "/printseatsgin/settingprinttemplate",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true
+				},
+				//成功的回调函数
+				data: {
+					"meetid":meetid,
+					"printseatsgintemplateid": data.field.ruleselect,
+				},
+				success: function(msg) {
+					if (msg.code == 0) {
+						parent.layer.msg(msg.msg);
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+
+						parent.reloads(); // 父页面刷新
+
+					} else {
+						layer.msg(msg.msg);
+
+
+					}
+
+				},
+				//失败的回调函数
+				error: function() {
+					console.log("error")
 				}
-
-				var signData;
-				var selectSign;
-
-				/* 监听提交 */
-				$.ajax({
-					async: false,
-					type: "get",
-					url: url + "/seatsgin/selectSeletive",
-					dataType: "json",
-					data: {
-					},
-					xhrFields: {
-						withCredentials: true
-					},
-					//成功的回调函数
-					success: function(msg) {
-						console.log(msg)
-						var data = msg.data;
-						signData = data;
-						$.each(data, function(idx, con) {
-							$("#select_meet").after("<option class='selectOp' value=" + con.id + ">" + con.name + "</option>");
-						});
-
-						$("#ruleselect").val(templateid);
-
-						layui.form.render("select");
-						// .parent()
-						// }
-					},
-					//失败的回调函数
-					error: function() {
-						console.log("error")
-					}
-				});
-
-				form.on('select(component-form-select)', function(data){
-					var id = +data.value;
-					selectSign = signData.filter(item=>item.id == id)[0] || "";
-
-					window.sessionStorage.setItem("__selectsign",JSON.stringify(selectSign));
-				});
-
-				form.on('submit(component-form-group)', function(data) {
-					if (data.field.ruleselect ==""){
-						return parent.layer.msg("请选择桌牌模版");
-					}
-					console.log(data.field.ruleselect)
-					$.ajax({
-						async: false,
-						type: "post",
-						url: url + "/printseatsgin/settingprinttemplate",
-						dataType: "json",
-						xhrFields: {
-							withCredentials: true
-						},
-						//成功的回调函数
-						data: {
-							"meetid":meetid,
-							"printseatsgintemplateid": data.field.ruleselect,
-						},
-						success: function(msg) {
-							if (msg.code == 0) {
-								parent.layer.msg(msg.msg);
-								var index = parent.layer.getFrameIndex(window.name);
-								parent.layer.close(index);
-
-								parent.reloads(); // 父页面刷新
-
-							} else {
-								layer.msg(msg.msg);
-
-
-							}
-
-						},
-						//失败的回调函数
-						error: function() {
-							console.log("error")
-						}
-					})
-					return false;
-				});
 			})
-		</script>
-	</body>
+			return false;
+		});
+	})
+</script>
+</body>
 </html>
