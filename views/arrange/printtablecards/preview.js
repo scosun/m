@@ -788,13 +788,14 @@ layui.config({
 
         console.log(printtemplate)
         $.ajax({
-            async: false,
+            async: true,
             type: "POST",
             xhrFields: {
                 withCredentials: true
             },
             // url: url + "/seatsgin/updateseatsgin",
             url: url + "/printtemplate/modify",
+            contentType: "application/x-www-form-urlencoded",
             dataType: "json",
             data:printtemplate,
             success: function(obj) {
