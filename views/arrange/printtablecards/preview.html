@@ -134,7 +134,7 @@
 
 
 
-
+	
 	.preview_left_text .printname{
 		line-height: 100%;
 		color: #000;
@@ -144,7 +144,10 @@
 		z-index: 9999999;
 	}
 	.preview_left_text .printname.border{ 
-		border: 1px dotted #ccc;
+		border: 1px dotted #848484;
+	}
+	.preview_left_text .printname.border.current{ 
+		border: 1px solid #e80b0b;
 	}
 	.text_width{
 		height: 21px;
@@ -697,49 +700,33 @@
 											</div>
 										</div>
 									</div>
-									<div class="clearfix">
+
+									<!-- <div class="clearfix">
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
 												<label class="layui-form-label">对齐</label>
 												<div class="layui-input-block">
 													<div id="alignbtn" style="margin-left:-10px;padding-top:6px">
 														<a data="nav-align-left" href="javascript:;" class="mytest"><span>左对齐</span><img data="left" src="../../../images/toolkit/left.svg" /></a>
-														<!--左对齐 给#fontwh 添加class tl-->
 														<a data="nav-align-center" href="javascript:;" class="mytest"><span>左右对齐</span><img data="center" src="../../../images/toolkit/or_so.svg" /></a>
-														<!--左右对齐 给#fontwh 添加class tc 去掉tl-->
 														<a data="nav-align-right" href="javascript:;" class="mytest"><span>右对齐</span><img data="right" src="../../../images/toolkit/right.svg" /></a>
-														<!--右对齐 给#fontwh 添加class tr 去掉tc tl-->
 													</div>
 												</div>
 											</div>
 										</div>
-										<!--
-											A 1 : 给#fontwh 添加class tl tt
-											A 2 : 给#fontwh 添加class tl
-											A 3 : 给#fontwh 添加class tl tb
-											B 1 : 给#fontwh 添加class tt
-											B 2 : 给#fontwh 什么都不添加
-											B 3 : 给#fontwh 添加class tb
-											C 1 : 给#fontwh 添加class tc tt 
-											C 2 : 给#fontwh 添加class tc
-											C 3 : 给#fontwh 添加class tc tb
-										-->
 										<div style="float: left;width: 50%;clear: auto ;">
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">位置</label>
 												<div class="layui-input-block">
 													<div id="positionbtn" style="margin-left:-6px;padding-top:6px">
 														<a data="nav-align-up" href="javascript:;" class="mytest"><span>上对齐</span><img data="top" src="../../../images/toolkit/up.svg"></a>
-														<!--上对齐 给#fontwh 添加class tt-->
 														<a data="nav-align-center-v" href="javascript:;" class="mytest"><span>上下对齐</span><img data="center" src="../../../images/toolkit/up_down.svg"></a>
-														<!--上下对齐 给#fontwh 不添加class-->
 														<a data="nav-align-down" href="javascript:;" class="mytest"><span>下对齐</span><img data="end" src="../../../images/toolkit/down.svg"></a>
-														<!--下对齐 给#fontwh 添加class tb-->
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									</div> -->
 
 									<div class="layui-form-smbt">位置设置(单位mm)</div>
 									<div class="clearfix">
@@ -776,7 +763,7 @@
 									<div class="layui-form-item">
 										<label class="layui-form-label">备注</label>
 										<div class="layui-input-block">
-											<textarea type="text" id="memo" name="memo" lay-verify="required" placeholder="请输入备注" value="" autocomplete="off" class="layui-input" ></textarea>
+											<textarea type="text" id="memo" name="memo" placeholder="请输入备注" value="" autocomplete="off" class="layui-input" ></textarea>
 										</div>
 									</div>
 
