@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Android通信</title>
+</head>
+<body>
+<div id="url">
+
+</div>
+<hr />
+<div id="open">
+    native参数：
+</div>
+<hr />
+<div>
+    点击直接调用JavascriptInterface绑定的函数H5JsStorage.showDetail("{'test':'123'}");
+    <br />
+    <button id="btn">详情</button>
+
+</div>
+
+<script>
+
+    document.getElementById("url").innerHTML = "URL地址：" + location.href;
+
+    // function getUrlParam(name) {
+    //     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    //      var uri = decodeURI(window.location.search);
+    //     var r = uri.substr(1).match(reg);  //匹配目标参数
+    //     if (r != null) return r[2]; return null; //返回参数值
+    // }
+    
+    // var pid = getUrlParam("id") || null;
+
+    //native
+    function onNetStatusChanged(str){
+        document.getElementById("open").innerHTML = "native参数：" + str;
+    }
+
+    document.getElementById("btn").onclick = function(){
+        if(typeof H5JsStorage != "undefined"){
+            H5JsStorage.showDetail("{'test':'123'}")
+        }else{
+            alert("H5JsStorage不存在");
+        }
+    }
+</script>
+</body>
+</html>

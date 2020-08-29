@@ -25,6 +25,7 @@
             /* justify-content: center; */
             /* align-items: center;   */
         }
+        
         .preview_left_text.flex{
             display:flex;
         }
@@ -40,12 +41,20 @@
         .preview_left_text.positionend{
             justify-content:flex-end;
         }
+
+        .printname{
+            word-break: keep-all;
+            white-space: nowrap;
+            cursor:default;
+        }
         .preview_left_text .printname{
             line-height: 100%;
             color: #000;
             display: inline-block;
-            position: relative;
+           /* position: relative; */
+            position: absolute;
             z-index: 9999999;
+            overflow: hidden;
         }
         .preview_left_text .printname.border{ 
             border: 1px dotted #ccc;

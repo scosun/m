@@ -142,6 +142,7 @@
 		/* position: relative; */
 		position: absolute;
 		z-index: 9999999;
+		overflow: hidden;
 	}
 	.preview_left_text .printname.border{ 
 		border: 1px dotted #848484;
@@ -568,8 +569,11 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 						</div>
-						<span id="newfontbtn" class="layui-right-nav" style="padding-right: 10px;cursor: pointer;">
-							新建文本
+						<span id="newfontbtn" class="layui-right-nav" style="right: 60px;cursor: pointer;">
+							新建
+						</span>
+						<span id="delfontbtn" class="layui-right-nav" style="right: 10px;cursor: pointer;">
+							删除
 						</span>
 					</div>
 					<div style="border-top:1px solid #ccc">
@@ -581,9 +585,14 @@
 								<!-- <span id="printnametext" class="printname">打席签123</span> -->
 								<div class="bjmm"></div>
 								<div class="text_width"><span id="text_width">200mm</span></div>
-								<div id="m_padding_left" class="text_width padding_left"><span id="text_padding_left">0mm</span></div>
 								<div class="text_height"><span id="text_height">100mm</span></div>
+
 								<div id="m_padding_top" class="text_height padding_top"><span id="text_padding_top">0mm</span></div>
+								<div id="m_padding_left" class="text_width padding_left"><span id="text_padding_left">0mm</span></div>
+								
+
+								<div id="m_padding_bottom" class="text_height padding_bottom"><span id="text_padding_bottom">0mm</span></div>
+								<div id="m_padding_right" class="text_width padding_right"><span id="text_padding_right">0mm</span></div>
 							</div>
 						</div>
 
@@ -662,7 +671,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">间距</label><!-- 水平 给#fontwh p 设置 letter-spacing: 0mm; -->
 												<div class="layui-input-block">
-													<input type="number" id="letterspacing"  name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+													<input type="number" id="letterspacing"  name="letterspacing" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input" />
 												</div>
 											</div>
 										</div>
@@ -670,7 +679,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">行距</label><!--垂直 给#fontwh p 设置 line-height: 100%;-->
 												<div class="layui-input-block">
-													<input type="number" id="vertical" name="vertical" min=0 lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+													<input type="number" id="vertical" name="vertical" lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input" />
 												</div>
 											</div>
 										</div>
@@ -734,7 +743,7 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label">上边</label>
 												<div class="layui-input-block">
-													<input id="margintop" type="number" name="margintop" lay-verify="required" placeholder="请输入居上毫米" value="" autocomplete="off" class="layui-input">
+													<input id="margintop" type="number" name="margintop" placeholder="请输入居上毫米" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
@@ -742,12 +751,30 @@
 											<div class="layui-form-item">
 												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">左边</label>
 												<div class="layui-input-block">
-													<input id="marginleft" type="number" name="marginleft" lay-verify="required" placeholder="请输入居下毫米" value="" autocomplete="off" class="layui-input">
+													<input id="marginleft" type="number" name="marginleft" placeholder="请输入居左毫米" value="" autocomplete="off" class="layui-input">
 												</div>
 											</div>
 										</div>
 									</div>
-										
+									
+									<div class="clearfix">
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label">下边</label>
+												<div class="layui-input-block">
+													<input id="marginbottom" type="number" name="marginbottom" placeholder="请输入居下毫米" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+										<div style="float: left;width: 50%;clear: auto ;">
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="text-align: center;margin-left: 5px;">右边</label>
+												<div class="layui-input-block">
+													<input id="marginright" type="number" name="marginright" placeholder="请输入居右毫米" value="" autocomplete="off" class="layui-input">
+												</div>
+											</div>
+										</div>
+									</div>
 
 									<div class="layui-form-item">
 										<label class="layui-form-label">字面</label>
