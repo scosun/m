@@ -88,7 +88,7 @@ layui.config({
                     align: 'left',
                 },
                 {
-                    field: 'memo',
+                    field: 'roomname',
                     title: '桌牌模版',
                     align: 'left',
                 },
@@ -157,7 +157,7 @@ layui.config({
                         align: 'left',
                     },
                     {
-                        field: 'memo',
+                        field: 'roomname',
                         title: '桌牌模版',
                         align: 'left',
                     },
