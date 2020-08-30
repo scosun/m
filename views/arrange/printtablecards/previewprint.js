@@ -19,20 +19,35 @@ layui.config({
         var r = uri.substr(1).match(reg);  //匹配目标参数
         if (r != null) return r[2]; return null; //返回参数值
     }
-    var isgrouplist = +getUrlParam("isgrouplist") || null;
+    var isgrouplist = getUrlParam("isgrouplist") || null;
 
     $.ajax({
-        url: url + "/seatsgin/findseatsginByid?id=" + isgrouplist,
+        url: url + "/printtemplate/selectSeletive?id=" + isgrouplist,
         type: "get",
         async: false,
         xhrFields: {
             withCredentials: true
         },
         success: function(obj) {
-            console.log("findseatsginByid-----",obj);
+            // console.log("findseatsginByid-----",obj);
             if(obj.code == 0){
-                var styles = obj.data || {};
-                showName(styles);
+                var data = obj.data || [];
+                var sign = data[0] || {};
+                var styles = sign.style;
+                if(styles){
+                    styles = JSON.parse(styles) || {};
+                    var style = styles[0].style || "";
+                    if(style){
+                        showName(style);
+                    }else{
+                        layer.msg("获取席签模板错误");
+                    }
+                }
+                else{
+                    layer.msg("获取席签模板错误");
+                }
+            }else{
+                layer.msg("获取席签模板错误");
             }
         },
         error:function(){

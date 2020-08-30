@@ -38,7 +38,7 @@ layui.config({
         if (r != null) return r[2]; return null; //返回参数值
     }
     var meetingid = +getUrlParam("meetingid") || null;
-    var isgrouplist = +getUrlParam("isgrouplist") || null;
+    var isgrouplist = getUrlParam("isgrouplist") || null;
     var roomId = 0;
 
     if(!meetingid){

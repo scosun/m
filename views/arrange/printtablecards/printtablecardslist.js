@@ -296,7 +296,8 @@ layui.config({
                 area: ['550px', '360px'],
                 btn: ['确定', '取消'],
                 maxmin: true,
-                content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.isgrouplist,
+                // content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.isgrouplist,
+                content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.memo,
                 success: function(layero, index) {
                 },
                 yes:function (index,layero) {
@@ -317,7 +318,8 @@ layui.config({
                 offset: '0',
                 //拷贝 meeting_room_zq.html
                 //content: 'meeting_room_zq.html?roomid='+age.id
-                content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.isgrouplist,
+                // content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.isgrouplist,
+                content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.memo,
                 success: function(layero, index) {
                 
                 }
