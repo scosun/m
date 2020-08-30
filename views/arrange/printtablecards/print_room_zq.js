@@ -284,7 +284,7 @@ layui.config({
                 // debugger
                 // deviceList.length=10;//先定义个假数据
                 if (deviceList.length == 0 ) {
-                    return layer.msg("请选择后再批量打印！")
+                    return layer.msg("请选择人员后再批量打印！")
                 }
                 //获取选中数目
                 layer.confirm('是否将'+deviceList.length+'个桌牌全部打印？',

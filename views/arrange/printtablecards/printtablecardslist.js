@@ -9,6 +9,7 @@ layui.config({
         router = layui.router(),
         $ = layui.jquery;
     var url = setter.baseUrl;
+    var seatUrl = setter.seatBaseUrl;
     // var url = "http://127.0.0.1:8083";
     var devices = {};
     var deviceList = [];
@@ -252,42 +253,99 @@ layui.config({
         if(date.getDay()==6) week="星期六";
         return week;
     }
+
+
+    function queryAllSeatStatus(meetingid,isgrouplist){
+        layer.load(2);
+        $.ajax({
+            async: false,
+            type: "get",
+            url: seatUrl + "/v1/meetings/show?meeting_id="+meetingid,
+            dataType: "json",
+            success: function(obj) {
+                console.log("--queryAllSeatStatus---");
+                layer.closeAll();
+                if(obj.attendees && obj.attendees.length > 0){
+                    var names = [];
+                    obj.attendees.forEach(function(item){
+                        names.push(item.attender);
+                    });
+
+                    layer.confirm('    是否将 '+ names.length +' 个桌牌全部打印？', {
+                        title:'打印桌牌',
+                        skin: '',
+                        btn: ['预览','取消'],
+                        // 取消
+                        btn2: function(){
+                            //layer.close();
+                            parent.layer.close();
+                        },
+                        // 预览
+                        yes: function(index){
+                            layer.close(index);
+                            sessionStorage.setItem("_printnames",names.join(','));
+                            window.open("previewprint.html?isgrouplist="+isgrouplist,"_blank");
+                        }
+                    },
+                    function(index) {
+                        layer.close(index);
+                    });
+                    
+                }else{
+                    layer.msg("没有获取到会议人名信息");
+                }
+            },
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+                layer.closeAll();
+            }
+        });
+    }
+
     //监听工具条
     table.on('tool(test-table-operate)', function(obj) {
         var data = obj.data;
         if (obj.event === 'print') {
-            layer.confirm('    是否将 '+ data.id +' 个桌牌全部打印？',
-                {
-                    title:'打印桌牌',
-                    skin: '',
-                    btn: ['预览','取消'],
-                    // 取消
-                    btn2: function(){
-                        //layer.close();
-                        parent.layer.close();
-                    },
-                    // 预览
-                    yes: function(index){
-                        layer.open({
-                            type: 2,
-                            title: '收藏管理 (考生姓名：张无忌)',
-                            //title: false,
-                            shadeClose: false, //弹出框之外的地方是否可以点击
-                            area: ['100%', '100%'],
-                            closeBtn: 1,
-                            // maxmin: true,
-                            closeBtn:false,
-                            offset: '0',
-                            content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
-                            success: function(layero, index) {
+            var meetingid = obj.data.id;
+            var isgrouplist = obj.data.memo;
+            if(!isgrouplist){
+                layer.msg("没有设置席签模板");
+                return;
+            }
+            queryAllSeatStatus(meetingid,isgrouplist);
+            // layer.confirm('    是否将 '+ data.id +' 个桌牌全部打印？',
+            //     {
+            //         title:'打印桌牌',
+            //         skin: '',
+            //         btn: ['预览','取消'],
+            //         // 取消
+            //         btn2: function(){
+            //             //layer.close();
+            //             parent.layer.close();
+            //         },
+            //         // 预览
+            //         yes: function(index){
+            //             layer.open({
+            //                 type: 2,
+            //                 title: '收藏管理 (考生姓名：张无忌)',
+            //                 //title: false,
+            //                 shadeClose: false, //弹出框之外的地方是否可以点击
+            //                 area: ['100%', '100%'],
+            //                 closeBtn: 1,
+            //                 // maxmin: true,
+            //                 closeBtn:false,
+            //                 offset: '0',
+            //                 content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
+            //                 success: function(layero, index) {
                             
-                            }
-                        })
-                    }
-                },
-                function(index) {
-                    layer.close(index);
-                });
+            //                 }
+            //             })
+            //         }
+            //     },
+            //     function(index) {
+            //         layer.close(index);
+            //     });
         }
         if(obj.event === 'setup'){
             layer.open({
