@@ -48,22 +48,32 @@ layui.config({
             var html = [];
 
             var namestyle = "";
-            var style = "width:" + styles.width + "mm;height:" + styles.length + "mm;"
-            var classtext = "preview_left_text ";
-            if(styles.position || styles.align){
-                classtext += " flex ";
-                if(styles.align){
-                    classtext += (" " + styles.align);
-                }
-                if(styles.position){
-                    classtext += (" " + styles.position);
-                }
-            }
+            var containerStyle = "width:" + styles.width + "mm;height:" + styles.height + "mm;"
+            // var classtext = "preview_left_text ";
+            // if(styles.position || styles.align){
+            //     classtext += " flex ";
+            //     if(styles.align){
+            //         classtext += (" " + styles.align);
+            //     }
+            //     if(styles.position){
+            //         classtext += (" " + styles.position);
+            //     }
+            // }
 
-            namestyle = " font-size:"+styles.fontSize + "mm;letter-spacing:"+styles.level + "mm;"
-            if(styles.above || styles.left){
-                namestyle += " margin-top:"+styles.above + "mm;margin-left:"+styles.left + "mm;"
+            namestyle = " font-size:"+styles.fontSize + "mm;letter-spacing:"+styles.level + "mm;";
+            if(styles.top){
+                namestyle += " top:"+styles.top + "mm;";
             }
+            if(styles.left){
+                namestyle += " left:"+styles.left + "mm;";
+            }
+            if(styles.bottom){
+                namestyle += " bottom:"+styles.bottom + "mm;";
+            }
+            if(styles.right){
+                namestyle += " right:"+styles.right + "mm;";
+            }
+            
             if(styles.vertical){
                 namestyle += " line-height:" +(100+(+styles.vertical))+"%;";
             }
@@ -76,12 +86,6 @@ layui.config({
             if(styles.zoom || styles.spin){
                 namestyle += (" transform:scale(" + (styles.spin || 1) + "," + (styles.zoom || 1) + ");");
             }
-            // $("#printnametext").css({
-            //     "font-size":(+seatSignData.fontSize/fontcc)+"mm",
-            //     "letter-spacing":(+domlevel)+"mm",
-            //     "margin-top":(+domabove)+"mm",
-            //     "margin-left":(+domleft)+"mm"
-            // });
 
             //0:一字两面,1:一字一面, 一字两面 就是 一正一反， 一字一面，就是两个一样
             //transform: rotate(180deg);
@@ -90,33 +94,47 @@ layui.config({
             for(var i = 0, len = names.length; i < len; i++){
 
                 var name = names[i] || {};
+                if(name.length == 2){
+                    //两个字人名 中间添加空格
+                    name = name.split("").join("　");
+                }
                 if(type == 0){
                     html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="transform: rotate(180deg); ' + style + '">');
+                    html.push('<div class="preview_left_text" style="transform: rotate(180deg); ' + containerStyle + '">');
                     html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
 
                     html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="' + style + '">');
+                    html.push('<div class="preview_left_text" style="' + containerStyle + '">');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('</div>');
+                    html.push('</div>');
+
+                }else if(type == 1){
+                    html.push('<div>');
+                    html.push('<div class="preview_left_text"  style="' + containerStyle + '">');
+                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
+                    html.push('</div>');
+                    html.push('</div>');
+                    
+                    
+                    html.push('<div>');
+                    html.push('<div class="preview_left_text"  style="' + containerStyle + '">');
                     html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
                 }else{
                     html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="' + style + '">');
-                    html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
-                    html.push('</div>');
-                    html.push('</div>');
-                    
-                    
-                    html.push('<div>');
-                    html.push('<div class="' + classtext + '" style="' + style + '">');
+                    html.push('<div class="preview_left_text"  style="' + containerStyle + '">');
                     html.push('<span class="printname" style="' + namestyle + '">' + name + '</span>');
                     html.push('</div>');
                     html.push('</div>');
                 }
             }
+
+
+
             $("#container").html(html.join(''));
 
         }

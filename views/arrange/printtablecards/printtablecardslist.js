@@ -293,7 +293,7 @@ layui.config({
             layer.open({
                 type: 2,
                 title: '设置',
-                area: ['30%', '40%'],
+                area: ['550px', '360px'],
                 btn: ['确定', '取消'],
                 maxmin: true,
                 content: 'setup_pop.html?meetid='+obj.data.id+'&templateid='+obj.data.isgrouplist,

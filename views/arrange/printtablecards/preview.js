@@ -17,6 +17,16 @@ layui.config({
     $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="print" id="batchmeet">设置<s></s></a>');
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
 
+    Array.prototype.remove = function(dx) { 
+        if(isNaN(dx)||dx>this.length){return false;} 
+        for(var i=0,n=0;i<this.length;i++) { 
+            if(this[i]!=this[dx]) 
+            { 
+            this[n++]=this[i] 
+            } 
+        } 
+        this.length-=1;
+    }
     
     var fonts = [];
     var detector = new Detector();
@@ -33,7 +43,7 @@ layui.config({
         fonts.push(["simsun","宋体"]);
         fonts.push(["NSimSun","新宋体"]);
         fonts.push(["FangSong","仿宋"]);
-        fonts.push(["FangSong","仿宋"]);
+        // fonts.push(["FangSong","仿宋"]);
         fonts.push(["KaiTi","楷体"]);
         fonts.push(["FangSongGB2312","仿宋GB2312"]);
         fonts.push(["KaiTiGB2312","楷体GB2312"]);
@@ -115,10 +125,11 @@ layui.config({
     
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-         var uri = window.location.search;
+         var uri = decodeURI(window.location.search);
         var r = uri.substr(1).match(reg);  //匹配目标参数
         if (r != null) return r[2]; return null; //返回参数值
     }
+    
     var pid = getUrlParam("id") || null;
 
 
@@ -130,8 +141,7 @@ layui.config({
     seatSignData.name = "主席会议室桌牌";
     seatSignData.printname = "打席签";
     
-    
-    seatSignData.length = "100";
+    seatSignData.height = "100";
     seatSignData.domheight = "100";
     seatSignData.width = "200";
     seatSignData.domwidth = "200";
@@ -140,7 +150,6 @@ layui.config({
     // seatSignData.font = "方正小标宋简体";
 
     seatSignData.fontSize = "51";
-    
 
     seatSignData.level = "5";
     seatSignData.vertical = "5";
@@ -150,27 +159,26 @@ layui.config({
 
     seatSignData.fontweight = "0";
 
-    seatSignData.align = "aligncenter";
-    seatSignData.position = "positioncenter";
-
-    seatSignData.above = "0";
-    seatSignData.domabove = "0";
-    seatSignData.left = "0";
+    seatSignData.top = "23";
+    seatSignData.domtop = "0";
+    seatSignData.left = "16";
     seatSignData.domleft = "0";
 
-    
-    seatSignData.below = undefined;
+    seatSignData.bottom = undefined;
+    seatSignData.dombottom = undefined;
     seatSignData.right = undefined;
+    seatSignData.domright = undefined;
     
+    seatSignData.align = "";
+    seatSignData.position = "";
+
     //打印字面 0:一字两面,1:一字一面 
     seatSignData.type = "0";
 
     seatSignData.memo = "";
 
-
     //默认 200mm 100mm 字体52mm ,
     //字体 52mm 当做基准值
-
 
     //编辑
     if(pid){
@@ -183,10 +191,14 @@ layui.config({
                     if(k == "length"){
                         var hh = Math.round(seatdata[k]*200/+seatdata.width);
                         seatSignData.domheight = hh;
+
+                        $("#fontwh").css({"height":hh+"mm"});
                     }
                     if(k == "width"){
                         var hh = Math.round(+seatdata.length*200/seatdata[k]);
                         seatSignData.domwidth = hh;
+
+                        $("#fontwh").css({"height":hh+"mm"});
                     }
                 }
             }
@@ -198,11 +210,26 @@ layui.config({
                 seatSignArray = JSON.parse(styles);
             }
 
+            if(seatSignArray.length > 0){
+                for(var i = 0,len = seatSignArray.length; i < len; i++){
+                    var obj = seatSignArray[i] || {};
+                    if(i == 0){
+                        changeSignHtml(true);
+                        changeSignStyle();
+                    }else{
+                        $("#fontwh").append('<span id="' + obj.id + '" class="border printname ">'+obj.style.printname+'</span>');
+                        changeSignStyle(i);
+                    }
+                }
+
+                bindFontClick();
+            }
+
             // if(!seatSignData.printname){
             //     seatSignData.printname = "打席签";
             // }
 
-            // var hh = Math.round(+seatSignData.length*200/+seatSignData.width);
+            // var hh = Math.round(+seatSignData.height*200/+seatSignData.width);
             // $("#fontwh").css({"height":hh+"mm"});
             // seatSignData.domheight = hh;
 
@@ -226,17 +253,20 @@ layui.config({
     // layui.form.render();
     
     function newFont(){
+        $(".printname").removeClass("current");
+
         var font = {};
         font.id = "print_" + seatSignIndex;
         font.style = JSON.parse(JSON.stringify(seatSignData));
         
         if(seatSignIndex > 0){
-            font.style.align = "";
-            font.style.position = "";
+            font.style.fontSize = 25;
+
+            font.style.top = "0";
+            font.style.left = "0";
         }
 
         seatSignArray.push(font);
-
         
         changeSignHtml(true);
         changeSignStyle();
@@ -245,11 +275,18 @@ layui.config({
     function bindFontClick(){
         $(".printname").unbind("click");
         $(".printname").bind("click",function(){
-            var id = this.id;
-            var idx = +id.split("_")[1];
-            
-            seatSignIndex = idx;
+            $(".printname").removeClass("current");
+            $(this).addClass("current");
 
+            var id = this.id;
+
+            for(var i = 0,len = seatSignArray.length; i < len; i++){
+                if(seatSignArray[i].id == id){
+                    seatSignIndex = i;
+                    continue;
+                }
+            }
+            
             changeSignHtml(false);
             changeSignStyle();
         });
@@ -260,6 +297,23 @@ layui.config({
         newFont();
     });
 
+    $("#delfontbtn").bind("click",function(){
+        if(seatSignIndex > 0){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var id = obj.id;
+
+            if($("#" + id).hasClass("current")){
+                seatSignArray.remove(seatSignIndex);
+                $("#" + id).remove();
+                seatSignIndex--;
+            }else{
+                layer.msg("请选择要删除的示例");
+            }
+        }else{
+            layer.msg("系统默认示例不能删除");
+        }
+    });
+    
 
     $("#printname").bind("input propertychange",function(){
         var printname = this.value;
@@ -271,9 +325,10 @@ layui.config({
 
         var obj = seatSignArray[seatSignIndex]||{};
         var seatSignData = obj.style || null;
-
+        
         seatSignData.printname = printname;
         $("#" + obj.id).html(printname);
+
         // changeSignStyle();
     });
 
@@ -284,7 +339,7 @@ layui.config({
             var obj = seatSignArray[seatSignIndex]||{};
             var style = obj.style || null;
 
-            var hh = Math.round(+style.length*200/width);
+            var hh = Math.round(+style.height*200/width);
 
             $("#fontwh").css({"height":hh+"mm"});
 
@@ -300,7 +355,7 @@ layui.config({
                 for(var i = 0; i < seatSignArray.length; i++){
                     if(i != seatSignIndex){
                         var data = seatSignArray[i].style || null;
-                        var hh = Math.round(+data.length*200/width);
+                        var hh = Math.round(+data.height*200/width);
                         data.width = width;
                         data.domheight = hh;
 
@@ -321,10 +376,10 @@ layui.config({
     
             $("#fontwh").css({"height":hh+"mm"});
 
-            style.length = height;
+            style.height = height;
             style.domheight = hh;
             
-            seatSignData.length = height;
+            seatSignData.height = height;
             seatSignData.domheight = hh;
 
             changeSignStyle();
@@ -334,7 +389,7 @@ layui.config({
                     if(i != seatSignIndex){
                         var data = seatSignArray[i].style || null;
                         var hh = Math.round(height*200/+data.width);
-                        data.length = height;
+                        data.height = height;
                         data.domheight = hh;
 
                         changeSignStyle(i);
@@ -379,18 +434,18 @@ layui.config({
 
     $("#vertical").bind("input propertychange",function(){
         var vertical = +this.value;
-        var reg = /^\d+$/g;
+        var reg = /^-?\d+$/g;
         if(reg.test(vertical)){
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
 
-            if(vertical > 0){
-                seatSignData.vertical = vertical;
+            // if(vertical > 0){
+            seatSignData.vertical = vertical;
 
-                changeSignStyle();
-            }else{
-                $("#vertical").val(0);
-            }
+            changeSignStyle();
+            // }else{
+            //     $("#vertical").val(0);
+            // }
         }
     });
 
@@ -455,7 +510,7 @@ layui.config({
         //     $("#fontwh").removeClass(seatSignData.position);
         // }
         
-        seatSignData.above = 0;
+        seatSignData.top = 0;
         seatSignData.left = 0;
         switch(data){
             case "left":
@@ -487,7 +542,7 @@ layui.config({
             $("#" + obj.id).removeClass(seatSignData.position);
         }
 
-        seatSignData.above = 0;
+        seatSignData.top = 0;
         seatSignData.left = 0;
         switch(data){
             case "top":
@@ -506,27 +561,30 @@ layui.config({
 
 
     $("#margintop").bind("input propertychange",function(){
-        var above = this.value;
+        var top = this.value;
         var reg = /^-?\d+$/g;
         
-        if(reg.test(above)){
+        if(reg.test(top)){
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
 
-            $("#fontwh").removeClass("flex");
-            $("#" + obj.id).addClass("border");
-            if(seatSignData.align){
-                $("#" + obj.id).removeClass(seatSignData.align);
-            }
-            if(seatSignData.position){
-                $("#" + obj.id).removeClass(seatSignData.position);
-            }
+            // $("#fontwh").removeClass("flex");
 
-            seatSignData.align = "";
-            seatSignData.position = "";
+            // $("#" + obj.id).addClass("border");
+
+            // if(seatSignData.align){
+            //     $("#" + obj.id).removeClass(seatSignData.align);
+            // }
+            // if(seatSignData.position){
+            //     $("#" + obj.id).removeClass(seatSignData.position);
+            // }
+            // seatSignData.align = "";
+            // seatSignData.position = "";
 
             
-            seatSignData.above = above;
+            seatSignData.top = top;
+            seatSignData.bottom = undefined;
+            $("#marginbottom").val("");
 
             changeSignStyle();
         }
@@ -538,21 +596,57 @@ layui.config({
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
 
-            $("#fontwh").removeClass("flex");
-            $("#" + obj.id).addClass("border");
-            if(seatSignData.align){
-                $("#" + obj.id).removeClass(seatSignData.align);
-            }
-            if(seatSignData.position){
-                $("#" + obj.id).removeClass(seatSignData.position);
-            }
-            seatSignData.align = "";
-            seatSignData.position = "";
+            // $("#fontwh").removeClass("flex");
+
+            // $("#" + obj.id).addClass("border");
+
+            // if(seatSignData.align){
+            //     $("#" + obj.id).removeClass(seatSignData.align);
+            // }
+            // if(seatSignData.position){
+            //     $("#" + obj.id).removeClass(seatSignData.position);
+            // }
+            // seatSignData.align = "";
+            // seatSignData.position = "";
 
             seatSignData.left = left;
+            seatSignData.right = undefined;
+            $("#marginright").val("");
+            
             changeSignStyle();
         }
     });
+    $("#marginbottom").bind("input propertychange",function(){
+        var bottom = this.value;
+        var reg = /^-?\d+$/g;
+        
+        if(reg.test(bottom)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
+            seatSignData.bottom = bottom;
+            seatSignData.top = undefined;
+            $("#margintop").val("");
+
+            changeSignStyle();
+        }
+    });
+    $("#marginright").bind("input propertychange",function(){
+        var right = this.value;
+        var reg = /^-?\d+$/g;
+        if(reg.test(right)){
+            var obj = seatSignArray[seatSignIndex]||{};
+            var seatSignData = obj.style || null;
+
+            seatSignData.right = right;
+            seatSignData.left = undefined;
+            $("#marginleft").val("");
+
+            changeSignStyle();
+        }
+    });
+
+
     $("#name").bind("input propertychange",function(){
         var obj = seatSignArray[seatSignIndex]||{};
         var style = obj.style || null;
@@ -594,6 +688,7 @@ layui.config({
         // if(seatSignData.font){
         //     $("#fontwh").removeClass(seatSignData.font);
         // }
+
         seatSignData.font = font;
         changeSignStyle();
     });
@@ -624,33 +719,31 @@ layui.config({
             return;
         }
 
-        console.log("------",seatSignData)
+        // console.log("------",seatSignData)
         if(create){
-            $("#fontwh").append('<span id="' + obj.id + '" class="printname ">'+seatSignData.printname+'</span>');
+            $("#fontwh").append('<span id="' + obj.id + '" class="border printname current ">'+seatSignData.printname+'</span>');
         }
 
         $("#name").val(seatSignData.name);
-        $("#printname").html(seatSignData.printname);
+        // $("#printname").val(seatSignData.printname);
+        $("#printname").val(seatSignData.printname);
         // $("#printnametext").html(seatSignData.printname);
 
         $("#fontwidth").val(seatSignData.width);
-        $("#fontheight").val(seatSignData.length);
+        $("#fontheight").val(seatSignData.height);
 
         $("#font_list").val(seatSignData.font);
 
         $("#fontsize").val(seatSignData.fontSize);
 
-        $("#font_list").val(seatSignData.font);
-
         $("#letterspacing").val(seatSignData.level);
         $("#vertical").val(seatSignData.vertical);
-
         $("#scale").val(seatSignData.zoom || 1);
         $("#rotate").val(seatSignData.spin || 1);
 
         $("#fontweight").prop("checked",+seatSignData.fontweight ? true : false);
 
-        $("#margintop").val(seatSignData.above);
+        $("#margintop").val(seatSignData.top);
         $("#marginleft").val(seatSignData.left);
 
         $("#printtype_selset").val(seatSignData.type);
@@ -661,6 +754,7 @@ layui.config({
 
         bindFontClick();
     }
+
     function changeSignStyle(index){
         var obj = seatSignArray[seatSignIndex]||{};
         if(index != undefined){
@@ -673,57 +767,94 @@ layui.config({
         }
         var fontId =  $("#" + obj.id);
 
-        var fontcc = +seatSignData.length/+seatSignData.domheight;
+        var fontcc = +seatSignData.height/+seatSignData.domheight;
 
+        //间距
         var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
-        var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
-        var domabove = Math.round(+seatSignData.domheight*+seatSignData.above/+seatSignData.length);
-        var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.length);
+
+        var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.height);
         
-        var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.length || 1;
-        var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.length || 1;
-        // var rotate = Math.round(+seatSignData.domheight*+seatSignData.spin/+seatSignData.length);
+        
+
+        // debugger
+        var domtop = Math.round(+seatSignData.domheight*+seatSignData.top/+seatSignData.height);
+        var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
+        
+
+        var domright = Math.round(+seatSignData.domwidth*+seatSignData.right/+seatSignData.width);
+        var dombottom = Math.round(+seatSignData.domheight*+seatSignData.bottom/+seatSignData.height);
+        
+        // var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.height || 1;
+        // var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.height || 1;
+        var scale = +seatSignData.zoom || 1;
+        var rotate = +seatSignData.spin || 1;
 
         fontId.css({
             "font-size":(+seatSignData.fontSize/fontcc)+"mm",
             "letter-spacing":(+domlevel)+"mm",
             "font-weight":+seatSignData.fontweight ? "bold" : "normal",
             "line-height":(100+vertical)+"%",
-            "margin-top":(+domabove)+"mm",
-            "margin-left":(+domleft)+"mm",
-            // "transform": "scale(" + rotate + "," + scale + ")",
+            "top":(isNaN(domtop)? "" : domtop+"mm"),
+            "left":(isNaN(domleft) ? "" : domleft+"mm"),
+
+            "bottom":(isNaN(dombottom) ? "" : dombottom+"mm"),
+            "right":(isNaN(domright) ? "" : domright+"mm"),
+
+            "transform": "scale(" + rotate + "," + scale + ")",
             "font-family":seatSignData.font || "方正小标宋简体"
         });
 
-        if(seatSignData.align){
-            fontId.addClass(seatSignData.align);
-        }
-        if(seatSignData.position){
-            fontId.addClass(seatSignData.position);
-        }
+        // if(seatSignData.align){
+        //     fontId.addClass(seatSignData.align);
+        // }
+        // if(seatSignData.position){
+        //     fontId.addClass(seatSignData.position);
+        // }
 
         
-        if(fontId.hasClass("aligncenter") && fontId.hasClass("positioncenter")){
-            fontId.css("transform","translate(-50%,-50%) " + "scale(" + rotate + "," + scale + ")");
-        }else if(fontId.hasClass("aligncenter")){
-            fontId.css("transform","translateX(-50%) " + "scale(" + rotate + "," + scale + ")");
-        }else if(fontId.hasClass("positioncenter")){
-            fontId.css("transform","translateY(-50%) " + "scale(" + rotate + "," + scale + ")");
-        }else{
-            fontId.css("transform","scale(" + rotate + "," + scale + ")");
-        }
+        // if(fontId.hasClass("aligncenter") && fontId.hasClass("positioncenter")){
+        //     fontId.css("transform","translate(-50%,-50%) " + "scale(" + rotate + "," + scale + ")");
+        // }else if(fontId.hasClass("aligncenter")){
+        //     fontId.css("transform","translateX(-50%) " + "scale(" + rotate + "," + scale + ")");
+        // }else if(fontId.hasClass("positioncenter")){
+        //     fontId.css("transform","translateY(-50%) " + "scale(" + rotate + "," + scale + ")");
+        // }else{
+        //     fontId.css("transform","scale(" + rotate + "," + scale + ")");
+        // }
 
         $("#text_width").html(seatSignData.width+"mm");
-        $("#text_height").html(seatSignData.length+"mm");
+        $("#text_height").html(seatSignData.height+"mm");
+        
+        if(!isNaN(domtop)){
+            $("#text_padding_top").html((+seatSignData.top)+"mm");
+            $("#m_padding_top").height((+domtop)+"mm");
+        }else{
+            $("#text_padding_top").html("0mm");
+            $("#m_padding_top").height("0mm");
+        }
 
-        $("#text_padding_top").html((+seatSignData.above)+"mm");
-        $("#m_padding_top").height((+domabove)+"mm");
+        if(!isNaN(dombottom)){
+            $("#text_padding_bottom").html((+seatSignData.bottom)+"mm");
+            $("#m_padding_bottom").height((+dombottom)+"mm");
+        }else{
+            $("#text_padding_bottom").html("0mm");
+            $("#m_padding_bottom").height("0mm");
+        }
+        
+        if(!isNaN(domleft)){
+            $("#text_padding_left").html((+seatSignData.left)+"mm");
+            $("#m_padding_left").width((+domleft)+"mm");
+        }else{
+            $("#text_padding_left").html("0mm");
+            $("#m_padding_left").width("0mm");
+        }
 
-        $("#text_padding_left").html((+seatSignData.left)+"mm");
-        $("#m_padding_left").width((+domleft)+"mm");
-
-        if(seatSignData.font){
-            // $("#fontwh").addClass(seatSignData.font);
+        if(!isNaN(domright)){
+            $("#text_padding_right").html((+seatSignData.right)+"mm");
+            $("#m_padding_right").width((+domright)+"mm");
+        }else{
+            $("#text_padding_right").html("0mm");
+            $("#m_padding_right").width("0mm");
         }
         
     }
@@ -736,7 +867,7 @@ layui.config({
         // seatSignData.zoom = +seatSignData.zoom;
         var printtemplate = {};
         printtemplate.name = seatSignData.name;
-        printtemplate.length = seatSignData.length;
+        printtemplate.length = seatSignData.height;
         printtemplate.width = seatSignData.width;
         printtemplate.type = seatSignData.type;
         printtemplate.memo = seatSignData.memo;
@@ -744,14 +875,14 @@ layui.config({
 
 
         $.ajax({
-            async: false,
+            async: true,
             type: "POST",
             xhrFields: {
                 withCredentials: true
             },
             // url: url + "/seatsgin/addseatsgin",
             url: url + "/printtemplate/save",
-            dataType: "json",
+            // dataType: "json",
             // data:seatSignData,
             data:printtemplate,
             success: function(obj) {
@@ -779,14 +910,14 @@ layui.config({
         // seatSignData.zoom = +seatSignData.zoom;
         
         var printtemplate = {};
+        printtemplate.id = pid;
         printtemplate.name = seatSignData.name;
-        printtemplate.length = seatSignData.length;
+        printtemplate.length = seatSignData.height;
         printtemplate.width = seatSignData.width;
         printtemplate.type = seatSignData.type;
         printtemplate.memo = seatSignData.memo;
         printtemplate.style = JSON.stringify(seatSignArray);
 
-        console.log(printtemplate)
         $.ajax({
             async: true,
             type: "POST",
@@ -795,8 +926,8 @@ layui.config({
             },
             // url: url + "/seatsgin/updateseatsgin",
             url: url + "/printtemplate/modify",
-            contentType: "application/x-www-form-urlencoded",
-            dataType: "json",
+            // contentType: "application/x-www-form-urlencoded",
+            // dataType: "json",
             data:printtemplate,
             success: function(obj) {
                 console.log("--addSeatSign---");
