@@ -17,17 +17,17 @@ layui.config({
     $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="print" id="batchmeet">设置<s></s></a>');
     $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
 
-    Array.prototype.remove = function(dx) { 
-        if(isNaN(dx)||dx>this.length){return false;} 
-        for(var i=0,n=0;i<this.length;i++) { 
-            if(this[i]!=this[dx]) 
-            { 
-            this[n++]=this[i] 
-            } 
-        } 
+    Array.prototype.remove = function(dx) {
+        if(isNaN(dx)||dx>this.length){return false;}
+        for(var i=0,n=0;i<this.length;i++) {
+            if(this[i]!=this[dx])
+            {
+                this[n++]=this[i]
+            }
+        }
         this.length-=1;
     }
-    
+
     var fonts = [];
     var detector = new Detector();
     /**
@@ -106,11 +106,11 @@ layui.config({
             }
 
             // if(data && data.length > 0){
-				// $.each(data, function (index, item) {
-					// 下拉菜单里添加元素
-				// });
-				
-			// }
+            // $.each(data, function (index, item) {
+            // 下拉菜单里添加元素
+            // });
+
+            // }
             // row = table.insertRow(-1);
             // col = row.insertCell(-1);
             // col.appendChild(document.createTextNode(fonts[i]))
@@ -122,25 +122,25 @@ layui.config({
         layui.form.render("select");
     }
     font_init();
-    
+
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-         var uri = decodeURI(window.location.search);
+        var uri = decodeURI(window.location.search);
         var r = uri.substr(1).match(reg);  //匹配目标参数
         if (r != null) return r[2]; return null; //返回参数值
     }
-    
+
     var pid = getUrlParam("id") || null;
 
 
-    
+
     var seatSignIndex = 0;
     var seatSignArray = [];
 
     var seatSignData = {};
     seatSignData.name = "主席会议室桌牌";
     seatSignData.printname = "打席签";
-    
+
     seatSignData.height = "100";
     seatSignData.domheight = "100";
     seatSignData.width = "200";
@@ -168,11 +168,11 @@ layui.config({
     seatSignData.dombottom = undefined;
     seatSignData.right = undefined;
     seatSignData.domright = undefined;
-    
+
     seatSignData.align = "";
     seatSignData.position = "";
 
-    //打印字面 0:一字两面,1:一字一面 
+    //打印字面 0:一字两面,1:一字一面
     seatSignData.type = "0";
 
     seatSignData.memo = "";
@@ -251,14 +251,14 @@ layui.config({
     // $("#fontweight").attr("checked",false);
 
     // layui.form.render();
-    
+
     function newFont(){
         $(".printname").removeClass("current");
 
         var font = {};
         font.id = "print_" + seatSignIndex;
         font.style = JSON.parse(JSON.stringify(seatSignData));
-        
+
         if(seatSignIndex > 0){
             font.style.fontSize = 25;
 
@@ -267,7 +267,7 @@ layui.config({
         }
 
         seatSignArray.push(font);
-        
+
         changeSignHtml(true);
         changeSignStyle();
     }
@@ -286,12 +286,12 @@ layui.config({
                     continue;
                 }
             }
-            
+
             changeSignHtml(false);
             changeSignStyle();
         });
     }
-    
+
     $("#newfontbtn").bind("click",function(){
         seatSignIndex++;
         newFont();
@@ -313,7 +313,7 @@ layui.config({
             layer.msg("系统默认示例不能删除");
         }
     });
-    
+
 
     $("#printname").bind("input propertychange",function(){
         var printname = this.value;
@@ -325,7 +325,7 @@ layui.config({
 
         var obj = seatSignArray[seatSignIndex]||{};
         var seatSignData = obj.style || null;
-        
+
         seatSignData.printname = printname;
         $("#" + obj.id).html(printname);
 
@@ -373,12 +373,12 @@ layui.config({
             var style = obj.style || null;
 
             var hh = Math.round(height*200/+style.width);
-    
+
             $("#fontwh").css({"height":hh+"mm"});
 
             style.height = height;
             style.domheight = hh;
-            
+
             seatSignData.height = height;
             seatSignData.domheight = hh;
 
@@ -421,7 +421,7 @@ layui.config({
     $("#letterspacing").bind("input propertychange",function(){
         var level = +this.value;
         var reg = /^-?\d+$/g;
-        
+
         if(reg.test(level)){
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
@@ -502,33 +502,33 @@ layui.config({
         var data = $(this).attr("data");
         // $("#fontwh").addClass("flex");
         $("#" + obj.id).removeClass("border");
-        
+
         if(seatSignData.align){
             $("#" + obj.id).removeClass(seatSignData.align);
         }
         // if(seatSignData.position){
         //     $("#fontwh").removeClass(seatSignData.position);
         // }
-        
+
         seatSignData.top = 0;
         seatSignData.left = 0;
         switch(data){
             case "left":
                 seatSignData.align = "";
-            break;
+                break;
             case "center":
                 seatSignData.align = "aligncenter";
-            break;
+                break;
             case "right":
                 seatSignData.align = "alignright";
-            break;
+                break;
         }
 
         changeSignStyle();
     });
 
     $("#positionbtn img").bind("click",function(){
-         var obj = seatSignArray[seatSignIndex]||{};
+        var obj = seatSignArray[seatSignIndex]||{};
         var seatSignData = obj.style || null;
 
         var data = $(this).attr("data");
@@ -547,13 +547,13 @@ layui.config({
         switch(data){
             case "top":
                 seatSignData.position = "";
-            break;
+                break;
             case "center":
                 seatSignData.position = "positioncenter";
-            break;
+                break;
             case "end":
                 seatSignData.position = "positionend";
-            break;
+                break;
         }
 
         changeSignStyle();
@@ -563,7 +563,7 @@ layui.config({
     $("#margintop").bind("input propertychange",function(){
         var top = this.value;
         var reg = /^-?\d+$/g;
-        
+
         if(reg.test(top)){
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
@@ -581,7 +581,7 @@ layui.config({
             // seatSignData.align = "";
             // seatSignData.position = "";
 
-            
+
             seatSignData.top = top;
             seatSignData.bottom = undefined;
             $("#marginbottom").val("");
@@ -612,14 +612,14 @@ layui.config({
             seatSignData.left = left;
             seatSignData.right = undefined;
             $("#marginright").val("");
-            
+
             changeSignStyle();
         }
     });
     $("#marginbottom").bind("input propertychange",function(){
         var bottom = this.value;
         var reg = /^-?\d+$/g;
-        
+
         if(reg.test(bottom)){
             var obj = seatSignArray[seatSignIndex]||{};
             var seatSignData = obj.style || null;
@@ -760,7 +760,7 @@ layui.config({
         if(index != undefined){
             obj = seatSignArray[index]||{};
         }
-        
+
         var seatSignData = obj.style || null;
         if(!seatSignData){
             return;
@@ -773,17 +773,17 @@ layui.config({
         var domlevel = Math.round(+seatSignData.domwidth*+seatSignData.level/+seatSignData.width);
 
         var vertical = Math.round(+seatSignData.domheight*+seatSignData.vertical/+seatSignData.height);
-        
-        
+
+
 
         // debugger
         var domtop = Math.round(+seatSignData.domheight*+seatSignData.top/+seatSignData.height);
         var domleft = Math.round(+seatSignData.domwidth*+seatSignData.left/+seatSignData.width);
-        
+
 
         var domright = Math.round(+seatSignData.domwidth*+seatSignData.right/+seatSignData.width);
         var dombottom = Math.round(+seatSignData.domheight*+seatSignData.bottom/+seatSignData.height);
-        
+
         // var scale = +seatSignData.domheight*+seatSignData.zoom/+seatSignData.height || 1;
         // var rotate = +seatSignData.domheight*+seatSignData.spin/+seatSignData.height || 1;
         var scale = +seatSignData.zoom || 1;
@@ -811,7 +811,7 @@ layui.config({
         //     fontId.addClass(seatSignData.position);
         // }
 
-        
+
         // if(fontId.hasClass("aligncenter") && fontId.hasClass("positioncenter")){
         //     fontId.css("transform","translate(-50%,-50%) " + "scale(" + rotate + "," + scale + ")");
         // }else if(fontId.hasClass("aligncenter")){
@@ -824,7 +824,7 @@ layui.config({
 
         $("#text_width").html(seatSignData.width+"mm");
         $("#text_height").html(seatSignData.height+"mm");
-        
+
         if(!isNaN(domtop)){
             $("#text_padding_top").html((+seatSignData.top)+"mm");
             $("#m_padding_top").height((+domtop)+"mm");
@@ -840,7 +840,7 @@ layui.config({
             $("#text_padding_bottom").html("0mm");
             $("#m_padding_bottom").height("0mm");
         }
-        
+
         if(!isNaN(domleft)){
             $("#text_padding_left").html((+seatSignData.left)+"mm");
             $("#m_padding_left").width((+domleft)+"mm");
@@ -856,14 +856,14 @@ layui.config({
             $("#text_padding_right").html("0mm");
             $("#m_padding_right").width("0mm");
         }
-        
+
     }
 
 
     function addSeatSign(){
         // seatSignData.name = $("#name").val();
         // seatSignData.memo = $("#memo").val();
-        
+
         // seatSignData.zoom = +seatSignData.zoom;
         var printtemplate = {};
         printtemplate.name = seatSignData.name;
@@ -906,9 +906,9 @@ layui.config({
     function editSeatSign(){
         // seatSignData.name = $("#name").val();
         // seatSignData.memo = $("#memo").val();
-        
+
         // seatSignData.zoom = +seatSignData.zoom;
-        
+
         var printtemplate = {};
         printtemplate.id = pid;
         printtemplate.name = seatSignData.name;
@@ -961,26 +961,26 @@ layui.config({
     }
 
     var $ = layui.$,
-    active = {
-        refresh:function(){
-            location.reload();
-        },
-        enterbtn: function() {
-            if(pid){
-                editSeatSign();
-            }else{
-                addSeatSign();
+        active = {
+            refresh:function(){
+                location.reload();
+            },
+            enterbtn: function() {
+                if(pid){
+                    editSeatSign();
+                }else{
+                    addSeatSign();
+                }
+            },
+            cancel: function() {
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+            },
+            close:function(){
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
             }
-        },
-        cancel: function() {
-            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-            parent.layer.close(index); //再执行关闭 
-        },
-        close:function(){
-            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-            parent.layer.close(index); //再执行关闭 
-        }
-    };
+        };
 
 
     $('.layui-ds').on('click', function() {
@@ -997,7 +997,6 @@ layui.config({
         }, function() {
             layer.close(subtips);
         });
-
         function openMsg() {
             subtips = layer.tips(_data, '#' + _id, {
                 tips: [3, '#666'],
