@@ -108,7 +108,11 @@
 						<!-- 右侧筛选条件 end-->
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
-					q
+					<script type="text/html" id="groups">
+						{{#  if($.inArray("savemeetsms", d) != -1){ }}
+						<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+						{{# }}}
+					</script>
 					<script type="text/html" id="test-table-operate-barDemo">
 						<a class="layui-btn-primary layui-btn-sm " data-dropdown="#dropUser{{d.LAY_INDEX}}"
 						   no-shade="true">更多<img style="width:10px;margin-left:5px;margin-bottom:2px" src="../../../images/drop-down.svg"></a>
