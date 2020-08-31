@@ -20,7 +20,10 @@
     点击直接调用JavascriptInterface绑定的函数H5JsStorage.showDetail("{'test':'123'}");
     <br />
     <button id="btn">详情</button>
-
+</div>
+<hr />
+<div id="native">
+    native响应：
 </div>
 
 <script>
@@ -43,7 +46,8 @@
 
     document.getElementById("btn").onclick = function(){
         if(typeof H5JsStorage != "undefined"){
-            H5JsStorage.showDetail("{'test':'123'}")
+            var msg = H5JsStorage.showDetail("{'test':'123'}");
+            document.getElementById("native").innerHTML = "native响应：" + msg;
         }else{
             alert("H5JsStorage不存在");
         }
