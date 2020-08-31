@@ -458,7 +458,7 @@ var __handDrag = null;
 		// 	$(this).attr("title",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 		// 	$(this).attr("id",ids[0] + "-" + group + "-" + ids[2] + "-" + ids[3]);
 		// });
-		seled.removeClass("seled");
+		$(".seled").removeClass("seled");
 		group++;
 		alert("合并完成");
 
@@ -2597,6 +2597,8 @@ var __handDrag = null;
 				$("#" + oid).attr("id","s-"+groupid+"-"+(rowid+1)+"-"+(seatsnum[colid]));
 			});
 		}.bind(this));
+
+		$(".seled").removeClass("seled");
 	}
 
 	seatMapsEditor.prototype.boxCreateSeats = function(){
