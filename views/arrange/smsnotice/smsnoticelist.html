@@ -95,7 +95,6 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 							<!-- // 20.04.06 dh 修改为以下-->
-							<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
 							<!-- <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button> -->
 						</div>
 						<!-- 右侧筛选条件 -->
@@ -109,18 +108,37 @@
 						<!-- 右侧筛选条件 end-->
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
+					<script type="text/html" id="groups">
+						{{#  if($.inArray("savemeetsms", d) != -1){ }}
+						<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+						{{# }}}
+					</script>
 					<script type="text/html" id="test-table-operate-barDemo">
 						<a class="layui-btn-primary layui-btn-sm " data-dropdown="#dropUser{{d.LAY_INDEX}}"
 						   no-shade="true">更多<img style="width:10px;margin-left:5px;margin-bottom:2px" src="../../../images/drop-down.svg"></a>
 						<ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
 							<div class="dropdown-anchor"></div>
+							{{#  if($.inArray("modifymeetsms", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+							{{# }}}
+							{{#  if($.inArray("deletemeetsms", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+							{{# }}}
+							{{#  if($.inArray("savemeetsms", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="personedit">人员编辑</a>
+							{{# }}}
+							{{#  if($.inArray("meetsend", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="sendmail">发送短信</a>
+							{{# }}}
+							{{#  if($.inArray("findmeetsms", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="record">短信记录</a>
+							{{# }}}
+							{{#  if($.inArray("findmeetsms", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="particulars">人员详情</a>
+							{{# }}}
+							{{#  if($.inArray("meetnosend", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="nosend">错误发送</a>
+							{{# }}}
 						</ul>
 
 					</script>

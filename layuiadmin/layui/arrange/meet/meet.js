@@ -7,7 +7,7 @@ layui.config({
     var table = layui.table,
         admin = layui.admin,
         setter = layui.setter,
-        tpl = layui.laytpl;
+        tpl = layui.laytpl,
         dropdown = 'dropdown',
         router = layui.router(),
         $ = layui.jquery;

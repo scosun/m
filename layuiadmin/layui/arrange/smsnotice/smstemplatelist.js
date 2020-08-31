@@ -2,9 +2,11 @@ layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
-}).use(['index', 'table', 'jquery'], function() {
+}).use(['index', 'table', 'jquery','laytpl'], function() {
     var table = layui.table,
         setter = layui.setter,
+        tpl = layui.laytpl,
+        tpl = layui.laytpl,
         $ = layui.jquery;
     var url = setter.baseUrl;;
     // var url = "http://127.0.0.1:8083";
@@ -22,7 +24,7 @@ layui.config({
     $.ajax({
         async: false,
         type: "get",
-        url:url+ "/permission/getpremission",
+        url:url + "/permission/getpremission",
         datatype: 'json',
 
         xhrFields: {
@@ -31,24 +33,16 @@ layui.config({
         //成功的回调函数
         success: function(msg) {
             var data = msg.data;
-            
+
             if (msg.code != 0) {
                 location.href = "user/login.html"
             }
-                window.a = data
-                if ($.inArray("addmeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').before("<button class='layui-ds gradient-block-diagonal' data-type='add' id='addmeeting'>新建</button>")
-                }
-                if ($.inArray("emptymeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="isAll" id="emptymeet">清空<s></s></a>');
-                }
-                if ($.inArray("batchmeet", data) != -1) {
-                    // 20.04.06 dh 下行有修改 
-                    $('#buttongroup').after('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>');
-                }
-                      
+            window.a = data
+            var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+                // console.log(grouphtml)
+                document.getElementById("group").innerHTML= html;
+            })
+
         },
         error: function(error) {
             console.log(error)

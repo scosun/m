@@ -130,9 +130,6 @@
 					<div>
 						<div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
 							<!-- // 20.04.06 dh 修改为以下-->
-							<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
-							<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="isAll" id='emptymeet'>下载<s></s></a>
-							<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
 							<!-- <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
 							<button class='layui-btn layui-ds' data-type='isAll' id='emptymeet'>人员模版下载</button>
 							<button class="layui-btn layui-ds" data-type="getCheckLength" id="batchmeet">批量删除</button> -->
@@ -148,6 +145,13 @@
 						<!-- 右侧筛选条件 end-->
 					</div>
 					<table id="test-table-operate" lay-filter="test-table-operate"></table>
+					<script type="text/html" id="groups">
+						{{#  if($.inArray("savemeetsms", d) != -1){ }}
+						<button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建</button>
+						{{# }}}
+						<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="isAll" id='emptymeet'>下载<s></s></a>
+						<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckLength" id="batchmeet">删除<s></s></a>
+					</script>
 					<script type="text/html" id="test-table-operate-barDemo">
 						<!--                        <a class="layui-btn layui-btn-xs" lay-event="personlist">人员编辑</a>-->
 						<!--                        <a class="layui-btn layui-btn-xs" lay-event="personedit">会议选择</a>-->
@@ -160,14 +164,30 @@
 						   no-shade="true" >更多<img style="width:10px;margin-left:5px;margin-bottom:2px" src="../../../images/drop-down.svg"></a>
 						<ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
 							<div class="dropdown-anchor"></div>
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="person">人员编辑</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="personedit">会议选择</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="upload">Excel上传</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="sendmail">发送短信</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="sendmailrecord">发送记录</a>
+							{{# }}}
+							{{#  if($.inArray("smsgroup", a) != -1){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="smsreply">回复记录</a>
+							{{# }}}
 						</ul>
 					</script>
 				</div>
@@ -182,10 +202,11 @@
 	}).extend({
 		index: 'lib/index', //主入口模块
 		dropdown: '/dropdown/dropdown'
-	}).use(['index', 'table', 'jquery', 'upload','dropdown'], function () {
+	}).use(['index', 'table', 'jquery', 'upload','dropdown','laytpl'], function () {
 		var table = layui.table,
 				setter = layui.setter,
 				$ = layui.jquery,
+				tpl = layui.laytpl,
 				dropdown = 'dropdown';
 		var url = setter.baseUrl;
 		// var url = "http://127.0.0.1:8083";
@@ -196,7 +217,33 @@
 		// $('#group').append(
 		// 		'<button class="layui-btn layui-ds" data-type="getCheckData" id="buttongroup">全选</button>'
 		// )
+		$.ajax({
+			async: false,
+			type: "get",
+			url:url + "/permission/getpremission",
+			datatype: 'json',
 
+			xhrFields: {
+				withCredentials: true
+			},
+			//成功的回调函数
+			success: function(msg) {
+				var data = msg.data;
+
+				if (msg.code != 0) {
+					location.href = "user/login.html"
+				}
+				window.a = data
+				var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+					// console.log(grouphtml)
+					document.getElementById("group").innerHTML= html;
+				})
+
+			},
+			error: function(error) {
+				console.log(error)
+			},
+		})
 		function isEmptyObject(obj) {
 
 			var jlength = 0;

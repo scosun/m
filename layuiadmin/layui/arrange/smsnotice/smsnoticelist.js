@@ -3,10 +3,11 @@ layui.config({
 }).extend({
     index: 'lib/index', //主入口模块
     dropdown: '/dropdown/dropdown'
-}).use(['index', 'table', 'jquery','dropdown'], function () {
+}).use(['index', 'table', 'jquery','dropdown','laytpl'], function () {
     var table = layui.table,
         setter = layui.setter,
         $ = layui.jquery,
+        tpl = layui.laytpl,
         dropdown = 'dropdown';
     // dropdown = layui.dropdown;
     var url = setter.baseUrl;
@@ -15,7 +16,33 @@ layui.config({
     var deviceList = [];
     // #test-table-operate
     //渲染表格
+    $.ajax({
+        async: false,
+        type: "get",
+        url:url + "/permission/getpremission",
+        datatype: 'json',
 
+        xhrFields: {
+            withCredentials: true
+        },
+        //成功的回调函数
+        success: function(msg) {
+            var data = msg.data;
+
+            if (msg.code != 0) {
+                location.href = "user/login.html"
+            }
+            window.a = data
+            var grouphtml= groups.innerHTML;tpl(grouphtml).render(data,function (html) {
+                // console.log(grouphtml)
+                document.getElementById("group").innerHTML= html;
+            })
+
+        },
+        error: function(error) {
+            console.log(error)
+        },
+    })
     function isEmptyObject(obj) {
 
         var jlength = 0;
