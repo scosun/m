@@ -1438,23 +1438,23 @@ var __handDrag = null;
 					}
 				}.bind(this)
 			},
-			// {
-			// 	name:"编排",
-			// 	id:"menu4",
-			// 	seatno:seatno,
-			// 	callback: function(seatno) {
-			// 		var cid = $("[cid="+seatno+"]").attr("cid") || "";
-			// 		if(cid){
-			// 			seatno = $("[cid="+seatno+"]").attr("id");
-			// 		}
-			// 		this.currseatno = seatno;
-			// 		var newno = window.prompt("请输入排号");
-			// 		if(newno){
-			// 			$("#"+seatno).text(newno);
-			// 			$("#"+seatno).addClass("rownumseats");
-			// 		}
-			// 	}.bind(this)
-			// }
+			{
+				name:"修改座区名字",
+				id:"menu4",
+				seatno:seatno,
+				callback: function(seatno) {
+					// var cid = $("[cid="+seatno+"]").attr("cid") || "";
+					// if(cid){
+					// 	seatno = $("[cid="+seatno+"]").attr("id");
+					// }
+					// this.currseatno = seatno;
+					var newno = window.prompt("请输入座区名称");
+					if(newno){
+						$("#"+seatno).text(newno);
+						// $("#"+seatno).addClass("rownumseats");
+					}
+				}.bind(this)
+			}
 		];
 		
 		if($("#"+seatno).length > 0){
@@ -2365,6 +2365,12 @@ var __handDrag = null;
 		$("#seatcontainerId").append(seathtml.join(''));
 	}
 
+	seatMapsEditor.prototype.setSeatsColor = function(color){
+		var seled = $("#seatcontainerId .seled:not(.rownumseats)");
+		seled.css("background-color",color);
+		seled.removeClass("seled");
+	}
+
 	seatMapsEditor.prototype.autoRunCode = function(ruleid,seatids){
 		var rowid = 0;
 		// var seled = $("#seatcontainerId .seatdiv:not(.rownumseats)[id$='r']");
@@ -2716,6 +2722,7 @@ var __handDrag = null;
 		$("#seatcontainerId .seled").removeClass("seled");
 		
 		var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
+		seats.css("background-color","");
 		// seats.each(function(){
 		// 	var id = this.id;
 		// 	var arr = id.split("-");
@@ -2952,6 +2959,14 @@ var __handDrag = null;
 						// console.log(00000,keyDownSelectAll)
 						keyDownSelectAll = true;
 					}
+				}
+			break;
+			case 67:
+				if(evt.shiftKey){
+					// 设置颜色
+					evt.preventDefault();
+					evt.stopPropagation();
+					keydownToolEvent("set-seat-color");
 				}
 			break;
 			case 82:

@@ -347,6 +347,9 @@
 					</div>
 				</div>
 			</div>
+			<div class="toollist_li">
+				<a id="toollist17" data="set-seat-color" href="javascript:;" alt="座区标色Shitf+C" title="座区标色Shitf+C"><img src="../../../images/toolkit/copy_editor.svg"></a>
+			</div>
 			<!--
 
 			<div class="toollist_li">
@@ -702,6 +705,10 @@
 				$(ele).attr({"data":key,"title":"向心点列表Ctrl+Alt+J","alt":"向心点列表Ctrl+Alt+J"});
 				$(ele).find("img").attr("src","../../../images/toolkit/center_list.svg");
 			break;
+			case "set-seat-color":
+				ele = $("#toollist17");
+			break;
+			
 		}
 		seatMapEvent(key,ele);
 		$('.toollist_li').removeClass("on");
@@ -984,6 +991,10 @@
 			
 			case "close-centerpoint":
 				unbindRulePoint();
+			break;
+
+			case "set-seat-color":
+				__openSetColor();
 			break;
 		}
 	}
@@ -1652,6 +1663,29 @@
 				}
 				,btn4:function(index,layero){
 					console.log(4)
+				}
+			});
+		}
+
+		window.__openSetColor = openSetColor;
+		function openSetColor(){
+			layer.open({
+				type: 2,
+				title: '设置座区颜色',
+				shadeClose: true, //弹出框之外的地方是否可以点击
+				offset: '20%',
+				area: ['500px', '400px'],
+				content: 'set_color.html',
+				resize:false,
+				btn: ['确定', '关闭'],
+				yes: function(index, layero) {
+					var color = layero.find('iframe').contents().find("#color").val() || "";
+					if(color){
+						seatmaps.setSeatsColor(color);
+						layer.close(index);
+					}else{
+						layer.msg("请选择颜色");
+					}
 				}
 			});
 		}

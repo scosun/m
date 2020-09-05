@@ -45,11 +45,36 @@
     }
 
     document.getElementById("btn").onclick = function(){
-        if(typeof H5JsStorage != "undefined"){
-            var msg = H5JsStorage.showDetail("{'test':'123'}");
-            document.getElementById("native").innerHTML = "native响应：" + msg;
-        }else{
-            alert("H5JsStorage不存在");
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isAndroid) {
+            //这个是安卓操作系统
+            alert("android");
+            if(typeof H5JsStorage != "undefined"){
+                var msg = H5JsStorage.showDetail("{'test':'123'}");
+                document.getElementById("native").innerHTML = "native响应：" + msg;
+            }else{
+                alert("H5JsStorage不存在");
+            }
+        }
+        if (isIOS) {
+        　　//这个是ios操作系统
+            alert("ios");
+            if(typeof webkit != "undefined"){
+                if(typeof webkit.messageHandlers != "undefined"){
+                    if(typeof webkit.messageHandlers.showDetail != "undefined"){
+                        var msg = webkit.messageHandlers.showDetail.postMessage("{'test':'123'}");
+                        document.getElementById("native").innerHTML = "native响应：" + msg;
+                    }else{
+                        alert("window.webkit.messageHandlers.showDetail不存在");
+                    }
+                }else{
+                    alert("window.webkit.messageHandlers不存在");
+                }
+            }else{
+                alert("window.webkit不存在");
+            }
         }
     }
 </script>
