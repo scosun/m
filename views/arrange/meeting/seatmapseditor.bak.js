@@ -43,8 +43,8 @@ var __handDrag = null;
 	// var serverUrl = "http://81.70.37.92";
 
 	//id---拼接 含义 分类-组-行-列 s-11-1-4
-	// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆) - 分组 - 行 - 列
-
+	// (s-矩形,c-圆形,r-跑道,p-多边形,o-椭圆,t-圆形餐桌号) - 分组 - 行 - 列
+	
 	// parseFloat($("#movecontainerId").css("left"));
 	// parseFloat($("#movecontainerId").css("top"));
 
@@ -313,6 +313,7 @@ var __handDrag = null;
 				seledgroup[st].push(id);
 			}
 		}
+		// var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats,.diningtable)");
 		var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
 		for(var gk in seledgroup){
 			allseats.each(function(){
@@ -1789,7 +1790,7 @@ var __handDrag = null;
 		});
 	}
 
-	seatMapsEditor.prototype.mouseCreateSeatMap = function(mt,seatnum,centernum,ruleid){
+	seatMapsEditor.prototype.mouseCreateSeatMap = function(mt,seatnum,centernum,ruleid,diningtable){
 		this.removeContainerEvent();
 		$("#circlemousexyId").show();
 
@@ -1800,7 +1801,7 @@ var __handDrag = null;
 				
 				var ids = [];
 				var ruleid = 1;
-				var seled = $("#mousecontainerId .seatdiv:not(.rownumseats)");
+				var seled = $("#mousecontainerId .seatdiv:not(.rownumseats,.diningtable)");
 				seled.each(function(){
 					ids.push(this.id);
 				});
@@ -1849,7 +1850,7 @@ var __handDrag = null;
 
 					// $("#seatcontainerId").html('');
 					if(mt == 1){
-						this.createCircleSeatMap(x1 - 20,y1 - 18,r1,seatnum,ruleid,1);
+						this.createCircleSeatMap(x1 - 20,y1 - 18,r1,seatnum,ruleid,1,diningtable);
 					}else{
 						this.createRunSeatMap(x1 - 20,y1 - 18,r1,seatnum,centernum,ruleid,1);
 					}
@@ -1909,10 +1910,10 @@ var __handDrag = null;
 		}
 	}
 
-	seatMapsEditor.prototype.createCircleSeatMap = function(ccx,ccy,r1,seatnum,ruleid,ism){
+	seatMapsEditor.prototype.createCircleSeatMap = function(ccx,ccy,r1,seatnum,ruleid,ism,diningtable){
 		
 		if(r1 > 20){
-			this.bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism);
+			this.bulidCircleSeatsContainer(ccx,ccy,r1,seatnum,ruleid,ism,diningtable);
 		}else{
 			this.creatMinCircleSeatMap(ccx,ccy,r1,seatnum,ruleid,ism);
 		}
@@ -1984,7 +1985,7 @@ var __handDrag = null;
 		
 	}
 
-	seatMapsEditor.prototype.bulidCircleSeatsContainer = function(ccx,ccy,r1,seatnum,ruleid,ism){
+	seatMapsEditor.prototype.bulidCircleSeatsContainer = function(ccx,ccy,r1,seatnum,ruleid,ism,diningtable){
 		//长半径,//高半径, 两个半径一样就是圆形
 		// var r1 = +$("#r1").val() || 400;
 		if(ism){
@@ -2006,6 +2007,10 @@ var __handDrag = null;
 		// console.log(ccx,ccy)
 		// $("#seatcontainerId").append("<div style='position:absolute;width:1px;height:1px;background:red;left:"+(ccx)+"px;top:"+(ccy)+"px;'></div>");
 
+		if(diningtable){
+			var ww = Math.round(r1 * 0.8) < 100 ? Math.round(r1 * 0.8) : 100;
+			seathtml.push('<div class="seatdiv diningtable" style="border-radius:50%;width:' + ww + 'px;height:' + ww + 'px;top:' + (ccy - (ww/2)) + 'px; left:'+ (ccx - (ww/2)) + 'px;" id="t-' + group + '-0-0' + '" >编号</div>');
+		}
 		
 		var ids = [];
 		var row = ruleid;

@@ -1314,14 +1314,17 @@
 					type: 2,
 					title: '设置座位数',
 					shadeClose: true, //弹出框之外的地方是否可以点击
-					offset: '10%',
-					area: ['550px', '460px'],
+					offset: '5%',
+					area: ['580px', '500px'],
 					content: 'special_circle_type.html',
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
 						var typeid = +layero.find('iframe').contents().find("#meet_typeid").val();
 						var select_ruleid = +layero.find('iframe').contents().find("#select_ruleid").val();
 						var seatnum = +layero.find('iframe').contents().find("#seatnum").val() || 0;
+
+						var diningtable = layero.find('iframe').contents().find("#diningtable").prop("checked");
+						
 						if(seatnum <= 0 ){
 							layer.msg('座位数量输入错误');
 							return false;
@@ -1329,7 +1332,7 @@
 
 						if(typeid == 1){
 							//鼠标画圆
-							seatmaps.mouseCreateSeatMap(1,seatnum,0,select_ruleid);
+							seatmaps.mouseCreateSeatMap(1,seatnum,0,select_ruleid,diningtable);
 						}else{
 							var ccx = +layero.find('iframe').contents().find("#ccx").val() || 0;
 							var ccy = +layero.find('iframe').contents().find("#ccy").val() || 0;
@@ -1342,7 +1345,7 @@
 								layer.msg('半径输入错误');
 								return false;
 							}
-							seatmaps.createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
+							seatmaps.createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0,diningtable);
 						}
 						layer.close(index);
 					}
@@ -1564,7 +1567,7 @@
 			if(data == "set-centerpoint"){
 				setCenterPoint();
 			}else if(data == "centerpoint-list"){
-				openCenterPointList();
+				// openCenterPointList();
 			}
 		});
 
@@ -1662,7 +1665,7 @@
 					// layer.close(index);
 				}
 				,btn4:function(index,layero){
-					console.log(4)
+					layer.close(index);
 				}
 			});
 		}
