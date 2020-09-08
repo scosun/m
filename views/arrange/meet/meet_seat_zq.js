@@ -24,48 +24,11 @@ layui.config({
         active[type] && active[type].call(this);
     });
 
-    upload.render({
-        elem: '#nav-upload'
-        , url:  url+"/wordtemplate/uploadWordTemplate",
-        data:{
-            "meetingid":meetingid,
-            "roomtemplateid":roomId
-        },
-        // auto: false,
-        exts: 'doc|docx',
-        //bindAction: '#btn99',
-        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-        //     obj.preview(function (index, file, result) {
-        //         // console.log(index); //得到文件索引
-        //         // console.log(file);
-        //         uploadfile = file //得到文件对象
-        //         // console.log(uploadfile)
-        //         // console.log(result); //得到文件base64编码，比如图片
-        //
-        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
-        //
-        //         //这里还可以做一些 append 文件列表 DOM 的操作
-        //
-        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
-        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
-        //     });
-        // },
-        done: function (res) {
-            if (res.code == 200) {
-               parent.layer.msg(res.msg)
-            }
-        }
-    });
-
     var seatMapsControl = new SeatMapsControl();
 
     var url = setter.baseUrl;
     var seatUrl = setter.seatBaseUrl;
 
-    // var uri = window.location.search;
-    // var str = uri.substr(1);
-    // var roomtemplateid;
-    
     function getUrlParam(name) {
         //构造一个含有目标参数的正则表达式对象
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -80,6 +43,14 @@ layui.config({
     $("#meetingname").val(meetingname);
 
     var roomId = 0;
+    
+    
+
+    // var uri = window.location.search;
+    // var str = uri.substr(1);
+    // var roomtemplateid;
+    
+    
  
     if(!meetingid){
         layer.msg("没有获取到会议id");
@@ -128,6 +99,41 @@ layui.config({
         },
         error:function(){
             layer.closeAll();
+        }
+    });
+
+
+    
+    upload.render({
+        elem: '#nav-upload'
+        , url:  url+"/wordtemplate/uploadWordTemplate",
+        data:{
+            "meetingid":meetingid,
+            "roomtemplateid":roomId
+        },
+        // auto: false,
+        exts: 'doc|docx',
+        //bindAction: '#btn99',
+        //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+        //     obj.preview(function (index, file, result) {
+        //         // console.log(index); //得到文件索引
+        //         // console.log(file);
+        //         uploadfile = file //得到文件对象
+        //         // console.log(uploadfile)
+        //         // console.log(result); //得到文件base64编码，比如图片
+        //
+        //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+        //
+        //         //这里还可以做一些 append 文件列表 DOM 的操作
+        //
+        //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+        //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+        //     });
+        // },
+        done: function (res) {
+            if (res.code == 200) {
+               parent.layer.msg(res.msg)
+            }
         }
     });
 
