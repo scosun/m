@@ -21,7 +21,7 @@ layui.config({
 
     $('.layui-ds,.layui-right-nav i').on('click', function() {
         var type = $(this).data('type');
-        active[type] && active[type].call(this);
+        active[type] && active[type].call(this,arguments);
     });
 
     var seatMapsControl = new SeatMapsControl();
@@ -44,12 +44,10 @@ layui.config({
 
     var roomId = 0;
     
-    
 
     // var uri = window.location.search;
     // var str = uri.substr(1);
     // var roomtemplateid;
-    
     
  
     if(!meetingid){
@@ -105,8 +103,8 @@ layui.config({
 
     
     upload.render({
-        elem: '#nav-upload'
-        , url:  url+"/wordtemplate/uploadWordTemplate",
+        elem: '#nav-upload',
+        url:  url+"/wordtemplate/uploadWordTemplate",
         data:{
             "meetingid":meetingid,
             "roomtemplateid":roomId
@@ -133,6 +131,37 @@ layui.config({
         done: function (res) {
             if (res.code == 200) {
                parent.layer.msg(res.msg)
+            }
+        }
+    });
+    
+    $("#nav-uploadseat").bind("click",function(evt){
+        evt.preventDefault();
+        evt.stopPropagation();
+        return false;
+    });
+
+    upload.render({
+        elem: '#nav-uploadseat',
+        url:  seatUrl + "/v1/wordtemplates/import?meeting_id=" + meetingid + "&roomtemplate_id=" + roomId,
+        // auto: false,
+        exts: 'doc|docx',
+        before:function(){
+            layer.load(2);
+        },
+        done: function (res) {
+            layer.closeAll();
+            // console.log(res)
+            if(res.status == 0){
+                layer.msg('上传成功');
+                queryAllSeatStatusByShow();
+                // $("#filepath").html(res.PATH.replace("/ADMINM/uploadFiles/file",""));
+                // filePath = res.PATH;
+                // if(!isEdit){
+                //     fileId = res.ID;
+                // }
+            }else{
+                layer.msg('上传失败');
             }
         }
     });
@@ -264,6 +293,11 @@ layui.config({
     function changeSeatColor(attendees){
         // debugger
         if(attendees.length > 0){
+
+            $("#nav-uploadseat").hide();
+            $("#nav-uploadseatbtn").show();
+
+
             var ruleselect = $("#ruleselect").val() || "";
             // serverSeatIds = [];
 
@@ -321,6 +355,9 @@ layui.config({
                 });
             }
         }else{
+            $("#nav-uploadseat").show();
+            $("#nav-uploadseatbtn").hide();
+
             var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
             seats.css("background-color","");
             seats.each(function(){
@@ -1058,6 +1095,9 @@ layui.config({
                 printContainer: true, 
                 operaSupport: false
             });
+        },
+        uploadseatbtn:function(){
+            layer.msg("不能重复导入人员");
         },
         upload:function() {
             $("#upload-file").trigger("click");
