@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>基站批量绑定电子桌牌座区图</title>
+<link rel="stylesheet" href="rule_zq.css" />
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" href="../../../layuiadmin/style/login.css" media="all">
+<link rel="stylesheet" href="../../../css/seat.css" media="all">
+<script src="../../../js/scosun.js"></script>
+<script src="../../../js/jquery-3.1.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+<link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css">
+<style type="text/css">
+	header {
+		box-shadow: 0px 0px 5px gray;
+		height: 3.5rem;
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		z-index: 9999;
+		background-color: white;
+	}
+
+	body {
+		padding-bottom: 50px;
+	}
+
+	footer {
+		position: fixed;
+		left: 0px;
+		bottom: 0px;
+		width: 100%;
+		height: 240px;
+		background-color: white;
+		z-index: 9999;
+	}
+	.layui-btn {background-color: #666;}
+	.layui-btn-danger {background-color: #FF5722;}
+	.layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+	/*右侧菜单*/
+	.layui-right-nav {
+		position: absolute;
+		right: 5px;
+		top: 0;
+		height: 3.5rem;
+		line-height: 3.5rem;
+		background-color: #fff;
+	}
+	.layui-right-nav i {
+		display: block;
+		height: 20px;
+		width: 20px;
+		float: left;
+		margin-top: 18px;
+		padding-left: 7px;
+		padding-right: 7px;
+	}
+	.layui-right-nav i img {
+		width: 100%;
+		display: block;
+	}
+</style>
+<script type="text/javascript">  
+	function doNothing(){  
+		window.event.returnValue=false;  
+		return false;  
+	}
+</script>
+</head>
+	<body oncontextmenu="doNothing()">
+
+		<header>
+			<span class="layui-breadcrumb" style="line-height: 3.5rem;">
+				<a style="margin-left: 10px"><cite id="rulename"></cite></a>
+				<div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+			</span>
+			<span class="layui-right-nav">
+				<i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
+                <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设置"><img src="../../../images/set_rules.svg"></i>
+                <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
+                <i id="nav-Closedlistg" data-type="hidden" class="layui-ds" data="关闭规则列表"><img src="../../../images/Closedlist.svg"></i>
+                <i id="nav-showlistg" data-type="hidden" style="display: none;" class="layui-ds" data="显示规则列表"><img src="../../../images/showlist.svg"></i>
+                <i id="nav-close" data="关闭此窗口" class="layui-ds" data-type="close" style="width: 18px;height: 18px;line-height: 3.5rem;"><img src="../../../images/close.png" ></i>
+            </span>
+		</header>
+
+
+
+		<footer>
+			<table id="zonetable" lay-filter="zonetable" style="margin-top: -0.6125rem;"></table>
+			<input type="text" name="roomid" id="roomid" style="display: none;">
+			<input type="text" name="ruleid" id="ruleid" style="display: none;">
+		</footer>
+
+		<script type="text/html" id="test-table-operate-barDemo">
+			<a  title="显示" lay-event="show" > <img src="../../../images/border.svg" width="23px" height="23px""> </a>
+			<a  title="修改参数" lay-event="edit" style="margin-left: 5px;"><img src="../../../images/Adjust.png" width="18px" height="18px">  </a>
+			<a  title="修改选区" lay-event="editxq" style="margin-left: 5px;"><img src="../../../images/groupedit.png" width="18px" height="18px"> </a>
+			<a  title="删除规则" lay-event="del" style="margin-left: 5px;"><img src="../../../images/delete.png" width="18px" height="18px"> </a>
+
+		</script>
+	</body>
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var tablezonetable;
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'user', 'table'], function() {
+			var $ = layui.$,
+				form = layui.form,
+				element = layui.element,
+				table = layui.table,
+				setter = layui.setter,
+				layer = layui.layer,
+				router = layui.router();
+			//全局变量编排规则id
+			
+
+			var seatMapsControl = new SeatMapsControl();
+
+			//全局变量会议室规则id
+			var url = setter.baseUrl;
+			window.ruleid = getUrlParam("ruleid");
+			window.roomid = getUrlParam("roomid");
+
+			function getUrlParam(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+				var r = window.location.search.substr(1).match(reg);//匹配目标参数
+				if (r != null) return decodeURI(r[2]); return null; //返回参数值
+			}
+
+			$('#rulename').text(getUrlParam("name"));
+
+			//规则列表表格调用方法
+			$.ajax({
+			    async: false,
+			    type: "get",
+			    url: url + "/rulesetup/findbyRulesetup",
+			    dataType: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+			    //成功的回调函数
+			    data: {
+			        "ruletemplateid": ruleid,
+			        "roomtemplateid": roomid
+			    },
+			    success: function(msg) {
+			        var data = msg.data;
+					tableRender(data);
+			    },
+			    //失败的回调函数
+			    error: function() {
+			        console.log("error")
+			    }
+			});
+
+
+			//绘制座区图方法
+			layer.load(2);
+			$.ajax({
+				url: url+"/roomtemplate/findByIdTemplatecode",
+				type: "POST",
+				async: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"id": roomid
+				},
+				success: function(data) {
+					var datas = data.data;
+					$("body").append(data.data.templatecode);
+
+					seatMapsControl.selectSeats();
+
+					queryAllSeatStatus(roomid, ruleid);
+					layer.closeAll();
+				},
+				error:function(){
+					layer.closeAll();
+				}
+			});
+
+
+			function tableRender(data){
+				var i = 0;
+				tablezonetable = table.render({
+					elem: '#zonetable',
+					data: data,
+					height: 240,
+					cols: [[
+						{
+							field: 'bgcolor',
+							title: '规则对应底色',
+							align: 'left',
+							width: '11%',
+							event: 'seeDetail',
+							style: 'cursor: pointer;',
+							templet: function(data) {
+								return "<div style='height:22px;width:60px;margin-top:3px;background-color: " + data.bgcolor + "'></div>"
+							}
+						}, {
+							field: 'seatsnum',
+							title: '座位数量',
+							width: '15%',
+							align: "center"
+						}, {
+							field: 'rulename',
+							title: '座次规则',
+							width: '15%',
+							align: "center"
+						},
+						{
+							field: 'ordernum',
+							title: '规则排序',
+							width: '18%',
+							align: "center",
+							sort: true,
+							templet: function(data) {
+								i++;
+								return i;
+							}
+						},
+						{
+							field: 'isincrement',
+							title: '递增补规则',
+							width: '18%',
+							align: "center"
+						}, {
+							field: 'modifytime',
+							title: '更新时间',
+							width: '12%',
+							sort: true,
+							align: "center"
+						}, {
+							width: '15%',
+							align: 'center',
+							flxed: 'right',
+							title: '操作',
+							toolbar: '#test-table-operate-barDemo'
+						}
+					]],
+					skin: 'line', //表格风格
+					page: false, //是否显示分页
+					limits: [5, 10, 15], //显示
+					limit: 15 //每页默认显示的数量
+				});
+			}
+
+
+			//规则列表方法方法
+			function ajax_reload() {
+				$.ajax({
+				    async: false,
+				    type: "get",
+				    url: url + "/rulesetup/findbyRulesetup",
+				    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+				    //成功的回调函数
+				    data: {
+				        "ruletemplateid": ruleid,
+				        "roomtemplateid": roomid
+				    },
+				    success: function(msg) {
+				
+				        var data = msg.data;
+				
+				        var i = 0;
+				        tablezonetable = table.render({
+				            elem: '#zonetable',
+				            data: data,
+				            height: 240,
+				            cols: [
+				                [
+				                    // 表头
+				
+				                    {
+				                        field: 'bgcolor',
+				                        title: '规则对应底色',
+				                        align: 'left',
+				                        width: '11%',
+				                        event: 'seeDetail',
+				                        style: 'cursor: pointer;',
+				                        templet: function(data) {
+				                            return "<div style='height:22px;width:60px;margin-top:3px;background-color: " +
+				                                data.bgcolor + "'></div>"
+				                        }
+				                    }, {
+				                        field: 'seatsnum',
+				                        title: '座位数量',
+				                        width: '15%',
+				                        align: "center"
+				
+				                    }, {
+				                        field: 'rulename',
+				                        title: '座次规则',
+				                        width: '15%',
+				                        align: "center"
+				
+				                    },
+				                    {
+				                        field: 'ordernum',
+				                        title: '规则排序',
+				                        width: '18%',
+				                        align: "center",
+				                        sort: true,
+				                        templet: function(data) {
+				                            i++;
+				                            return i;
+				                        },
+				
+				
+				                    },
+				                    {
+				                        field: 'isincrement',
+				                        title: '递增补规则',
+				
+				                        width: '18%',
+				                        align: "center"
+				
+				
+				                    }, {
+				                        field: 'modifytime',
+				                        title: '更新时间',
+				                        width: '12%',
+				                        sort: true,
+				                        align: "center"
+				
+				                    }, {
+				                        width: '15%',
+				                        align: 'center',
+				                        flxed: 'right',
+				                        title: '操作',
+				                        toolbar: '#test-table-operate-barDemo'
+				                    }
+				                ]
+				            ],
+				            skin: 'line', //表格风格
+				            page: false, //是否显示分页
+				            limits: [5, 10, 15], //显示
+				            limit: 15 //每页默认显示的数量
+				        });
+				
+				    },
+				    //失败的回调函数
+				    error: function() {
+				        console.log("error")
+				    }
+				})
+			}
+
+
+			table.on('tool(zonetable)', function(obj) {
+				var data = obj.data;
+				if (obj.event === 'show') {
+					querySeatById(data.rulezone);
+				} else if (obj.event === 'del') {
+					console.log(obj)
+					layer.confirm('确定删除规则吗?', function(index) {
+					    obj.del();
+					
+					    $.ajax({
+					        async: false,
+					        type: "get",
+					        url: url + "/rulesetup/deleteRulesetup",
+					        dataType: "json",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+					        //成功的回调函数
+					        data: {
+					            "id": obj.data.id
+					        },
+					        success: function(msg) {
+					            if (msg.code == '0') {
+					                delSeatRule(obj.data.rulezone);
+					                layer.msg("删除成功");
+					                ajax_reload();
+					            } else {
+					                layer.msg("删除失败");
+					            }
+					        },
+					        //失败的回调函数
+					        error: function() {
+					            console.log("error")
+					        }
+					    })
+					});
+				} else if (obj.event === 'edit') {
+					console.log(obj.data.id)
+					layer.open({
+						type: 2,
+						title: '<p style="">修改规则</p>',
+						content: 'rule_form.html',
+						area: ['50%', '55%'],
+						btn: ['确定', '取消'],
+						// shadeClose: true,
+						yes: function(index, layero) {
+							var body = layer.getChildFrame('body', index);
+							var ruleselect = body.find('#ruleselect').val();
+							var isincrement = body.find('#isincrement').val();
+
+							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+							rulename = rulename[1] || "";
+							
+							console.log(ruleselect)
+							console.log(isincrement)
+							var oldruleid = obj.data.ruleid;
+							updateSeatRule(rulename,obj.data.rulezone, ruleselect, obj.data.id, isincrement, oldruleid)
+							layer.close(index);
+						},
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', index);
+							body.find('#ruleselect').val(obj.data.ruleid);
+							body.find('#isincrement').val(obj.data.isincrement);
+
+							var iframeWin = layero.find('iframe')[0].contentWindow;
+							iframeWin.layui.form.render('select');
+						}
+					})
+
+				} else if (obj.event === 'editxq') {
+					editObj = obj;
+					changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement)
+				}
+			});
+			var inde = true;
+			var editObj;
+			var __handDrag = null;
+
+			var active = {
+				dragcontainer:function(){
+					if(__handDrag){
+						__handDrag = null;
+						$('#seatcontainer').unbind('mousedown');
+						$('#seatcontainer').unbind('mouseup');
+						$('#seatcontainer').unbind('mousemove');
+						// $('.toollist_li').removeClass("on");
+						// $("#nav-selection").addClass("on");
+						seatMapsControl.selectSeats();
+					}else{
+						seatMapsControl.removeContainerEvent();
+						__handDrag = new SeatMapsDrag();
+					}
+				},
+				reseled:function(){
+					if(!editObj){
+						layer.msg("请先选择列表修改座区");
+						return;
+					}
+					layer.open({
+						type: 2,
+						title: '<p style="">重选座区</p>',
+						content: 'rule_form.html',
+						area: ['50%', '55%'],
+						btn: ['确定', '取消'],
+						// shadeClose: true,
+						yes: function(index, layero) {
+							var body = layer.getChildFrame('body', index);
+							var ruleselect = body.find('#ruleselect').val();
+							var isincrement = body.find('#isincrement').val();
+							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+							rulename = rulename[1] || "";
+
+							if(ruleselect==''||ruleselect==null)
+                            {return layer.msg("请选择规则")}
+                            if(isincrement==''||isincrement==null)
+                            {return layer.msg("请选择规则")}
+							setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+							layer.close(index);
+						},
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', index);
+							var ruleselect = body.find('#ruleselect').val(editObj.data.ruleid);
+							var isincrement = body.find('#isincrement').val(editObj.data.isincrement);
+
+							var iframeWin = layero.find('iframe')[0].contentWindow;
+							iframeWin.layui.form.render('select');
+						}
+					})
+				},
+				add: function() {
+					layer.open({
+						type: 2,
+						title: '<p style="">规则设置</p>',
+						content: 'rule_form.html',
+						area: ['50%', '55%'],
+						btn: ['确定', '取消'],
+						yes: function(index, layero) {
+							var body = layer.getChildFrame('body', index);
+							var ruleselect = body.find('#ruleselect').val();
+							var isincrement = body.find('#isincrement').val();
+							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+							rulename = rulename[1] || "";
+
+							if(ruleselect==''||ruleselect==null)
+                            {return layer.msg("请选择规则");}
+                            if(isincrement==''||isincrement==null)
+                            {return layer.msg("请选择规则");}
+							setSeatRule(rulename,ruleselect, isincrement,true);
+							layer.close(index);
+						}
+					});
+				},
+				hidden: function() {
+					if (inde == false) {
+						$('#hidden').text("关闭规则列表")
+						$('footer').show();
+
+						inde = true;
+					} else if (inde) {
+						$('#hidden').text("开启规则列表")
+						$('footer').hide();
+						inde = false;
+					}
+				},
+				hidden: function() {
+					if (!inde) {
+						setTimeout(function(){
+							$('#nav-showlistg').hide();
+							$('#nav-Closedlistg').show();
+						}, 100);
+						$('footer').show();
+						inde = true;
+					} else {
+						setTimeout(function(){
+							$('#nav-showlistg').show();
+							$('#nav-Closedlistg').hide();
+						}, 100);
+						$('footer').hide();
+						inde = false;
+					}
+				},
+				close: function() {
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭 
+					parent.reloads();
+				}
+			}
+
+			$('.layui-ds').on('click', function() {
+				var type = $(this).data('type');
+				active[type] && active[type].call(this);
+			});
+
+			
+
+			var changeRuleZone = [];
+			var rulerecordid = 0;
+			var oldruleid = 0;
+			var oldisincrement = 0;
+
+			var temp_ruletemplateid = 0;
+			var roomtemplateid = 0;
+			
+			var seatObj = {};
+			var ckids_now = [];
+			var changeSeatIds = [];
+			var colors = ["#FFC0CB", "#6495ED", "#7FFFAA", "#F4A460", "#F0E68C", "#D2B48C", "#FA8072", "#00FFFF", "#8A2BE2","#FF4500"];
+			window.showRuleIds = [];
+
+			function queryAllSeatStatus(roomid, ruleid) {
+            	var data = {};
+            	data.action = "s";
+            	data.ruletemplateid = ruleid;
+            	data.roomtemplateid = roomid;
+            	$.ajax({
+            		type: "get",
+            		url: url+"/rulesetup/show",
+            		data: data,
+					xhrFields: {
+						withCredentials: true
+					},
+            		dataType: 'json',
+            		success: function(data) {
+                        var datas= data.data;
+            			if (datas && datas instanceof Array) {
+            				setSeatStatus(datas);
+            			}
+            		}
+            	});
+            }
+			
+			function setSeatStatus(data) {
+				console.log("001----显示颜色");
+				// console.log(data);
+				if (data && data instanceof Array) {
+					for (var i = 0, len = data.length; i < len; i++) {
+						var items = data[i] || null;
+						if(items){
+							items = JSON.parse(items);
+							items.forEach(function(item) {
+								$("#" + item.seatid).addClass(item.ruleid);
+							});
+						}
+					}
+				}
+			}
+			
+			function setSeatRule(rulename,ruleselect, isincrement,isaddrule,editObj,oldruleid) {
+				var rule_id = ruleselect;
+				var isincrement = isincrement - 0;
+
+				if (isaddrule) {
+					var count = 0;
+					// var ckids_now = $("#seatcontainerId .seled");
+
+					var ckids_now = seatsIdSort();
+
+					if (ckids_now && ckids_now.length > 0) {
+						var rule = [];
+						for (var i = 0, len = ckids_now.length; i < len; i++) {
+							rule.push({
+								// "seatid": ckids_now[i].id,
+								"seatid": ckids_now[i],
+								// "attender": "",
+								"ruleid":rule_id
+							});
+						}
+						saveSeatRule(rulename,rule, rule_id, ruleid, roomid, isincrement);
+					}else{
+						layer.msg("没有选中座区");
+					}
+				} else {
+					// var ckids_now = $("#seatcontainerId .seled");
+					var ckids_now = seatsIdSort();
+					if (ckids_now && ckids_now.length > 0) {
+						var rule = [];
+						for (var i = 0, len = ckids_now.length; i < len; i++) {
+							rule.push({
+								// "seatid": ckids_now[i].id,
+								"seatid": ckids_now[i],
+								// "attender": "",
+								"ruleid":rule_id
+							});
+						}
+						console.log(rule, ruleid)
+						// this.updateSeatRule(rule, ruleid, isincrement);
+						updateSeatRule(rulename,JSON.stringify(rule), ruleselect, editObj.data.id, isincrement, oldruleid)
+						resetChangeSeartIds();
+					}
+				}
+			}
+
+			function seatsIdSort(){
+				var seled1 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='s']");
+				var seled2 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='c']");
+				var seled3 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='r']");
+				var seled4 = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)[id^='o']");
+
+				var seleds = [seled1,seled2,seled3,seled4];
+				var seatsdata = {
+					"s":{},
+					"c":{},
+					"r":{},
+					"o":{}
+				};
+				for(var i = 0,len = seleds.length; i < len; i++){
+					var seats = seleds[i] || [];
+					if(seats.length > 0){
+						seats.each(function(){
+							var id = $(this).attr("id");
+							var ids = id.split("-");
+							if(!seatsdata[ids[0]][("_")+ids[1]]){
+								seatsdata[ids[0]][("_")+ids[1]] = [];
+							}
+							seatsdata[ids[0]][("_")+ids[1]].push(id);
+						});
+					}
+				}
+
+				var seatsids = [];
+
+				for(var stype in seatsdata){
+					var gseats = seatsdata[stype] || {};
+					for(var gid in gseats){
+						var seatids = gseats[gid];
+						if(stype == "s"){
+							var seledgroup = {};
+							var seledrowv = [];
+							for(var i = 0,len = seatids.length; i < len; i++){
+								var id = seatids[i];
+								var st = $("#"+id).position().top;
+								var h = $("#"+id).height();
+								
+								var kid = seatMapsControl.isRow(seledgroup,(st - h/2),(st + h/2));
+								if(kid){
+									seledgroup[kid].push(id);
+								}else{
+									seledgroup[st] = [];
+									seledgroup[st].push(id);
+									seledrowv.push(st);
+								}
+							}
+
+							seledrowv = seledrowv.sort(function(a,b){return a-b;});
+							seledrowv.forEach(function(ik,rowid){
+								var col = seledgroup[ik];
+								col.sort(function(a,b){
+									var la = $("#" + a).position().left;
+									var lb = $("#" + b).position().left;
+									return la - lb;
+								});
+								seatsids = seatsids.concat(col);
+							});
+
+							// seatsid 按dom 顺序排序
+							var domids = "";
+							seatsids.forEach(function(item){
+								domids += "#"+item+","
+							});
+							domids = domids.substr(0,domids.length-1);
+							var eles = $(domids);
+							seatsids = [];
+							eles.each(function(){
+								var id = $(this).attr("id");
+								seatsids.push(id);
+							});
+						}else if(stype == "c" || stype == "r" || stype == "o"){
+							var up = [];
+							var down = [];
+							if(stype == "c" || stype == "r"){
+								seatids.forEach(function(seatid){
+									var ang = +$("#"+seatid).attr("ang");
+									// console.log(ang)
+									if(ang > 360 && ang < 540){
+										down.push(seatid);
+									}else{
+										up.push(seatid);
+									}
+								});
+							}else if(stype == "o"){
+								seatids.forEach(function(seatid){
+									var ids = seatid.split("-");
+									// console.log(ang)
+									if(ids[2] == 1){
+										down.push(seatid);
+									}else{
+										up.push(seatid);
+									}
+								});
+							}
+							// console.log(up,down,seatids)
+
+							up.sort(function(a,b){
+								var la = $("#" + a).position().left;
+								var lb = $("#" + b).position().left;
+								return la - lb;
+							});
+
+							down.sort(function(a,b){
+								var la = $("#" + a).position().left;
+								var lb = $("#" + b).position().left;
+								return la - lb;
+							});
+
+							seatsids = seatsids.concat(up.concat(down));
+						}
+					}
+				}
+
+				return seatsids;
+			}
+
+			function isRow(seledgroup,d,h){
+				for(var k in seledgroup){
+					if(+k >= d && +k <= h){
+						return k;
+					}
+				}
+				return false;
+			}
+			
+			function saveSeatRule(rulename,rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
+				var data = {};
+				data.rulezone = JSON.stringify(rule);
+				data.ruleid = ruleid;
+				data.rulename = rulename;
+				data.ruletemplateid = temp_ruletemplateid;
+				data.roomtemplateid = roomtemplateid;
+				data.isincrement = isincrement;
+				data.seatsnum = rule.length;
+				$.ajax({
+					type: "POST",
+					url: url + "/rulesetup/addRulesetup",
+					data: data,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						if (data.code==0) {
+							for (var i = 0, len = rule.length; i < len; i++) {
+								$("#" + rule[i].seatid).removeClass('seled');
+								$("#" + rule[i].seatid).addClass(ruleid);
+							}
+							ajax_reload();
+						} else {
+							alert("设置失败");
+						}
+					}
+				});
+			}
+
+			function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid) {
+				var rulez = JSON.parse(rule);
+				var data = {};
+				data.rule = rulez; //JSON.stringify(rule);
+				data.action = "u";
+				data.rulename = rulename;
+				data.ruleid = ruleid;
+				data.rulerecordid = rulerecordid;
+				data.isincrement = isincrement;
+				$.ajax({
+				    type: "POST",
+				    url: url + "/rulesetup/updateRulesetup",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+				    data: {
+				        "id": rulerecordid,
+				        "rulename": rulename,
+				        "rulezone": rule,
+				        "isincrement": isincrement,
+				        "ruleid": ruleid
+				    },
+				    dataType: 'json',
+				    success: function(data) {
+				        if (data.code == '0') {
+				            for (var i = 0, len = rulez.length; i < len; i++) {
+				                $("#" + rulez[i].seatid).removeClass(oldruleid);
+				                $("#" + rulez[i].seatid).addClass(ruleid);
+				            }
+				            ajax_reload();
+				        } else {
+				            alert("设置失败");
+				        }
+				    }
+				});
+			}
+
+			function resetChangeSeartIds() {
+				$("#seatcontainer .seled").removeClass("seled");
+
+				//以下代码还不知道是干嘛的
+				if (changeSeatIds.length > 0) {
+					changeSeatIds.forEach(function(item) {
+						$("#" + item).removeClass('reseled');
+					});
+				}
+				changeSeatIds = [];
+			}
+			function querySeatById(rulezone) {
+				resetChangeSeartIds();
+				console.log("点击选区成功");
+				if (rulezone && rulezone.length > 0) {
+					showRuleIds = [];
+					var rulezonejson = JSON.parse(rulezone);
+					$.each(rulezonejson, function(index, item) {
+						$("#" + item.seatid).addClass('seled');
+						if (!$("#" + item.seatid).hasClass(item.ruleid)) {
+							$("#" + item.seatid).addClass(item.ruleid);
+						}
+						//这个变量是为了，重新框选的时候，清空已有的选择记录
+						showRuleIds.push(item);
+					})
+				}
+			}
+			function changeSeatRuleArea(id, rulezone, ruleid, isincrement) {
+				resetChangeSeartIds();
+				rulerecordid = id;
+				oldruleid = ruleid;
+				oldisincrement = isincrement;
+				if (rulezone && rulezone.length > 0) {
+					rulezonejson = JSON.parse(rulezone)
+					$.each(rulezonejson, function(index, item) {
+						$("#" + item.seatid).addClass('seled');
+						if (!$("#" + item.seatid).hasClass(item.ruleid)) {
+							$("#" + item.seatid).addClass(item.ruleid);
+						}
+						changeSeatIds.push(item.seatid);
+					})
+				}
+			}
+
+			function delSeatRule(rulezone) {
+				resetChangeSeartIds();
+				rulezone = JSON.parse(rulezone)
+
+				if (rulezone && rulezone.length > 0) {
+					rulezone.forEach(function(item) {
+						$("#" + item.seatid).removeClass();
+						$("#" + item.seatid).addClass('seatdiv');
+					});
+				}
+			}
+
+
+
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
+				if (r != null) return unescape(r[2]);
+				return null;
+			}
+
+			function getCookie(name) {
+				var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+				if (arr = document.cookie.match(reg)) {
+					return unescape(arr[2]);
+				} else {
+					return null;
+				}
+			}
+
+
+
+		})
+
+		function asd() {
+			location.reload();
+		}
+
+		window.onkeyup = function(ev) {
+			var key = ev.keyCode || ev.which;
+			if (key == 27) { //按下Escape
+				layer.closeAll('iframe'); //关闭所有的iframe层
+
+			}
+		}
+	</script>
+</html>
