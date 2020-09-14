@@ -133,7 +133,7 @@
                             <!--// 20.04.06 dh 原来按钮
                             <button class="layui-btn layui-ds" data-type="add" >添加</button> -->
                             <button class="gradient-block-diagonal layui-ds" data-type="add">新建</button>
-							
+
                         </div>
                         <!-- 右侧筛选条件 -->
                         <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
@@ -548,12 +548,12 @@
                         //url: url + "/meeting/findAllBylayui", //数据接口
                         method: 'get',
                         where: {
-                            content: $('#demoReload').val()
+                            name: $('#demoReload').val()
                         },
                         xhrFields: {
                             withCredentials: true
                         },
-                        url: url + "/flolckstatistics/search", //数据接口
+                        url: url + "/sortattendee/search", //数据接口
                         page: {
                             layout: ['prev', 'page', 'next', 'count', 'skip']
                         },
@@ -572,24 +572,20 @@
                                 //     unresize: 'false',
                                 // },
                                 {
-                                    field: 'title',
-                                    title: '通知标题',
+                                    field: 'name',
+                                    title: '名称',
                                     align: 'left',
                                 }, {
-                                field: 'succeednotice',
-                                title: '成功通知',
+                                field: 'modifytime',
+                                title: '更新时间',
                                 align: 'left',
                             },
-                                {
-                                    field: 'notnotice',
-                                    title: '失败通知',
-                                    align: 'left',
-                                },
+
                                 {
                                     title: '操作',
                                     align: 'left',
                                     toolbar: '#test-table-operate-barDemo',
-                                    width: 140,
+                                    width: '15%',
                                 },
 
                             ]

@@ -563,13 +563,13 @@
                     table.render({
                         elem: '#test-table-operate',
                         // height: 'full-200',
-                        url: url + "/meeting/meetingSearch" //数据接口
+                        url: url + "/printtemplate/search" //数据接口
                         ,
                         xhrFields: {
                             withCredentials: true
                         },
                         where: {
-                            "meeting": $('#demoReload').val()
+                            "name": $('#demoReload').val()
                         },
 
                         method: 'get',
@@ -584,20 +584,38 @@
                                 },
                                 {
                                     field: 'name',
-                                    title: '会议名称',
+                                    title: '模板名',
                                     align: 'left',
                                 },
                                 {
-                                    field: 'name',
-                                    title: '会议人员',
+                                    field: 'length',
+                                    title: '单面尺寸 (mm)',
                                     align: 'left',
+                                    templet:function (data){
+                                        return data.length+"   (mm)      " +"   *   " +data.width+"  (mm)"
+                                    }
                                 },
                                 {
-                                    width: 80,
-                                    flxed: '2',
-                                    title: '查看',
-                                    toolbar: '#rulezone',
+                                    field: 'font',
+                                    title: '类型',
+                                    align: 'left',
+                                    templet: function(data) {
+                                        if (data.type == 0) {
+                                            return '<span class="layui-badge layui-bg-orange">单页双面</span>'
+                                        }
+                                        if (data.type == 1) {
+                                            return '<span class="layui-badge layui-bg-blue">单页单面(2页)</span>'
+                                        }
+                                        if (data.type == 2) {
+                                            return '<span class="layui-badge layui-bg-blue">单页单面(1页)</span>'
+                                        }
+                                        if (data.smsTemplateType == undefined) {
+                                            return ''
+                                        }
+                                    },
+
                                 },
+
                                 {
                                     width: 130,
                                     title: '操作',

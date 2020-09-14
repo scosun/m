@@ -290,7 +290,7 @@ layui.config({
                     function(index) {
                         layer.close(index);
                     });
-                    
+
                 }else{
                     layer.msg("没有获取到会议人名信息");
                 }
@@ -338,7 +338,7 @@ layui.config({
             //                 offset: '0',
             //                 content: 'seatmap.html?ruleid=' + data.ruleid + '&roomid=' + data.roomid + '&meetingid=' + data.id,
             //                 success: function(layero, index) {
-                            
+
             //                 }
             //             })
             //         }
@@ -379,11 +379,11 @@ layui.config({
                 // content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.isgrouplist,
                 content: 'print_room_zq.html?meetingid='+obj.data.id+"&isgrouplist="+obj.data.memo,
                 success: function(layero, index) {
-                
+
                 }
             })
         }
-        
+
     });
     var $ = layui.$,
         active = {
@@ -452,7 +452,7 @@ layui.config({
             },
             //批量删除
             isAll: function() { //验证是否全选
-            
+
                 layer.confirm('您将要进行列表清空操作,执行后您的所有记录将被删除,请谨慎操作,是否确认?', function(index) {
                     $.ajax({
                         async: false,
@@ -512,13 +512,13 @@ layui.config({
                 table.render({
                     elem: '#test-table-operate',
                     // height: 'full-200',
-                    url: url + "/meeting/meetingSearch" //数据接口
+                    url: url + "/printseatsgin/search" //数据接口
                         ,
                     xhrFields: {
                         withCredentials: true
                     },
                     where: {
-                        "meeting": $('#demoReload').val()
+                        "name": $('#demoReload').val()
                     },
 
                     method: 'get',
@@ -537,8 +537,13 @@ layui.config({
                                 align: 'left',
                             },
                             {
-                                field: 'name',
-                                title: '会议人员',
+                                field: 'address',
+                                title: '人员数量',
+                                align: 'left',
+                            },
+                            {
+                                field: 'roomname',
+                                title: '桌牌模版',
                                 align: 'left',
                             },
                             {

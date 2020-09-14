@@ -287,7 +287,7 @@ layui.config({
                 yes: function (index, layero) {
 					var submit = layero.find('iframe').contents().find("#upclick");
 					submit.click();
-					
+
                 },
                 success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
@@ -379,7 +379,7 @@ layui.config({
                         url: url+ "/meetingcanhui/updateMeetingCanHui",
                         type: "post",
                         data: {
-    
+
                             "id": age.id,
                             "isleave": body.find('#status').val()
                         },
@@ -393,30 +393,30 @@ layui.config({
                                 })
                                 layer.close(index);
                                 ajaxs(age.meetingId);
-    
-    
+
+
                             } else {
                                 layer.msg('删除失败，请稍后再试', {
                                     icon: 5
                                 });
                             }
-    
+
                         },
                         error: function (error) {
-    
+
                             layer.msg('删除失败，服务器错误请稍后再试', {
                                 icon: 5
                             });
                         }
-    
+
                     })
-					
-					
+
+
                 },
                 success:function(layero,index) {
                     var body = layer.getChildFrame('body', index);
                     body.find('#status').val(age.isleave);
-                    
+
                 }
 
 
@@ -658,6 +658,44 @@ layui.config({
                     success: function (msg) {
                         if (msg.code == 0) {
                             layer.msg("删除成功");
+                            ajaxs($('#select-room').val()); // 父页面刷新
+
+                        } else {
+                            layer.msg(msg.msg);
+
+
+                        }
+
+                    },
+                    //失败的回调函数
+                    error: function () {
+                        console.log("error")
+                    }
+                })
+            })
+        },
+        empty: function () { //获取选中数目
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再删除人员")
+            }
+            layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行清空当前会议参会人员操作,执行删除操作后，与参会人员相关联座区自动编排数据也将一并被删除,是否确认继续进行该操作？？',{title:'温馨提示'}, function (index) {
+
+                $.ajax({
+                    async: false,
+                    type: "delete",
+                    url: url + "/meetingcanhui/empty/"+$('#select-room').val(),
+                    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    //成功的回调函数
+                    data: {
+                        "meetingcanhuiid": attenderList.join(",")
+
+                    },
+                    success: function (msg) {
+                        if (msg.code == 0) {
+                            layer.msg("清空成功");
                             ajaxs($('#select-room').val()); // 父页面刷新
 
                         } else {

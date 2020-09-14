@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,25 +8,95 @@
     <script src="../../js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="jquery.SuperSlide.2.1.3.js"></script>
     <style>
-        html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {-webkit-text-size-adjust:none;}/*阻止转屏时字体变大*/
-        html,body,div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,img,dd,dt,dl,ol{padding:0; margin:0; border:none;}
-        img{padding:0; margin:0; vertical-align:top; border:none;}
-        ul,li{list-style:none outside none; padding:0; margin:0;}
-        a,button,input,span,textarea,div,li{-webkit-touch-callout:none;-webkit-tap-highlight-color:rgba(255,0,0,0);margin:0;padding:0;}
-        a{text-decoration:none;}
-        em{font-style:normal}
-        i{display:inline-block;vertical-align: middle;}
-        span{display:inline-block;vertical-align: inherit;}
-        .clear{clear:both; height:0; width:100%;}
-        .clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0}
-        .clearfix{zoom: 1; clear:both;}
-        ul,li{list-style:none outside none; padding:0; margin:0;}
-        html{
+        html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {
+            -webkit-text-size-adjust: none;
+        }
+
+        /*阻止转屏时字体变大*/
+        html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, img, dd, dt, dl, ol {
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+
+        img {
+            padding: 0;
+            margin: 0;
+            vertical-align: top;
+            border: none;
+        }
+
+        ul, li {
+            list-style: none outside none;
+            padding: 0;
+            margin: 0;
+        }
+
+        a, button, input, span, textarea, div, li {
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        em {
+            font-style: normal
+        }
+
+        i {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        span {
+            display: inline-block;
+            vertical-align: inherit;
+        }
+
+        .clear {
+            clear: both;
+            height: 0;
+            width: 100%;
+        }
+
+        .clearfix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0
+        }
+
+        .clearfix {
+            zoom: 1;
+            clear: both;
+        }
+
+        ul, li {
+            list-style: none outside none;
+            padding: 0;
+            margin: 0;
+        }
+
+        html {
             background-color: #f1f2f7;
         }
-        .sysdiv_w100{width:100%}
-        .sysdiv_w50{width:50%;float: left}
-        .sysdiv_cont{
+
+        .sysdiv_w100 {
+            width: 100%
+        }
+
+        .sysdiv_w50 {
+            width: 50%;
+            float: left
+        }
+
+        .sysdiv_cont {
             /*border:1px solid #e6e6e6;
             border-radius: 3px;
             background-color: #fff;
@@ -42,6 +111,7 @@
             -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
         }
+
         .sysdiv_cont_title {
             position: relative;
             height: 40px;
@@ -52,15 +122,32 @@
             border-radius: 2px 2px 0 0;
             font-size: 14px;
         }
-        .sysml5{margin-left:5px;}
-        .sysmr5{margin-right:5px;}
-        .sysml20{margin-left:20px;}
-        .sysmr20{margin-right:20px;}
-        .sysmb10{margin-bottom:10px;}
+
+        .sysml5 {
+            margin-left: 5px;
+        }
+
+        .sysmr5 {
+            margin-right: 5px;
+        }
+
+        .sysml20 {
+            margin-left: 20px;
+        }
+
+        .sysmr20 {
+            margin-right: 20px;
+        }
+
+        .sysmb10 {
+            margin-bottom: 10px;
+        }
+
         .syslist.minisyslist li {
             width: 20%;
         }
-        .syslist li{
+
+        .syslist li {
             float: left;
             width: 16.6%;
             text-align: center;
@@ -69,158 +156,203 @@
             -moz-transition: All 0.2s ease-in-out;
             -o-transition: All 0.2s ease-in-out;
         }
-        .syslist li .sysdiv_cont{
+
+        .syslist li .sysdiv_cont {
             padding: 0 0 10px;
             position: relative;
         }
-        .syslist li:hover{
-            transform: translate(0,-5px);
-            -webkit-transform: translate(0,-5px);
-            -moz-transform: translate(0,-5px);
-            -o-transform: translate(0,-5px);
-            -ms-transform: translate(0,-5px);
+
+        .syslist li:hover {
+            transform: translate(0, -5px);
+            -webkit-transform: translate(0, -5px);
+            -moz-transform: translate(0, -5px);
+            -o-transform: translate(0, -5px);
+            -ms-transform: translate(0, -5px);
         }
-        .syslist li p{
+
+        .syslist li p {
             font-size: 14px;
             color: #99abb4
         }
-        .syslist li h3{
+
+        .syslist li h3 {
             font-size: 16px;
             color: #455a64;
         }
-        .syslist .iconfont{font-size: 25px;}
-        .syslist .icon-my-meeting{
-            color:rgba(255,255,255,.9);
+
+        .syslist .iconfont {
+            font-size: 25px;
         }
-        .syslist .icon-canhuiren{
+
+        .syslist .icon-my-meeting {
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .syslist .icon-canhuiren {
             font-size: 22px;
-            color:rgba(255,255,255,.9);
-            margin-top:5px;
+            color: rgba(255, 255, 255, .9);
+            margin-top: 5px;
         }
-        .syslist .icon-moban{
-            color:rgba(255,255,255,.9);
-            margin-top:3px;
+
+        .syslist .icon-moban {
+            color: rgba(255, 255, 255, .9);
+            margin-top: 3px;
         }
-        .syslist .icon-wodehuichang{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-wodehuichang {
+            color: rgba(255, 255, 255, .9);
             margin-top: 2px;
             margin-left: 1px;
         }
-        .syslist .icon-huiyi{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-huiyi {
+            color: rgba(255, 255, 255, .9);
             margin-left: 1px;
             margin-top: 3px;
         }
-        .syslist .icon-menpaiji{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-menpaiji {
+            color: rgba(255, 255, 255, .9);
             margin-left: 2px;
             margin-top: 4px;
         }
-        .syslist .icon-dianzizhuopai{color:rgba(255,255,255,.9);margin-top: 4px;margin-left: 1px;}
-        .syslist .icon-feiji{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-dianzizhuopai {
+            color: rgba(255, 255, 255, .9);
+            margin-top: 4px;
+            margin-left: 1px;
+        }
+
+        .syslist .icon-feiji {
+            color: rgba(255, 255, 255, .9);
             margin-top: 4px;
             margin-left: -4px;
         }
-        .syslist .icon-duanxin{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-duanxin {
+            color: rgba(255, 255, 255, .9);
             margin-top: 5px;
             margin-left: 1px;
         }
-        .syslist .icon-xinfeng{margin-top: 3px;margin-top: 4px;margin-top: 3px;margin-left: 1px;color:rgba(255,255,255,.9);}
-        .syslist .icon-wodehuiyi{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-xinfeng {
+            margin-top: 3px;
+            margin-top: 4px;
+            margin-top: 3px;
+            margin-left: 1px;
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .syslist .icon-wodehuiyi {
+            color: rgba(255, 255, 255, .9);
             margin-top: 3px;
         }
-        .syslist .icon-bianpaiguize{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-bianpaiguize {
+            color: rgba(255, 255, 255, .9);
             margin-top: 1px;
             margin-left: -2px;
         }
-        .syslist .icon-canhuirenyuan{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-canhuirenyuan {
+            color: rgba(255, 255, 255, .9);
             margin-top: 2px;
             margin-left: 1px;
         }
-        .syslist .icon-canhuibaodao{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-canhuibaodao {
+            color: rgba(255, 255, 255, .9);
             margin-top: 3px;
             margin-left: 1px;
         }
-        .syslist .icon-duanxintongzhi{
-            color:rgba(255,255,255,.9);
+
+        .syslist .icon-duanxintongzhi {
+            color: rgba(255, 255, 255, .9);
             margin-top: 1px;
             margin-left: 2px;
         }
-        .sysdiv_cont_text{
-            padding:25px 0 0;
+
+        .sysdiv_cont_text {
+            padding: 25px 0 0;
             font-size: 14px;
-            color:#999;
-            text-align:center
+            color: #999;
+            text-align: center
         }
-        .sysdiv_cont_text2{
-            padding:10px;
+
+        .sysdiv_cont_text2 {
+            padding: 10px;
             font-size: 12px;
-            color:#999;
-            text-align:left;
-            line-height:26px;
+            color: #999;
+            text-align: left;
+            line-height: 26px;
         }
-        .sysdiv_cont_text2 p{
+
+        .sysdiv_cont_text2 p {
             padding-left: 30px;
         }
-        .iconfont.icon-naozhong{
+
+        .iconfont.icon-naozhong {
             float: left;
-            color:#ff0000;
+            color: #ff0000;
             font-size: 26px;
         }
-        .syslisttext_tit{
+
+        .syslisttext_tit {
             font-size: 14px;
             color: #444;
             font-weight: 400;
-            line-height:34px;
+            line-height: 34px;
         }
-        .syslisttext li{
-            border-bottom:1px dotted #e6e6e6;
+
+        .syslisttext li {
+            border-bottom: 1px dotted #e6e6e6;
         }
-        .syslisttext li a{
+
+        .syslisttext li a {
             display: block;
-            position:relative;
+            position: relative;
             font-size: 12px;
-            color:#999;
-            text-align:left;
-            line-height:34px;
+            color: #999;
+            text-align: left;
+            line-height: 34px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
             padding-right: 40px
         }
-        .syslisttext li a:hover{
-            color:#fd5576;
+
+        .syslisttext li a:hover {
+            color: #fd5576;
         }
-        .syslisttext li a span{
-            position:absolute;
-            top:0;
+
+        .syslisttext li a span {
+            position: absolute;
+            top: 0;
             right: 0
         }
-        .floatL .f1{
+
+        .floatL .f1 {
             position: absolute;
             left: 10px;
             top: 5px;
         }
-        .floatL .f2{
+
+        .floatL .f2 {
             position: absolute;
             left: 20px;
             top: 18px;
         }
-        .floatr{
+
+        .floatr {
             float: left;
             padding-left: 65px;
             text-align: left;
             padding-top: 14px;
             height: 45px;
         }
-        .icon-weibiaoti1fuzhi{
-            font-size: 46px!important;
+
+        .icon-weibiaoti1fuzhi {
+            font-size: 46px !important;
         }
     </style>
 </head>
@@ -246,7 +378,7 @@
                     </div>
                     <div class="floatr">
                         <p>我的会议</p>
-                        <h3>200</h3>
+                        <h3 id="meetnum"></h3>
                     </div>
                 </div>
             </li>
@@ -571,20 +703,66 @@
 </div>
 <script type="text/javascript">
     /*-----------兼容小屏12.26--------------*/
-    function winWresize(element){
-        var winWidth=$(window).width();
+    function winWresize(element) {
+        var winWidth = $(window).width();
         if (winWidth <= 955) {
             $('.syslist').addClass("minisyslist")
-        }else{
+        } else {
             $('.syslist').removeClass("minisyslist")
         }
     }
+
+
     winWresize();
     //浏览器窗口调整大小
     $(window).resize(function () {
         winWresize();
     });
-    jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:5});
+    jQuery(".txtScroll-top").slide({
+        titCell: ".hd ul",
+        mainCell: ".bd ul",
+        autoPage: true,
+        effect: "top",
+        autoPlay: true,
+        vis: 5
+    });
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        dropdown: '/dropdown/dropdown'
+    }).use(['index', 'table', 'jquery', 'laytpl', 'dropdown'], function () {
+        admin = layui.admin,
+            setter = layui.setter,
+            tpl = layui.laytpl,
+            dropdown = 'dropdown',
+            router = layui.router(),
+            $ = layui.jquery;
+        var url = setter.baseUrl;
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/console/all",
+            datatype: 'json',
+
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg.data;
+                console.log(data);
+                $("#meetnum").text(data.meetnum)
+
+            },
+            error: function (error) {
+                console.log(error)
+            },
+        })
+    })
 </script>
 </body>
 </html>

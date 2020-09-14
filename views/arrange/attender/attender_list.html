@@ -86,7 +86,7 @@
                                     <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
                                     <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
                                 </div>
-                                
+
                                 <div class="layui-input-inline"
                                     style="margin-bottom:10px;margin-left:10px;width: 25%">
                                     <form class="layui-form" action="">
@@ -144,6 +144,9 @@
         {{# }}}
         {{#  if($.inArray("batchperson", d) != -1){ }}
         <button class="layui-btn layui-ds btndel" data-type="getCheckLength" id="batchmeet" data="批量删除">批量删除</button>
+        {{# }}}
+        {{#  if($.inArray("batchperson", d) != -1){ }}
+        <button class="layui-btn layui-ds btndel" data-type="empty" id="empty" data="全部清空">全部清空</button>
         {{# }}}
 
 

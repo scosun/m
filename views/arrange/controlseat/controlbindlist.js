@@ -43,7 +43,7 @@ layui.config({
     function tableRender(stauts){
         table.render({
             elem: '#test-table-operate',
-            url: url + "/ruletemplate/findRuleTemplateBylayui",//数据接口
+            url: url + "/tablesignbind/findBindBylayui",//数据接口
             method: 'get',
             where:{
                 stauts:stauts || ""
@@ -63,22 +63,22 @@ layui.config({
                     },
                     {
                         field: 'name',
-                        title: '编排绑定名称',
+                        title: '基站名称',
                         align: 'left',
                     }, {
                         field: 'roomname',
-                        title: '会议室名称',
+                        title: '会场名称',
                         align: 'left',
                     },
+                     {
+                    field: 'bindnum',
+                    title: '绑定数量',
+                    align: 'left',
+                },
                     {
                         title: '绑定设定',
                         toolbar: '#table-zone-list',
-                    },
-                    {
-                        field: 'modifytime',
-                        title: '更新时间',
-                        align: 'left',
-
+                        align: 'center',
                     },
                     {
                         width: 100,
@@ -102,7 +102,7 @@ layui.config({
         });
     }
 
-    
+
     tableRender();
 
 
@@ -166,7 +166,7 @@ layui.config({
                 $.ajax({
                     async: false,
                     type: "get",
-                    url: url + "/ruletemplate/deleteruletemplate",
+                    url: url + "/tablesignbind/deleteTablesignBind",
                     dataType: "json",
                     xhrFields: {
                         withCredentials: true
@@ -217,7 +217,7 @@ layui.config({
                 area: ['70%', '75%'],
                 btn: ['确定', '取消'],
                 maxmin: true,
-                content: 'group.html?ruleid=' + data.id + '&roomid=' + data.roomid + "&name=" + data.name,
+                content: 'groupmodify.html?ruleid=' + data.id + '&roomid=' + data.roomid + "&productKey=" + data.productKey,
                 yes: function (index, layero) {
                     var submit = layero.find('iframe').contents().find("#ruleclick");
                     submit.click();

@@ -85,9 +85,16 @@
 </head>
 <body>
 <div class="layui-fluid layadmin-cmdlist-fluid" style="background-color: #F2F2F2;">
+    <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+        <div class="layui-inline">
+            <input class="layui-input" name="id" placeholder="请输入关键字" id="demoReload"
+                   autocomplete="off">
+        </div>
+        <button class="layui-btn layui-ds btnsearch" data-type="search" id="search" >搜索</button>
+    </div>
     <div class="mt10">
         <ul id="shop" class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
-            <!-- 
+            <!--
             <li class="layui-col-md2 layui-col-xs6 ">
                 <div class="box_shadow card_style">
                     <a href="javascript:;" class="x-admin-backlog-body">
