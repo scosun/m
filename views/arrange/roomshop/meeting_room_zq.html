@@ -119,8 +119,8 @@
 			}
 			var roomid = getUrlParam("roomid");
 			var name = getUrlParam("name");
-			//0 收费  1免费
-			var roomstatus = 1;
+			//0 免费 1收费
+			var roomstatus = 0;
 
 			$('#rulename').text(name);
 			layer.load(2);
@@ -195,7 +195,7 @@
 					}
 				},
 				clonetemp:function(){
-					if(roomstatus){
+					if(!roomstatus){
 						cloneTemp();
 					}else{
 						layer.msg("收费会场不能克隆");
