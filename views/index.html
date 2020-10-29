@@ -18,6 +18,23 @@
 
     <script src="../js/scosun.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/jquery-3.1.1.min.js"></script>
+    <style type="text/css">
+        .jninfo {
+            position: fixed;
+            bottom: 0;
+            height: 50px;
+            line-height: 50px;
+            left:0;
+            width: 220px;
+            text-align: center;
+            font-size: 12px;
+            color: #ccc;
+            background-color: #20222A;
+        }
+        .layui-side-menu .layui-nav {
+           padding-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body class="layui-layout-body">
@@ -73,7 +90,8 @@
         <div class="layui-side layui-side-menu">
             <div class="">
                 <div class="layui-logo layui-icon" lay-href="systemindex/systemindex.html ">
-                    <span><img src="../layuiadmin/style/res/logo.svg" /></span>
+                    <span id="mrlogo"><img src="../layuiadmin/style/res/logo.svg" /></span>
+                    <span id="jnlogo" style="display: none;"><img src="../images/jinan-logo.png" width="40"/></span>
                 </div>
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
@@ -307,6 +325,7 @@
                         </li> -->
                 </ul>
             </div>
+            <div id="jninfo" class="jninfo" style="display: none;">济南市大数据管理局</div>
         </div>
 
         <!-- 页面标签 -->
@@ -461,6 +480,34 @@
 
             },
             error: function (error) {
+                console.log(error)
+            },
+        })
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/ui/getUsername",
+            datatype: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+                console.log(msg.code)
+                if(msg.code===0){
+                    $('#mrlogo').hide()
+                    $('#jnlogo').show()
+                    $('#jninfo').show()
+                }else{
+                    $('#mrlogo').show()
+                    $('#jnlogo').hide()
+                    $('#jninfo').hide()
+                }
+            },
+            error: function (error) {
+                $('#mrlogo').show()
+                $('#jnlogo').hide()
+                $('#jninfo').hide()
                 console.log(error)
             },
         })
