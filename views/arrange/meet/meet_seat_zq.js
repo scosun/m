@@ -39,8 +39,8 @@ layui.config({
         if (r != null) return r[2]; return null;
     }
     var meetingid = +getUrlParam("meetingid") || null;
-    var meetingname = +getUrlParam("name") || null;
-    $("#meetingname").val(meetingname);
+    // var meetingname = getUrlParam("name") || null;
+    
 
     var roomId = 0;
     
@@ -254,6 +254,7 @@ layui.config({
                 if(code == 0){
                     var datas = obj.data || {};
                     $("#meetingname").text(datas[0].name);
+                    $("#meetingname2").html(datas[0].name);
                     $("#meetingaddress").text("地点："+datas[0].address);
                     $("#meetingremark").text("备注："+datas[0].memo);
                     $("#meetingtime").text("时间："+datas[0].meetingtime);
