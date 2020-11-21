@@ -53,7 +53,7 @@ $(function(){
 
     //开发使用，做一次自动登录
     if(!token){
-        // autoLogin();
+        autoLogin();
         return;
     }
 
@@ -82,7 +82,7 @@ $(function(){
             withCredentials: true
         },
         success: function(obj) {
-            console.log("findroomBymeetingid-----",data);
+            // console.log("findroomBymeetingid-----",data);
             var code = obj.code;
             if(code == 0){
                 var data = obj.data || [];
@@ -100,30 +100,7 @@ $(function(){
     });
 
     function buildMeetTabHtml(item){
-        // var str = [];
-        // data.forEach(function(item,i){
-        //     if(i == 0){
-        //         str.push('<li id="' + item.roomid + '" class="layui-this">' + item.name + '</li>');
-
         getRoomTemplateCode(item.roomid);
-
-
-        
-
-        //     }else{
-        //         str.push('<li id="' + item.roomid + '">' + item.name + '</li>');
-        //     }
-        // });
-        // $(".layui-tab-title").html(str);
-
-        // $('.layui-tab-title > li').on('click', function(evt) {
-        //     var roomid = this.id;
-        //     console.log("roomid----",roomid);
-
-        //     saveSeats();
-            
-        //     getRoomTemplateCode(roomid);
-        // });
     }
 
     function getRoomTemplateCode(roomid){
@@ -159,12 +136,12 @@ $(function(){
                     // 激活单选
                     seatMapsControl.bindOneSeats();
 
-                    if(showSeatsData.length == 0){
-                        // 初始化没有数据，查询show接口查名字
-                        queryAllSeatStatusByShow();
-                    }else{
-                        changeSeatColor(showSeatsData);
-                    }
+                    // if(showSeatsData.length == 0){
+                    //     // 初始化没有数据，查询show接口查名字
+                    //     queryAllSeatStatusByShow();
+                    // }else{
+                    //     changeSeatColor(showSeatsData);
+                    // }
                 }else{
                     // alert("获取会议室模板错误");
                     if(typeof H5JsMeeting != "undefined"){
