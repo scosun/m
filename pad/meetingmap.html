@@ -113,12 +113,14 @@
     <button onclick="StartMeeting();" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
     <button onclick="StopMeeting();" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
     <button onclick="RestoreMeeting();" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
-    <button onclick=";" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
+    <button onclick="FinishMeeting();" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
     <button onclick="ResetMeeting();" style="z-index: 99;position: absolute; top:20px;left: 560px;">设备重置</button>
 
-    <button onclick="getDragSeatsBox();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button>
-    <button onclick="getDragSeatsBox();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
-    <button onclick="getDragSeatsBox();" style="z-index: 99;position: absolute; top:50px;left: 260px;">查看</button>
+    <button onclick="AddSeat();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button>
+    <button onclick="EditSeat();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
+    <button onclick="ExchangeSeats();" style="z-index: 99;position: absolute; top:50px;left: 260px;">互换</button>
+    <button onclick="DeleteSeats();" style="z-index: 99;position: absolute; top:50px;left: 310px;">删除</button>
+    <button onclick="ShowSeat();" style="z-index: 99;position: absolute; top:50px;left: 360px;">查看</button>
     
     
     
@@ -275,16 +277,16 @@
                 
                 var time = 50 + i*50;
                 
-                (function(seatid,time){
+                (function(seatid,time,i){
                     setTimeout(function(){
                         var obj = {
                             type:2,
                             seatid:seatid,
-                            name:"张三"
+                            name:"张三" + i
                         };
                         ChangeSeatStatus(obj);
                     },time);
-                })(seatid,time);
+                })(seatid,time,i);
             }
         }
         function StopMeeting(){
@@ -302,6 +304,12 @@
         function ResetMeeting(){
             var obj = {
                 type:5
+            };
+            ChangeSeatStatus(obj);
+        }
+        function FinishMeeting(){
+            var obj = {
+                type:6
             };
             ChangeSeatStatus(obj);
         }
@@ -336,6 +344,15 @@
                 var seats = $("#seatcontainerId .seatdiv");
                 seats.removeClass("smstop");
             }else if(obj.type == 5){
+                //设备重置
+                var seats = $("#seatcontainerId .seatdiv");
+                seats.removeClass("sm1 sm2 smstop");
+                seats.each(function(i,item){
+                    var id = item.id;
+                    var num = id.split('-')[3];
+                    $(item).text(num);
+                })
+            }else if(obj.type == 6){
                 //设备重置
                 var seats = $("#seatcontainerId .seatdiv");
                 seats.removeClass("sm1 sm2 smstop");
@@ -481,7 +498,7 @@
         }
 
         //新增座区图名字
-        function addSeat(){
+        function AddSeat(){
             var seats = $("#seatcontainerId .seled");
             if(seats.length > 0 && seats.length == 1){
                 var seatname = $(seats[0]).text();
@@ -527,7 +544,7 @@
         }
         
         //修改座区
-        function editSeat(){
+        function EditSeat(){
             var seats = $("#seatcontainerId .seled");
             if(seats.length > 0 && seats.length == 1){
                 var seatname = $(seats[0]).text();
@@ -536,25 +553,25 @@
                     if(typeof H5JsMeeting != "undefined"){
                         H5JsMeeting.showInputDialog(1,seatname);
                     }else{
-                        // var newname = window.prompt("请输入名字",seatname);
+                        var newname = window.prompt("请输入名字",seatname);
                         
-                        // if(newname && !regnum.test(newname)){
-                        //     var seatdiv = $("#seatcontainerId .seatdiv");
-                        //     var ish = true;
-                        //     seatdiv.each(function(){
-                        //         var oname = $(this).text();
-                        //         if(oname == newname){
-                        //             alert(newname+"已存在"+seatno);
-                        //             ish = false;
-                        //             return false;
-                        //         }
-                        //     });
-                        //     var seatno = $(seats[0]).attr("id");
-                        //     if(ish){
-                        //         $("#"+seatno).text(newname);
-                        //         seats.removeClass("seled");
-                        //     }
-                        // }
+                        if(newname && !regnum.test(newname)){
+                            var seatdiv = $("#seatcontainerId .seatdiv");
+                            var ish = true;
+                            seatdiv.each(function(){
+                                var oname = $(this).text();
+                                if(oname == newname){
+                                    alert(newname+"已存在"+seatno);
+                                    ish = false;
+                                    return false;
+                                }
+                            });
+                            var seatno = $(seats[0]).attr("id");
+                            if(ish){
+                                $("#"+seatno).text(newname);
+                                seats.removeClass("seled");
+                            }
+                        }
                     }
                 }else{
                     if(typeof H5JsMeeting != "undefined"){
@@ -572,9 +589,75 @@
             }
         }
 
+        function ShowSeat(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length > 0 && seats.length == 1){
+                var seatid = seats[0].id;
+                if(typeof H5JsMeeting != "undefined"){
+                }else{
+                    alert(seatid);
+                }
+            }else{
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                }else{
+                    alert("请选择一个座区");
+                }
+            }
+        }
+
+        function ExchangeSeats(){
+            // {nid: "s-1-2-6", did: "s-1-1-1"}
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length == 0){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择座区");
+                }else{
+                    alert("请选择座区");
+                }
+                return;
+            }
+            if(seats.length != 2){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择两个互换座区");
+                }else{
+                    alert("请选择两个互换座区");
+                }
+                return;
+            }
+
+            var ids = [];
+            ids.push({"nid":seats[0].id,"did":seats[1].id});
+
+            seatMapsControl.exChangeOnlySeats(ids);
+            // __saveSeats();
+        }
+
         //删除座区图名字
-        function deleteSeats(){
-            __deleteBingName();
+        function DeleteSeats(){
+            var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
+            if(seled.length == 0){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择座区");
+                }else{
+                    alert("请选择座区");
+                }
+            }else{
+                var seatids = [];
+                seled.each(function(){
+                    $(this).css("background-color","");
+                    var id = $(this).attr("id");
+                    var ids = id.split("-");
+                    seatids.push(id);
+                    $(this).text(ids[3]);
+                });
+                seled.removeClass("seled");
+
+                alert(seatids.join(','));
+            }
+
+            // saveSeats();
+            // __deleteBingName();
         }
 
         var seledPos = [];
@@ -686,32 +769,7 @@
             seatMapsControl.bindOneSeats();
         }
         
-        function exchangeSeats(){
-            // {nid: "s-1-2-6", did: "s-1-1-1"}
-            var seats = $("#seatcontainerId .seled");
-            if(seats.length == 0){
-                if(typeof H5JsMeeting != "undefined"){
-                    H5JsMeeting.showTipsDialog("请选择座区");
-                }else{
-                    alert("请选择座区");
-                }
-                return;
-            }
-            if(seats.length != 2){
-                if(typeof H5JsMeeting != "undefined"){
-                    H5JsMeeting.showTipsDialog("请选择两个互换座区");
-                }else{
-                    alert("请选择两个互换座区");
-                }
-                return;
-            }
-
-            var ids = [];
-            ids.push({"nid":seats[0].id,"did":seats[1].id});
-
-            seatMapsControl.exChangeOnlySeats(ids);
-            __saveSeats();
-        }
+        
 
         // 测试会议 410  405
 
