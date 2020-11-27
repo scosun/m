@@ -34,6 +34,13 @@
         .layui-side-menu .layui-nav {
            padding-bottom: 20px;
         }
+        .layui-ds{
+            cursor:pointer;
+        }
+
+        body .layer-ext-myskin .layui-layer-content {
+            overflow: visible;
+        }
     </style>
 </head>
 
@@ -79,6 +86,7 @@
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
                         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <dd><a lay-href="set/user/phone.html">换绑手机</a></dd>
+                        <dd><a data-type="team" class="layui-ds">切换团队</a></dd>
                         <hr>
                         <dd layadmin-event="1" id="logout"><a>退出</a></dd>
                     </dl>
@@ -542,7 +550,30 @@
                 },
             })
         })
+        var active = {
+            //邀请
+            team: function () {
+                layer.open({
+                    type: 2,
+                    title: '切换团队',
+                    content: 'user/team.html',
+                    // maxmin: true,
+                    area: ['600px', '300px'],
+                    btn: ['确认', '取消'],
+                    yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    },
+                    success: function (layero, index) {
+                    }
+                });
+            }}
+        $('.layui-ds').on('click', function () {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
     })
+
 
 </script>
 </body>

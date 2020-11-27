@@ -102,21 +102,21 @@
                     type: "get",
                     url: url+"/islogin",
                     dataType: "json",
-                   
+
                     xhrFields: {
                         withCredentials: true
                     },
-                    
+
                     success: function(msg) {
                         if (msg.code == 0) {
                                 location.href = "../index.html"
-                        } 
+                        }
                     },
                     error: function(msg) {
-                        
-                
+
+
                     }
-                
+
                 })
                 form.render();
                 window.onkeyup = function(ev) {
@@ -133,7 +133,7 @@
                         flag = true ;
                     }
                     $.ajax({
-                        async: true,
+                        async: false,
                         type: "post",
                         url: url+"/Login",
                         dataType: "json",
@@ -159,6 +159,7 @@
                                     icon: 1,
                                     time: 1000
                                 }, function() {
+
                                     location.href = "../index.html"
                                 })
                             } else {

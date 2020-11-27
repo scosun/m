@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .layui-form-label span {
+            color: #f00;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .layui-input-block span,
+        p span {
+            color: #f00;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span>*</span>选择团队</label>
+            <div class="layui-input-block">
+                <select name="teamId" lay-skin="select" lay-filter="component-form-select" id="team">
+                    <option value="">选择团队</option>
+                    <option value="0">切换个人版</option>
+                    <option value="" id="smss"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-layout-admin layui-hide">
+            <div class="layui-input-block">
+                <div style="position: absolute;right: 0px;bottom: 0px;">
+                    <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+        var $ = layui.$,
+            setter = layui.setter,
+            laydate = layui.laydate,
+            form = layui.form;
+        var url = setter.baseUrl;
+        // var url = "http://127.0.0.1:8083"
+        var uploadfile = null;
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/team/List",
+            where: {
+                smsTemplateType: 0
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg;
+                $.each(data.data, function (idx, con) {
+                    if (con.teamStatus === 0){
+                        $("#smss").after("<option value=" + con.teamId + " >" + con.teamName +
+                            "</option>");
+                    }else  {
+                        $("#smss").after("<option value=" + con.teamId + " disabled>" + con.teamName +
+                            "</option>");
+                    }
+
+                })
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
+
+        form.on('submit(addsms)', function (data) {
+            $.ajax({
+                url: url + "/team/switchteam",
+                type: "post",
+                dataType: "json",
+                data: {
+                    teamId: data.field.teamId,
+                },
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                      parent.layer.msg("切换成功 请重新刷新数据");
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+
+            })
+            return false;
+        })
+    });
+</script>
+</body>
+
+</html>

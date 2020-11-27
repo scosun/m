@@ -163,7 +163,6 @@ layui.config({
         done: function (res, curr, count) {
             table_data = res.data;
             layer.closeAll('loading');
-            deviceList.length = 0;
             // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
             // layer.close(index);    //返回数据关闭loading
         },
@@ -292,10 +291,10 @@ layui.config({
     var defaultsort = table.render({
         elem: '#defaultsort',
         // height: 'full-200',
-        url: url + "/attendeesort/selectiveBydefault", //数据接口
+        url: url + "/teaminvitation/list", //数据接口
         //    ,
-        where: {
-            sortattendeeid: id
+        where:{
+            "teamId":teamId
         },
         xhrFields: {
             withCredentials: true
@@ -313,23 +312,30 @@ layui.config({
         cols: [
             [ //表头
                 {
-                    field: 'name',
-                    title: '姓名',
+                    field: 'username',
+                    title: '用户名',
                     align: 'leftleft',
                 },
                 {
-                    field: 'company',
-                    title: '邀请角色',
+                    field: 'invitationStatus',
                     align: 'left',
+                    title: '用户状态',
+                    templet: function(data) {
+                        if (data.invitationStatus == 0) {
+                            return '同意加入'
+                        }
+                        if (data.invitationStatus == 1) {
+                            return '拒绝加入'
+                        }
+                        if (data.invitationStatus == 2) {
+                            return '未操作'
+                        }
+                    },
                 },
                 {
-                    field: 'duties',
-                    align: 'left',
-                    title: '邀请时间'
-                },
-                {
-                    title: '操作',
-                    toolbar: '#defaultsortdetails',
+                    field: 'createTime',
+                    title: '操作时间',
+                    align: 'leftleft',
                 },
             ]
         ],
@@ -341,13 +347,6 @@ layui.config({
         even: true,
         limits: [15, 30, 50],
         parseData: function (res, curr, count) {
-            for (var i in res.data) {
-
-                if (defaultsortList.has(res.data[i].id)) {
-                    //如果set集合中有的话，给rows添加check属性选中
-                    res.data[i]["LAY_CHECKED"] = true;
-                }
-            }
             return {
                 "code": res.code, //解析接口状态
                 "count": res.count, //解析数据长度
@@ -357,7 +356,6 @@ layui.config({
         },
         done: function (res, curr, count) {
 
-            soulTable.render(this)
         }
     });
 
@@ -478,8 +476,13 @@ layui.config({
                 area: ['400px', '250px'],
                 btn: ['确认', '取消'],
                 yes: function (index, layero) {
+
                 },
                 success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    //var url = "http://localhost:8888/m/views/user/inviteMember.html?team="+teamId
+                    var url = "http://81.70.37.92/meet/views/user/inviteMember.html?team="+teamId
+                    body.find('#username').val(url);
                 }
             });
         },
