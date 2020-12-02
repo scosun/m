@@ -1,0 +1,32 @@
+1.开始拖动人员
+dragMatchSeat(x,y)
+x,y屏幕坐标
+
+2.结束拖动人员
+dragEndMatchSeat(x,y,json)
+x,y屏幕坐标，json人员信息
+
+3.开始互换座区
+var xy = getDragSeatsBox()
+xy = {left:100,top:100,width:200,height:100}
+返回 矩形框的 左上角坐标，及矩形宽高
+
+4.移动矩形座区
+dragSeatsBox(x,y);
+x,y屏幕坐标
+
+5.结束互换座区
+dragEndSeatsBox();
+
+
+6.修改座区
+editSeat()
+
+7.新增座区
+addSeat()
+
+8.删除座区
+deleteSeats()
+
+9.保存座区
+saveSeats()
