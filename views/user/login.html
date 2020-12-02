@@ -73,7 +73,7 @@
                     </div>
                     <div class="layui-trans layui-form-item layadmin-user-login-other">
                         <a href="loginpwd.html" class=" layadmin-link">密码登录</a>
-
+<!--                        <a href="dinglogin.html" class=" layadmin-link">钉钉登录</a>-->
 
                         <a href="reg.html" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
                     </div>
@@ -102,21 +102,21 @@
                     type: "get",
                     url: url+"/islogin",
                     dataType: "json",
-                   
+
                     xhrFields: {
                         withCredentials: true
                     },
-                    
+
                     success: function(msg) {
                         if (msg.code == 0) {
                                 location.href = "../index.html"
-                        } 
+                        }
                     },
                     error: function(msg) {
-                        
-                
+
+
                     }
-                
+
                 })
                 form.render();
                 window.onkeyup = function(ev) {

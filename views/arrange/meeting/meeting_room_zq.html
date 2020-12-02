@@ -10,12 +10,13 @@
 	<link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
 	<script src="../../../js/scosun.js"></script>
 	<link rel="stylesheet" href="../../../css/seat.css" media="all">
-	<script type="text/javascript">  
-		function doNothing(){  
-			window.event.returnValue=false;  
-			return false;  
+	<script type="text/javascript">
+		function doNothing(){
+			window.event.returnValue=false;
+			return false;
 		}
 	</script>
+
 </head>
 <body oncontextmenu="doNothing()">
 	<div class="layui-form-item">
@@ -45,7 +46,7 @@
 			// console.log(roomid)
 
 			layer.load(2);
-			
+
 			$.ajax({
 				url: url+"/roomtemplate/findByIdTemplatecode",
 				type: "post",
@@ -65,7 +66,7 @@
 				error:function(){
 					layer.closeAll();
 				}
-				
+
 			});
 		});
 	</script>
