@@ -16,12 +16,16 @@
     <!-- <link rel="stylesheet" href="rule_zq.css" /> -->
     
     <style type="text/css">
-        .sm1{
+        /* 3: 准备会议发送成功；-3: 准备会议失败； */
+        
+        .sm3{
             background-color: #ffcbcc;
         }
-        .sm2{
+        .sm33{
             background-color: #d7ffca;
         }
+
+
         .smstop{
             background-color: #d6d6d6;
         }
@@ -109,12 +113,14 @@
     
     <div id="dragcontainerId" class="dragcontainer" style="box-sizing:border-box !important;">105,20</div>
      -->
-    <button onclick="ReadyMeeting();" style="z-index: 99;position: absolute; top:20px;left: 160px;">会议准备</button>
-    <button onclick="StartMeeting();" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
-    <button onclick="StopMeeting();" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
-    <button onclick="RestoreMeeting();" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
-    <button onclick="FinishMeeting();" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
-    <button onclick="ResetMeeting();" style="z-index: 99;position: absolute; top:20px;left: 560px;">设备重置</button>
+     <!-- 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌 -->
+    <button onclick="ChangeSeatStatus(0);" style="z-index: 99;position: absolute; top:20px;left: 160px;">会议准备</button>
+    <button onclick="ChangeSeatStatus(1);" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
+    <button onclick="ChangeSeatStatus(2);" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
+    <button onclick="ChangeSeatStatus(3);" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
+    <button onclick="ChangeSeatStatus(4);" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
+    <button onclick="ChangeSeatStatus(5);" style="z-index: 99;position: absolute; top:20px;left: 560px;">重启会议</button>
+    <button onclick="ChangeSeatStatus(6);" style="z-index: 99;position: absolute; top:20px;left: 640px;">设备重置</button>
 
     <button onclick="AddSeat();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button>
     <button onclick="EditSeat();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
@@ -155,6 +161,7 @@
 
     <script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/seatscontrol_drag.js" charset="utf-8"></script>
+    <script src="js/signcontrol.js" charset="utf-8"></script>
     <script src="js/meetingmap.js" charset="utf-8"></script>
 
     
@@ -249,63 +256,66 @@
 
 
         function ReadyMeeting(){
-            var seats = $("#seatcontainerId .seatdiv");
+            // var seats = $("#seatcontainerId .seatdiv");
             
-            for(var i = 0,len = seats.length; i < len; i++){
-                var seatid = $(seats[i]).attr("id");
+            // for(var i = 0,len = seats.length; i < len; i++){
+            //     var seatid = $(seats[i]).attr("id");
                 
-                var time = 50 + i*50;
+            //     var time = 50 + i*50;
                 
-                (function(seatid,time){
-                    setTimeout(function(){
-                        // console.log(seatid)
-                        var obj = {
-                            type:1,
-                            seatid:seatid,
-                            status:Math.round(Math.random())
-                        };
-                        ChangeSeatStatus(obj);
-                    },time);
-                })(seatid,time);
-            }
+            //     (function(seatid,time){
+            //         setTimeout(function(){
+            //             // console.log(seatid)
+            //             var obj = {
+            //                 type:1,
+            //                 seatid:seatid,
+            //                 status:Math.round(Math.random())
+            //             };
+            //             ChangeSeatStatus(obj);
+            //         },time);
+            //     })(seatid,time);
+            // }
+
+            ChangeSeatStatus(0);
         }
         function StartMeeting(){
-            var seats = $("#seatcontainerId .seatdiv");
+            // var seats = $("#seatcontainerId .seatdiv");
             
-            for(var i = 0,len = seats.length; i < len; i++){
-                var seatid = $(seats[i]).attr("id");
+            // for(var i = 0,len = seats.length; i < len; i++){
+            //     var seatid = $(seats[i]).attr("id");
                 
-                var time = 50 + i*50;
+            //     var time = 50 + i*50;
                 
-                (function(seatid,time,i){
-                    setTimeout(function(){
-                        var obj = {
-                            type:2,
-                            seatid:seatid,
-                            name:"张三" + i
-                        };
-                        ChangeSeatStatus(obj);
-                    },time);
-                })(seatid,time,i);
-            }
+            //     (function(seatid,time,i){
+            //         setTimeout(function(){
+            //             var obj = {
+            //                 type:2,
+            //                 seatid:seatid,
+            //                 name:"张三" + i
+            //             };
+            //             ChangeSeatStatus(obj);
+            //         },time);
+            //     })(seatid,time,i);
+            // }
+            ChangeSeatStatus(1);
         }
         function StopMeeting(){
-            var obj = {
-                type:3
-            };
-            ChangeSeatStatus(obj);
+            // var obj = {
+            //     type:3
+            // };
+            ChangeSeatStatus(2);
         }
         function RestoreMeeting(){
             var obj = {
                 type:4
             };
-            ChangeSeatStatus(obj);
+            ChangeSeatStatus(3);
         }
         function ResetMeeting(){
             var obj = {
                 type:5
             };
-            ChangeSeatStatus(obj);
+            ChangeSeatStatus(4);
         }
         function FinishMeeting(){
             var obj = {
@@ -313,54 +323,59 @@
             };
             ChangeSeatStatus(obj);
         }
-        // type,seatid,status,name
-        function ChangeSeatStatus(jsonstr){
-            var obj = jsonstr;
-            if(typeof jsonstr == "string"){
-                try{
-                    obj = JSON.parse(jsonstr);
-                    // alert("name--"+json.name)
-                }catch(ex){
-                    alert("parse error---")
-                }
-            }
 
-            if(obj.type == 1){
+        // type,seatid,status,name
+        // 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌
+        function ChangeSeatStatus(type){
+            __signControl.appTableSignControl(+type);
+            // var obj = jsonstr;
+            // if(typeof jsonstr == "string"){
+            //     try{
+            //         obj = JSON.parse(jsonstr);
+            //         // alert("name--"+json.name)
+            //     }catch(ex){
+            //         alert("parse error---")
+            //     }
+            // }
+            
+            if(type === 0){
+                //0 准备会议
+            }else if(type == 1){
                 //会议准备，检测席签状态
-                if(obj.status){
-                    $("#" + obj.seatid).addClass("sm1");
-                }else{
-                    $("#" + obj.seatid).addClass("sm2")
-                }
-            }else if(obj.type == 2){
+                // if(obj.status){
+                //     $("#" + obj.seatid).addClass("sm1");
+                // }else{
+                //     $("#" + obj.seatid).addClass("sm2");
+                // }
+            }else if(type == 2){
                 //会议开始，导入人员
-                $("#" + obj.seatid).text(obj.name);
+                // $("#" + obj.seatid).text(obj.name);
             }else if(obj.type == 3){
                 //会议暂停
-                var seats = $("#seatcontainerId .seatdiv");
-                seats.addClass("smstop");
+                // var seats = $("#seatcontainerId .seatdiv");
+                // seats.addClass("smstop");
             }else if(obj.type == 4){
                 //会议恢复
-                var seats = $("#seatcontainerId .seatdiv");
-                seats.removeClass("smstop");
+                // var seats = $("#seatcontainerId .seatdiv");
+                // seats.removeClass("smstop");
             }else if(obj.type == 5){
                 //设备重置
-                var seats = $("#seatcontainerId .seatdiv");
-                seats.removeClass("sm1 sm2 smstop");
-                seats.each(function(i,item){
-                    var id = item.id;
-                    var num = id.split('-')[3];
-                    $(item).text(num);
-                })
+                // var seats = $("#seatcontainerId .seatdiv");
+                // seats.removeClass("sm1 sm2 smstop");
+                // seats.each(function(i,item){
+                //     var id = item.id;
+                //     var num = id.split('-')[3];
+                //     $(item).text(num);
+                // })
             }else if(obj.type == 6){
                 //设备重置
-                var seats = $("#seatcontainerId .seatdiv");
-                seats.removeClass("sm1 sm2 smstop");
-                seats.each(function(i,item){
-                    var id = item.id;
-                    var num = id.split('-')[3];
-                    $(item).text(num);
-                })
+                // var seats = $("#seatcontainerId .seatdiv");
+                // seats.removeClass("sm1 sm2 smstop");
+                // seats.each(function(i,item){
+                //     var id = item.id;
+                //     var num = id.split('-')[3];
+                //     $(item).text(num);
+                // })
             }
         }
 
