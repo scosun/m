@@ -1,0 +1,119 @@
+a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video,input,select {
+margin:0;
+padding:0;
+border:0;
+box-sizing:border-box;
+font-family:arial
+}
+html {
+font-size:.28rem;
+}
+/*14rem*/
+body {
+font-family:"Microsoft Yahei","Hiragino Sans GB",arial;
+font-size:.28rem;
+-webkit-text-size-adjust:none;
+color:#333;
+background-color:#fafafa
+}
+table {
+border-collapse:collapse;
+border-spacing:0
+}
+img {
+max-width:100%;
+vertical-align:middle;
+border:0;
+-ms-interpolation-mode:bicubic;
+-webkit-touch-callout:none
+}
+:focus {
+outline:0
+}
+
+input::placeholder {
+color:#b2b2b2;
+}
+textarea::placeholder {
+color:#b2b2b2;
+}
+.clear {
+height:0rem;
+line-height:0rem;
+font-size:0;
+clear:both;
+}
+.clearfix:after {
+content:".";
+display:block;
+*display:inline;
+*zoom:1;
+height:0;
+clear:both;
+visibility:hidden;
+}
+*+html .clearfix {
+overflow:hidden;
+}
+* html .clearfix {
+height:1%;
+}
+input,button,textarea {
+margin:0;
+padding:0;
+border:0;
+outline:none;
+-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+select {
+appearance:none;
+-moz-appearance:none;
+-webkit-appearance:none;
+-webkit-appearance:none;
+-webkit-border-radius:0;
+-webkit-user-select:text;
+}
+ul,ol {
+list-style:none
+}
+a {
+text-decoration:none;
+color:#333
+}
+.text_yc {
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+/*------public------*/
+/* 比例是 1px 除100 == 0.01rem */
+body {
+background:#F6F7F9;
+}
+.contText{
+	margin:0.2rem;
+	font-size: 0.36rem;
+	text-align: center;
+	color: #e2e2e2;
+}
+.contText h3{
+	font-weight: normal;
+	padding:1.8rem 0 0.8rem;
+	letter-spacing: 0.03rem;
+}
+.contText img{
+	width: 85%;
+	margin-bottom: 0.8rem;
+}
+.contText p{
+	font-size: 0.28rem;
+	line-height: 180%;
+	margin-bottom:0.3rem
+}
+.contText p span{
+	background-color: #242424;
+	font-size: 0.32rem;
+	padding:0.1rem 0.12rem;
+	border-radius: 0.05rem;
+	letter-spacing: 0.02rem;
+}

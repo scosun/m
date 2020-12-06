@@ -96,7 +96,7 @@
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
                     <!-- 控制台 // 20.04.06 dh 新加 -->
-                    <li data-name="component" class="layui-nav-item">
+                    <li data-name="component" class="layui-nav-item" id="console">
                         <a href="javascript:;" lay-tips="我的会议" lay-direction="2">
                             <i class="layui-icon iconfont icon-kongzhitai"></i>
                             <cite>控制台</cite>
@@ -157,7 +157,7 @@
                         </dl>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item ">
+                    <li data-name="component" class="layui-nav-item " id="sort">
                         <a href="javascript:;" lay-tips="智能排序" lay-direction="2">
                             <i class="layui-icon iconfont icon-zhinengpaixu"></i>
                             <cite>智能排序</cite>
@@ -230,7 +230,7 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item">
+                    <li data-name="component" class="layui-nav-item" id="smsteam">
                         <a href="javascript:;" lay-tips="短信通知" lay-direction="2">
                             <i class="layui-icon iconfont icon-duanxintongzhi"></i>
                             <cite>短信通知</cite>
@@ -325,7 +325,7 @@
                         </li> -->
                 </ul>
             </div>
-            <div id="jninfo" class="jninfo" style="display: none;">济南市大数据管理局</div>
+            <div id="jninfo" class="jninfo" style="display: none;">济南市大数据局</div>
         </div>
 
         <!-- 页面标签 -->
@@ -483,6 +483,7 @@
                 console.log(error)
             },
         })
+        var isding = false;
         $.ajax({
             async: false,
             type: "get",
@@ -495,7 +496,11 @@
             success: function (msg) {
                 console.log(msg.code)
                 if(msg.code===0){
+                    isding = true;
                     $('#mrlogo').hide()
+                    $('#smsteam').hide()
+                    $('#console').hide()
+                    $('#sort').hide()
                     $('#jnlogo').show()
                     $('#jninfo').show()
                 }else{
@@ -522,7 +527,12 @@
                 },
                 //成功的回调函数
                 success: function (msg) {
-                    location.href = "user/login.html"
+                    if (isding = true){
+                        location.href = "user/dinglogin.html"
+                    }else {
+                        location.href = "user/login.html"
+                    }
+
                 },
                 error: function (error) {
                     console.log(error)
@@ -530,7 +540,7 @@
             })
         })
     })
-  
+
 </script>
 </body>
 
