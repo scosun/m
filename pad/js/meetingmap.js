@@ -50,6 +50,7 @@ $(function(){
     var showSeatsData = [];
 
     // $("#meetingname").val(meetingname);
+    
 
     //开发使用，做一次自动登录
     if(!token){
