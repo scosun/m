@@ -16,6 +16,7 @@ SignControl.prototype = {
     meetWs:null,
     meetingType:-1,
     backComplete:1,
+    userName:"",
 	init: function(){
         console.log("signcontrol-----init");
 
@@ -29,18 +30,22 @@ SignControl.prototype = {
             if (r != null) return r[2]; return null;
         }
         var username = getUrlParam("username") || null;
-        console.log("username----",username);
+        // console.log("username----",username);
         if(!username){
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.showTipsDialog("没有获取到username");
-            }else{
-                alert("没有获取到username");
-            }
-            return;
+            // if(typeof H5JsMeeting != "undefined"){
+            //     H5JsMeeting.showTipsDialog("没有获取到username");
+            // }else{
+            //     alert("没有获取到username");
+            // }
+            // return;
         }else{
-            this.createMeetWebSocket(username);
+            // if(typeof H5JsMeeting != "undefined"){
+            //     H5JsMeeting.showTipsDialog(username);
+            // }
+            this.userName = username;
+            // this.createMeetWebSocket(username);
         }
-        $(window).bind("beforeunload",this.stopMeetWebSocket.bind(this));
+        // $(window).bind("beforeunload",this.stopMeetWebSocket.bind(this));
 	},
 	bindEvent:function(){
        
@@ -188,53 +193,24 @@ SignControl.prototype = {
 
             // 打开一个 web socket
             // var ws = new WebSocket("ws://f.longjuli.com/cardWebSocket/shuxian");
-            var ws = new WebSocket("ws://m.longjuli.com:8083/cardWebSocket/" + username);
+            // var ws = new WebSocket("ws://m.longjuli.com:8083/cardWebSocket/" + username);
+            var ws = new WebSocket("wss://f.longjuli.com/cardWebSocket/" + username);
+
+            // if(typeof H5JsMeeting != "undefined"){
+            //     H5JsMeeting.showTipsDialog("wss://f.longjuli.com/cardWebSocket/" + username);
+            // }
+
             ws.onopen = function(){
                 t.meetWs = ws;
+                // if(typeof H5JsMeeting != "undefined"){
+                //     H5JsMeeting.showTipsDialog("ws----open");
+                // }
                 console.log("ws----open");
             }
             
             ws.onmessage = function (evt) {
-                t.backComplete = 0;
-
                 var received_msg = evt.data || "";
-
-                console.log("数据已接收...",received_msg);
-
-                // 会议状态 
-                // 0：未发送； 
-                // 1：开始会议发送成功；-1：开始会议发送失败； 
-                // 2：结束会议成功; -2:结束会议失败； 
-                // 3: 准备会议发送成功；-3: 准备会议失败； 
-                // 4: 暂停会议成功；-4：暂停会议失败；  
-                // 5: 恢复会议成功；-5: 恢复会议失败；
-                // 6: 重启会议成功；-6: 重启会议失败；
-                // 7: 重置桌牌成功；-7：重置桌牌失败；
-                
-                // name=测试199, seatid=2-10-10, roomid=410, meetingState=3, productKey=productKey199, deviceName=deviceName199, deviceStatus=ONLINE
-                
-                try{
-                    var obj = JSON.parse(received_msg);
-                    var meetingState = +obj.meetingState;
-                    if(meetingState == 3 || meetingState == -3){
-                        t.readyMeeting(obj);
-                    }else if(meetingState == 1 || meetingState == -1){
-                        t.startMeeting(obj);
-                    }else if(meetingState == 4 || meetingState == -4){
-                        t.stopMeeting(obj);
-                    }else if(meetingState == 5 || meetingState == -5){
-                        t.restoreMeeting(obj);
-                    }else if(meetingState == 2 || meetingState == -2){
-                        t.finishMeeting(obj);
-                    }else if(meetingState == 6 || meetingState == -6){
-                        t.rebootMeeting(obj);
-                    }else if(meetingState == 7 || meetingState == -7){
-                        t.resetMeeting(obj);
-                    }
-                    
-                }catch(ex){
-                }
-                
+                t.meetWebSocketMessage(received_msg);
                 
                 // {
                 //     "name": 名字,
@@ -250,11 +226,14 @@ SignControl.prototype = {
 
             //连接关闭的回调方法
             ws.onclose = function(){
-                console.log("ws----close");
+                // console.log("ws----close");
+                t.createMeetWebSocket(t.userName);
             }
         }else{
             // 浏览器不支持 WebSocket
-            alert("您的浏览器不支持 WebSocket!");
+            if(typeof H5JsMeeting != "undefined"){
+                H5JsMeeting.showTipsDialog("您的浏览器不支持 WebSocket!");
+            }
         }
     },
     stopMeetWebSocket:function(){
@@ -262,7 +241,58 @@ SignControl.prototype = {
             this.meetWs.close();
         }else{
            // 浏览器不支持 WebSocket
-           alert("您的浏览器不支持 WebSocket!");
+            if(typeof H5JsMeeting != "undefined"){
+                H5JsMeeting.showTipsDialog("您的浏览器不支持 WebSocket!");
+            }
+        }
+    },
+    meetWebSocketMessage(received_msg){
+        var t = this;
+
+        t.backComplete = 0;
+
+        
+
+        // if(typeof H5JsMeeting != "undefined"){
+        //     H5JsMeeting.showTipsDialog("ws----onmessage-----"+received_msg);
+        // }
+        console.log("数据已接收...",received_msg);
+
+        // 会议状态 
+        // 0：未发送； 
+        // 1：开始会议发送成功；-1：开始会议发送失败； 
+        // 2：结束会议成功; -2:结束会议失败； 
+        // 3: 准备会议发送成功；-3: 准备会议失败； 
+        // 4: 暂停会议成功；-4：暂停会议失败；  
+        // 5: 恢复会议成功；-5: 恢复会议失败；
+        // 6: 重启会议成功；-6: 重启会议失败；
+        // 7: 重置桌牌成功；-7：重置桌牌失败；
+        
+        // name=测试199, seatid=2-10-10, roomid=410, meetingState=3, productKey=productKey199, deviceName=deviceName199, deviceStatus=ONLINE
+        
+        try{
+            var obj = JSON.parse(received_msg);
+            var meetingState = +obj.meetingState;
+            if(meetingState == 3 || meetingState == -3){
+                t.readyMeeting(obj);
+            }else if(meetingState == 1 || meetingState == -1){
+                t.startMeeting(obj);
+            }else if(meetingState == 4 || meetingState == -4){
+                t.stopMeeting(obj);
+            }else if(meetingState == 5 || meetingState == -5){
+                t.restoreMeeting(obj);
+            }else if(meetingState == 2 || meetingState == -2){
+                t.finishMeeting(obj);
+            }else if(meetingState == 6 || meetingState == -6){
+                t.rebootMeeting(obj);
+            }else if(meetingState == 7 || meetingState == -7){
+                t.resetMeeting(obj);
+            }
+            
+        }catch(ex){
+            if(typeof H5JsMeeting != "undefined"){
+                H5JsMeeting.showTipsDialog("ws----onmessage-----catch");
+            }
         }
     },
     // startMeetWebSocket(){
@@ -286,6 +316,10 @@ SignControl.prototype = {
         // 4.会议结束完成，可以点 会议开始，重启会议，设备重置
         // 5.会议重启完成，可以点 会议开始，重启会议，设备重置
         // 6.重置桌牌完成，可以点 会议准备，设备重置
+
+        // if(typeof H5JsMeeting != "undefined"){
+        //     H5JsMeeting.showTipsDialog("type----"+type);
+        // }
 
         if(this.backComplete == 0){
             return;
@@ -339,6 +373,10 @@ SignControl.prototype = {
                 $(item).text(num);
             });
         }
+
+        // if(typeof H5JsMeeting != "undefined"){
+        //     H5JsMeeting.showTipsDialog("type--ajax--------------"+type);
+        // }
 
         // | roomid | Integer | 会议室id |
         // | type   | Integer | 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，
