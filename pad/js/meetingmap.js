@@ -50,6 +50,7 @@ $(function(){
     var showSeatsData = [];
 
     // $("#meetingname").val(meetingname);
+    
 
     //开发使用，做一次自动登录
     if(!token){
@@ -136,6 +137,10 @@ $(function(){
                     // 激活单选
                     seatMapsControl.bindOneSeats();
 
+                    //群控缓存数据
+                    // getCacheData();
+                    __signControl.getCacheData(roomId);
+
                     // if(showSeatsData.length == 0){
                     //     // 初始化没有数据，查询show接口查名字
                     //     queryAllSeatStatusByShow();
@@ -180,7 +185,9 @@ $(function(){
             }
         });
     }
+    
 
+    /*
     function queryAllSeatStatusByShow(){
         $.ajax({
             async: true,
@@ -362,7 +369,7 @@ $(function(){
             }
         });
     }
-    
+    */
 
 
 
@@ -486,5 +493,105 @@ $(function(){
         });
         seled.removeClass("seled");
         saveSeats();
+    }
+
+
+
+        
+    function WebSocketInit(){
+        //主机地址
+        var wsUrl = "ws://221.214.51.75:9000/video";
+        //视频流地址
+        var rtspUrl = "rtsp://192.168.10.45/user=admin&password=&channel=1&stream=0.sdp?";
+        //websocket连接
+        var ws = wsUrl + "?url=" + encodeURIComponent(rtspUrl);
+
+        console.info(ws);
+        
+        var output;
+
+        //初始化操作
+        // testWebSocket();
+
+        function testWebSocket() {
+            websocket = new WebSocket(ws);
+            websocket.onopen = function(evt) {
+                onOpen(evt)
+            };
+            websocket.onclose = function(evt) {
+                onClose(evt)
+            };
+            websocket.onmessage = function(evt) {
+                onMessage(evt)
+            };
+            websocket.onerror = function(evt) {
+                onError(evt)
+            };
+        }
+
+        function onOpen(evt) {
+            writeToScreen("CONNECTED");
+            doSend("WebSocket rocks");
+        }
+
+        function onClose(evt) {
+            writeToScreen("DISCONNECTED");
+        }
+
+        //收到消息
+        function onMessage(evt) {
+            // var obj = eval('(' + evt.data + ')');
+            // image = obj['data']['face']['image'];
+            // if(obj['type']=='recognized' || obj['type']=='unrecognized'){
+            //  writeFace(obj['type']+'</br><img height="100" width="100" src="data:image/png;base64,' + image + '"/>');
+            // }
+            //关闭连接
+            //websocket.close();
+        }
+
+        function onError(evt) {
+            writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+        }
+
+        function doSend(message) {
+            writeToScreen("SENT: " + message);
+            websocket.send(message);
+        }
+
+        //输出识别结果到屏幕
+        function writeFace(message) {
+            // var result = document.getElementById("msg");
+            // var pre = document.createElement("div");
+            // //pre.style.wordWrap = "break-word";
+            // pre.style.display="inline-block";
+            // pre.style.margin="10px";
+            // pre.innerHTML = message;
+            // output.appendChild(pre);
+        }
+        function writeToScreen(message) {
+            console.log("-----",message)
+            // var result = document.getElementById("test");
+            // var pre = document.createElement("p");
+            // pre.style.wordWrap = "break-word";       
+            // pre.innerHTML = message;
+            // output.appendChild(pre);
+        }
+    }
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg)){
+            return unescape(arr[2]);
+        }else{
+            return null;
+        }
     }
 });
