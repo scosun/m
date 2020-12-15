@@ -67,38 +67,40 @@ p span {
 		<label class="layui-form-label">通知方式</label>
 		<div class="layui-input-block">
 			<select name="meetingid" lay-skin="select" lay-filter="component-form-select" id="smslist">
-				<option value="-1">通知方式</option>
-				<option value="" id="sms"></option>
+				<option value="">请选择</option>
+				<option value="1">钉钉通知</option>
+				<option value="2">短信通知</option>
+				<option value="3">钉钉短信通知</option>
 			</select>
 		</div>
 	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">通知范围</label>
-		<div class="layui-input-block">
-			<input type="radio" name="sex" value="从通讯录选择" title="从通讯录选择" checked="">
-			<input type="radio" name="sex" value="从Excel模版导入" title="从Excel模版导入">
-		</div>
-		<div class="layui-input-block">
-			<button type="button" class="layui-btn layui-btn-sm layui-btn-normal">小型按钮</button>
-			共选择 19 人 
-			<div class="floatR">
-				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>
-			</div>
-		</div>
-		<div class="layui-input-block">
-			<div class="layui-upload-drag" id="test10">
-				<i class="layui-icon"></i>
-				<p>点击上传，或将文件拖拽到此处</p>
-				<div class="layui-hide" id="uploadDemoView">
-					<hr>
-					<img src="" alt="上传成功后渲染" style="max-width: 196px">
-				</div>
-			</div>
-			<div class="floatR">
-				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>
-			</div>
-		</div>
-	</div>
+<!--	<div class="layui-form-item">-->
+<!--		<label class="layui-form-label">通知范围</label>-->
+<!--		<div class="layui-input-block">-->
+<!--			<input type="radio" name="sex" value="从通讯录选择" title="从通讯录选择" checked="">-->
+<!--			<input type="radio" name="sex" value="从Excel模版导入" title="从Excel模版导入">-->
+<!--		</div>-->
+<!--		<div class="layui-input-block">-->
+<!--			<button type="button" class="layui-btn layui-btn-sm layui-btn-normal">小型按钮</button>-->
+<!--			共选择 19 人 -->
+<!--			<div class="floatR">-->
+<!--				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="layui-input-block">-->
+<!--			<div class="layui-upload-drag" id="test10">-->
+<!--				<i class="layui-icon"></i>-->
+<!--				<p>点击上传，或将文件拖拽到此处</p>-->
+<!--				<div class="layui-hide" id="uploadDemoView">-->
+<!--					<hr>-->
+<!--					<img src="" alt="上传成功后渲染" style="max-width: 196px">-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="floatR">-->
+<!--				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
 
 	<div class="layui-form-item">
 		<label class="layui-form-label">通知内容</label>
@@ -113,10 +115,10 @@ p span {
 		<!-- <label class="layui-form-label"><span>*</span>报名截止时间</label> -->
 		<label class="layui-form-label">报名截止时间</label>
 		<div class="layui-input-inline">
-			<input type="text" name="date" class="layui-input" id="dates" placeholder="yyyy-MM-dd">
+			<input type="text" name="date" class="layui-input" id="dates" placeholder="yyyy-MM-dd" autocomplete="off">
 		</div>
 		<div class="layui-input-inline">
-			<input type="text" name="time" class="layui-input" id="times" placeholder="HH:mm:ss">
+			<input type="text" name="time" class="layui-input" id="times" placeholder="HH:mm:ss" autocomplete="off">
 		</div>
 	</div>
 	<div class="layui-form-item layui-layout-admin layui-hide">
@@ -238,6 +240,7 @@ layui.config({
 		format: 'yyyy年MM月dd日' //可任意组合
 		,
 		theme: 'molv'
+		,trigger: 'click'
 	});
 
 	laydate.render({
@@ -246,6 +249,7 @@ layui.config({
 		format: 'HH:mm:ss',
 		btns: ['clear', 'now', 'confirm'],
 		theme: 'molv'
+		,trigger: 'click'
 	})
 	form.on('submit(addsms)', function (data) {
 		console.log(data)
@@ -282,7 +286,7 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 					parent.layer.msg("添加成功")
 					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
 					parent.layer.close(index);
-					parent.reloads();	
+					parent.reloads();
 				}else{
 					parent.layer.msg(data.msg)
 				}

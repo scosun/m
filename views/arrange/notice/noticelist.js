@@ -10,17 +10,17 @@ layui.config({
         $ = layui.jquery;
 
     // #test-table-operate
-    // var url = setter.baseUrl;
-     var url="https://f.longjuli.com";
+    var url = setter.baseUrl;
+    //  var url=se;
     var devices = {};
     var arrangeList = [];
-    
+
     $.ajax({
         async: false,
         type: "get",
         url: url + "/permission/getpremission",
         datatype: 'json',
-    
+
         xhrFields: {
             withCredentials: true
         },
@@ -42,7 +42,7 @@ layui.config({
         },
     })
     function isEmptyObject(obj) {
-    
+
         var jlength = 0;
         for (var key in obj) {
             if (key != "null") {
@@ -55,28 +55,10 @@ layui.config({
         elem: '#test-table-operate',
         // height: 'full-200',
         //数据接口
-        // url: url + "/ruletemplate/findRuleTemplateBylayui",
-        data:[
-            {
-                title:"通知2020.12.12在xx楼12层开会",
-                way:"钉钉+短信",
-                scope:"19人",
-                registration:"2020-12-08 09:00",
-                sendtime:"2020-12-08 09:00",
-            },{
-                title:"通知2020.12.12在xx楼12层开会",
-                way:"钉钉+短信",
-                scope:"19人",
-                registration:"2020-12-08 09:00",
-                sendtime:"2020-12-08 09:00",
-            },{
-                title:"通知2020.12.12在xx楼12层开会",
-                way:"钉钉+短信",
-                scope:"19人",
-                registration:"2020-12-08 09:00",
-                sendtime:"2020-12-08 09:00",
-            }
-        ],
+        url: url + "/meetingnotice/list",
+        // data:[
+        //
+        // ],
         method: 'get',
         // where:{
         //     stauts:0
@@ -90,23 +72,45 @@ layui.config({
         cols: [
             [ //表头
                 {
-                    field: 'title',
+                    field: 'noticeTitle',
                     title: '标题',
                     align: 'left',
                 }, {
-                    field: 'way',
+                    field: 'sendState',
                     title: '方式',
                     align: 'left',
+                templet: function (data) {
+                    // 判断下 显示灰色文字 还是 绿色文字
+                    // 灰色文字
+                    // return "<span>"+data.sendtime+"</span>"
+                    // 绿色文字
+                   if (data.sendState === "1"){
+                       return "钉钉通知";
+                   }
+                    if (data.sendState === "2"){
+                        return "短信通知";
+                    }
+                    if (data.sendState === "3"){
+                        return "钉钉短信通知";
+                    }
+                }
                 }, {
-                    field: 'scope',
+                    field: 'personNumber',
                     title: '范围',
                     align: 'left',
+                templet: function (data) {
+                    // 判断下 显示灰色文字 还是 绿色文字
+                    // 灰色文字
+                    // return "<span>"+data.sendtime+"</span>"
+                    // 绿色文字
+                    return data.personNumber+"人"
+                }
                 }, {
-                    field: 'registration',
+                    field: 'deadlineForRegistrationTime',
                     title: '报名截止',
                     align: 'left',
                 }, {
-                    field: 'sendtime',
+                    field: 'meetingStartTime',
                     title: '发送时间',
                     align: 'left',
                     templet: function (data) {
@@ -114,7 +118,7 @@ layui.config({
                         // 灰色文字
                         // return "<span>"+data.sendtime+"</span>"
                         // 绿色文字
-                        return "<span style='color:#1cf51c'>"+data.sendtime+"</span>"
+                        return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
                     }
                 }, {
                     title: '状态',
@@ -153,13 +157,15 @@ layui.config({
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/ruletemplate/findRuleTemplateBylayui" //数据接口
-            ,
-
+            //数据接口
+            url: url + "/meetingnotice/list",
+            // data:[
+            //
+            // ],
             method: 'get',
-            where:{
-                stauts:0
-            },
+            // where:{
+            //     stauts:0
+            // },
             xhrFields: {
                 withCredentials: true
             },
@@ -169,44 +175,65 @@ layui.config({
             cols: [
                 [ //表头
                     {
-                        type: 'checkbox',
-                        fixed: 'left'
-                    },
-                    // {
-                    //     field: 'id',
-                    //     title: 'ID',
-                    //     //align: 'center',
-                    //     unresize: 'false',
-                    //     width:80,
-                    // },
-                    {
-                        field: 'name',
-                        title: '编排规则名称',
+                        field: 'noticeTitle',
+                        title: '标题',
                         align: 'left',
                     }, {
-                    field: 'roomname',
-                    title: '会议室名称',
+                    field: 'sendState',
+                    title: '方式',
                     align: 'left',
-                },
-                    {
-                        //align: 'right',
-                        //flxed: 'right',
-                        title: '编排设定',
-                        toolbar: '#table-zone-list',
-                    },
-                    {
-                        field: 'modifytime',
-                        title: '更新时间',
-                        align: 'left',
-
-                    },
-                    {
-                        width: 100,
-                        //align: 'right',
-                        //flxed: 'right',
-                        title: '操作',
-                        toolbar: '#test-table-operate-barDemo',
+                    templet: function (data) {
+                        // 判断下 显示灰色文字 还是 绿色文字
+                        // 灰色文字
+                        // return "<span>"+data.sendtime+"</span>"
+                        // 绿色文字
+                        if (data.sendState === "1"){
+                            return "钉钉通知";
+                        }
+                        if (data.sendState === "2"){
+                            return "短信通知";
+                        }
+                        if (data.sendState === "3"){
+                            return "钉钉短信通知";
+                        }
                     }
+                }, {
+                    field: 'personNumber',
+                    title: '范围',
+                    align: 'left',
+                    templet: function (data) {
+                        // 判断下 显示灰色文字 还是 绿色文字
+                        // 灰色文字
+                        // return "<span>"+data.sendtime+"</span>"
+                        // 绿色文字
+                        return data.personNumber+"人"
+                    }
+                }, {
+                    field: 'deadlineForRegistrationTime',
+                    title: '报名截止',
+                    align: 'left',
+                }, {
+                    field: 'meetingStartTime',
+                    title: '发送时间',
+                    align: 'left',
+                    templet: function (data) {
+                        // 判断下 显示灰色文字 还是 绿色文字
+                        // 灰色文字
+                        // return "<span>"+data.sendtime+"</span>"
+                        // 绿色文字
+                        return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                    }
+                }, {
+                    title: '状态',
+                    toolbar: '#test-table-state-barDemo',
+                }, {
+                    title: '导出',
+                    toolbar: '#test-table-export-barDemo',
+                }, {
+                    width: 100,
+                    title: '操作',
+                    toolbar: '#test-table-operate-barDemo',
+                }
                 ]
             ],
 
@@ -293,7 +320,7 @@ layui.config({
                 $.ajax({
                     async: false,
                     type: "get",
-                    url: url + "/ruletemplate/deleteruletemplate",
+                    url: url + "/meetingnotice/delete",
                     dataType: "json",
                     xhrFields: {
                         withCredentials: true
@@ -363,11 +390,11 @@ layui.config({
             add: function() {
                 layer.open({
                     type: 2,
-                    title: '规则_新建',
-                    area: ['70%', '75%'],
+                    title: '新建会议通知',
+                    area: ['60%', '65%'],
                     btn: ['确定', '取消'],
                     maxmin: true,
-                    content: 'group.html',
+                    content: 'noticeAddPop.html',
                     yes: function(index, layero) {
                         var submit = layero.find('iframe').contents().find("#ruleclick");
                         submit.click();
