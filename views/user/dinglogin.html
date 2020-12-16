@@ -56,173 +56,175 @@
         console.log(isMobile())
         if (isMobile() === true){
             location.href = "./prompt.html"
-        }
-        $.ajax({
-            async: true,
-            type: "get",
-            url: url+"/islogin",
-            dataType: "json",
+        }else {
+            $.ajax({
+                async: true,
+                type: "get",
+                url: url+"/islogin",
+                dataType: "json",
 
-            xhrFields: {
-                withCredentials: true
-            },
+                xhrFields: {
+                    withCredentials: true
+                },
 
-            success: function(msg) {
-                if (msg.code == 0) {
-                    location.href = "../index.html"
+                success: function(msg) {
+                    if (msg.code == 0) {
+                        location.href = "../index.html"
+                    }
+                },
+                error: function(msg) {
+
+
                 }
-            },
-            error: function(msg) {
 
+            })
+            if (localStorage.getItem("accessToken") === null){
+
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url+"/ding/getAccessToken",
+                    dataType: "json",
+                    data:{
+                        "appKey": "ding8f9dzorsxzgnpc3r",
+                        "appSecret": "0BvjPwdpLQsaZbPc7aPM26hiCim150oPEuDIBRLdD5SbMEbLNTFPG2cDX5UHUVbh"
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(msg) {
+                        if (msg.code === 0) {
+                            localStorage.setItem("accessToken",msg.data)
+                        }
+                    },
+                    error: function(msg) {
+
+
+                    }
+
+                })
+            }
+            console.log(localStorage.getItem("code"));
+            if (localStorage.getItem("code") === null){
+                dd.ready(function() {
+                    dd.runtime.permission.requestAuthCode({
+                        corpId: "ding216cb8d2a00c59ba35c2f4657eb6378f", // 企业id
+                        onSuccess: function (info) {
+                            code = info.code // 通过该免登授权码可以获取用户身份]
+                            localStorage.setItem("code",code)
+                        },
+                        onFail: function (info){
+                            console.log(info);
+                        }
+                    });
+                });
+            }
+            if (localStorage.getItem("accessToken") !=null && localStorage.getItem("code") != null){
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url+"/ding/login",
+                    dataType: "json",
+                    data:{
+                        "accessToken": localStorage.getItem("accessToken"),
+                        "code": localStorage.getItem("code")
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(msg) {
+                        if (msg.code == 0) {
+                            location.href = "../index.html"
+                        }
+                        if (msg.data.errcode === 40014){
+                            getAcccessToken();
+                        }
+                        if (msg.data.errcode === 40078){
+                            getAuthCode();
+                        }
+                    },
+                    error: function(msg) {
+
+
+                    }
+
+                })
 
             }
-
-        })
-        if (localStorage.getItem("accessToken") === null){
-
-            $.ajax({
-                async: false,
-                type: "get",
-                url: url+"/ding/getAccessToken",
-                dataType: "json",
-                data:{
-                    "appKey": "ding8f9dzorsxzgnpc3r",
-                    "appSecret": "0BvjPwdpLQsaZbPc7aPM26hiCim150oPEuDIBRLdD5SbMEbLNTFPG2cDX5UHUVbh"
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function(msg) {
-                    if (msg.code === 0) {
-                        localStorage.setItem("accessToken",msg.data)
-                    }
-                },
-                error: function(msg) {
-
-
-                }
-
-            })
-        }
-        console.log(localStorage.getItem("code"));
-        if (localStorage.getItem("code") === null){
-            dd.ready(function() {
-                dd.runtime.permission.requestAuthCode({
-                    corpId: "ding216cb8d2a00c59ba35c2f4657eb6378f", // 企业id
-                    onSuccess: function (info) {
-                        code = info.code // 通过该免登授权码可以获取用户身份]
-                        localStorage.setItem("code",code)
+            function userId(){
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url+"/ding/login",
+                    dataType: "json",
+                    data:{
+                        "accessToken": localStorage.getItem("accessToken"),
+                        "code": localStorage.getItem("code")
                     },
-                    onFail: function (info){
-                        console.log(info);
-                    }
-                });
-            });
-        }
-         if (localStorage.getItem("accessToken") !=null && localStorage.getItem("code") != null){
-            $.ajax({
-                async: false,
-                type: "get",
-                url: url+"/ding/login",
-                dataType: "json",
-                data:{
-                    "accessToken": localStorage.getItem("accessToken"),
-                    "code": localStorage.getItem("code")
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function(msg) {
-                    if (msg.code == 0) {
-                        location.href = "../index.html"
-                    }
-                    if (msg.data.errcode === 40014){
-                        getAcccessToken();
-                    }
-                    if (msg.data.errcode === 40078){
-                        getAuthCode();
-                    }
-                },
-                error: function(msg) {
-
-
-                }
-
-            })
-
-        }
-        function userId(){
-            $.ajax({
-                async: false,
-                type: "get",
-                url: url+"/ding/login",
-                dataType: "json",
-                data:{
-                    "accessToken": localStorage.getItem("accessToken"),
-                    "code": localStorage.getItem("code")
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function(msg) {
-                    if (msg.code == 0) {
-                        location.href = "../index.html"
-                    }
-                    if (msg.data.errcode === 40078){
-                        getAuthCode();
-                    }
-                    if (msg.data.errcode === 40014){
-                        getAcccessToken();
-                    }
-                },
-                error: function(msg) {
-
-
-                }
-
-            })
-        }
-        function getAuthCode(){
-            dd.ready(function() {
-                dd.runtime.permission.requestAuthCode({
-                    corpId: "ding216cb8d2a00c59ba35c2f4657eb6378f", // 企业id
-                    onSuccess: function (info) {
-                        code = info.code // 通过该免登授权码可以获取用户身份]
-                        localStorage.setItem("code",code)
-                        userId();
+                    xhrFields: {
+                        withCredentials: true
                     },
-                    onFail: function (info){
-                        console.log(info);
+                    success: function(msg) {
+                        if (msg.code == 0) {
+                            location.href = "../index.html"
+                        }
+                        if (msg.data.errcode === 40078){
+                            getAuthCode();
+                        }
+                        if (msg.data.errcode === 40014){
+                            getAcccessToken();
+                        }
+                    },
+                    error: function(msg) {
+
+
                     }
+
+                })
+            }
+            function getAuthCode(){
+                dd.ready(function() {
+                    dd.runtime.permission.requestAuthCode({
+                        corpId: "ding216cb8d2a00c59ba35c2f4657eb6378f", // 企业id
+                        onSuccess: function (info) {
+                            code = info.code // 通过该免登授权码可以获取用户身份]
+                            localStorage.setItem("code",code)
+                            userId();
+                        },
+                        onFail: function (info){
+                            console.log(info);
+                        }
+                    });
                 });
-            });
-        }
-        function  getAcccessToken(){
-            $.ajax({
-                async: false,
-                type: "get",
-                url: url+"/ding/getAccessToken",
-                dataType: "json",
-                data:{
-                    "appKey": "ding8f9dzorsxzgnpc3r",
-                    "appSecret": "0BvjPwdpLQsaZbPc7aPM26hiCim150oPEuDIBRLdD5SbMEbLNTFPG2cDX5UHUVbh"
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function(msg) {
-                    if (msg.code === 0) {
-                        localStorage.setItem("accessToken",msg.data)
-                        userId();
+            }
+            function  getAcccessToken(){
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: url+"/ding/getAccessToken",
+                    dataType: "json",
+                    data:{
+                        "appKey": "ding8f9dzorsxzgnpc3r",
+                        "appSecret": "0BvjPwdpLQsaZbPc7aPM26hiCim150oPEuDIBRLdD5SbMEbLNTFPG2cDX5UHUVbh"
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(msg) {
+                        if (msg.code === 0) {
+                            localStorage.setItem("accessToken",msg.data)
+                            userId();
+                        }
+                    },
+                    error: function(msg) {
+
+
                     }
-                },
-                error: function(msg) {
 
-
-                }
-
-            })
+                })
+            }
         }
+
         //提交
 
     })

@@ -19,6 +19,9 @@
     <script src="../js/scosun.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/jquery-3.1.1.min.js"></script>
     <style type="text/css">
+        .layui-logo span{
+            margin-left:-5px
+        }
         .jninfo {
             position: fixed;
             bottom: 0;
@@ -30,9 +33,17 @@
             font-size: 12px;
             color: #ccc;
             background-color: #20222A;
+            -webkit-transition: all .3s;
         }
         .layui-side-menu .layui-nav {
-           padding-bottom: 20px;
+            padding-bottom: 20px;
+        }
+        .layadmin-side-shrink .jninfo{
+            width: 0;
+            color: #20222A;
+        }
+        .layadmin-side-shrink .layui-layout-admin .layui-logo span {
+            display: block;
         }
     </style>
 </head>
@@ -115,8 +126,8 @@
                             <dd data-name="metingman"><a
                                     lay-href="arrange/rulezone/rulezone.html">会场片区设定</a></dd>
                             <dd id="lounge"><a lay-href="arrange/lounge/lounge.html">休息室</a></dd>
-                           <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
-                            <dd><a lay-href="arrange/roomshop/roomshoplist.html">会场商店</a></dd>
+                            <dd><a lay-filter="seatmap" lay-href="arrange/meeting/seatmapseditor.html">会场编辑器</a></dd>
+                            <dd><a lay-href="arrange/roomshop/roomshoplist.html">共享会场模板</a></dd>
                             <!-- // 20.04.06 dh 去掉
                                 <dd><a lay-filter="specialseatmap" lay-href="arrange/meeting/specialeditor.html">异形会场编辑器</a></dd> -->
                         </dl>
@@ -138,7 +149,7 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd id="meet"><a lay-href="arrange/meet/meet.html">会议列表</a></dd>
-<!--                            <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>-->
+                            <!--                            <dd><a lay-href="arrange/attender2rule/attender2rule.html">对应关系列表</a></dd>-->
                         </dl>
                     </li>
 
@@ -153,7 +164,7 @@
 
                             <dd data-name="property" id="type"><a
                                     lay-href="arrange/typelist/typelist.html">属性列表</a></dd>
-<!--                            <dd><a lay-href="arrange/attendersort/sortattendee.html">智能排序</a></dd>-->
+                            <!--                            <dd><a lay-href="arrange/attendersort/sortattendee.html">智能排序</a></dd>-->
                         </dl>
                         </dl>
                     </li>
@@ -177,9 +188,9 @@
                         <dl class="layui-nav-child">
 
                             <dd data-name="grid"><a lay-href="arrange/seatproduct/seatproductlists.html">产品列表</a></dd>
-							<dd data-name="seatdevicefirstlist"><a lay-href="arrange/seatproduct/seatdevicefirstlist.html">设备列表</a></dd>
-							<!--<dd data-name="seattemplatelist"><a lay-href="arrange/seattemplate/seattemplatelist.html">桌牌模版</a></dd>-->
-							<dd data-name="seatfontlist"><a lay-href="arrange/seattemplate/seatfontlist.html">桌牌字体</a></dd>
+                            <dd data-name="seatdevicefirstlist"><a lay-href="arrange/seatproduct/seatdevicefirstlist.html">设备列表</a></dd>
+                            <!--<dd data-name="seattemplatelist"><a lay-href="arrange/seattemplate/seattemplatelist.html">桌牌模版</a></dd>-->
+                            <dd data-name="seatfontlist"><a lay-href="arrange/seattemplate/seatfontlist.html">桌牌字体</a></dd>
                             <dd data-name="roomseatlist"><a lay-href="arrange/roomseat/roomseatlist.html">设备绑定</a></dd>
                             <dd data-name="controlbindlist"><a lay-href="arrange/controlseat/controlbindlist.html">基站批量绑定电子桌牌</a></dd>
                             <dd data-name="controlseatlist"><a lay-href="arrange/controlseat/controlseatlist.html">群控管理</a></dd>
@@ -250,20 +261,20 @@
                             </dd>
                         </dl>
                     </li>
-<!--                    <li data-name="component" class="layui-nav-item" id="avirGroup">-->
-<!--                        <a href="javascript:;" lay-tips="系统管理" lay-direction="2">-->
-<!--                            <i class="layui-icon iconfont icon-xitongguanli"></i>-->
-<!--                            <cite>系统管理</cite>-->
-<!--                        </a>-->
-<!--                        <dl class="layui-nav-child">-->
-<!--                            <dd data-name="grid" id="user">-->
-<!--                                <a lay-href="arrange/user/user.html">用户管理</a>-->
-<!--                            </dd>-->
-<!--                            <dd data-name="button" id="role">-->
-<!--                                <a lay-href="arrange/role/role.html">权限组管理</a>-->
-<!--                            </dd>-->
-<!--                        </dl>-->
-<!--                    </li>-->
+                    <!--                    <li data-name="component" class="layui-nav-item" id="avirGroup">-->
+                    <!--                        <a href="javascript:;" lay-tips="系统管理" lay-direction="2">-->
+                    <!--                            <i class="layui-icon iconfont icon-xitongguanli"></i>-->
+                    <!--                            <cite>系统管理</cite>-->
+                    <!--                        </a>-->
+                    <!--                        <dl class="layui-nav-child">-->
+                    <!--                            <dd data-name="grid" id="user">-->
+                    <!--                                <a lay-href="arrange/user/user.html">用户管理</a>-->
+                    <!--                            </dd>-->
+                    <!--                            <dd data-name="button" id="role">-->
+                    <!--                                <a lay-href="arrange/role/role.html">权限组管理</a>-->
+                    <!--                            </dd>-->
+                    <!--                        </dl>-->
+                    <!--                    </li>-->
 
                     <!-- <li data-name="component" class="layui-nav-item">
                             <a href="javascript:;" lay-tips="组件" lay-direction="2">
@@ -374,7 +385,7 @@
         index: 'lib/index' //主入口模块
     }).use('index', function () {
         var $ = layui.$,
-      setter =layui.setter;
+            setter =layui.setter;
         window.element = layui.element;
         var url = setter.baseUrl;
         console.log(url)
