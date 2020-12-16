@@ -251,8 +251,6 @@ SignControl.prototype = {
 
         t.backComplete = 0;
 
-        
-
         // if(typeof H5JsMeeting != "undefined"){
         //     H5JsMeeting.showTipsDialog("ws----onmessage-----"+received_msg);
         // }
@@ -271,7 +269,11 @@ SignControl.prototype = {
         // name=测试199, seatid=2-10-10, roomid=410, meetingState=3, productKey=productKey199, deviceName=deviceName199, deviceStatus=ONLINE
         
         try{
-            var obj = JSON.parse(received_msg);
+            var obj = received_msg;
+            if(typeof received_msg == "string"){
+                obj = JSON.parse(received_msg);
+            }
+            
             var meetingState = +obj.meetingState;
             if(meetingState == 3 || meetingState == -3){
                 t.readyMeeting(obj);
@@ -459,6 +461,32 @@ SignControl.prototype = {
         if(typeof H5JsMeeting != "undefined"){
             H5JsMeeting.finishSeatStatus(this.meetingType);
         }
+    },
+
+    
+    findDeviceDetailsTest:function(seatid){
+        this.roomId = roomid;
+        console.log(this.roomId)
+        $.ajax({
+            async: true,
+            type: "post",
+            // url: this.baseUrl +"/tableSign/getCacheData?roomid="+this.roomId,
+            url: this.baseUrl +"/tableSign/findDeviceDetailsTest",
+            data:{roomid:this.roomId,seatid:seatid},
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                    // var data = obj.data || [];
+                    // this.loadCacheData(data);
+                }else{
+                    alert("获取座区详情数据失败");
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
     }
 };
 

@@ -406,10 +406,11 @@
             var seats = $("#seatcontainerId .seled");
             if(seats.length > 0 && seats.length == 1){
                 var seatid = seats[0].id;
-                if(typeof H5JsMeeting != "undefined"){
-                }else{
-                    alert(seatid);
-                }
+                __signControl.findDeviceDetailsTest(seatid);
+                // if(typeof H5JsMeeting != "undefined"){
+                // }else{
+                //     alert(seatid);
+                // }
             }else{
                 if(typeof H5JsMeeting != "undefined"){
                     H5JsMeeting.showTipsDialog("请选择一个座区");
