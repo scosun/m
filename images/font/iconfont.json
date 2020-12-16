@@ -1,0 +1,23 @@
+{
+  "id": "2273022",
+  "name": "tupian",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2630442",
+      "name": "头像",
+      "font_class": "touxiang",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "3187571",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    }
+  ]
+}
