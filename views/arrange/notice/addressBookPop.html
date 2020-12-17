@@ -1,111 +1,311 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title></title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
-<link rel="stylesheet" href="../../../images/font/iconfont.css">
-<style type="text/css">
-  .layui-fanhui-btn {
-    display: block;
-    border-bottom: 1px solid #e6e6e6;
-    text-align: center;
-    line-height: 36px;
-  }
-  .layui-fanhui-btn:hover {
-    background-color: #f2f2f2;
-  }
-  .icon-touxiang:before {
-    margin-right: 5px;
-  }
-  .icon-wenjianjia:before {
-    margin-right: 5px;
-  }
-  .layui-form-checked span, .layui-form-checked:hover span {
-    background-color: transparent;
-  }
-  .layui-transfer-active .layui-btn {
-      background-color: #ffce00;
-      border-color: #ffce00;
-  }
-  .layui-btn:hover {
-      opacity: .8;
-      filter: alpha(opacity=80);
-      color: #fff;
-  }
-  .layui-transfer-active .layui-btn-disabled {
-      background-color: #FBFBFB;
-      border-color: #e6e6e6;
-      color: #C9C9C9;
-  }
-</style>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../images/font/iconfont.css">
+    <style type="text/css">
+        .layui-fanhui-btn {
+            display: block;
+            border-bottom: 1px solid #e6e6e6;
+            text-align: center;
+            line-height: 36px;
+        }
+
+        .layui-fanhui-btn:hover {
+            background-color: #f2f2f2;
+        }
+
+        .icon-touxiang:before {
+            margin-right: 5px;
+        }
+
+        .icon-wenjianjia:before {
+            margin-right: 5px;
+        }
+
+        .layui-form-checked span,
+        .layui-form-checked:hover span {
+            background-color: transparent;
+        }
+
+        .layui-transfer-active .layui-btn {
+            background-color: #ffce00;
+            border-color: #ffce00;
+        }
+
+        .layui-btn:hover {
+            opacity: .8;
+            filter: alpha(opacity=80);
+            color: #fff;
+        }
+
+        .layui-transfer-active .layui-btn-disabled {
+            background-color: #FBFBFB;
+            border-color: #e6e6e6;
+            color: #C9C9C9;
+        }
+    </style>
 </head>
+
 <body>
-<div style="padding: 20px;"> 
-<div id="test4" class="demo-transfer">
-    <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-4">
-        <div class="layui-transfer-box" data-index="0" style="width: 200px; height: 360px;">
-            <div class="layui-transfer-search">
-                <i class="layui-icon layui-icon-search"></i>
-                <input type="input" class="layui-input" placeholder="关键词搜索" />
+    <div style="padding: 20px;">
+        <div id="test4" class="demo-transfer">
+            <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-4">
+                <div class="layui-transfer-box" data-index="0" style="width: 200px; height: 360px;">
+                    <div class="layui-transfer-search">
+                        <i class="layui-icon layui-icon-search"></i>
+                        <input type="input" class="layui-input" placeholder="关键词搜索" />
+                    </div>
+                    <a id="prebtn" style="display: none;" class="layui-fanhui-btn" href="javascript:;">返回上一级</a>
+                    <ul id="selectbox" class="layui-transfer-data" style="height: 267px;">
+                        <!-- <li>
+                            <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                                <span class="iconfont icon-touxiang">李白</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                                <span class="iconfont icon-wenjianjia">后勤组</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+                <div class="layui-transfer-active">
+                    <!-- layui-btn-disabled -->
+                    <button id="addbtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="0"><i class="layui-icon layui-icon-next"></i></button>
+                    <button id="removebtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="1"><i class="layui-icon layui-icon-prev"></i></button>
+                </div>
+                <div class="layui-transfer-box" data-index="1" style="width: 200px; height: 360px;">
+                    <ul id="selectedbox" class="layui-transfer-data" style="height: 267px;">
+                        <!-- <li>
+                            <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                                <span class="iconfont icon-touxiang">李白</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                                <span class="iconfont icon-wenjianjia">后勤组</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
             </div>
-            <a class="layui-fanhui-btn" href="javascript:;">返回上一级</a>
-            <ul class="layui-transfer-data" style="height: 267px;">
-                <li>
-                      <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
-                          <span class="iconfont icon-touxiang">李白</span>
-                          <i class="layui-icon layui-icon-ok"></i>
-                      </div>
-                </li>
-                <li>
-                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
-                        <span class="iconfont icon-wenjianjia">后勤组</span>
-                        <i class="layui-icon layui-icon-ok"></i>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="layui-transfer-active">
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled" data-index="0"><i class="layui-icon layui-icon-next"></i></button>
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="1"><i class="layui-icon layui-icon-prev"></i></button>
-        </div>
-        <div class="layui-transfer-box" data-index="1" style="width: 200px; height: 360px;">
-            <ul class="layui-transfer-data" style="height: 267px;">
-                <li>
-                      <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
-                          <span class="iconfont icon-touxiang">李白</span>
-                          <i class="layui-icon layui-icon-ok"></i>
-                      </div>
-                </li>
-                <li>
-                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
-                        <span class="iconfont icon-wenjianjia">后勤组</span>
-                        <i class="layui-icon layui-icon-ok"></i>
-                    </div>
-                </li>
-            </ul>
         </div>
     </div>
-</div> 
-</div>
-<script src="../../../layuiadmin/layui/layui.js"></script>
-<script>
-layui.config({
-	base: '../../../layuiadmin/' //静态资源所在路径
-}).extend({
-	index: 'lib/index' //主入口模块
-}).use(['transfer', 'layer', 'util'], function(){
-  var $ = layui.$
-  ,transfer = layui.transfer
-  ,layer = layui.layer
-  ,util = layui.util;
-  
-  
-});
-</script>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="../../../js/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            ShuttleBox = function (obj){
+                this.init.apply(this,arguments);
+            };
+
+            ShuttleBox.prototype = {
+                constructor:ShuttleBox,
+                
+                //type=1 人员;  type=2 组
+                selectData:[],
+
+                init: function(){
+                    console.log("signcontrol-----init");
+                    
+                    this.bindEvent();
+                    this.getDataHttp();
+                },
+                bindEvent:function(){
+                    $("#addbtn").bind("click",this.addItem.bind(this));
+                    $("#removebtn").bind("click",this.removeItem.bind(this));
+                },
+
+                addItemToSelected(){
+
+                },
+
+                addItem(){
+                    var ckitems = this.selectData.filter(function(item){
+                        return item.checked == true;
+                    });
+
+                    //如果是 文件夹，查询具体人员，是人员直接移到右边
+                    var person = ckitems.filter(function(item){
+                        return item.type == 1;
+                    });
+                    var group = ckitems.filter(function(item){
+                        return item.type == 2;
+                    });
+
+                    if(person.length > 0){
+                        person.map(function(item){
+                            item.checked = false;
+                            item.hidden = true;
+                        }.bind(this));
+
+                        this.addSelectData();
+                        this.addSelectedData();
+                    }
+
+                    if(group.length > 0){
+                        //去查询组内人员
+
+                    }
+                    // console.log(person,group,this.selectedData);
+                },
+
+                removeItem(){
+                    var ckitems = this.selectData.filter(function(item){
+                        return item.checked == true;
+                    });
+
+                    //左边只有人员，直接移到右边
+                    var person = ckitems.filter(function(item){
+                        return item.type == 1;
+                    });
+
+                    if(person.length > 0){
+                        person.map(function(item){
+                            item.checked = false;
+                            item.hidden = false;
+                        }.bind(this));
+
+                        this.addSelectData();
+                        this.addSelectedData();
+                    }
+
+                },
+
+                itemClick(evt){
+                    // console.log("itemclick----",evt);
+                    var ele = evt.currentTarget;
+
+                    var item = this.selectData.filter(function(item){
+                        return item.id == ele.id;
+                    })[0];
+                    
+                    if(item.checked){
+                        $(ele).find(".layui-form-checkbox").removeClass("layui-form-checked");
+                        item.checked = false;
+                    }else{
+                        $(ele).find(".layui-form-checkbox").addClass("layui-form-checked");
+                        item.checked = true;
+                    }
+                },
+
+                getDataHttp(){
+                    var data = [
+                        {id:1,name:"人1",type:1,checked:false,hidden:false},
+                        {id:2,name:"人2",type:1,checked:false,hidden:false},
+                        {id:3,name:"人3",type:1,checked:false,hidden:false},
+                        {id:4,name:"组1",type:2,checked:false,hidden:false},
+                        {id:5,name:"组2",type:2,checked:false,hidden:false},
+                        {id:6,name:"组3",type:2,checked:false,hidden:false},
+                    ];
+
+                    this.selectData = data;
+                    this.addSelectData(data);
+
+                    // $.ajax({
+                    //     async: true,
+                    //     type: "post",
+                    //     url: this.baseUrl +"/tableSign/appTableSignControlTest",
+                    //     // url: "http://m.longjuli.com:8083/tableSign/appTableSignControl",
+                    //     // dataType: "json",
+                    //     // roomId:this.roomId,
+                    //     data:{type:type},
+                    //     success: function(obj) {
+                    //         console.log("success")
+                    //     },
+                    //     //失败的回调函数
+                    //     error: function() {
+                    //         console.log("error")
+                    //     }
+                    // });
+                },
+
+                addSelectData(){
+                    var html = [];
+                    if(this.selectData && this.selectData.length){
+                        var data = this.selectData.filter(function(item){
+                            return item.hidden == false;
+                        });
+                        for(var i = 0, len = data.length; i < len; i++){
+                            var item = data[i] || {};
+
+                            var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
+                            var ck = item.checked ? "layui-form-checked" : "";
+
+                            html.push('<li id="' + item.id + '">');
+                            html.push('<div class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
+                            html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
+                            html.push('<i class="layui-icon layui-icon-ok"></i>');
+                            html.push('</div>');
+                            html.push('</li>');
+                        }
+                    }
+
+                    $("#selectbox").html(html.join(''));
+
+                    $("#selectbox > li").unbind("click");
+                    $("#selectbox > li").bind("click",this.itemClick.bind(this));
+                },
+                
+                addSelectedData(){
+                    var html = [];
+                    if(this.selectData && this.selectData.length){
+                        var data = this.selectData.filter(function(item){
+                            return item.hidden == true;
+                        });
+                        for(var i = 0, len = data.length; i < len; i++){
+                            var item = data[i] || {};
+
+                            var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
+                            var ck = item.checked ? "layui-form-checked" : "";
+
+                            html.push('<li id="' + item.id + '">');
+                            html.push('<div class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
+                            html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
+                            html.push('<i class="layui-icon layui-icon-ok"></i>');
+                            html.push('</div>');
+                            html.push('</li>');
+                        }
+                    }
+
+                    $("#selectedbox").html(html.join(''));
+
+                    $("#selectedbox > li").unbind("click");
+                    $("#selectedbox > li").bind("click",this.itemClick.bind(this));
+                }
+            }
+
+        });
+
+
+
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['transfer', 'layer', 'util'], function () {
+            var $ = layui.$
+                , transfer = layui.transfer
+                , layer = layui.layer
+                , util = layui.util;
+
+            var _shuuulebox = new ShuttleBox();
+        });
+
+        
+    </script>
 </body>
+
 </html>
