@@ -104,6 +104,8 @@
                 </div>
             </div>
         </div>
+
+        <button id="getPersonBtn" type="button" class="layui-btn layui-btn-primary">获取已选人员</button>
     </div>
     <script src="../../../layuiadmin/layui/layui.js"></script>
     <script src="../../../js/jquery-3.1.1.min.js"></script>
@@ -124,13 +126,14 @@
                 keyWord:"",
                 isSearch:false,
                 keyOut:null,
+                deptname:"",
 
                 init: function(){
                     // console.log("signcontrol-----init");
                     
                     this.bindEvent();
                     this.parentId.push(0);
-                    this.getDataHttp(0);
+                    this.getDataHttp(0,"");
                 },
                 bindEvent:function(){
                     $("#prebtn").bind("click",this.preList.bind(this));
@@ -139,8 +142,11 @@
                     $('#keysearch').bind('input propertychange',this.keySearch.bind(this)); 
                 },
 
-                addItemToSelected(){
-
+                getSelectedItem(){
+                    var data = this.selectData.filter(function(item){
+                        return item.hidden == true && item.type == 1;
+                    });
+                    return data;
                 },
 
                 keySearch(){
@@ -159,8 +165,11 @@
 
                 preList(){
                     var id = this.parentId.pop() || 0;
-                    if(id == this.currentId && id != 0){
-                        id = this.parentId.pop() || 0;
+                    // if(id == this.currentId && id != 0){
+                    //     id = this.parentId.pop() || 0;
+                    // }
+                    if(id){
+                        id = this.parentId[this.parentId.length - 1];
                     }
                     if(id == 0){
                         if(this.keyWord){
@@ -223,13 +232,41 @@
 
                 },
 
+                ckItemClick(evt){
+                    // console.log("itemclick----",evt);
+                    var ele = evt.currentTarget;
+
+                    var id = $(ele).attr("data");
+
+                    var item = this.selectData.filter(function(item){
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
+                    })[0];
+
+                    if(item.checked){
+                        $(ele).find(".layui-unselect").removeClass("layui-form-checked");
+                        item.checked = false;
+                    }else{
+                        $(ele).find(".layui-unselect").addClass("layui-form-checked");
+                        item.checked = true;
+                    }
+                },
                 itemClick(evt){
                     // console.log("itemclick----",evt);
                     
                     var ele = evt.currentTarget;
 
+                    var id = $(ele).parent().attr("data");
+
                     var item = this.selectData.filter(function(item){
-                        return item.id == ele.id;
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
                     })[0];
 
                     // 0是文件夹 1是人
@@ -250,8 +287,14 @@
                     // console.log("folderItemClick----",evt);
                     var ele = evt.currentTarget;
 
+                    var id = $(ele).parent().attr("data");
+
                     var item = this.selectData.filter(function(item){
-                        return item.id == ele.id;
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
                     })[0];
                     
 
@@ -266,24 +309,11 @@
                         }
                     }else{
                         this.parentId.push(item.id);
-                        this.getDataHttp(item.id);
+                        this.getDataHttp(item.id,item.deptname);
                     }
                 },
 
-                getDataHttp(id){
-                    // var data = [
-                    //     {id:1,name:"人1",type:1,checked:false,hidden:false},
-                    //     {id:2,name:"人2",type:1,checked:false,hidden:false},
-                    //     {id:3,name:"人3",type:1,checked:false,hidden:false},
-                    //     {id:4,name:"组1",type:2,checked:false,hidden:false},
-                    //     {id:5,name:"组2",type:2,checked:false,hidden:false},
-                    //     {id:6,name:"组3",type:2,checked:false,hidden:false},
-                    // ];
-
-                    // this.selectData = data;
-                    // this.addSelectData(data);
-
-                    
+                getDataHttp(id,deptname){
                     this.currentId = id;
 
                     this.setPreBtnStatus(id);
@@ -295,16 +325,39 @@
                         xhrFields: {
                             withCredentials: true
                         },
-                        data:{id:id},
+                        data:{
+                            id:id,
+                            deptname:deptname
+                        },
                         success: function(obj) {
                             if(obj.code == 0){
                                 var data = obj.data || [];
                                 data.map(function(item){
                                     item.checked = false;
                                     item.hidden = false;
-                                });
+                                }.bind(this));
+                                
+                                if(this.selectData && this.selectData.length > 0){
+                                    var ckdata = this.selectData.filter(function(item){
+                                        return item.hidden == true;
+                                    });
+                                    ckdata.map(function(ck){
+                                        var p = data.filter(function(f){
+                                            return f.userid == ck.userid;
+                                        });
+                                        if(p.length > 0){
+                                            p[0].checked = false;
+                                            p[0].hidden = true;
+                                        }else{
+                                            data.push(ck);
+                                        }
+                                    });
+                                }
+
                                 this.selectData = data;
-                                this.addSelectData(data);
+
+                                this.addSelectData();
+                                this.addSelectedData();
                             }
                             // console.log(obj)
                             // console.log("success")
@@ -342,7 +395,7 @@
                                         item.hidden = false;
                                     });
                                     this.selectData = data;
-                                    this.addSelectData(data);
+                                    this.addSelectData();
                                 }else{
                                     this.isSearch = false;
                                     this.keySearch(this.keyWord);
@@ -380,10 +433,12 @@
                             var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
                             var ck = item.checked ? "layui-form-checked" : "";
 
-                            html.push('<li id="' + item.id + '">');
-                            html.push('<div class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
-                            html.push('<span id="' + item.id + '" class="iconfont ' + icon + '">' + item.name + '</span>');
-                            html.push('<i id="' + item.id + '" class="layui-icon layui-icon-ok"></i>');
+                            var id = item.type == 1 ? item.userid : item.id;
+
+                            html.push('<li >');
+                            html.push('<div data="' + id + '" class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
+                            html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
+                            html.push('<i class="layui-icon layui-icon-ok"></i>');
                             html.push('</div>');
                             html.push('</li>');
                         }
@@ -408,8 +463,9 @@
 
                             var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
                             var ck = item.checked ? "layui-form-checked" : "";
+                            var id = item.type == 1 ? item.userid : item.id;
 
-                            html.push('<li id="' + item.id + '">');
+                            html.push('<li data="' + id + '" >');
                             html.push('<div class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
                             html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
                             html.push('<i class="layui-icon layui-icon-ok"></i>');
@@ -421,7 +477,7 @@
                     $("#selectedbox").html(html.join(''));
 
                     $("#selectedbox > li").unbind("click");
-                    $("#selectedbox > li").bind("click",this.itemClick.bind(this));
+                    $("#selectedbox > li").bind("click",this.ckItemClick.bind(this));
                 }
             }
         });
@@ -439,6 +495,12 @@
                 , util = layui.util;
 
             var _shuuulebox = new ShuttleBox();
+
+            $("#getPersonBtn").bind('click',function(){
+
+                var data = _shuuulebox.getSelectedItem();
+                console.log(data)
+            });
         });
 
         
