@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html >
 <head>
     <meta charset="utf-8">
     <title>龙居里® Meeting++</title>
@@ -12,6 +12,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/> -->
     <!-- <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css"> -->
     <!-- <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all"> -->
+    <link rel="stylesheet" href="css/index.css" media="all">
     <link rel="stylesheet" href="css/seat.css" media="all">
     <!-- <link rel="stylesheet" href="rule_zq.css" /> -->
     
@@ -70,6 +71,115 @@
 
     <div id="seatsbody" style="position: absolute;"></div>
 
+
+    <!--弹框-->
+    <div id="seatInfo" class="pop-mask" style="display: none;">
+        <div class="circleExitpop">
+            <div class="det-sharepop-bt">
+                <div class="ltext">
+                    座位S-1-11-2绑定的电子桌牌
+                </div>
+                <div class="rbtn"></div>
+            </div>
+            <div class="popcontent-text2">
+                <div class="popcontent-details">
+                    <div class="popcontent-details-a">
+                        <img src="images/listimg.jpg" alt="">
+                    </div>
+                    <div class="popcontent-details-b">
+                        <p>型号：MTG Plus (LoRa)</p>
+                        <p>编号：889JJD8888DDD</p>
+                        <p>网络：LoRa</p>
+                    </div>
+                    <div class="popcontent-details-c">
+                        <p>电量：100%</p>
+                        <p>座位：1组11排2号</p>
+                        <p>通讯：正常</p>
+                    </div>
+                </div>
+                <ul class="popcontent-details-list clearfix">
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议准备：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议开始：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议暂停：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议恢复：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议结束：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议重启：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>设备重置：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/seatscontrol_drag.js" charset="utf-8"></script>
@@ -406,6 +516,7 @@
             var seats = $("#seatcontainerId .seled");
             if(seats.length > 0 && seats.length == 1){
                 var seatid = seats[0].id;
+                
                 __signControl.findDeviceDetailsTest(seatid);
                 // if(typeof H5JsMeeting != "undefined"){
                 // }else{

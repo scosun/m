@@ -465,8 +465,8 @@ SignControl.prototype = {
 
     
     findDeviceDetailsTest:function(seatid){
-        this.roomId = roomid;
-        console.log(this.roomId)
+        // this.roomId = roomid;
+        // console.log(this.roomId)
         $.ajax({
             async: true,
             type: "post",
@@ -476,8 +476,11 @@ SignControl.prototype = {
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
-                    // var data = obj.data || [];
+                    $("#seatInfo").show();
+                    var data = obj.data || {};
                     // this.loadCacheData(data);
+
+                    this.seatInfoHtml(data);
                 }else{
                     alert("获取座区详情数据失败");
                 }
@@ -487,6 +490,134 @@ SignControl.prototype = {
                 console.log("error")
             }
         });
+    },
+
+    seatInfoHtml(obj){
+        var html = [];
+
+        var deviceType = ["阿里E-ink桌牌","龙居里E-ink桌牌","龙居里LCD桌牌"];
+        var communication = ["lora","蓝牙"];
+        var deviceStatus = {
+            ONLINE:"设备在线",
+            OFFLINE:"设备离线",
+            UNACTIVE:"设备未激活",
+            DISABLE:"设备已禁用",
+        };
+
+        html.push('<div class="circleExitpop">');
+        html.push('<div class="det-sharepop-bt">');
+        html.push('<div class="ltext">');
+        html.push('座位' + obj.seatid + '绑定的电子桌牌');
+        html.push('</div>');
+        html.push('<div id="closeInfoBtn" class="rbtn"></div>');
+        html.push('</div>');
+
+        html.push('<div class="popcontent-text2">');
+        html.push('<div class="popcontent-details">');
+        html.push('<div class="popcontent-details-a">');
+        html.push('<img src="images/listimg.jpg" alt="">');
+        html.push('</div>');
+        html.push('<div class="popcontent-details-b">');
+        html.push('<p>型号：'+deviceType[+obj.deviceType]+'</p>');
+        html.push('<p>编号：'+obj.deviceName+'</p>');
+        html.push('<p>网络：'+communication[+obj.communication]+'</p>');
+        html.push('</div>');
+        html.push('<div class="popcontent-details-c">');
+        html.push('<p>电量：'+obj.electricity+'%</p>');
+        html.push('<p>座位：'+obj.seatid+'</p>');
+        html.push('<p>通讯：'+deviceStatus[obj.deviceStatus]+'</p>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('<ul class="popcontent-details-list clearfix">');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议准备：<span>正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议开始：<span class="r">不正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议暂停：<span>正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议恢复：<span class="r">不正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议结束：<span>正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>会议重启：<span class="r">不正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('<li>');
+        html.push('<div class="wDIV">');
+        html.push('<div class="a">');
+        html.push('<p>设备重置：<span>正常</span></p>');
+        html.push('<p>2020-12-16 16:51:53</p>');
+        html.push('</div>');
+        html.push('<div class="b">');
+        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('</li>');
+        html.push('</ul>');
+        html.push('</div>');
+        html.push('</div>');
+
+        $("#seatInfo").html(html.join(''));
+
+        $("#closeInfoBtn").bind("click",this.closeInfoModel.bind(this));
+        
+    },
+
+    closeInfoModel(){
+        $("#seatInfo").hide();
     }
 };
 
