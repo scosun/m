@@ -1,0 +1,379 @@
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video, input, select { margin: 0; padding: 0; border: 0; box-sizing: border-box; font-family:arial }
+html { font-size:.28rem; }/*14rem*/
+body { font-family: "Microsoft Yahei", "Hiragino Sans GB", arial; background-color: #F9F8F8; font-size: 1rem; -webkit-text-size-adjust: none; color:#333; background-color:#f7f7f7 }
+input { outline: 0; -webkit-box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-appearance: none; font-family:arial; }
+input, textarea, button, a { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+input, button, textarea, select { -webkit-appearance: none; border: none; }
+.clear { height: 0rem; line-height: 0rem; font-size: 0; clear: both; }
+.clearfix:after { content: "."; display: block; *display: inline;*zoom: 1;height: 0; clear: both; visibility: hidden; }
+*+html .clearfix { overflow: hidden; }
+* html .clearfix { height: 1%; }
+ul, ol { list-style: none }
+a { text-decoration: none; color:#333 }
+ul,ol {
+	list-style:none
+}
+/*------头部------*/
+.topDiv {
+	height:0.88rem;
+	line-height:0.88rem;
+	position:relative;
+	font-size:0.40rem;
+	color: #333333;
+	text-align:center;
+	padding:0 1rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+        white-space: nowrap;
+}
+.topDiv-btnL {
+	position:absolute;
+	top:0.11rem;
+	left:0.12rem;
+	width:0.66rem;
+	height:0.66rem;
+	background:url(../images/icon1.png) no-repeat center;
+	background-size:0.66rem 0.66rem;
+}
+.topDiv-btnR {
+        position:absolute;
+	top:0.11rem;
+	right:0.12rem;
+	width:0.66rem;
+	height:0.66rem;
+        background: #FFCE16;
+        border-radius: 50%;
+}
+.topDiv-btnR img{
+	width:0.66rem;
+	height:0.66rem;
+        border-radius: 50%;
+}
+.floatLeft{
+        position: fixed;
+        left:0;
+        width: 1.18rem;
+        /* height: 594px; */
+        background: #FFFFFF;
+        border-radius: 0 0.18rem 0.18rem 0;
+        top: 50%; 
+        transform: translateY(-50%);
+        z-index: 1000;
+}
+.floatLeft li{
+        display: block;
+        /* height: 0.58rem;
+        width: 0.58rem; */
+        padding:0.2rem 0.3rem;
+        background:url(../images/line.png) no-repeat bottom center;
+	background-size:1.18rem 0.02rem;
+}
+.floatLeft li:last-child{
+        background:none;
+}
+.floatLeft li span{
+        display: block;
+        height: 0.58rem;
+        width: 0.58rem;
+}
+.floatLeft li.a span{
+        background:url(../images/shuaxin.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.a.on span{
+        background:url(../images/shuaxin-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.b span{
+        background:url(../images/bianji.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.b.on span{
+        background:url(../images/bianji-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.c span{
+        background:url(../images/tianjia.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.c.on span{
+        background:url(../images/tianjia-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.d span{
+        background:url(../images/xiazai.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.d.on span{
+        background:url(../images/xiazai-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.e span{
+        background:url(../images/shanchu.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.e.on span{
+        background:url(../images/shanchu-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.f span{
+        background:url(../images/baochun.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatLeft li.f.on span{
+        background:url(../images/baochun-on.png) no-repeat center bottom;
+	background-size:0.58rem 0.58rem;
+}
+.floatright{
+        z-index: 1000;
+        position: fixed;
+        right:0;
+        top:1.7rem;
+        width: 2.64rem;
+        max-height:8.8rem;
+        background: #FFFFFF;
+        border-radius: 0.18rem 0 0 0.18rem;
+}
+.floatright_bt{
+        border-radius: 0.18rem 0 0 0;
+        height:0.8rem;
+        padding-left:1rem;
+        line-height:0.8rem;
+        background: #ECEBEB;
+        font-size: 0.34rem;
+        color: #333333;
+}
+.floatright_bt.a{
+        background:#ECEBEB url(../images/shuaxin-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+
+.floatright_bt.b{
+        background:#ECEBEB url(../images/bianji-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+
+.floatright_bt.c{
+        background:#ECEBEB url(../images/tianjia-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+.floatright_bt.d{
+        background:#ECEBEB url(../images/xiazai-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+.floatright_bt.e{
+        background:#ECEBEB url(../images/shanchu-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+
+.floatright_bt.f{
+        background:#ECEBEB url(../images/baochun-on.png) no-repeat 0.3rem center;
+	background-size:0.58rem 0.58rem;
+}
+.floatrightlist{
+        font-size: 0.34rem;
+        color: #333333; 
+        max-height: 8rem;
+        overflow: auto;
+}
+.floatrightlist li{
+        height: 0.86rem;
+        line-height: 0.86rem;
+        padding-left:0.25rem;
+        background:url(../images/line.png) no-repeat bottom center;
+        background-size:2.64rem 0.02rem;
+        position: relative;
+        font-size: 0.3rem;
+        color: #999; 
+}
+.floatrightlist li span{
+        position: absolute;
+        top:0.21rem;
+        right:0.2rem;
+        height: 0.44rem;
+        width: 0.44rem;
+        background:url(../images/zaixian-no.png) no-repeat bottom center;
+	background-size:0.44rem 0.44rem;
+}
+.floatrightlist li:last-child{
+        background:none;
+}
+.floatrightlist li.on{
+        color: #20222A; 
+}
+.floatrightlist li.on span{
+        background:url(../images/zaixian.png) no-repeat bottom center;
+	background-size:0.44rem 0.44rem;
+}
+.operateList li{
+        color: #666; 
+}
+.operateList li.zhunbei{
+        background: #FFCE16;
+        color: #333333; 
+}
+.operateList li.zhunbei span{
+        background:url(../images/zhengzhixing.png) no-repeat bottom center;
+	background-size:0.44rem 0.44rem;
+}
+.operateList li.kaishi span{
+        background:url(../images/weizhixing.png) no-repeat bottom center;
+	background-size:0.44rem 0.44rem;
+}
+.operateList li.zhanting{
+        color: #AAAAAA; 
+}
+.operateList li.zhanting span{
+        background:url(../images/zhixingguo.png) no-repeat bottom center;
+	background-size:0.44rem 0.44rem;
+}
+.contentdiv{
+        position: fixed;
+        left:0;
+        right: 0;
+        bottom: 0;
+        top:0.88rem;
+        background-color: #FFCE16;
+        overflow: auto;
+}
+.contentlist{
+        width: 26rem;
+        height: 30rem;
+        background-color: aquamarine;
+        margin:0.2rem
+}
+.contentlist li{
+        float:left;
+        margin:0.1rem;
+        width: 0.75rem;
+        height: 0.75rem;
+}
+.contentlist li.have{
+        background-color:#ff0000;
+}
+/* det-sharepop */
+.pop-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 2000;
+}
+.circleExitpop {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-top: -4rem;
+        margin-left: -6rem;
+        width: 12rem;
+        height: 8.5rem;
+        background: #FFFFFF;
+        box-shadow: 0 0 0.3rem 0 rgba(185,182,182,0.3);
+        border-radius: 0.12rem;
+        z-index: 20;
+        font-weight: bold;
+}
+.det-sharepop-bt {
+        height: 1.14rem;
+        text-align: center;
+        line-height: 1.14rem;
+        font-size: 0.36rem;
+        color: #333333;
+        border-bottom: 0.02rem solid #F6F3F3;
+        font-weight: bold;
+}
+.circleExitpop .det-sharepop-bt {
+        text-align: left;
+        padding-left: 0.3rem;
+}
+.det-sharepop-bt .rbtn {
+        position: absolute;
+        right: 0.2rem;
+        top: 0.2rem;
+        height: 0.8rem;
+        width: 0.8rem;
+        background: url(../images/guanbi.png) no-repeat center;
+        background-size: 0.4rem 0.4rem;
+}
+.popcontent-text2 {
+        font-size: .30rem;
+        font-family: PingFang SC;
+        color: #20222A;
+        padding: .3rem;
+}
+.popcontent-details{
+        font-size:.26rem;
+        font-family:PingFang SC;
+        color:#20222A;
+        display:-webkit-box;
+        display:-ms-flexbox;
+        display:flex;
+        align-items:center;
+}
+.popcontent-details-a img{
+        width: 3rem;
+        height: 1.8rem;
+        margin-right: 0.5rem;
+}
+.popcontent-details-b,.popcontent-details-c {
+        -webkit-box-flex:1;
+        -ms-flex:1;
+        flex:1;
+        line-height: 0.5rem;
+        font-weight: normal;
+}
+.popcontent-details-list{
+        font-weight: normal;
+        font-size:.26rem;
+        font-family:PingFang SC;
+        color:#20222A;
+        overflow: auto;
+        height: 4.6rem;
+        margin-top: 0.2rem;
+}
+.popcontent-details-list li{
+        float: left;
+        width: 50%;
+}
+.popcontent-details-list li .wDIV{
+        border-bottom: 0.01rem solid #CCC;
+        padding-bottom: 0.2rem;
+        padding-top: 0.2rem;
+        display:-webkit-box;
+        display:-ms-flexbox;
+        display:flex;
+        align-items:center;
+        margin-right: 0.3rem;
+}
+.popcontent-details-list li .a{
+        -webkit-box-flex:3;
+        -ms-flex:3;
+        flex:3;
+        line-height: 0.36rem;
+}
+.popcontent-details-list li .a span{
+        color: rgb(0,255,0);
+}
+.popcontent-details-list li .a .r{
+        color: #ff0000;
+}
+.popcontent-details-list li .b{
+        width: 1.5rem;
+        margin-right: 0.3rem;
+}
+.popcontent-btn {
+        display: block;
+        height: .62rem;
+        line-height: .62rem;
+        border: .01rem solid #2C7EE2;
+        border-radius: .12rem;
+        font-size: .26rem;
+        font-family: PingFang SC;
+        color: #2C7EE2;
+        text-align: center;
+        box-sizing: content-box;
+        padding:0.05rem 0;
+        width: 1.5rem;
+}
