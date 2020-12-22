@@ -543,17 +543,27 @@
                     layer.open({
                         type: 2,
                         title: '通讯录添加',
-                        area: ['70%', '75%'],
+                        area: ['70%', '95%'],
                         btn: ['确定', '取消'],
                         maxmin: true,
                         content: 'addressBookPop.html?notice=' + $('#select-room').val(),
                         yes: function (index, layero) {
-                            // 确认提交的一个提示
-                            layer.confirm('　　　　　确认新增一位参会人员？　　　　　', {title: '温馨提示'}, function () {
-                                var submit = layero.find('iframe').contents().find("#click");
-                                submit.click();
-                            });
-
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            
+                            var datas = iframeWin._shuuulebox.getSelectedItem();
+                            if(datas.length == 0){
+                                layer.confirm('确认新增一位参会人员？', {title: '温馨提示'},function(index){
+                                    // var submit = layero.find('iframe').contents().find("#click");
+                                    // submit.click();
+                                    layer.close(index);
+                                });
+                            }else{
+                                //保存数据
+                                var userids = datas.map(function(item){
+                                    return item.userid;
+                                });
+                                console.log("选择人员----",datas,userids);
+                            }
                         }
                         // content: '/gkzytb/franchiser/rigthColumnJsonList'
                     });

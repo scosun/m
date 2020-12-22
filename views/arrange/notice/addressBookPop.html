@@ -58,13 +58,13 @@
     <div style="padding: 20px;">
         <div id="test4" class="demo-transfer">
             <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-4">
-                <div class="layui-transfer-box" data-index="0" style="width: 200px; height: 360px;">
+                <div class="layui-transfer-box" data-index="0" style="width: 300px; height: 400px;">
                     <div class="layui-transfer-search">
                         <i class="layui-icon layui-icon-search"></i>
                         <input id="keysearch" type="input" autocomplete="off" class="layui-input" placeholder="关键词搜索" />
                     </div>
-                    <a id="prebtn" style="display: none;" class="layui-fanhui-btn" href="javascript:;">返回上一级</a>
-                    <ul id="selectbox" class="layui-transfer-data" style="height: 267px;">
+                    <a id="prebtn" class="layui-fanhui-btn" href="javascript:;">根目录</a>
+                    <ul id="selectbox" class="layui-transfer-data" style="height: 300px;">
                         <!--
                         <li>
                             <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
@@ -86,8 +86,8 @@
                     <button id="addbtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="0"><i class="layui-icon layui-icon-next"></i></button>
                     <button id="removebtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="1"><i class="layui-icon layui-icon-prev"></i></button>
                 </div>
-                <div class="layui-transfer-box" data-index="1" style="width: 200px; height: 360px;">
-                    <ul id="selectedbox" class="layui-transfer-data" style="height: 267px;">
+                <div class="layui-transfer-box" data-index="1" style="width: 300px; height: 400px;">
+                    <ul id="selectedbox" class="layui-transfer-data" style="height: 400px;">
                         <!-- <li>
                             <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
                                 <span class="iconfont icon-touxiang">李白</span>
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <button id="getPersonBtn" type="button" class="layui-btn layui-btn-primary">获取已选人员</button>
+        <!-- <button id="getPersonBtn" type="button" class="layui-btn layui-btn-primary">获取已选人员</button> -->
     </div>
     <script src="../../../layuiadmin/layui/layui.js"></script>
     <script src="../../../js/jquery-3.1.1.min.js"></script>
@@ -120,7 +120,7 @@
                 
                 //type=1 人员;  type=2 组
                 selectData:[],
-                baseUrl:"https://f.longjuli.com",
+                baseUrl:"",
                 parentId:[],
                 currentId:"",
                 keyWord:"",
@@ -128,9 +128,10 @@
                 keyOut:null,
                 deptname:"",
 
-                init: function(){
-                    // console.log("signcontrol-----init");
-                    
+                init: function(obj){
+                    // console.log("ShuttleBox-----init",obj);
+                    this.baseUrl = obj.baseUrl;
+
                     this.bindEvent();
                     this.parentId.push(0);
                     this.getDataHttp(0,"");
@@ -158,12 +159,17 @@
                     clearTimeout(this.keyOut);
                     this.keyOut = setTimeout(function(){
                         if(!this.isSearch){
+                            // this.parentId = [];
                             this.searchDataHttp(this.keyWord);
                         }
                     }.bind(this),200)
                 },
 
                 preList(){
+                    if(this.currentId == 0){
+                        return;
+                    }
+
                     var id = this.parentId.pop() || 0;
                     // if(id == this.currentId && id != 0){
                     //     id = this.parentId.pop() || 0;
@@ -210,6 +216,7 @@
                             this.searchGroupDataHttp(names.join(','));
                         }
                     }
+
                     // console.log(person,group,this.selectedData);
                 },
 
@@ -344,6 +351,8 @@
                                     var ckdata = this.selectData.filter(function(item){
                                         return item.hidden == true;
                                     });
+                                    ckdata = ckdata.reverse();
+
                                     ckdata.map(function(ck){
                                         var p = data.filter(function(f){
                                             return f.userid == ck.userid;
@@ -352,7 +361,7 @@
                                             p[0].checked = false;
                                             p[0].hidden = true;
                                         }else{
-                                            data.push(ck);
+                                            data.unshift(ck);
                                         }
                                     });
                                 }
@@ -375,7 +384,8 @@
                 searchDataHttp(key){
 
                     if(key==""){
-                        this.getDataHttp(0);
+                        this.parentId = [0];
+                        this.getDataHttp(0,"");
                         return;
                     }
                     
@@ -390,6 +400,8 @@
                         },
                         data:{deptname:key},
                         success: function(obj) {
+                            this.parentId = [0];
+                            
                             if(obj.code == 0 && this.keyWord != ""){
                                 if(key == this.keyWord){
                                     var data = obj.data || [];
@@ -397,6 +409,25 @@
                                         item.checked = false;
                                         item.hidden = false;
                                     });
+
+                                    if(this.selectData && this.selectData.length > 0){
+                                        var ckdata = this.selectData.filter(function(item){
+                                            return item.hidden == true;
+                                        });
+                                        ckdata = ckdata.reverse();
+
+                                        ckdata.map(function(ck){
+                                            var p = data.filter(function(f){
+                                                return f.userid == ck.userid;
+                                            });
+                                            if(p.length > 0){
+                                                p[0].checked = false;
+                                                p[0].hidden = true;
+                                            }else{
+                                                data.unshift(ck);
+                                            }
+                                        });
+                                    }
                                     this.selectData = data;
                                     this.addSelectData();
                                 }else{
@@ -441,7 +472,12 @@
                                         item.checked = false;
                                         item.hidden = true;
 
-                                        this.selectData.push(item);
+                                        var h = this.selectData.filter(function(s){
+                                            return s.userid == item.userid;
+                                        });
+                                        if(h.length == 0){
+                                            this.selectData.push(item);
+                                        }
                                     }.bind(this));
                                 }else{
                                     data.map(function(item){
@@ -466,9 +502,9 @@
                 
                 setPreBtnStatus(id){
                     if(id == 0){
-                        $("#prebtn").hide();
+                        $("#prebtn").html("根目录");
                     }else{
-                        $("#prebtn").show();
+                        $("#prebtn").html("返回上一级");
                     }
                 },
 
@@ -535,23 +571,26 @@
 
 
 
+
         layui.config({
             base: '../../../layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use(['transfer', 'layer', 'util'], function () {
+        }).use(['index','transfer', 'layer', 'util'], function () {
             var $ = layui.$
                 , transfer = layui.transfer
                 , layer = layui.layer
+                , setter = layui.setter
                 , util = layui.util;
+                var url = setter.baseUrl;
 
-            var _shuuulebox = new ShuttleBox();
+            window._shuuulebox = new ShuttleBox({baseUrl:url});
 
-            $("#getPersonBtn").bind('click',function(){
+            // $("#getPersonBtn").bind('click',function(){
 
-                var data = _shuuulebox.getSelectedItem();
-                console.log(data)
-            });
+            //     var data = _shuuulebox.getSelectedItem();
+            //     console.log(data)
+            // });
         });
 
         
