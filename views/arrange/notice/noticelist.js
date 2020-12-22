@@ -51,6 +51,7 @@ layui.config({
         };
         return jlength
     };
+
     table.render({
         elem: '#test-table-operate',
         // height: 'full-200',
@@ -369,18 +370,26 @@ layui.config({
                 }
             });
         } else if (obj.event === 'edit') {
-
             layer.open({
                 type: 2,
-                title: '规则_编辑',
+                title: '修改会议通知',
                 area: ['70%', '75%'],
                 btn: ['确定', '取消'],
                 maxmin: true,
-                content: 'arrangemanUpdate.html?ruleid=' + data.id + '&roomid=' + data.roomid + "&name=" + data.name,
+                content: 'noticemodifyPop.html?id=' + data.id,
                 yes: function (index, layero) {
-                    var submit = layero.find('iframe').contents().find("#ruleclick");
-                    submit.click();
+                    layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;确认修改一个会议通知吗?',{title:'温馨提示'}, function () {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    })
 
+                },
+                success: function (layero, index) {
+                    var body = layui.layer.getChildFrame('body', index);
+                    // 取到弹出层里的元素，并把编辑的内容放进去
+                    body.find("#noticeContent").val(data.noticeContent);
+                    body.find("#noticeTitle").val(data.noticeTitle);
+                    body.find("#sendState").val(data.sendState); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
         }
@@ -396,9 +405,11 @@ layui.config({
                     maxmin: true,
                     content: 'noticeAddPop.html',
                     yes: function(index, layero) {
-                        var submit = layero.find('iframe').contents().find("#ruleclick");
-                        submit.click();
 
+                        layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;确认新增一个会议通知吗?',{title:'温馨提示'}, function () {
+                            var submit = layero.find('iframe').contents().find("#click");
+                            submit.click();
+                            })
                     }
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
                 });
@@ -498,14 +509,13 @@ layui.config({
                 table.render({
                     elem: '#test-table-operate',
                     // height: 'full-200',
-                    url: url+ "/ruletemplate/ruletemplateSearch" //数据接口
+                    url: url+ "/meetingnotice/search" //数据接口
                         ,
                         xhrFields: {
                             withCredentials: true
                         },
                     where: {
-                        "rule": $('#demoReload').val(),
-                        "status":0
+                        "content": $('#demoReload').val()
                     },
 
                     method: 'get',
@@ -515,44 +525,65 @@ layui.config({
                     cols: [
                         [ //表头
                             {
-                                type: 'checkbox',
-                                fixed: 'left'
-                            },
-                            // {
-                            //     field: 'id',
-                            //     title: 'ID',
-                            //     //align: 'center',
-                            //     unresize: 'false',
-                            //     width:80,
-                            // },
-                            {
-                                field: 'name',
-                                title: '编排规则名称',
+                                field: 'noticeTitle',
+                                title: '标题',
                                 align: 'left',
                             }, {
-                            field: 'roomname',
-                            title: '会议室名称',
+                            field: 'sendState',
+                            title: '方式',
                             align: 'left',
-                        },
-                            {
-                                //align: 'right',
-                                //flxed: 'right',
-                                title: '编排设定',
-                                toolbar: '#table-zone-list',
-                            },
-                            {
-                                field: 'modifytime',
-                                title: '更新时间',
-                                align: 'left',
-
-                            },
-                            {
-                                width: 100,
-                                //align: 'right',
-                                //flxed: 'right',
-                                title: '操作',
-                                toolbar: '#test-table-operate-barDemo',
+                            templet: function (data) {
+                                // 判断下 显示灰色文字 还是 绿色文字
+                                // 灰色文字
+                                // return "<span>"+data.sendtime+"</span>"
+                                // 绿色文字
+                                if (data.sendState === "1"){
+                                    return "钉钉通知";
+                                }
+                                if (data.sendState === "2"){
+                                    return "短信通知";
+                                }
+                                if (data.sendState === "3"){
+                                    return "钉钉短信通知";
+                                }
                             }
+                        }, {
+                            field: 'personNumber',
+                            title: '范围',
+                            align: 'left',
+                            templet: function (data) {
+                                // 判断下 显示灰色文字 还是 绿色文字
+                                // 灰色文字
+                                // return "<span>"+data.sendtime+"</span>"
+                                // 绿色文字
+                                return data.personNumber+"人"
+                            }
+                        }, {
+                            field: 'deadlineForRegistrationTime',
+                            title: '报名截止',
+                            align: 'left',
+                        }, {
+                            field: 'meetingStartTime',
+                            title: '发送时间',
+                            align: 'left',
+                            templet: function (data) {
+                                // 判断下 显示灰色文字 还是 绿色文字
+                                // 灰色文字
+                                // return "<span>"+data.sendtime+"</span>"
+                                // 绿色文字
+                                return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                            }
+                        }, {
+                            title: '状态',
+                            toolbar: '#test-table-state-barDemo',
+                        }, {
+                            title: '导出',
+                            toolbar: '#test-table-export-barDemo',
+                        }, {
+                            width: 100,
+                            title: '操作',
+                            toolbar: '#test-table-operate-barDemo',
+                        }
                         ]
                     ],
 

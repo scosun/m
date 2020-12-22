@@ -59,14 +59,14 @@ p span {
 		<label class="layui-form-label">通知标题</label>
 		<div class="layui-input-block">
 			<input type="text" name="noticeTitle" lay-verify="required" placeholder="模版名称" autocomplete="off"
-				id="username" class="layui-input">
+				id="noticeTitle" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<!-- <label class="layui-form-label"><span>*</span>通知方式</label> -->
 		<label class="layui-form-label">通知方式</label>
 		<div class="layui-input-block">
-			<select name="sendState" lay-skin="select" lay-filter="component-form-select" id="smslist">
+			<select name="sendState" lay-skin="select" lay-filter="component-form-select" id="sendState">
 				<option value="">请选择</option>
 				<option value="1">钉钉通知</option>
 				<option value="2">短信通知</option>
@@ -105,7 +105,7 @@ p span {
 	<div class="layui-form-item">
 		<label class="layui-form-label">通知内容</label>
 		<div class="layui-input-block">
-			<textarea name="noticeContent" lay-verify="required" placeholder="请输入内容" id="content" class="layui-textarea"
+			<textarea name="noticeContent" lay-verify="required" placeholder="请输入内容" id="noticeContent" class="layui-textarea"
 			></textarea>
 			<p id="label">已输入<span id="smslength">100</span>个字，约<span>2</span>条短信</p>
 		</div>
@@ -146,7 +146,12 @@ layui.config({
 
 	var url = setter.baseUrl;
 	// var url = "http://127.0.0.1:8083"
-
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);//匹配目标参数
+		if (r != null) return decodeURI(r[2]); return null; //返回参数值
+	}
+	var id = getUrlParam("id");
 	//拖拽上传
 	var day2 = new Date();
 	day2.setTime(day2.getTime());
@@ -185,10 +190,11 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 		var resutdatetime = resultdate +" "+data.time;
 		console.log($('#smslist').val())
 		$.ajax({
-			url: url + "/meetingnotice/save",
+			url: url + "/meetingnotice/modify",
 			type: "post",
 			dataType: "json",
 			data: {
+				id: id,
 				noticeTitle: data.noticeTitle,
 				noticeContent: data.noticeContent,
 				sendState: data.sendState,
@@ -200,7 +206,7 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 			},
 			success: function (data) {
 				if (data.code == 0) {
-					parent.layer.msg("添加成功")
+					parent.layer.msg("修改成功")
 					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
 					parent.layer.close(index);
 					parent.reloads();
