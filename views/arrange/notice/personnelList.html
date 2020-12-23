@@ -540,6 +540,9 @@
 
                 },
                 isAll: function () {
+                    if ($('#select-room').val() === "") {
+                        return layer.msg("请先选择会议通知")
+                    }
                     layer.open({
                         type: 2,
                         title: '通讯录添加',
@@ -549,20 +552,54 @@
                         content: 'addressBookPop.html?notice=' + $('#select-room').val(),
                         yes: function (index, layero) {
                             var iframeWin = window[layero.find('iframe')[0]['name']];
-                            
+
                             var datas = iframeWin._shuuulebox.getSelectedItem();
                             if(datas.length == 0){
-                                layer.confirm('确认新增一位参会人员？', {title: '温馨提示'},function(index){
+                                layer.msg("请选择通讯录中的人员并移动到右侧")
+                            }else{
+                                layer.confirm('确认新增'+datas.length+'个通知人员吗？', {title: '温馨提示'},function(index){
                                     // var submit = layero.find('iframe').contents().find("#click");
                                     // submit.click();
-                                    layer.close(index);
+                                    var userids = datas.map(function(item){
+                                        return item.userid;
+                                    });
+                                    var arr = userids.join(',')
+                                    $.ajax({
+                                        async: false,
+                                        type: "post",
+                                        url: url + "/noticePerson/addressBookImport",
+                                        dataType: "json",
+                                        xhrFields: {
+                                            withCredentials: true
+                                        },
+                                        //成功的回调函数
+                                        data: {
+                                            "userids": arr,
+                                            "mid":$('#select-room').val()
+
+                                        },
+                                        success: function (msg) {
+                                            if (msg.code == 0) {
+                                                layer.msg("添加成功");
+                                                reloads(); // 父页面刷新
+
+                                            } else {
+                                                layer.msg(msg.msg);
+
+
+                                            }
+
+                                        },
+                                        //失败的回调函数
+                                        error: function () {
+                                            console.log("error")
+                                        }
+                                    })
                                 });
-                            }else{
                                 //保存数据
-                                var userids = datas.map(function(item){
-                                    return item.userid;
-                                });
-                                console.log("选择人员----",datas,userids);
+
+                                // console.log(arr);
+                                // console.log("选择人员----",datas,userids);
                             }
                         }
                         // content: '/gkzytb/franchiser/rigthColumnJsonList'
