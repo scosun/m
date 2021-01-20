@@ -41,6 +41,55 @@
             setter = layui.setter;
         var url = setter.baseUrl;
         $.ajax({
+            async: true,
+            type: "get",
+            url: url+"/islogin",
+            dataType: "json",
+
+            xhrFields: {
+                withCredentials: true
+            },
+
+            success: function(msg) {
+                if (msg.code == 0) {
+
+                }else {
+                    login()
+                }
+            },
+            error: function(msg) {
+
+
+            }
+
+        })
+        function login(){
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url + "/loginApp",
+                dataType: "json",
+                data: {
+                    "username":"13698626066",
+                    "password":"scosun"
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code === 0) {
+                        layer.msg("登录成功")
+
+                    }
+                },
+                error: function (msg) {
+                    layer.msg("操作失败，系统错误")
+                }
+
+            })
+        }
+
+        $.ajax({
             async: false,
             type: "get",
             url: url + "/meetingnoticerecord/notshow",
