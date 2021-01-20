@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>参会详情</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script type="text/javascript" src="../js/pmsp.js"></script>
+    <link href="../css/base.css" rel="stylesheet" type="text/css"/>
+    <link href="../font/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../images/favicon.ico">
+</head>
+<body>
+<div class="detailsInfo">
+    <p class="ts">通知原文</p>
+    <div class="text" id="content">
+    </div>
+    <h3>报名记录</h3>
+    <ul id="record">
+    </ul>
+</div>
+<ul class="bottomBtn">
+    <li id="leave">请假</li>
+    <li id="signup">报名</li>
+</ul>
+
+<!-- 报名 -->
+<div class="pop-mask layui-hide"  id="signup_dialog">
+    <div class="pop-cont">
+        <div class="pop-cont-t">
+           <h3 class="pt100">是否确认参加会议？</h3>
+        </div>
+        <ul class="popbottomBtn">
+            <li  id="signup_dialog_cancel">取消</li>
+            <li id="signup_dialog_ok">下一步</li>
+        </ul>
+    </div>
+</div>
+<!-- 请假 -->
+<div class="pop-mask layui-hide" id="leave_dialog">
+    <div class="pop-cont">
+        <div class="pop-cont-t">
+           <h3 class="pt50">若确认请假请输入详细原因</h3>
+           <div class="forminput2">
+                <input type="text" id="leave_dialog_content" placeholder="请输入详细原因">
+            </div>
+        </div>
+        <ul class="popbottomBtn">
+            <li id="leave_dialog_cancel">取消</li>
+            <li id="leave_dialog_ok">确定</li>
+        </ul>
+    </div>
+</div>
+<div class="pop-mask layui-hide" id="signup_ok_dialog">
+    <div class="pop-cont">
+        <div class="pop-cont-t">
+            <h3 class="pt50">请输入车牌号</h3>
+            <div class="forminput2">
+                <input type="text" id="signup_ok_dialog_content" placeholder="请输入车牌号">
+            </div>
+        </div>
+        <ul class="popbottomBtn">
+            <li id="signup_ok_dialog_cancel">忽略</li>
+            <li id="signup_ok_dialog_ok">确定</li>
+        </ul>
+    </div>
+</div>
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: '../layuiadmin/lib/index' //主入口模块
+    }).use(['index', 'user'], function () {
+        var $ = layui.$,
+            layer = layui.layer,
+            setter = layui.setter;
+        var url = setter.baseUrl;
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);//匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }
+        var urlParam = getUrlParam("id");
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url+"/meetingnotice/findAllByid",
+            dataType: "json",
+            data:{
+                "id": urlParam
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(msg) {
+                if (msg.code === 0) {
+                    console.log(msg.data.noticeContent)
+                    $("#content").text(msg.data.noticeContent)
+                }
+            },
+            error: function(msg) {
+
+
+            }
+
+        })
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url+"/noticePerson/singrecord",
+            dataType: "json",
+            data:{
+                "mid": urlParam
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(msg) {
+                if (msg.code === 0) {
+                    msg.data.map(function (data){
+                        var reasonLeave;
+                        if (data.reasonLeave == null || data.reasonLeave == undefined){
+                            reasonLeave = '未反馈请假原因'
+                        }else {
+                            reasonLeave = data.reasonLeave;
+                        }
+                        if (data.meetingStatus === 0){
+                            $("#record").append('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
+                        }
+                        if (data.meetingStatus === 1){
+                            var type = ''
+                            if (data.type === 0){
+                                type = '钉钉'
+                            }
+                            if (data.type === 1){
+                                type = '钉钉待办窗口'
+                            }
+                            if (data.type === 2){
+                                type = phone +'短信'
+                            }
+                            $("#record").append('<li><p>'+data.createtime+' [通过'+type+'报名]</p><h4 class="red">确认请假，原因：'+reasonLeave+'</h4></li>')
+                        }
+                        if (data.meetingStatus === 2){
+                            $("#record").append('<li><p>'+data.createtime+'  [系统通知]</p> <h4 class="blue">报名已截止。</h4></li>')
+                        }
+                    })
+                }
+            },
+            error: function(msg) {
+
+
+            }
+
+        })
+        $("#leave").click(function (){
+            console.log(666)
+            $("#leave_dialog").removeClass("layui-hide")
+        })
+        $("#leave_dialog_cancel").click(function (){
+            $("#leave_dialog").addClass("layui-hide")
+        })
+        $("#leave_dialog_ok").click(
+            function() {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: url + "/noticePerson/singup",
+                    dataType: "json",
+                    data: {
+                        "mid": urlParam,
+                        "meetingstatus": 2,
+                        "type": 1,
+                        "reasonLeave":$("#leave_dialog_content").val()
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (msg) {
+                        if (msg.code === 0) {
+                            layer.msg("操作成功")
+                            $("#leave_dialog").addClass("layui-hide")
+                        }
+                        if (msg.code === -2) {
+                            layer.msg("报名已经截止")
+                            $("#leave_dialog").addClass("layui-hide")
+                        }
+
+                    },
+                    error: function (msg) {
+                        layer.msg("操作失败，系统错误")
+                    }
+
+                })
+            }
+        )
+        //报名区
+        $("#signup").click(function (){
+            console.log(666)
+            $("#signup_dialog").removeClass("layui-hide")
+        })
+        $("#signup_dialog_cancel").click(function (){
+            $("#signup_dialog").addClass("layui-hide")
+        })
+        $("#signup_dialog_ok").click(
+            function (){
+                $("#signup_dialog").addClass("layui-hide")
+                $("#signup_ok_dialog").removeClass("layui-hide")
+            }
+        )
+        $("#signup_ok_dialog_cancel").click(function (){
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url + "/noticePerson/singup",
+                dataType: "json",
+                data: {
+                    "mid": urlParam,
+                    "meetingstatus": 1,
+                    "type": 1
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code === 0) {
+                        layer.msg("报名成功")
+                        $("#signup_ok_dialog").addClass("layui-hide")
+                    }
+                    if (msg.code === -2) {
+                        layer.msg("报名已经截止")
+                        $("#signup_ok_dialog").addClass("layui-hide")
+                    }
+                },
+                error: function (msg) {
+                    layer.msg("操作失败，系统错误")
+                }
+
+            })
+        })
+        $("#signup_ok_dialog_ok").click(
+            function() {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: url + "/noticePerson/singup",
+                    dataType: "json",
+                    data: {
+                        "mid": urlParam,
+                        "meetingstatus": 1,
+                        "type": 1,
+                        "numberPlate": $('#signup_ok_dialog_content').val()
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (msg) {
+                        if (msg.code === 0) {
+                            layer.msg("报名成功")
+                            $("#signup_ok_dialog").addClass("layui-hide")
+                        }
+                        if (msg.code === -2) {
+                            layer.msg("报名已经截止")
+                            $("#signup_ok_dialog").addClass("layui-hide")
+                        }
+                    },
+                    error: function (msg) {
+                        layer.msg("操作失败，系统错误")
+                    }
+
+                })
+            }
+        )
+
+
+    })
+</script>
+</html>

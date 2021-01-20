@@ -289,25 +289,52 @@
                         title: '是否收到',
                         align: 'left',
                         templet: function (data) {
-                            return data.sendtime + "<br />" + data.sendtime
+                            // 判断下 显示灰色文字 还是 绿色文字
+                            // 灰色文字
+                            // return "<span>"+data.sendtime+"</span>"
+                            // 绿色文字
+                            var content = "";
+                            if (data.dingNoticeStatus == 0 ){
+                                content+="钉钉通知: 已发送\n"
+                            }
+                            if (data.dingNoticeStatus == 1 ){
+                                content+="钉钉通知: 未发送\n"
+                            }
+                            if (data.smsNoticeStatus == 0 ){
+                                content+="短信通知: 已发送"
+                            }
+                            if (data.smsNoticeStatus == 1 ){
+                                content+="短信通知: 已发送"
+                            }
+                            return content;
                         }
                     }, {
                         field: 'scope',
                         title: '最后反馈',
                         align: 'left',
                         templet: function (data) {
-                            return data.sendtime + "<br />" + data.sendtime
+                            if (data.sendtime == undefined){
+                                return '未反馈'
+                            }else {
+                                return data.sendtime + "<br />" + data.sendtime
+                            }
+
                         }
                     }, {
                         field: 'sendtime',
                         title: '最后报名状态',
                         align: 'left',
                         templet: function (data) {
-                            // 判断下 显示灰色文字 还是 绿色文字
-                            // 灰色文字
-                            // return "<span>"+data.sendtime+"</span>"
-                            // 绿色文字
-                            return "<span style='color:red'>" + data.sendtime + "</span>"
+                            if (data.meetingstatus === 0){
+                                return "<span style='color:red'> 未反馈 </span>"
+                            }
+                            if (data.meetingstatus === 1){
+                                return "<span style='color:red'>参会 </span>"
+                            }
+                            if (data.meetingstatus === 2){
+                                return "<span style='color:red'>请假</span>"
+                            }
+
                         }
                     }, {
                         field: 'sendtime',
@@ -318,7 +345,15 @@
                             // 灰色文字
                             // return "<span>"+data.sendtime+"</span>"
                             // 绿色文字
-                            return "<span style='color:red'>" + data.sendtime + "</span>"
+                            if (data.meetingstatus === 0){
+                                return "<span style='color:red'> 未反馈 </span>"
+                            }
+                            if (data.meetingstatus === 1){
+                                return "<span style='color:red'>已参会 </span>"
+                            }
+                            if (data.meetingstatus === 2){
+                                return "<span style='color:red'>" + data.sendtime + "</span>"
+                            }
                         }
                     }, {
                         width: 180,

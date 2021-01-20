@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>搜索</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<script type="text/javascript" src="js/pmsp.js"></script>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="font/iconfont.css" rel="stylesheet">
+</head>
+<body>
+<div class="searchDiv">
+    <div class="icon"><i class="iconfont icon-fangdajing"></i></div>
+    <input type="text" id="content"  placeholder="请输入" />
+</div>
+<p class="searchMumber">共搜索到<span>1</span>条记录</p>
+<ul class="meetingList" id="meetingList">
+</ul>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user'], function() {
+            var $ = layui.$,
+                layer = layui.layer,
+                setter = layui.setter;
+            var url = setter.baseUrl;
+        $(document).on("input propertychange","#content",function(event){
+            $.ajax({
+                async: false,
+                type: "get",
+                url: url + "/meetingnoticerecord/searchallByRecord",
+                dataType: "json",
+                data: {
+                    "content": event.originalEvent.data
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code === 0) {
+                        var html = [];
+                        msg.data.map(function (x){
+                            if (x.meetingstatus === 0){
+                                var display;
+                                var signup;
+                                if (x.meetingid !=null){
+                                    display = 'display';
+                                    signup = 'none';
+                                }else {
+                                    display = 'none';
+                                    signup = 'display';
+                                }
+                                html.push('<li>\n' +
+                                    '        <h3 class="bt">'+x.mname+'</h3>\n' +
+                                    '        <div class="info">\n' +
+                                    '            <div class="l">\n' +
+                                    '                <p>'+x.content+'</p>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="r">\n' +
+                                    '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="blue">点击报名</a></span>\n' +
+                                    '          <span class="gray" style="display: '+display+'" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '            </div>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="sinfo">\n' +
+                                    '            <span>'+x.notificationunit+'</span>\n' +
+
+                                    '            <span>报名截止时间：'+x.deadlineForRegistrationTime+'</span>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="bjNew"><i class="iconfont icon-biaoqian"></i></div>\n' +
+                                    '    </li>'
+                                )
+                            }else if (x.meetingstatus === 1) {
+                                var display;
+                                var signup = '';
+                                if (x.meetingid !=null){
+                                    display = 'display';
+                                }else {
+                                    display = 'none';
+                                    signup = 'display';
+                                }
+                                html.push('<li>\n' +
+                                    '        <h3 class="bt">'+x.mname+'</h3>\n' +
+                                    '        <div class="info">\n' +
+                                    '            <div class="l">\n' +
+                                    '                <p>'+x.content+'</p>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="r">\n' +
+                                    '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="green">已报名</a></span>\n' +
+                                    '          <span class="gray" style="display: '+display+'" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '            </div>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="sinfo">\n' +
+                                    '            <span>'+x.notificationunit+'</span>\n' +
+                                    '            <span>报名截止时间：'+x.deadlineForRegistrationTime+'</span>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="bjNew"><i class="iconfont icon-biaoqian"></i></div>\n' +
+                                    '    </li>'
+                                )
+                            } else if (x.meetingstatus == 2){
+                                html.push('<li>\n' +
+                                    '        <h3 class="bt">'+x.mname+'</h3>\n' +
+                                    '        <div class="info">\n' +
+                                    '            <div class="l">\n' +
+                                    '                <p>'+x.content+'</p>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="r">\n' +
+                                    '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="green">请假</a></span>\n' +
+                                    '          <span class="gray" style="display: none" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '            </div>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="sinfo">\n' +
+                                    '            <span>'+x.notificationunit+'</span>\n' +
+
+                                    '            <span>报名截止时间：'+x.deadlineForRegistrationTime+'</span>\n' +
+                                    '        </div>\n' +
+                                    '        <div class="bjNew"><i class="iconfont icon-biaoqian"></i></div>\n' +
+                                    '    </li>'
+                                )
+                            }
+                        })
+                        $('#meetingList').html(html.join(""))
+                    }
+                },
+                error: function (msg) {
+
+                }
+
+            })
+        })
+
+
+
+        })
+</script>
+</body>
+</html>

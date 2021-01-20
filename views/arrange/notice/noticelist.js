@@ -118,8 +118,11 @@ layui.config({
                         // 判断下 显示灰色文字 还是 绿色文字
                         // 灰色文字
                         // return "<span>"+data.sendtime+"</span>"
-                        // 绿色文字
-                        return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                        if (data.meetingStartTime == null){
+                            return '未发送'
+                        }else {
+                            return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                        }
                     }
                 }, {
                     title: '状态',
@@ -128,7 +131,7 @@ layui.config({
                     title: '导出',
                     toolbar: '#test-table-export-barDemo',
                 }, {
-                    width: 100,
+                    width: 200,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -222,7 +225,11 @@ layui.config({
                         // 灰色文字
                         // return "<span>"+data.sendtime+"</span>"
                         // 绿色文字
-                        return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                        if (data.meetingStartTime == null){
+                            return '未发送'
+                        }else {
+                            return "<span style='color:#1cf51c'>"+data.meetingStartTime+"</span>"
+                        }
                     }
                 }, {
                     title: '状态',
@@ -231,7 +238,7 @@ layui.config({
                     title: '导出',
                     toolbar: '#test-table-export-barDemo',
                 }, {
-                    width: 100,
+                    width: 200,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -379,6 +386,64 @@ layui.config({
                 content: 'noticemodifyPop.html?id=' + data.id,
                 yes: function (index, layero) {
                     layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;确认修改一个会议通知吗?',{title:'温馨提示'}, function () {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    })
+
+                },
+                success: function (layero, index) {
+                    var body = layui.layer.getChildFrame('body', index);
+                    // 取到弹出层里的元素，并把编辑的内容放进去
+                    body.find("#noticeContent").val(data.noticeContent);
+                    body.find("#noticeTitle").val(data.noticeTitle);
+                    body.find("#sendState").val(data.sendState); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
+            });
+        }else if (obj.event === 'sendmail'){
+            if (data.meetingStartTime != null){
+                return layer.msg("当前会议已发送通知")
+            }
+            layer.confirm('确定要发送会议通知吗？', function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: url + "/meetingnotice/sendNotice",
+                    dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    //成功的回调函数
+                    data: {
+                        "id": data.id
+                    },
+                    success: function (msg) {
+
+                        if (msg.code == '0') {
+                            layer.msg("发送成功");
+                            reloads();
+                        } else {
+                            layer.msg("发送失败");
+
+                        }
+
+                    },
+                    //失败的回调函数
+                    error: function () {
+                        console.log("error")
+                    }
+                })
+                layer.close(index);
+            });
+        } else  if ("bind"){
+            layer.open({
+                type: 2,
+                title: '绑定会议',
+                area: ['50%', '50%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'bindmeeting.html?id=' + data.id,
+                yes: function (index, layero) {
+                    layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;确认绑定会议吗?',{title:'温馨提示'}, function () {
                         var submit = layero.find('iframe').contents().find("#click");
                         submit.click();
                     })
