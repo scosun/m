@@ -35,9 +35,10 @@
 <body>
     <div class="detailsInfo">
         <p class="ts">座位信息</p>
-        <div class="text">
-            xxx同志：您好，参加2020年12月7日（星期一）9:30 在龙奥大厦G0402会议室召开的全市领导干部会议，请的座位在<span class="blue">4</span>排<span
-                class="blue">16</span>号
+        <div id="seatinfo" class="text">
+            xxx同志：您好
+            <!-- ，参加2020年12月7日（星期一）9:30 在龙奥大厦G0402会议室召开的全市领导干部会议，请的座位在<span class="blue">4</span>排<span
+                class="blue">16</span>号 -->
         </div>
         <h3>就座引导</h3>
         <div id="seatsbox" style="position: absolute;width: 93%;height: calc(100% - 210px);" class="rollBox">
@@ -58,11 +59,12 @@
 
             function getUrlParam(name) {
                 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-                var uri = window.location.search;
+                var uri = decodeURI(window.location.search);
                 var r = uri.substr(1).match(reg);  //匹配目标参数
                 if (r != null) return r[2]; return null; //返回参数值
             }
             var meetingid = getUrlParam("meetingid");
+            var name = getUrlParam("name");
 
             $.ajax({
                 async: false,
@@ -79,6 +81,17 @@
                     console.log(obj)
                     if (obj.code === 0) {
                         var datas = obj.data || {};
+                        var templatefilename = datas.templatefilename || "";
+                        var modifierid = datas.modifierid || "";
+
+                        var seatcode = templatefilename.split("-");
+                        var info = name+"同志：您好，参加"+datas.seatList+"在"+datas.name+"召开的的"+datas.meetname+"，您的座位在"+modifierid;
+                        if(seatcode && seatcode.length > 0){
+                            var xc = seatcode[2] || "";
+                            var yc = seatcode[3] || "";
+                            info = info +'<span class="blue">'+xc+'</span>排<span class="blue">'+yc+'</span>号';
+                        }
+                        $("#seatinfo").html(info);
                         // $("#seatsbody").append(datas.templatecode);
                         var html = datas.templatecode;
                         html = html.replace('style="position: fixed;left: 25px;top: 15px;"', 'style="position: fixed;left: 25px;top: 125px;"')
@@ -90,7 +103,7 @@
 
                         $("#seatsbody").html(html);
 
-                        var templatefilename = datas.templatefilename || "";
+                        
                         if(templatefilename){
                             var seatid = $("#" + templatefilename);
                             seatid.css("background","#007AFF");
