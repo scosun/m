@@ -1,25 +1,140 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>全市领导干部会议</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-<meta name="format-detection" content="telephone=no">
-<meta name="format-detection" content="email=no">
-<script type="text/javascript" src="js/pmsp.js"></script>
-<link href="css/base.css" rel="stylesheet" type="text/css" />
-<link href="font/iconfont.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>全市领导干部会议</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script type="text/javascript" src="js/pmsp.js"></script>
+    <link href="css/base.css" rel="stylesheet" type="text/css" />
+    <link href="font/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/seat.css" media="all">
+    <style>
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        .rollBox {
+            /* height: 2rem;
+            line-height: 2rem; */
+            clear: both;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: nowrap;
+            scroll-snap-points-x: repeat(100%);
+            scroll-snap-type: mandatory;
+        }
+    </style>
 </head>
+
 <body>
-<div class="detailsInfo">
-    <p class="ts">座位信息</p>
-    <div class="text">
-         xxx同志：您好，参加2020年12月7日（星期一）9:30 在龙奥大厦G0402会议室召开的全市领导干部会议，请的座位在<span class="blue">4</span>排<span class="blue">16</span>号
+    <div class="detailsInfo">
+        <p class="ts">座位信息</p>
+        <div class="text">
+            xxx同志：您好，参加2020年12月7日（星期一）9:30 在龙奥大厦G0402会议室召开的全市领导干部会议，请的座位在<span class="blue">4</span>排<span
+                class="blue">16</span>号
+        </div>
+        <h3>就座引导</h3>
+        <div id="seatsbox" style="position: absolute;width: 93%;height: calc(100% - 210px);" class="rollBox">
+            <div id="seatsbody" style="zoom: 0.5;"></div>
+        </div>
+        
     </div>
-    <h3>就座引导</h3>
-    <div>加载地图代码</div>
-</div>
+    <script src="../../layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'user'], function () {
+            var $ = layui.$,
+                setter = layui.setter;
+            var url = setter.baseUrl;
+
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var uri = window.location.search;
+                var r = uri.substr(1).match(reg);  //匹配目标参数
+                if (r != null) return r[2]; return null; //返回参数值
+            }
+            var meetingid = getUrlParam("meetingid");
+
+            $.ajax({
+                async: false,
+                type: "get",
+                url: url + "/meetingnotice/findRoomtemplate",
+                dataType: "json",
+                data: {
+                    meetingid:meetingid
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (obj) {
+                    console.log(obj)
+                    if (obj.code === 0) {
+                        var datas = obj.data || {};
+                        // $("#seatsbody").append(datas.templatecode);
+                        var html = datas.templatecode;
+                        html = html.replace('style="position: fixed;left: 25px;top: 15px;"', 'style="position: fixed;left: 25px;top: 125px;"')
+                        html = html.replace('../../../images/leftright-ts.svg', '')
+                        html = html.replace('[#会议名称#]座区图','');
+                        html = html.replace('地点：[#会议地点#]','');
+                        html = html.replace('时间：[#会议时间#]','');
+                        html = html.replace('备注：[#会议备注#]','');
+
+                        $("#seatsbody").html(html);
+
+                        var templatefilename = datas.templatefilename || "";
+                        if(templatefilename){
+                            var seatid = $("#" + templatefilename);
+                            seatid.css("background","#007AFF");
+                            var left = seatid.position().left / 2;
+                            var top = seatid.position().top / 2;
+                            var seatwidth = seatid.width()/2;
+                            
+                            var seatsbox = $("#seatsbox");
+                            var sw = seatsbox.width()/2;
+                            var sh = seatsbox.height()/2;
+                            // console.log(sw,seatwidth,left - sw + seatwidth,top - sh + seatwidth)
+                            seatsbox[0].scrollLeft = (left - sw + seatwidth);
+                            seatsbox[0].scrollTop = (top - sh + seatwidth);
+                        }
+
+                        var meetingname = datas.meetingname || "";
+                        if(meetingname){
+                            try{
+                                meetingname = JSON.parse(meetingname);
+                                meetingname.forEach(function(item){
+                                    if(item.seatid != templatefilename){
+                                        $("#" + item.seatid).css("background","#E6E6E6");
+                                    }
+                                })
+                            }catch(e){
+
+                            }
+                            
+                        }
+                       
+                    }
+                },
+                error: function (msg) {
+                    layer.msg("操作失败，系统错误")
+                }
+
+            });
+
+
+        });
+        function herfUrl(x) {
+
+        }
+    </script>
 </body>
+
 </html>

@@ -11,15 +11,31 @@
 <script type="text/javascript" src="js/pmsp.js"></script>
 <link href="css/base.css" rel="stylesheet" type="text/css" />
 <link href="font/iconfont.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="js/dropload/dropload.css" />
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/dropload/dropload.js"></script>
+<style>
+    input[type="search"]::-webkit-search-cancel-button{
+        display: none;
+        -webkit-appearance: none;
+    }
+</style>
 </head>
 <body>
 <div class="searchDiv">
     <div class="icon"><i class="iconfont icon-fangdajing"></i></div>
-    <input type="text" id="content"  placeholder="请输入" />
+    <!-- <input type="search" id="content"  placeholder="请输入" /> -->
+    <form id="searchForm" action="" class="input-kw-form">
+        <input id="searchInput" type="search" autocomplete="off" name="baike-search" placeholder="请输入关键词" class="input-kw">
+    </form>
 </div>
-<p class="searchMumber">共搜索到<span>1</span>条记录</p>
-<ul class="meetingList" id="meetingList">
-</ul>
+
+<!-- <p class="searchMumber">共搜索到<span>1</span>条记录</p> -->
+<div id="meetingBox" >
+    <ul class="meetingList" id="meetingList">
+    </ul> 
+</div>
+
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
     layui.config({
@@ -27,18 +43,100 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'user'], function() {
-            var $ = layui.$,
-                layer = layui.layer,
-                setter = layui.setter;
-            var url = setter.baseUrl;
-        $(document).on("input propertychange","#content",function(event){
+        var $ = layui.$,
+            layer = layui.layer,
+            setter = layui.setter;
+        var url = setter.baseUrl;
+
+
+        $('#searchForm').on('submit', function(event){
+            //拦截表单默认提交事件
+            if(event){
+                event.preventDefault();
+            }
+            $('#searchInput').blur();
+            //获取input框的值，用ajax提交到后台
+            var content = $('#searchInput').val();
+            getDataList(content);
+        });
+        
+
+        var page = 0;//页码数
+        var dropme = null
+        function dropInit(){
+            // dropload函数接口设置
+            $('#meetingBox').dropload({
+                scrollArea : window,
+                // 下拉刷新模块显示内容
+                domUp : {
+                    domClass   : 'dropload-up',
+                    // 下拉过程显示内容
+                    domRefresh : '<div class="dropload-refresh">↓下拉刷新</div>',
+                    // 下拉到一定程度显示提示内容
+                    domUpdate  : '<div class="dropload-update">↑释放更新</div>',
+                    // 释放后显示内容
+                    domLoad    : '<div class="dropload-load"><span class="loading-dp"></span>数据加载中...</div>'
+                },
+                domDown : {
+                    domClass   : 'dropload-down',
+                    // 滑动到底部显示内容
+                    domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                    // 内容加载过程中显示内容
+                    domLoad    : '<div class="dropload-load"><span class="loading-dp"></span>数据加载中...</div>',
+                    // 没有更多内容-显示提示
+                    domNoData  : '<div class="dropload-noData">已无更多内容</div>'
+                },
+                // 1 . 下拉刷新 回调函数
+                loadUpFn : function(me){
+                    console.log("loadUpFn------");
+                    var content = $('#searchInput').val();
+                    if(content){
+                        page = 1; 
+                        dropme = me;
+                        
+                        me.resetload();
+                        me.unlock();
+                        getDataList(content);
+                    }else{
+                        me.noData();
+                        me.resetload();
+                    }
+                },
+                // 2 . 上拉加载更多 回调函数
+                loadDownFn : function(me){
+                    console.log("loadDownFn-----")
+                    page++; // 每次请求，页码加1
+                    dropme = me;
+                    // me.lock();
+
+                    if(page == 1){
+                        // 显示无数据
+                        me.noData();
+                        me.resetload();
+                    }else{
+                        var content = $('#searchInput').val();
+                        getDataList(content);
+                    }
+                    
+
+                },
+                threshold : 150
+            });
+        } 
+
+        dropInit();
+
+
+        function getDataList(content){
             $.ajax({
                 async: false,
                 type: "get",
                 url: url + "/meetingnoticerecord/searchallByRecord",
                 dataType: "json",
                 data: {
-                    "content": event.originalEvent.data
+                    "content": content,
+                    "page":page,
+                    "limit":10
                 },
                 xhrFields: {
                     withCredentials: true
@@ -46,6 +144,8 @@
                 success: function (msg) {
                     if (msg.code === 0) {
                         var html = [];
+                        var count = msg.count;
+                        var len = msg.data.length;
                         msg.data.map(function (x){
                             if (x.meetingstatus === 0){
                                 var display;
@@ -65,7 +165,7 @@
                                     '            </div>\n' +
                                     '            <div class="r">\n' +
                                     '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="blue">点击报名</a></span>\n' +
-                                    '          <span class="gray" style="display: '+display+'" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'" ><i class="iconfont icon-zuowei1"></i>座区图</a></span>\n'+
                                     '            </div>\n' +
                                     '        </div>\n' +
                                     '        <div class="sinfo">\n' +
@@ -93,7 +193,7 @@
                                     '            </div>\n' +
                                     '            <div class="r">\n' +
                                     '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="green">已报名</a></span>\n' +
-                                    '          <span class="gray" style="display: '+display+'" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'" ><i class="iconfont icon-zuowei1"></i>座区图</a></span>\n'+
                                     '            </div>\n' +
                                     '        </div>\n' +
                                     '        <div class="sinfo">\n' +
@@ -112,7 +212,7 @@
                                     '            </div>\n' +
                                     '            <div class="r">\n' +
                                     '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="green">请假</a></span>\n' +
-                                    '          <span class="gray" style="display: none" ><i class="iconfont icon-zuowei1"></i>座区图</span>\n'+
+                                    '          <span class="gray" style="display: none" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'" ><i class="iconfont icon-zuowei1"></i>座区图</a></span>\n'+
                                     '            </div>\n' +
                                     '        </div>\n' +
                                     '        <div class="sinfo">\n' +
@@ -124,15 +224,38 @@
                                     '    </li>'
                                 )
                             }
-                        })
-                        $('#meetingList').html(html.join(""))
+                        });
+
+                        if(page == 1){
+                            $('#meetingList').html(html.join(""));
+                        }else{
+                            $('#meetingList').append(html.join(""));
+                        }
+                        
+
+                        
+                        //没有下一页
+                        if(len < 10){
+                            dropme.lock();
+                            // 显示无数据
+                            dropme.noData();
+                        }
+
+                        setTimeout(function(){
+                            // 每次数据加载完，必须重置
+                            dropme.resetload();
+                        },500);
                     }
                 },
                 error: function (msg) {
 
                 }
 
-            })
+            });
+        }
+
+        $(document).on("input propertychange","#content",function(event){
+            
         })
 
 
