@@ -2756,7 +2756,11 @@ var __handDrag = null;
 		// var flag = copyText(copyhtml); //传递文本
 		// alert(flag ? "复制成功！" : "复制失败！");
 		var allseats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
-	
+		var seatids = [];
+		allseats.each((function(){
+			seatids.push(this.id);
+		}));
+		sessionStorage.setItem("_seatids",seatids.join(','));
 		sessionStorage.setItem("_seatnum",allseats.length);
 		sessionStorage.setItem("_seatscomplete",copyhtml);
 	}

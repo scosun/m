@@ -306,7 +306,8 @@ layui.config({
 						seatnum = +sessionStorage.getItem("_seatnum") || 0;
 					}
 					
-					
+					var seatlist = sessionStorage.getItem("_seatids") || "";
+
 					$.ajax({
 						url: url+"/roomtemplate/updateRoomtemplate",
 						type: "POST",
@@ -320,7 +321,8 @@ layui.config({
 							"seatrule": body.find('#seatrule').val(),
 							// "templatecode": body.find('#templatecode').val(),
 							"templatecode": templatecode,
-							"seatnum":seatnum
+							"seatnum":seatnum,
+							"seatlist":seatlist
 						},
 						success: function(data) {
 							if (data.code == '0') {
@@ -521,7 +523,7 @@ layui.config({
 						sessionStorage.setItem("_seatscomplete","");
 					}
 					var seatnum = +sessionStorage.getItem("_seatnum") || 0;
-
+					var seatlist = sessionStorage.getItem("_seatids") || "";
 					$.ajax({
 						url: url+"/roomtemplate/addRoomtemplate",
 						type: "POST",
@@ -534,7 +536,8 @@ layui.config({
 							"seatrule": body.find('#seatrule').val(),
 							// "templatecode": body.find('#templatecode').val()
 							"templatecode": templatecode,
-							"seatnum":seatnum
+							"seatnum":seatnum,
+							"seatlist":seatlist,
 						},
 						success: function(data) {
 							if (data.code === 0) {
