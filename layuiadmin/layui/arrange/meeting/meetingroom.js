@@ -429,14 +429,13 @@ layui.config({
 			
 			layer.open({
 				type: 2,
-				title: obj.data.name,
+				title: false,
 				//content: 'meeting_room_zq.html?roomid='+age.id
-				content: 'meeting_room_zq.html?roomid='+age.id
-					,maxmin: true
-					,
+				content: 'meeting_room_zq.html?roomid='+age.id,
+				// maxmin: true,
+				closeBtn:false,
 				area: ['100%', '100%'],
 				skin: 'layer-ext-greytitle',//添加自定义样式
-
 				scrollbar: false,
 				yes: function(index, layero) {
 				},
