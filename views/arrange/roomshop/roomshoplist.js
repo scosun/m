@@ -158,7 +158,7 @@ layui.config({
                             html.push('<div class="img_box"><img src='+url+"/shop"+curr.imageurl+' /></div>');
                             html.push('<h3>'+curr.name+'</h3>');
                             if(isding){}else {
-                                html.push('<p>￥<cite>'+ (curr.price || 0) +'</cite></p>');
+                                html.push('<p style="display: none">￥<cite>'+ (curr.price || 0) +'</cite></p>');
                             }
                             html.push('</a></div></li>');
 

@@ -108,6 +108,8 @@ p span {
 			<textarea name="noticeContent" lay-verify="required" placeholder="请输入内容" id="content" class="layui-textarea"
 			></textarea>
 			<p id="label">已输入<span id="smslength">100</span>个字，约<span>2</span>条短信</p>
+			<a
+					id="person" onclick="test('${接收人}')"><span>${接收人}</span></a>
 		</div>
 	</div>
 
@@ -119,6 +121,14 @@ p span {
 		</div>
 		<div class="layui-input-inline">
 			<input type="text" name="time" class="layui-input" id="times" placeholder="HH:mm:ss" autocomplete="off">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+		<label class="layui-form-label">通知单位</label>
+		<div class="layui-input-block">
+			<input type="text" name="notificationunit" lay-verify="required" placeholder="通知单位" autocomplete="off"
+				   id="notificationunit" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item layui-layout-admin layui-hide">
@@ -193,6 +203,7 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 				noticeContent: data.noticeContent,
 				sendState: data.sendState,
 				deadlineForRegistrationTime: resutdatetime,
+				notificationunit: data.notificationunit
 			},
 			async: false,
 			xhrFields: {
@@ -216,6 +227,17 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 		return false;
 	})
 });
+function test(str) {
+	var tc = document.getElementById("content");
+	var tclen = tc.value.length;
+	tc.focus();
+	if (typeof document.selection != "undefined") {
+		document.selection.createRange().text = str;
+	}
+	else {
+		tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+	}
+}
 </script>
 </body>
 </html>

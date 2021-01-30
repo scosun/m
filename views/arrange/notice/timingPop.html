@@ -53,7 +53,7 @@ p span {
 </head>
 <body>
 <div class="layui-card-body" style="padding: 20px 20px 0 0;">
-<form class="layui-form" action="" lay-filter="component-form-group">
+<form class="layui-form" action="" lay-filter="component-form-group"  autocomplete="off"	>
 
 	<div class="layui-form-item">
 		<!-- <label class="layui-form-label"><span>*</span>预设发送时间</label> -->
@@ -86,84 +86,14 @@ layui.config({
 	setter = layui.setter,
 	laydate = layui.laydate,
 	form = layui.form;
-
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);//匹配目标参数
+		if (r != null) return decodeURI(r[2]); return null; //返回参数值
+	}
 	var url = setter.baseUrl;
 	// var url = "http://127.0.0.1:8083"
 	var uploadfile = null;
-
-	
-
-	$.ajax({
-		async: false,
-		type: "get",
-		url: url + "/meeting/findByMeeting",
-		dataType: "json",
-		xhrFields: {
-			withCredentials: true
-		},
-		//成功的回调函数
-		success: function (msg) {
-			var data = msg;
-			$.each(data.data, function (idx, con) {
-				$("#sms").after("<option value=" + con.id + ">" + con.name +
-					"</option>");
-			})
-			form.render();
-		},
-		//失败的回调函数
-		error: function () {
-			console.log("error")
-		}
-	})
-	$.ajax({
-		async: false,
-		type: "get",
-		url: url + "/smstemplate/findAll?smsTemplateType=0",
-		where: {
-			smsTemplateType: 0
-		},
-		xhrFields: {
-			withCredentials: true
-		},
-
-		//成功的回调函数
-		success: function (msg) {
-			var data = msg;
-			$.each(data.data, function (idx, con) {
-				$("#smss").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
-					"</option>");
-			})
-			form.render();
-		},
-		//失败的回调函数
-		error: function () {
-			console.log("error")
-		}
-	})
-	$.ajax({
-		async: false,
-		type: "get",
-		url: url + "/smstemplate/findByselective?smsTemplateType=1",
-		xhrFields: {
-			withCredentials: true
-		},
-		where: {
-			smsTemplateType: 1
-		},
-		//成功的回调函数
-		success: function (msg) {
-			var data = msg;
-			$.each(data.data, function (idx, con) {
-				$("#bao").after("<option value=" + con.smsTemplateId + ">" + con.smsTemplateName +
-					"</option>");
-			})
-			form.render();
-		},
-		//失败的回调函数
-		error: function () {
-			console.log("error")
-		}
-	})
 	var day2 = new Date();
 	day2.setTime(day2.getTime());
 	var s2 = day2.getFullYear() + "-" + (day2.getMonth() + 1) + "-" + day2.getDate();
@@ -171,6 +101,7 @@ layui.config({
 		elem: '#dates',
 		min: s2,
 		max: '2080-10-14',
+		trigger: 'click',
 		format: 'yyyy年MM月dd日' //可任意组合
 		,
 		theme: 'molv'
@@ -179,6 +110,7 @@ layui.config({
 	laydate.render({
 		elem: '#times',
 		type: 'time',
+		trigger: 'click',
 		format: 'HH:mm:ss',
 		btns: ['clear', 'now', 'confirm'],
 		theme: 'molv'
@@ -186,11 +118,8 @@ layui.config({
 	form.on('submit(addsms)', function (data) {
 		console.log(data)
 		var data = data.field;
-		console.log(data)
-		if (data.meetingid == -1) {
-			return parent.layer.msg("请选择会议")
-		}
-		if(data.time == ''|data.date == ''){
+
+		if(data.time == ''||data.date == ''){
 	return parent.layer.msg("请选择日期时间")
 }
 
@@ -199,15 +128,12 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 		var resutdatetime = resultdate +" "+data.time;
 		console.log($('#smslist').val())
 		$.ajax({
-			url: url + "/smsstatistics/add",
+			url: url + "/meetingnotice/timedtask",
 			type: "post",
 			dataType: "json",
 			data: {
-				meetingid: data.meetingid,
-				title: data.title,
-				noticeid: data.noticeid,
-	applyid: data.applyid,
-	time: resutdatetime,
+				id: getUrlParam("id"),
+				date: resutdatetime,
 			},
 			async: false,
 			xhrFields: {
@@ -215,10 +141,10 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 			},
 			success: function (data) {
 				if (data.code == 0) {
-					parent.layer.msg("添加成功")
+					parent.layer.msg("操作成功")
 					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
 					parent.layer.close(index);
-					parent.reloads();	
+					parent.reloads();
 				}else{
 					parent.layer.msg(data.msg)
 				}

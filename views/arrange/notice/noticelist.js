@@ -131,7 +131,7 @@ layui.config({
                     title: '导出',
                     toolbar: '#test-table-export-barDemo',
                 }, {
-                    width: 200,
+                    width: 300,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -238,7 +238,7 @@ layui.config({
                     title: '导出',
                     toolbar: '#test-table-export-barDemo',
                 }, {
-                    width: 200,
+                    width: 300,
                     title: '操作',
                     toolbar: '#test-table-operate-barDemo',
                 }
@@ -394,9 +394,15 @@ layui.config({
                 success: function (layero, index) {
                     var body = layui.layer.getChildFrame('body', index);
                     // 取到弹出层里的元素，并把编辑的内容放进去
+
+                    var strings = data.deadlineForRegistrationTime.split(" ");
+                    var string =strings[0].replace('-','年').replace('-','月')+"日";
+                    body.find("#dates").val(string);
+                    body.find("#times").val(strings[1]);
                     body.find("#noticeContent").val(data.noticeContent);
                     body.find("#noticeTitle").val(data.noticeTitle);
-                    body.find("#sendState").val(data.sendState); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                    body.find("#noticeTitle").val(data.noticeTitle);
+                    body.find("#notificationunit").val(data.notificationunit); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
         }else if (obj.event === 'sendmail'){
@@ -434,7 +440,35 @@ layui.config({
                 })
                 layer.close(index);
             });
-        } else  if ("bind"){
+        }
+        else if (obj.event === 'timing'){
+            if (data.meetingStartTime != null){
+                return layer.msg("当前会议已发送通知")
+            }
+            layer.open({
+                type: 2,
+                title: '定时发送',
+                area: ['50%', '60%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'timingPop.html?id=' + data.id,
+                yes: function (index, layero) {
+                    layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;确认发送短信吗?',{title:'温馨提示'}, function () {
+                        var submit = layero.find('iframe').contents().find("#click");
+                        submit.click();
+                    })
+
+                },
+                success: function (layero, index) {
+                    var body = layui.layer.getChildFrame('body', index);
+                    // 取到弹出层里的元素，并把编辑的内容放进去
+                    body.find("#noticeContent").val(data.noticeContent);
+                    body.find("#noticeTitle").val(data.noticeTitle);
+                    body.find("#sendState").val(data.sendState); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
+            });
+        }
+        else  if ( obj.event === "bind"){
             layer.open({
                 type: 2,
                 title: '绑定会议',
@@ -458,6 +492,29 @@ layui.config({
                 }
             });
         }
+        else  if (obj.event ==="personlist"){
+            var index =  layer.open({
+                type: 2,
+                title: data.noticeTitle +'的人员列表',
+                area: ['100%', '100%'],
+                // btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'personlList.html?mid=' + data.id,
+                success: function (layero, index) {
+                    // var body = layui.layer.getChildFrame('body', index);
+                    // // 取到弹出层里的元素，并把编辑的内容放进去
+                    // body.find("#noticeContent").val(data.noticeContent);
+                    // body.find("#noticeTitle").val(data.noticeTitle);
+                    // body.find("#sendState").val(data.sendState); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
+            });
+        } else if (obj.event === 'singup'){
+            window.location = url + "/meetingnotice/singupExcel?mid="+data.id;
+        }
+        else if (obj.evenet === 'leave'){
+            window.location = url + "/meetingnotice/leaveExceln?mid="+data.id;
+        }
+        // layer.full(index);
     })
     var $ = layui.$,
         active = {

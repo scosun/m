@@ -34,7 +34,7 @@
             font-size: 20px;
             margin-right: -2px;
         }
-        
+
     </style>
     <style type="text/css">
         header {
@@ -84,7 +84,7 @@
             margin-right: 685px;
             margin-top: 9px;
         }
-        
+
         .dragh3{
             cursor: pointer;
         }
@@ -108,19 +108,19 @@
             top: 40px;
             border:1px solid #ccc;
             background-color: #fff;
-            
+
         }
         .setpop .layui-form-item{
             margin: 10px 0;
-            
+
         }
         .setpop .layui-form-item input{
             vertical-align: middle;
-        } 
+        }
         .setpop .layui-form-item label{
             display: inline-block;
             vertical-align: -2px;
-        } 
+        }
         .settoparr{
             position:absolute;
             top: -10px;
@@ -147,10 +147,10 @@
         <span class="layui-breadcrumb" style="line-height: 3.5rem;">
             <a><cite id="meetingname2" style="padding-left: 15px;">会议室模板名称--获取</cite></a>
             <!-- <a onclick="asd()" href="javascript:;"><cite>刷新</cite></a> -->
-            <div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" onclick="asd()"></i></div>
+            <div class="assistBtn" style="margin-left:10px"><span class="fengeline_hui">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>
         </span>
         <!-- 右侧菜单 -->
-        
+
         <span class="layui-right-nav">
                     <i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
             <!-- <input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/> -->
@@ -158,10 +158,10 @@
         </span>
         <!-- 右侧菜单 end-->
 	</div>
-	
-    <div class="meeting_room_zp_wrap">
+
+    <div class="meeting_room_zp_wrap" style="margin-top:30px">
     </div>
-    <div class="layui-form-item" style="margin-top:50px">
+    <div class="layui-form-item" >
         <div class="layui-input-block">
             <input type="text" name="roomid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input"
                 id="roomid" style="display: none;">
@@ -173,13 +173,14 @@
             base: '../../../layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use(['index', 'user', 'table'], function() {
+        }).use(['index', 'user', 'table','upload'], function() {
             var $ = layui.$,
             form = layui.form,
             element = layui.element,
             table = layui.table,
             setter = layui.setter,
             layer = layui.layer,
+			upload = layui.upload,
             router = layui.router();
             var url = setter.baseUrl;
             var uri = window.location.search;
@@ -188,8 +189,69 @@
             // console.log(roomid)
 
             layer.load(2);
+			/*右侧菜单HOVER显示提示文字*/
+			var subtips;
+			$('.layui-right-nav i').each(function(){
+				var _id = $(this).attr('id');
+				var _data = $(this).attr('data');
+				$("#" + _id).hover(function() {
+					openMsg();
+				}, function() {
+					if(subtips){
+						layer.close(subtips);
+					}
+				});
+				function openMsg() {
+					subtips = layer.tips(_data, '#'+_id,{tips:[3,'#666'],time: 30000});
+				}
+			});
+			upload.render({
+				elem: '#nav-upload',
+				url:  url+"/wordtemplate/uploadWordTemplate",
+				data:{
+					// "meetingid":meetingid,
+					"roomtemplateid":roomid
+				},
+				// auto: false,
+				exts: 'doc|docx',
+				//bindAction: '#btn99',
+				//  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				//     obj.preview(function (index, file, result) {
+				//         // console.log(index); //得到文件索引
+				//         // console.log(file);
+				//         uploadfile = file //得到文件对象
+				//         // console.log(uploadfile)
+				//         // console.log(result); //得到文件base64编码，比如图片
+				//
+				//         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+				//
+				//         //这里还可以做一些 append 文件列表 DOM 的操作
+				//
+				//         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+				//         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+				//     });
+				// },
+				done: function (res) {
+					if (res.code == 200) {
+						parent.layer.msg(res.msg)
+					}
+				}
+			});
+			$('.layui-ds,.layui-right-nav i').on('click', function() {
+				var type = $(this).data('type');
+				active[type] && active[type].call(this,arguments);
+			});
+			var active = {
+				close:function(){
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭
+				},
+				refresh:function (){
+					location.reload();
+				}
 
-            $.ajax({
+			};
+			$.ajax({
                 url: url+"/roomtemplate/findByIdTemplatecode",
                 type: "post",
                 async: true,
@@ -202,6 +264,7 @@
                 success: function(data) {
                     var datas = data.data
                     // console.log(datas)
+					$("#meetingname2").text(datas.name);
                     $("body .meeting_room_zp_wrap").html(datas.templatecode);
                     layer.closeAll();
                 },

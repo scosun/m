@@ -58,16 +58,16 @@
                     <div>
                         <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
                         </div>
-                        <div class="layui-input-inline"
-                             style="margin-bottom:10px;margin-left:10px;width: 25%">
-                            <form class="layui-form" action="">
-                                <select name="interest" lay-skin="select" lay-filter="component-form-select"
-                                        id="select-room">
-                                    <option value="">请选择会议通知</option>
-                                    <option value="" id="select_meets"></option>
-                                </select>
-                            </form>
-                        </div>
+<!--                        <div class="layui-input-inline"-->
+<!--                             style="margin-bottom:10px;margin-left:10px;width: 25%">-->
+<!--                            <form class="layui-form" action="">-->
+<!--                                <select name="interest" lay-skin="select" lay-filter="component-form-select"-->
+<!--                                        id="select-room">-->
+<!--                                    <option value="">请选择会议通知</option>-->
+<!--                                    <option value="" id="select_meets"></option>-->
+<!--                                </select>-->
+<!--                            </form>-->
+<!--                        </div>-->
                         <!-- 右侧筛选条件 -->
                         <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
                             <div class="layui-inline">
@@ -88,7 +88,7 @@
                         <a class="layui-btn layui-btn-xs" lay-event="manualOperation">人工报名</a>
                         {{#  } }}
                         {{#  if($.inArray("upperson", a) != -1){ }}
-                        <a class="layui-btn layui-btn-xs" lay-event="manualOperation">重新发送</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="resend">重发</a>
                         {{#  } }}
                         {{#  if($.inArray("upperson", a) != -1){ }}
                         <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
@@ -160,29 +160,34 @@
                 console.log(error)
             },
         })
-        $.ajax({
-            async: true,
-            type: "get",
-            url: url + "/meetingnotice/meetnoticelist",
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            },
-            //成功的回调函数
-            success: function (msg) {
-                var data = msg;
-                console.log(data)
-                $.each(data.data.reverse(), function (idx, con) {
-                    $("#select_meets").after("<option value=" + con.id + ">" + con.noticeTitle +
-                        "</option>");
-                })
-                form.render();
-            },
-            //失败的回调函数
-            error: function () {
-                console.log("error")
-            }
-        })
+        // $.ajax({
+        //     async: true,
+        //     type: "get",
+        //     url: url + "/meetingnotice/meetnoticelist",
+        //     dataType: "json",
+        //     xhrFields: {
+        //         withCredentials: true
+        //     },
+        //     //成功的回调函数
+        //     success: function (msg) {
+        //         var data = msg;
+        //         console.log(data)
+        //         $.each(data.data.reverse(), function (idx, con) {
+        //             $("#select_meets").after("<option value=" + con.id + ">" + con.noticeTitle +
+        //                 "</option>");
+        //         })
+        //         form.render();
+        //     },
+        //     //失败的回调函数
+        //     error: function () {
+        //         console.log("error")
+        //     }
+        // })
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);//匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }
 
         function isEmptyObject(obj) {
 
@@ -202,7 +207,7 @@
 			exts: 'xls|xlsx',
 			data: {
 				mid: function () {
-					return $('#select-room').val();
+					return getUrlParam("mid");
 				}
 			},
 			//bindAction: '#btn99',
@@ -231,13 +236,8 @@
 
 			}
 		});
-        form.on('select(component-form-select)', function (data) {
 
-            tablereload(data.value)
-            window.indexs = data.value;
-        });
 
-        function tablereload(obj) {
             table.render({
                 elem: '#test-table-operate',
                 // height: 'full-200',
@@ -245,7 +245,7 @@
                 url: url + "/noticePerson/list",
                 method: 'get',
                 where: {
-                    mid: obj
+                    mid: getUrlParam("mid")
                 },
                 xhrFields: {
                     withCredentials: true
@@ -307,7 +307,7 @@
                                 content+="短信通知: 发送成功"
                             }
                             if (data.smsNoticeStatus == 1 ){
-                                content+="短信通知: 已发送"
+                                content+="短信通知: 未发送"
                             }
                             return content;
                         }
@@ -352,7 +352,7 @@
                                 return "<span style='color:red'> 未反馈 </span>"
                             }
                             if (data.meetingstatus === 1){
-                                return "<span style='color:red'>  </span>"
+                                return "<span style='color:red'>&nbsp; </span>"
                             }
                             if (data.meetingstatus === 2){
                                 return "<span style='color:red'>" + data.reasonForLeave + "</span>"
@@ -383,10 +383,160 @@
 
 
             });
-        }
+
 
         window.reloads = function reloads() {
-            tablereload($("#select-room").val())
+            table.render({
+                elem: '#test-table-operate',
+                // height: 'full-200',
+                //数据接口
+                url: url + "/noticePerson/list",
+                method: 'get',
+                where: {
+                    mid: getUrlParam("mid")
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                },
+                cols: [
+                    [ //表头
+                        {
+                            field: 'name',
+                            title: '姓名',
+                            align: 'left',
+                        }, {
+                        field: 'dept',
+                        title: '单位',
+                        align: 'left',
+                    }, {
+                        field: 'duties',
+                        title: '职务',
+                        align: 'left',
+                    }, {
+                        field: 'phone',
+                        title: '手机',
+                        align: 'left',
+                    }, {
+                        field: 'sendtime',
+                        title: '是否通讯录范围',
+                        align: 'left',
+                        templet: function (data) {
+                            // 判断下 显示灰色文字 还是 绿色文字
+                            // 灰色文字
+                            // return "<span>"+data.sendtime+"</span>"
+                            // 绿色文字
+                            if (data.isQzdperson === 0) {
+                                return '是';
+                            }
+                            if (data.isQzdperson === 1) {
+                                return '不是';
+                            }
+                        }
+                    }, {
+                        field: 'scope',
+                        title: '是否收到',
+                        align: 'left',
+                        templet: function (data) {
+                            // 判断下 显示灰色文字 还是 绿色文字
+                            // 灰色文字
+                            // return "<span>"+data.sendtime+"</span>"
+                            // 绿色文字
+                            var content = "";
+                            if (data.dingNoticeStatus == 0 ){
+                                content+="钉钉通知: 发送成功\n"
+                            }
+                            if (data.dingNoticeStatus == 1 ){
+                                content+="钉钉通知: 未发送\n"
+                            }
+                            if (data.smsNoticeStatus == 0 ){
+                                content+="短信通知: 发送成功"
+                            }
+                            if (data.smsNoticeStatus == 1 ){
+                                content+="短信通知: 未发送"
+                            }
+                            return content;
+                        }
+                    }, {
+                        field: 'scope',
+                        title: '最后反馈',
+                        align: 'left',
+                        templet: function (data) {
+                            if (data.sendtime == undefined){
+                                return '未反馈'
+                            }else {
+                                return data.sendtime + "<br />" + data.sendtime
+                            }
+
+                        }
+                    }, {
+                        field: 'sendtime',
+                        title: '最后报名状态',
+                        align: 'left',
+                        templet: function (data) {
+                            if (data.meetingstatus === 0){
+                                return "<span style='color:red'> 未反馈 </span>"
+                            }
+                            if (data.meetingstatus === 1){
+                                return "<span style='color:red'>参会 </span>"
+                            }
+                            if (data.meetingstatus === 2){
+                                return "<span style='color:red'>请假</span>"
+                            }
+                            if (data.meetingstatus === 3){
+                                return "<span style='color:red'>报名截止</span>"
+                            }
+
+                        }
+                    }, {
+                        field: 'sendtime',
+                        title: '请假原因',
+                        align: 'left',
+                        templet: function (data) {
+                            // 判断下 显示灰色文字 还是 绿色文字
+                            // 灰色文字
+                            // return "<span>"+data.sendtime+"</span>"
+                            // 绿色文字
+                            if (data.meetingstatus === 0){
+                                return "<span style='color:red'> 未反馈 </span>"
+                            }
+                            if (data.meetingstatus === 1){
+                                return "<span style='color:red'>&nbsp; </span>"
+                            }
+                            if (data.meetingstatus === 2){
+                                return "<span style='color:red'>" + data.reasonForLeave + "</span>"
+                            }
+                            if (data.meetingstatus === 3){
+                                return "<span style='color:red'>" + 报名截止 + "</span>"
+                            }
+                        }
+                    }, {
+                        width: 300,
+                        title: '操作',
+                        toolbar: '#test-table-operate-barDemo',
+                    }
+                    ]
+                ],
+
+                event: true,
+                page: true,
+                limit: 15,
+                skin: 'line',
+                even: true,
+                limits: [5, 10, 15],
+                done: function (res, curr, count) {
+                    table_data = res.data;
+
+                    layer.closeAll('loading');
+                    arrangeList.length = 0;
+                    // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                    // layer.close(index);    //返回数据关闭loading
+                },
+
+
+            });
         }
 
         window.onkeyup = function (ev) {
@@ -521,8 +671,7 @@
 
                     }
                 });
-            }
-            else if (obj.event === 'resend'){
+            } else if (obj.event === 'resend'){
                 layer.confirm('确定重新发送吗？', function (index) {
                     $.ajax({
                         async: false,
@@ -569,7 +718,7 @@
                         area: ['70%', '75%'],
                         btn: ['确定', '取消'],
                         maxmin: true,
-                        content: 'personnelAddPop.html?notice=' + $('#select-room').val(),
+                        content: 'personnelAddPop.html?notice=' + getUrlParam("mid"),
                         yes: function (index, layero) {
                             // 确认提交的一个提示
                             layer.confirm('　　　　　确认新增一位参会人员？　　　　　', {title: '温馨提示'}, function () {
@@ -647,7 +796,7 @@
                         area: ['70%', '95%'],
                         btn: ['确定', '取消'],
                         maxmin: true,
-                        content: 'addressBookPop.html?notice=' + $('#select-room').val(),
+                        content: 'addressBookPop.html?notice=' + getUrlParam("mid"),
                         yes: function (index, layero) {
                             var iframeWin = window[layero.find('iframe')[0]['name']];
 
@@ -673,7 +822,7 @@
                                         //成功的回调函数
                                         data: {
                                             "userids": arr,
-                                            "mid":$('#select-room').val()
+                                            "mid":getUrlParam("mid")
 
                                         },
                                         success: function (msg) {
@@ -714,7 +863,7 @@
                             withCredentials: true
                         },
                         where: {
-                            "content": $('#demoReload').val()
+                            "content": getUrlParam("mid")
                         },
 
                         method: 'get',

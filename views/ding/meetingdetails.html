@@ -176,7 +176,7 @@
                 // 1 . 下拉刷新 回调函数
                 loadUpFn : function(me){
                     console.log("loadUpFn------");
-                    page = 1; 
+                    page = 1;
                     dropme = me;
                     me.resetload();
                     me.unlock();
@@ -191,10 +191,15 @@
                 },
                 threshold : 150
             });
-        } 
+        }
 
         dropInit();
-
+        function  reload(){
+            page = 1;
+            dropme.resetload();
+            dropme.unlock();
+            getDataList();
+        }
         function getDataList(){
             $.ajax({
                 async: false,
@@ -223,10 +228,14 @@
                             }else {
                                 reasonLeave = data.reasonLeave;
                             }
-                            if (data.meetingStatus === 0){
-                                $("#record").append('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
-                            }
                             if (data.meetingStatus === 1){
+                                if (data.type === 5 ){
+                                    $("#record").append('<li><p>'+data.createtime+'  人工操作</p> <h4 class="blue">确认参会。</h4></li>')
+                                }else {
+                                    $("#record").append('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
+                                }
+                            }
+                            if (data.meetingStatus === 2){
                                 var type = ''
                                 if (data.type === 0){
                                     type = '钉钉'
@@ -237,9 +246,12 @@
                                 if (data.type === 2){
                                     type = phone +'短信'
                                 }
+                                if (data.type === 5){
+                                    type = '人工操作'
+                                }
                                 $("#record").append('<li><p>'+data.createtime+' [通过'+type+'报名]</p><h4 class="red">确认请假，原因：'+reasonLeave+'</h4></li>')
                             }
-                            if (data.meetingStatus === 2){
+                            if (data.meetingStatus === 3){
                                 $("#record").append('<li><p>'+data.createtime+'  [系统通知]</p> <h4 class="blue">报名已截止。</h4></li>')
                             }
                         })
@@ -294,10 +306,12 @@
                         if (msg.code === 0) {
                             layer.msg("操作成功")
                             $("#leave_dialog").addClass("layui-hide")
+                            reload();
                         }
                         if (msg.code === -2) {
                             layer.msg("报名已经截止")
                             $("#leave_dialog").addClass("layui-hide")
+                            reload();
                         }
 
                     },
@@ -340,10 +354,12 @@
                     if (msg.code === 0) {
                         layer.msg("报名成功")
                         $("#signup_ok_dialog").addClass("layui-hide")
+                        reload()
                     }
                     if (msg.code === -2) {
                         layer.msg("报名已经截止")
                         $("#signup_ok_dialog").addClass("layui-hide")
+                        reload()
                     }
                 },
                 error: function (msg) {
@@ -372,10 +388,12 @@
                         if (msg.code === 0) {
                             layer.msg("报名成功")
                             $("#signup_ok_dialog").addClass("layui-hide")
+                            reload()
                         }
                         if (msg.code === -2) {
                             layer.msg("报名已经截止")
                             $("#signup_ok_dialog").addClass("layui-hide")
+                            reload()
                         }
                     },
                     error: function (msg) {

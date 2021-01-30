@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -14,7 +14,6 @@
     <link href="../font/iconfont.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
-
     <link rel="icon" type="image/png" sizes="16x16" href="../../../images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../js/dropload/dropload.css" />
     <script src="../js/jquery-3.1.1.min.js"></script>
@@ -165,7 +164,6 @@
         //
         // })
         // $("#leave").click(function (){
-        //     console.log(666)
         //     $("#leave_dialog").removeClass("layui-hide")
         // })
         // $("#leave_dialog_cancel").click(function (){
@@ -181,7 +179,7 @@
         //             data: {
         //                 "mid": urlParam,
         //                 "meetingstatus": 2,
-        //                 "type": 1,
+        //                 "type": 0,
         //                 "reasonLeave":$("#leave_dialog_content").val()
         //             },
         //             xhrFields: {
@@ -228,7 +226,7 @@
         //         data: {
         //             "mid": urlParam,
         //             "meetingstatus": 1,
-        //             "type": 1
+        //             "type": 0
         //         },
         //         xhrFields: {
         //             withCredentials: true
@@ -258,7 +256,7 @@
         //             dataType: "json",
         //             data: {
         //                 "mid": urlParam,
-        //                 "meetingstatus": 1,
+        //                 "meetingstatus": 0,
         //                 "type": 1,
         //                 "numberPlate": $('#signup_ok_dialog_content').val()
         //             },
@@ -394,7 +392,7 @@
                                     $("#record").append('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
                                 }
                             }
-                            iif (data.meetingStatus === 2){
+                            if (data.meetingStatus === 2){
                                 var type = ''
                                 if (data.type === 0){
                                     type = '钉钉'
@@ -413,6 +411,7 @@
                             if (data.meetingStatus === 3){
                                 $("#record").append('<li><p>'+data.createtime+'  [系统通知]</p> <h4 class="blue">报名已截止。</h4></li>')
                             }
+
                         })
 
                         //没有下一页
@@ -455,7 +454,7 @@
                     data: {
                         "mid": urlParam,
                         "meetingstatus": 2,
-                        "type": 1,
+                        "type": 0,
                         "reasonLeave":$("#leave_dialog_content").val()
                     },
                     xhrFields: {
@@ -504,7 +503,7 @@
                 data: {
                     "mid": urlParam,
                     "meetingstatus": 1,
-                    "type": 1
+                    "type": 0
                 },
                 xhrFields: {
                     withCredentials: true
@@ -537,7 +536,7 @@
                     data: {
                         "mid": urlParam,
                         "meetingstatus": 1,
-                        "type": 1,
+                        "type": 0,
                         "numberPlate": $('#signup_ok_dialog_content').val()
                     },
                     xhrFields: {

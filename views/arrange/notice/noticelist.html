@@ -60,14 +60,16 @@
 					</script>
 					<script type="text/html" id="test-table-state-barDemo">
 						<a lay-event="sendmail">发送</a>&nbsp;|&nbsp;
-						<a lay-event="rulezone">定时</a>&nbsp;|&nbsp;
-						<a lay-event="rulezone">查看</a>
+						<a lay-event="timing">定时</a>&nbsp;
 					</script>
 					<script type="text/html" id="test-table-export-barDemo">
-						<a lay-event="rulezone">参会</a>&nbsp;|&nbsp;
-						<a lay-event="rulezone">请假</a>
+						<a lay-event="singup">参会</a>&nbsp;|&nbsp;
+						<a lay-event="leave">请假</a>
 					</script>
 					<script type="text/html" id="test-table-operate-barDemo">
+						{{#  if($.inArray("upperson", a) != -1){ }}
+						<a class="layui-btn layui-btn-xs" lay-event="personlist">详情</a>
+						{{#  } }}
 						{{#  if($.inArray("upperson", a) != -1){ }}
 						<a class="layui-btn layui-btn-xs" lay-event="bind">绑定</a>
 						{{#  } }}
