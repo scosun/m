@@ -249,10 +249,9 @@
                 },
                 success: function (msg) {
                     if (msg.code === 0) {
-                        if(page == 1){
-                            $('#meetingList').html('');
-                        }
+                        
                         var len = msg.data.length;
+                        var html = [];
                         msg.data.map(function (x){
                             if (x.meetingstatus === 0){
                                 var display;
@@ -264,7 +263,7 @@
                                     display = 'none';
                                     signup = 'display';
                                 }
-                                $('#meetingList').prepend('<li>\n' +
+                                html.push('<li>\n' +
                                     '        <h3 class="bt">'+x.mname+'</h3>\n' +
                                     '        <div class="info">\n' +
                                     '            <div class="l">\n' +
@@ -292,7 +291,7 @@
                                     display = 'none';
                                     signup = 'display';
                                 }
-                                $('#meetingList').prepend('<li>\n' +
+                                html.push('<li>\n' +
                                     '        <h3 class="bt">'+x.mname+'</h3>\n' +
                                     '        <div class="info">\n' +
                                     '            <div class="l">\n' +
@@ -311,7 +310,7 @@
                                     '    </li>'
                                 )
                             } else if (x.meetingstatus == 2){
-                                $('#meetingList').prepend('<li>\n' +
+                                html.push('<li>\n' +
                                     '        <h3 class="bt">'+x.mname+'</h3>\n' +
                                     '        <div class="info">\n' +
                                     '            <div class="l">\n' +
@@ -332,6 +331,12 @@
                                 )
                             }
                         });
+
+                        if(page == 1){
+                            $('#meetingList').html(html.join(''));
+                        }else{
+                            $('#meetingList').append(html.join(''));
+                        }
                         //没有下一页
                         if(len < 10){
                             dropme.lock();

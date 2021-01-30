@@ -26,8 +26,10 @@
     <div class="text" id="content">
     </div>
     <h3>报名记录</h3>
-    <ul id="record">
-    </ul>
+    <div id="dragBox" >
+        <ul id="record">
+        </ul>
+    </div>
 </div>
 <ul class="bottomBtn">
     <li id="leave">请假</li>
@@ -375,11 +377,9 @@
                 },
                 success: function(msg) {
                     if (msg.code === 0) {
-                        if(page == 1){
-                            $('#record').html('');
-                        }
+                        
                         var len = msg.data.length;
-
+                        var html = [];
                         msg.data.map(function (data){
                             var reasonLeave;
                             if (data.reasonLeave == null){
@@ -389,12 +389,12 @@
                             }
                             if (data.meetingStatus === 1){
                                 if (data.type === 5 ){
-                                    $("#record").append('<li><p>'+data.createtime+'  人工操作</p> <h4 class="blue">确认参会。</h4></li>')
+                                    html.push('<li><p>'+data.createtime+'  人工操作</p> <h4 class="blue">确认参会。</h4></li>')
                                 }else {
-                                    $("#record").append('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
+                                    html.push('<li> <p>'+data.createtime+'</p> <h4 class=green>确认参会。</h4> </li>')
                                 }
                             }
-                            iif (data.meetingStatus === 2){
+                            if (data.meetingStatus === 2){
                                 var type = ''
                                 if (data.type === 0){
                                     type = '钉钉'
@@ -403,17 +403,23 @@
                                     type = '钉钉待办窗口'
                                 }
                                 if (data.type === 2){
-                                    type = phone +'短信'
+                                    type = data.phone +'短信'
                                 }
                                 if (data.type === 5){
                                     type = '人工操作'
                                 }
-                                $("#record").append('<li><p>'+data.createtime+' [通过'+type+'报名]</p><h4 class="red">确认请假，原因：'+reasonLeave+'</h4></li>')
+                                html.push('<li><p>'+data.createtime+' [通过'+type+'报名]</p><h4 class="red">确认请假，原因：'+reasonLeave+'</h4></li>')
                             }
                             if (data.meetingStatus === 3){
-                                $("#record").append('<li><p>'+data.createtime+'  [系统通知]</p> <h4 class="blue">报名已截止。</h4></li>')
+                                html.push('li><p>'+data.createtime+'  [系统通知]</p> <h4 class="blue">报名已截止。</h4></li>')
                             }
                         })
+
+                        if(page == 1){
+                            $('#record').html(html.join(""));
+                        }else{
+                            $('#record').append(html.join(""));
+                        }
 
                         //没有下一页
                         if(len < 10){
