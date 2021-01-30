@@ -189,10 +189,11 @@
 
                             <dd data-name="grid"><a lay-href="arrange/seatproduct/seatproductlists.html">产品列表</a></dd>
                             <dd data-name="seatdevicefirstlist"><a lay-href="arrange/seatproduct/seatdevicefirstlist.html">设备列表</a></dd>
+							<dd data-name="seatdevicefirstlist"><a lay-href="arrange/seatdeviceinfo/seatdeviceinfolist.html">设备三元组信息</a></dd>
                             <!--<dd data-name="seattemplatelist"><a lay-href="arrange/seattemplate/seattemplatelist.html">桌牌模版</a></dd>-->
                             <dd data-name="seatfontlist"><a lay-href="arrange/seattemplate/seatfontlist.html">桌牌字体</a></dd>
                             <dd data-name="roomseatlist"><a lay-href="arrange/roomseat/roomseatlist.html">设备绑定</a></dd>
-                            <dd data-name="controlbindlist"><a lay-href="arrange/controlseat/controlbindlist.html">基站批量绑定电子桌牌</a></dd>
+                            <dd data-name="controlbindlist"><a lay-href="arrange/controlseat/controlbindlist.html">基站绑定座位</a></dd>
                             <dd data-name="controlseatlist"><a lay-href="arrange/controlseat/controlseatlist.html">群控管理</a></dd>
 
                             <!--                                <dd data-name="grid"><a lay-href="arrange/meetings/meetings_list.html">列表</a></dd>-->
@@ -261,12 +262,12 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item ">
+                    <li data-name="component" class="layui-nav-item " id="notice">
                         <a href="javascript:;" lay-tips="编排规则" lay-direction="2">
                             <i class="layui-icon iconfont icon-bianpaiguize"></i>
                             <cite>会议通知</cite>
                         </a>
-                        <dl class="layui-nav-child">
+                        <dl class="layui-nav-child" >
                             <dd id="meetingnotice"><a lay-href="arrange/notice/noticelist.html">会议通知</a></dd>
                             <dd id="meetingnoticeperson"><a lay-href="arrange/notice/personnelList.html">会议通知人员</a></dd>
                         </dl>
@@ -351,7 +352,7 @@
 
         <!-- 页面标签 -->
         <!-- 20203.31 去掉-->
-        <div class="layadmin-pagetabs" id="LAY_app_tabs" style="display:none">
+        <div class="layadmin-pagetabs" id="LAY_app_tabs" style="display:none" >
             <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
             <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
             <div class="layui-icon layadmin-tabs-control layui-icon-down">
@@ -441,6 +442,10 @@
                     if ($.inArray("user", data) == -1 && $.inArray("role", data) == -1) {
                         $('#avirGroup').addClass('layui-hide');
                     }
+                    if ($.inArray("qzdnotice", data) === -1) {
+                        $('#notice').addClass('layui-hide');
+                    }
+
 
 
                 } else {

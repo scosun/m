@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>设备三元组信息列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+  <script src="../../../js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+  <link rel="stylesheet" type="text/css" href="../../../layuiadmin/modules/dropdown/dropdown.css"/>
+  <script src="../../../js/scosun.js"></script>
+  <style type="text/css">
+    .layui-btn {background-color: #666;}
+    .layui-btn-danger {background-color: #FF5722;}
+    .layui-laypage .layui-laypage-curr .layui-laypage-em {background-color: #666;}
+    .w60{
+      width: 60px;
+    }
+    .w40{
+      width: 40px;
+    }
+    .textC{
+      text-align: center;
+    }
+    .layui-btn-sign-red,.layui-btn-sign-green {
+      height: 20px;
+      line-height: 20px;
+      padding: 0 4px;
+      font-size: 12px;
+      background-color: #fff;
+      border: 1px solid #e6e6e6;
+    }
+    .layui-btn-sign-red{color:#ff0000;border-color:#ff0000}
+    .layui-btn-sign-green{color:#008908;border-color:#008908}
+    .layui-btn-sign-red:hover{color:#fff;border-color:#ff0000;background-color: #ff0000;}
+    .layui-btn-sign-green:hover{color:#fff;border-color:#008908;background-color: #008908;}
+    .cursorD{cursor: default;}
+    .layui-btn-group .layui-btn:only-child {
+      border-radius:2px;
+    }
+    .layui-btn+.layui-btn {
+      margin-left: 0;
+    }
+    .dropdown-menu-nav.dropdown-bottom-right {
+      padding-left:10px;
+      padding-right:10px;
+    }
+    .dropdown-menu-nav.dropdown-top-right {
+      padding-left:10px;
+      padding-right:10px;
+    }
+    .layui-btn-primary {
+      border: 1px solid #ccc;
+      display: inline-block;
+      border-radius: 2px;
+    }
+    .layui-btn-sm {
+      height: 22px;
+      line-height: 22px;
+    }
+    .layui-btn-sm i {
+      display: inline-block;
+      vertical-align: middle;
+      color: #aaa;
+    }
+    .layui-btn-primary:hover {
+      border-color: #ccc;
+      color: #333;
+    }
+    .btnsearch {
+      background: #666 url(../../../images/btnsearch.png) no-repeat center center;
+      background-size: 1.2rem 1.2rem;
+      text-indent: -9999px;
+    }
+    /* 修改全屏弹框标题背景为原来灰色 在弹框的父页面加 部分弹框为灰色背景的，弹框设置中添加自定义CLASS skin: 'layer-ext-greytitle'*/
+			.layer-ext-greytitle .layui-layer-title {
+				background-color: #f8f8f8!important;
+			}
+  </style>
+
+</head>
+<body>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>组件</cite></a>
+    <a><cite>数据表格</cite></a>
+    <a><cite>数据操作</cite></a>
+  </div>
+</div>
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <div>
+            <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;" id="group">
+              <!-- // 20.04.06 dh
+                  <button class='layui-btn layui-ds' data-type='add' id='addmeeting'>新增</button>
+              -->
+              <!-- // 20.04.06 dh 修改为以下-->
+              <button class="gradient-block-diagonal layui-ds" data-type="add" id='addmeeting'>新建三元组信息</button>
+				<a class="layui-btn-a-grey layui-ds" href="javascript:;" data-type="getCheckData" id="importb">导入</a>
+            </div>
+			
+            <!-- 右侧筛选条件 -->
+            <div class="test-table-reload-btn" style="float:right;margin-bottom: 10px;">
+              <div class="layui-inline">
+                <input class="layui-input" name="id" placeholder="请输入关键字" id="demoReload"
+                       autocomplete="off">
+              </div>
+              <button class="layui-btn layui-ds btnsearch" data-type="search" id="search">搜索</button>
+            </div>
+            <!-- 右侧筛选条件 end-->
+          </div>
+          <table id="test-table-operate" lay-filter="test-table-operate"></table>
+          <script type="text/html" id="test-table-operate-barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script >
+  layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index', //主入口模块
+    dropdown: '/dropdown/dropdown'
+  }).use(['index', 'table', 'jquery','dropdown','upload'], function () {
+    var table = layui.table,
+            setter = layui.setter,
+            $ = layui.jquery,
+			form = layui.form,
+            dropdown = 'dropdown',
+			upload = layui.upload;
+    // dropdown = layui.dropdown;
+    var url = setter.baseUrl;
+    // var url = "http://127.0.0.1:8083";
+    var devices = {};
+    var deviceList = [];
+	
+	table.render({
+		  elem: '#test-table-operate',
+		  method: 'get',
+		  xhrFields: {
+		    withCredentials: true
+		  },
+		  url: url + "/deviceGroup/findDeviceGroupList", //数据接口
+		  page: {
+		    layout: ['prev', 'page', 'next', 'count', 'skip']
+		  },
+		  cols: [
+		    [ //表头
+		      {
+		        type: 'checkbox',
+		        fixed: 'left'
+		      },
+		      {
+		        field: 'id',
+		        title: 'ID',
+		        width: '5%',
+		        //align: 'center',
+		        unresize: 'false',
+		      },
+		      {
+		        field: 'version',
+		        title: 'Version',
+				width: '5%',
+		        align: 'left',
+		      },
+		      {
+		        field: 'contractType',
+		        title: 'ContractType',
+				width: '10%',
+		        align: 'left',
+		      },
+		  			  {
+		  			    field: 'devEUI',
+		  			    title: 'DevEUI',
+						width: '15%',
+		  			    align: 'left',
+		  			  },
+		  			  {
+		  			    field: 'pincode',
+		  			    title: 'PINCode',
+						width: '10%',
+		  			    align: 'left',
+		  			  },
+		  			  {
+		  			    field: 'appKey',
+		  			    title: 'AppKey',
+						width: '21%',
+		  			    align: 'left',
+		  			  },
+		  			  {
+		  			    field: 'genAppKey',
+		  			    title: 'GenAppKey',
+						width: '21%',
+		  			    align: 'left',
+		  			  },
+		      {
+		        title: '操作',
+		        align: 'left',
+		        width: '10%',
+		        toolbar: '#test-table-operate-barDemo'
+		      }
+		    ]
+		  ],
+		  event: true,
+		  page: true,
+		  limit: 15,
+		  skin: 'line',
+		  even: true,
+		  limits: [5, 10, 15],
+		  done: function (res, curr, count) {
+		    table_data = res.data;
+		    layer.closeAll('loading');
+		    deviceList.length = 0;
+		  },
+		});
+		
+		
+		upload.render({
+		    elem: '#importb'
+		    , url: url+'/deviceGroup/excelInPinCode',
+		    // auto: false,
+		    exts:'xls|xlsx',
+		    //bindAction: '#btn99',
+		    //  choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+		    //     obj.preview(function (index, file, result) {
+		    //         // console.log(index); //得到文件索引
+		    //         // console.log(file);
+		    //         uploadfile = file //得到文件对象
+		    //         // console.log(uploadfile)
+		    //         // console.log(result); //得到文件base64编码，比如图片
+		    //
+		    //         //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+		    //
+		    //         //这里还可以做一些 append 文件列表 DOM 的操作
+		    //
+		    //         //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+		    //         //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+		    //     });
+		    // },
+		    done: function (res) {
+		        reloads();
+		    }
+		});
+		
+	window.reloads = function(){
+		table.render({
+			  elem: '#test-table-operate',
+			  method: 'get',
+			  xhrFields: {
+			    withCredentials: true
+			  },
+			  url: url + "/deviceGroup/findDeviceGroupList", //数据接口
+			  page: {
+			    layout: ['prev', 'page', 'next', 'count', 'skip']
+			  },
+			  cols: [
+			    [ //表头
+			      {
+			        type: 'checkbox',
+			        fixed: 'left'
+			      },
+			      {
+			        field: 'id',
+			        title: 'ID',
+			        width: '5%',
+			        //align: 'center',
+			        unresize: 'false',
+			      },
+			      {
+			        field: 'version',
+			        title: 'Version',
+			  				width: '5%',
+			        align: 'left',
+			      },
+			      {
+			        field: 'contractType',
+			        title: 'ContractType',
+			  				width: '10%',
+			        align: 'left',
+			      },
+			  			  {
+			  			    field: 'devEUI',
+			  			    title: 'DevEUI',
+			  						width: '15%',
+			  			    align: 'left',
+			  			  },
+			  			  {
+			  			    field: 'pincode',
+			  			    title: 'PINCode',
+			  						width: '10%',
+			  			    align: 'left',
+			  			  },
+			  			  {
+			  			    field: 'appKey',
+			  			    title: 'AppKey',
+			  						width: '21%',
+			  			    align: 'left',
+			  			  },
+			  			  {
+			  			    field: 'genAppKey',
+			  			    title: 'GenAppKey',
+			  						width: '21%',
+			  			    align: 'left',
+			  			  },
+			      {
+			        title: '操作',
+			        align: 'left',
+			        width: '10%',
+			        toolbar: '#test-table-operate-barDemo'
+			      }
+			    ]
+			  ],
+			  event: true,
+			  page: true,
+			  limit: 15,
+			  skin: 'line',
+			  even: true,
+			  limits: [5, 10, 15],
+			  done: function (res, curr, count) {
+			    table_data = res.data;
+			    layer.closeAll('loading');
+			    deviceList.length = 0;
+			  },
+			});
+	}
+		
+    //监听表格复选框选择
+    table.on('checkbox(test-table-operate)', function (obj) {
+      // console.log(obj.checked); //当前是否选中状态
+      // // console.log(obj.data); //选中行的相关数据
+      // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+      // // console.log(table.checkStatus('test-table-operate').data); // 获取表格中选中行的数据
+      if (obj.checked && obj.type == 'one') {
+        var devi = {};
+        devi = obj.data.id;
+        deviceList.push(devi)
+      }
+      if (!obj.checked && obj.type == 'one') {
+        var index = deviceList.indexOf(obj.data.id);
+        if (index > -1) {
+          deviceList.splice(index, 1);
+        }
+      }
+      if (!obj.checked && obj.type == 'all') {
+        deviceList.length = 0;
+
+      }
+      if (obj.checked && obj.type == 'all') {
+        $.each(table.checkStatus('test-table-operate').data, function (idx, con) {
+          var devi = {};
+          devi = con.id;
+
+          deviceList.push(devi)
+        });
+        deviceList = Array.from(new Set(deviceList))
+      }
+
+    });
+
+    //监听工具条
+    table.on('tool(test-table-operate)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'edit') {
+        layer.open({
+          type: 2,
+          //title: '收藏管理 (考生姓名：张无忌)',
+          title: '修改三元组信息',
+          maxmin: true,
+          shadeClose: false, //弹出框之外的地方是否可以点击
+          area: ['55%', '65%'],
+          btn: ['确定', '取消'],
+          closeBtn: 1,
+          //offset: '-43px',
+          //  content: $('#show-view'),
+          content: 'seatdeviceinfoupdate.html?id=' + obj.data.id,
+          success: function (layero, index) {
+          },
+          yes: function (index, layero) {
+            var submit = layero.find('iframe').contents().find("#click");
+            submit.click();
+          }
+
+        });
+      } else if (obj.event === 'del') {
+        layer.confirm('确认删除吗？', function (index) {
+          $.ajax({
+            async: false,
+            type: "post",
+            url: url + "/deviceGroup/delete",
+            datatype: 'json',
+            data: {
+              id: obj.data.id,
+            },
+            xhrFields: {
+              withCredentials: true
+            },
+            //成功的回调函数
+            success: function (msg) {
+              if (msg.code == 0) {
+                layer.msg(msg.msg)
+                // var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                // layer.close(index);
+				reloads()
+              } else {
+                layer.msg(msg.msg)
+              }
+            },
+            error: function (error) {
+              console.log(error)
+            },
+          })
+          layer.close(index);
+        });
+
+      }
+    });
+    var $ = layui.$,
+
+            active = {
+              //全选
+              getCheckData: function () { //获取选中数据
+                // var checkStatus = table.checkStatus('test-table-operate'),
+                //     data = checkStatus.data;
+                // layer.alert(JSON.stringify(data));
+                // console.log(checkStatus.data)
+                var cb = $(".layui-form-checkbox");
+                // $('.layui-cell-checkbox').click();
+
+                $(".layui-form-checkbox").each(function () {
+                  // if (flag) {
+
+                  $(this).click();
+
+                  // } else {
+                  //     $(this).removeClass('layui-form-checked')
+                  // }
+                })
+
+
+              },
+              add: function () {
+                layer.open({
+                  type: 2,
+                  //title: '收藏管理 (考生姓名：张无忌)',
+                  title: '新建三元组信息',
+                  // maxmin: true,
+                  shadeClose: false, //弹出框之外的地方是否可以点击
+                  area: ['55%', '65%'],
+                  btn: ['确定', '取消'],
+                  closeBtn: 1,
+                  move:false,
+                  skin: 'layer-ext-greytitle',//添加自定义样式
+                  //offset: '-43px',
+                  content: 'seatdeviceinfoadd.html',
+                  success: function (layero, index) {
+                    // var body = layui.layer.getChildFrame('body', index);
+                    // var roomid;
+                    // // 取到弹出层里的元素，并把编辑的内容放进去
+                    // body.find("#ruleid").val(data.id);
+                    // body.find("#roomid").val(data.roomid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                  },
+                  yes: function (index, layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                  }
+                });
+              },
+              search: function () {
+                var search = undefined
+                $('#demoReload').val() === ''?search = undefined:search = $('#demoReload').val()
+                table.render({
+                  elem: '#test-table-operate',
+                  // height: 'full-200',
+                  //url: url + "/meeting/findAllBylayui", //数据接口
+                  method: 'post',
+                  where: {
+                    search: search
+                  },
+                  xhrFields: {
+                    withCredentials: true
+                  },
+                  url: url + "/deviceGroup/seachSelect", //数据接口
+                  page: {
+                    layout: ['prev', 'page', 'next', 'count', 'skip']
+                  },
+				  cols: [
+				    [ //表头
+				      {
+				        type: 'checkbox',
+				        fixed: 'left'
+				      },
+				      {
+				        field: 'id',
+				        title: 'ID',
+				        width: '5%',
+				        //align: 'center',
+				        unresize: 'false',
+				      },
+				      {
+				        field: 'version',
+				        title: 'Version',
+				  				width: '5%',
+				        align: 'left',
+				      },
+				      {
+				        field: 'contractType',
+				        title: 'ContractType',
+				  				width: '10%',
+				        align: 'left',
+				      },
+				  			  {
+				  			    field: 'devEUI',
+				  			    title: 'DevEUI',
+				  						width: '15%',
+				  			    align: 'left',
+				  			  },
+				  			  {
+				  			    field: 'pincode',
+				  			    title: 'PINCode',
+				  						width: '10%',
+				  			    align: 'left',
+				  			  },
+				  			  {
+				  			    field: 'appKey',
+				  			    title: 'AppKey',
+				  						width: '21%',
+				  			    align: 'left',
+				  			  },
+				  			  {
+				  			    field: 'genAppKey',
+				  			    title: 'GenAppKey',
+				  						width: '21%',
+				  			    align: 'left',
+				  			  },
+				      {
+				        title: '操作',
+				        align: 'left',
+				        width: '10%',
+				        toolbar: '#test-table-operate-barDemo'
+				      }
+				    ]
+				  ],
+                  event: true,
+                  page: true,
+                  limit: 15,
+                  skin: 'line',
+                  even: true,
+                  limits: [5, 10, 15],
+                  done: function (res, curr, count) {
+                    table_data = res.data;
+                    layer.closeAll('loading');
+                    deviceList.length = 0;
+                  },
+                });
+              }
+            };
+
+    $('.layui-ds').on('click', function () {
+      var type = $(this).data('type');
+      active[type] && active[type].call(this);
+    });
+
+  });
+</script>
+</body>
+</html>

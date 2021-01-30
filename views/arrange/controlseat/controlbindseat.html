@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>绑定平台</title>
+		<title>绑定设置</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport"
@@ -44,6 +44,12 @@
 		                </select>
 		            </div>
 		        </div>
+				<div class="layui-form-item">
+				      <div class="layui-input-block" style="width: 120px;float: left;">
+				        <input type="text" value="" placeholder="请选择颜色" class="layui-input" id="test-form-input">
+				      </div>
+					 <div id="test-form" style="margin-left: 5px;"></div>
+				    </div>
 				<div class="layui-form-item layui-layout-admin layui-hide">
 				    <div class="layui-input-block">
 				        <div style="position: absolute;right: 0px;bottom: 0px;">
@@ -60,11 +66,12 @@
 		        base: '../../../layuiadmin/' //静态资源所在路径
 		    }).extend({
 		        index: 'lib/index' //主入口模块
-		    }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+		    }).use(['index', 'form', 'laydate', 'element', 'upload','colorpicker'], function () {
 		        var $ = layui.$,
 		            setter = layui.setter,
 					layer = layui.layer,
-		            form = layui.form;
+		            form = layui.form,
+					colorpicker = layui.colorpicker;
 		        /*var productKey = getUrlParam("productKey");
 		        function getUrlParam(name) {
 		            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -97,7 +104,7 @@
 		            }
 		        })
 				
-				var id = getUrlParam("id");
+				//var id = getUrlParam("id");
 				function getUrlParam(name) {
 				    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 				    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -105,74 +112,61 @@
 				}
 				
 				var deviceInfo = null;
-				//渲染下拉框的ajax
-				$.ajax({
-				    async: true,
-				    type: "get",
-				    url: url + "/tablesigndevice/selectByPrimaryKey",
-				    dataType: "json",
-				    xhrFields: {
-				        withCredentials: true
-				    },
-					data: {
-						id: id
-					},
-				    //成功的回调函数
-				    success: function (msg) {
-				        var data = msg;
-						if(data.code == 0){
-							deviceInfo = data.data;
-						}
-				    },
-				    //失败的回调函数
-				    error: function () {
-				        console.log("error")
-				    }
-				})
+				
+				//颜色选择器常规使用
+				//表单赋值
+				colorpicker.render({
+				   elem: '#test-form'
+				   ,color: '#1c97f5'
+				   ,done: function(color){
+				     $('#test-form-input').val(color);
+				  }
+				});
+			
 				
 		        form.on('submit(addsms)', function (data) {
-					console.log(deviceInfo.deviceName)
-					if(deviceInfo == null){
-						return layer.msg("没有获取到相应的数据！")
-					}
-		            var data = data.field;
-					if(data.interest == null || data.interest == ''){
-						return layer.msg("请选择一个产品！")
-					}
-		            $.ajax({
-		                url: url + "/tablesigndevice/oneBindToAliyun",
-		                type: "post",
-		                dataType: "json",
-		                data: {
-							productKey: data.interest,
-							nickname: deviceInfo.nickname,
-							deviceName: deviceInfo.deviceName,
-							pinCode: deviceInfo.pinCode,
-							devEui: deviceInfo.devEui
-		                },
-		                async: false,
-		                xhrFields: {
-		                    withCredentials: true
-		                },
-		                success: function (data) {
-							console.log(data.code)
-		                    if (data.code == 0) {
-		                        parent.layer.msg("绑定成功")
-		                        var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-		                        parent.layer.close(index);
-		                        parent.ajaxs(window.indexs);
-		                    }else{
-		                        parent.layer.msg(data.msg)
-		                    }
-		                },
-		                error: function (error) {
-		                    console.log(error)
-		                }
+					return true;
+					// console.log(deviceInfo.deviceName)
+					// if(deviceInfo == null){
+					// 	return layer.msg("没有获取到相应的数据！")
+					// }
+		   //          var data = data.field;
+					// if(data.interest == null || data.interest == ''){
+					// 	return layer.msg("请选择一个产品！")
+					// }
+		   //          $.ajax({
+		   //              url: url + "/productSeatrule/insertSelective",
+		   //              type: "post",
+		   //              dataType: "json",
+		   //              data: {
+					// 		bgcolor: data.bgcolor,
+					// 		productkey: data.productkey,
+					// 		rulezone: data.rulezone
+		   //              },
+		   //              async: false,
+		   //              xhrFields: {
+		   //                  withCredentials: true
+		   //              },
+		   //              success: function (data) {
+					// 		console.log(data.code)
+		   //                  if (data.code == 0) {
+		   //                      parent.layer.msg("绑定成功")
+		   //                      var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+		   //                      parent.layer.close(index);
+		   //                      parent.ajaxs(window.indexs);
+		   //                  }else{
+		   //                      parent.layer.msg(data.msg)
+		   //                  }
+		   //              },
+		   //              error: function (error) {
+		   //                  console.log(error)
+		   //              }
+		   // )}
 		
-		            })
-		            return false;
+		           
 		        })
 		    });
 		</script>
 	</body>
 </html>
+
