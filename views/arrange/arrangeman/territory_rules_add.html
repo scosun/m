@@ -89,6 +89,7 @@
 				</a> -->
 			</span>
 			<span class="layui-right-nav">
+				<i id="clickrule" data-type="clickrule" class="layui-ds" data="点选排序"><img src="../../../images/toolkit/the_radio.svg"></i>
 				<i id="drag-container" data-type="dragcontainer" class="layui-ds" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
                 <i id="nav-Setuptheg" data-type="add" class="layui-ds" data="规则设置"><img src="../../../images/set_rules.svg"></i>
                 <i id="nav-electiong" data-type="reseled" class="layui-ds" data="重选座区"><img src="../../../images/re-election.svg"></i>
@@ -123,7 +124,7 @@
 	</body>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 <!--	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">-->
-	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+	<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		var tablezonetable;
 		layui.config({
@@ -189,7 +190,7 @@
 			                        field: 'bgcolor',
 			                        title: '规则对应底色',
 			                        align: 'left',
-			                        width: '11%',
+			                        width: '15%',
 			                        event: 'seeDetail',
 			                        style: 'cursor: pointer;',
 			                        templet: function(data) {
@@ -199,7 +200,7 @@
 			                    }, {
 			                        field: 'seatsnum',
 			                        title: '座位数量',
-			                        width: '15%',
+			                        width: '10%',
 			                        align: "center"
 			
 			                    }, {
@@ -212,7 +213,7 @@
 			                    {
 			                        field: 'ordernum',
 			                        title: '规则排序',
-			                        width: '18%',
+			                        width: '10%',
 			                        align: "center",
 			                        sort: true,
 			                        templet: function(data) {
@@ -226,19 +227,19 @@
 			                        field: 'isincrement',
 			                        title: '递增补规则',
 			
-			                        width: '18%',
+			                        width: '15%',
 			                        align: "center"
 			
 			
 			                    }, {
 			                        field: 'modifytime',
 			                        title: '更新时间',
-			                        width: '12%',
+			                        width: '15%',
 			                        sort: true,
 			                        align: "center"
 			
 			                    }, {
-			                        width: '15%',
+			                        width: '20%',
 			                        align: 'center',
 			                        flxed: 'right',
 			                        title: '操作',
@@ -315,7 +316,7 @@
 				                        field: 'bgcolor',
 				                        title: '规则对应底色',
 				                        align: 'left',
-				                        width: '11%',
+				                        width: '15%',
 				                        event: 'seeDetail',
 				                        style: 'cursor: pointer;',
 				                        templet: function(data) {
@@ -325,7 +326,7 @@
 				                    }, {
 				                        field: 'seatsnum',
 				                        title: '座位数量',
-				                        width: '15%',
+				                        width: '10%',
 				                        align: "center"
 				
 				                    }, {
@@ -338,7 +339,7 @@
 				                    {
 				                        field: 'ordernum',
 				                        title: '规则排序',
-				                        width: '18%',
+				                        width: '10%',
 				                        align: "center",
 				                        sort: true,
 				                        templet: function(data) {
@@ -352,19 +353,19 @@
 				                        field: 'isincrement',
 				                        title: '递增补规则',
 				
-				                        width: '18%',
+				                        width: '15%',
 				                        align: "center"
 				
 				
 				                    }, {
 				                        field: 'modifytime',
 				                        title: '更新时间',
-				                        width: '12%',
+				                        width: '15%',
 				                        sort: true,
 				                        align: "center"
 				
 				                    }, {
-				                        width: '15%',
+				                        width: '20%',
 				                        align: 'center',
 				                        flxed: 'right',
 				                        title: '操作',
@@ -464,6 +465,18 @@
 			var __handDrag = null;
 
 			var active = {
+				clickrule:function(){
+					__isClickRule = !__isClickRule;
+					if(__isClickRule){
+						//激活单选
+						seatMapsControl.bindClickRule();
+					}else{
+						//恢复多选
+						seatMapsControl.clearClickRulePoint();
+						seatMapsControl.selectSeats();
+					}
+					
+				},
 				dragcontainer:function(){
 					if(__handDrag){
 						__handDrag = null;
@@ -472,7 +485,13 @@
 						$('#seatcontainer').unbind('mousemove');
 						// $('.toollist_li').removeClass("on");
 						// $("#nav-selection").addClass("on");
-						seatMapsControl.selectSeats();
+
+						if(__isClickRule){
+							//如果是单选规则，还是激活单选规则
+							seatMapsControl.bindClickRule();
+						}else{
+							seatMapsControl.selectSeats();
+						}
 					}else{
 						seatMapsControl.removeContainerEvent();
 						__handDrag = new SeatMapsDrag();
@@ -497,11 +516,22 @@
 							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
 							rulename = rulename[1] || "";
 
-							if(ruleselect==''||ruleselect==null)
-                            {return layer.msg("请选择规则")}
-                            if(isincrement==''||isincrement==null)
-                            {return layer.msg("请选择规则")}
-							setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+							console.log("ruleselect----",ruleselect)
+
+							if(ruleselect == '' || ruleselect == null){
+								return layer.msg("请选择编排规则");
+							}
+
+							if(ruleselect == "R98"){
+								var seatids = seatMapsControl.getClickRulePoint();
+								console.log(seatids)
+							}else{
+								if(isincrement == '' || isincrement == null){
+									return layer.msg("请选择增补规则");
+								}
+								setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+							}
+							
 							layer.close(index);
 						},
 						success: function(layero, index) {
@@ -901,7 +931,9 @@
 						}
 						//这个变量是为了，重新框选的时候，清空已有的选择记录
 						showRuleIds.push(item);
-					})
+					});
+
+					seatMapsControl.clearClickRulePoint();
 				}
 			}
 			function changeSeatRuleArea(id, rulezone, ruleid, isincrement) {

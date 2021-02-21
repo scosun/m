@@ -23,9 +23,77 @@
 		//取消选中ids
 		sckids:[],
 
+		//点选规则ids
+		clickRuleIds:[],
+
 		init:function(){
 
 		}
+	}
+
+
+	//获取点选数据
+	seatMapsControl.prototype.getClickRulePoint = function(){
+		return this.clickRuleIds;
+	}
+
+	//清空点选数据
+	seatMapsControl.prototype.clearClickRulePoint = function(){
+		this.clickRuleIds.forEach(function(item,index){
+			$("#" + item).text(item.split("-")[3]);
+			$("#" + item).removeClass("seled");
+		});
+		this.clickRuleIds = [];
+	}
+
+	//点选设置排序规则
+	seatMapsControl.prototype.bindClickRule = function(){
+		this.removeContainerEvent();
+		
+		//点选规则，先清除原有全部已选座区
+		var seleds = $(".seled");
+		for(var i = 0,len = seleds.length; i < len; i++){
+			var id = seleds[i].id;
+			if(this.clickRuleIds.indexOf(id) == -1){
+				$(seleds[i]).removeClass("seled");
+			}
+		}
+
+		this.selList.bind("click",function(evt){
+			var ele = evt.currentTarget;
+			var sel = $(ele);
+			if(this.isLocked(ele)){
+				return;
+			}
+
+			var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R98","R99"];
+			for(var i = 0,len = rclass.length; i < len; i++){
+				if(sel.hasClass(rclass[i])){
+					return;
+				}
+			}
+
+			if (!sel.hasClass("seled")) {
+				sel.addClass("seled");
+
+				this.clickRuleIds.push(ele.id);
+
+			} else {
+				sel.removeClass("seled");
+				
+				var ii = this.clickRuleIds.indexOf(ele.id);
+				if(ii > -1){
+					this.clickRuleIds.splice(ii,1);
+					sel.text(ele.id.split("-")[3]);
+				}
+			}
+
+			this.clickRuleIds.forEach(function(item,index){
+				$("#" + item).text(index+1);
+			});
+
+			console.log(this.clickRuleIds)
+		}.bind(this));
 	}
 	
 	seatMapsControl.prototype.isRow = function(seledgroup,d,h){
@@ -556,7 +624,7 @@
 					// if(selList[i].className.indexOf("reseled") == -1){
 					if(!sel.hasClass("seled")){
 						//首先判断当选座位没有绑定规则
-						var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R99"];
+						var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R98","R99"];
 						var isr = false;
 						for(var r = 0; r < rclass.length; r++){
 							if(this.selList[i].className.indexOf(rclass[r]) != -1){
@@ -594,7 +662,7 @@
 								this.sckids.push(sid);
 								sel.removeClass("seled");
 								// sel.css("background","");
-								sel.removeClass("reseled R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R99");
+								sel.removeClass("reseled R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R98 R99");
 							}
 						}
 					}
