@@ -16,7 +16,7 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">换绑手机</div>
+                        <div class="layui-card-header">换绑手机  <i class="layui-icon"  lay-href="systemindex/systemindex.html">&#x1006;</i></div>
                         <div class="layui-card-body" pad15>
 
                             <div class="layui-form" lay-filter="">
@@ -81,7 +81,7 @@
                     success: function(msg) {
                         if (msg.code == 0) {
                             console.log(msg.data)
-                            
+
                             $('#LAY-user-login-cellphone').val(msg.data.username)
                         } else {
                             layer.msg(msg.msg, {
@@ -91,7 +91,7 @@
                             }, function() {
                                    parent.location.href = "../../user/login.html"
                                 })
-                
+
                         }
                     },
                     error: function(msg) {
@@ -100,10 +100,10 @@
                             offset: "15px",
                             icon: 2
                         });
-                
+
                     }
-                
-                })   
+
+                })
                 form.on('submit(setmyinfo)', function(obj) {
 
                     $.ajax({
@@ -114,7 +114,7 @@
                         data: {
                             "vocode": obj.field.vercode,
                             "newphone": obj.field.newphone,
-                           
+
                         },
                         xhrFields: {
                             withCredentials: true

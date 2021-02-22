@@ -7,9 +7,9 @@
 
 /*index.html*/
 
-.layadmin-side-shrink .layui-layout-admin .layui-logo {
+/* .layadmin-side-shrink .layui-layout-admin .layui-logo {
     background-image: url(../layuiadmin/style/res/logo.svg);
-}
+} */
 
 .layui-nav-tree .layui-nav-bar {
     background-color: #ffce00;
@@ -320,6 +320,5 @@ html {
     height: 30px;
     display: block;
 }
-
 
 

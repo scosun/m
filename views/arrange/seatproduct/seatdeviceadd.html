@@ -43,13 +43,13 @@
                        id="productName" class="layui-input" disabled="disabled">
             </div>
         </div>-->
-        <div class="layui-form-item">
+        <!-- <div class="layui-form-item">
             <label class="layui-form-label"><span>*</span>设备名称</label>
             <div class="layui-input-block">
                 <input type="text" name="devicename" lay-verify="required" placeholder="请输入设备名称" autocomplete="off"
                        id="devicename" class="layui-input">
             </div>
-        </div>
+        </div> -->
         <div class="layui-form-item">
             <label class="layui-form-label">备注名称</label>
             <div class="layui-input-block">
@@ -57,18 +57,18 @@
                        id="nickname" class="layui-input">
             </div>
         </div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label"><span>*</span>devEui</label>
+		    <div class="layui-input-block">
+		        <input type="text" name="deveui" lay-verify="required" placeholder="请输入devEui" autocomplete="off"
+		               id="deveui" class="layui-input">
+		    </div>
+		</div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>pinCode</label>
+            <label class="layui-form-label">pinCode</label>
             <div class="layui-input-block">
-                <input type="text" name="pincode" lay-verify="required" placeholder="请输入pinCode" autocomplete="off"
+                <input type="text" name="pincode" placeholder="请输入pinCode" autocomplete="off"
                        id="pincode" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label"><span>*</span>devEui</label>
-            <div class="layui-input-block">
-                <input type="text" name="deveui" lay-verify="required" placeholder="请输入devEui" autocomplete="off"
-                       id="deveui" class="layui-input">
             </div>
         </div>
 		<div class="layui-form-item">
@@ -157,11 +157,11 @@
         form.on('submit(addsms)', function (data) {
             var data = data.field;
             //data.iotid=== '' ? data.iotid = undefined:data.iotid = data.iotid
-            data.devicename=== '' ? data.devicename = undefined:data.devicename = data.devicename;
+            // data.devicename=== '' ? data.devicename = undefined:data.devicename = data.devicename;
             data.nickname=== '' ? data.nickname = undefined:data.nickname = data.nickname
             data.pincode=== '' ? data.pincode = undefined:data.pincode = data.pincode
             data.deveui=== '' ? data.deveui = undefined:data.deveui = data.deveui
-            console.log(data)
+            //console.log(data)
             $.ajax({
                 url: url + "/tablesigndevice/insert",
                 type: "post",
@@ -169,7 +169,7 @@
                 data: {
                     //productKey:productKey,
                     //iotId:data.iotid,
-                    deviceName:data.devicename,
+                    //deviceName:data.devicename,
                     pinCode:data.pincode,
                     devEui:data.deveui,
 					communication:data.communication,

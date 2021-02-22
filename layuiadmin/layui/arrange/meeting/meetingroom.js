@@ -306,7 +306,8 @@ layui.config({
 						seatnum = +sessionStorage.getItem("_seatnum") || 0;
 					}
 					
-					
+					var seatlist = sessionStorage.getItem("_seatids") || "";
+
 					$.ajax({
 						url: url+"/roomtemplate/updateRoomtemplate",
 						type: "POST",
@@ -320,7 +321,8 @@ layui.config({
 							"seatrule": body.find('#seatrule').val(),
 							// "templatecode": body.find('#templatecode').val(),
 							"templatecode": templatecode,
-							"seatnum":seatnum
+							"seatnum":seatnum,
+							"seatlist":seatlist
 						},
 						success: function(data) {
 							if (data.code == '0') {
@@ -427,14 +429,13 @@ layui.config({
 			
 			layer.open({
 				type: 2,
-				title: obj.data.name,
+				title: false,
 				//content: 'meeting_room_zq.html?roomid='+age.id
-				content: 'meeting_room_zq.html?roomid='+age.id
-					,maxmin: true
-					,
+				content: 'meeting_room_zq.html?roomid='+age.id,
+				// maxmin: true,
+				closeBtn:false,
 				area: ['100%', '100%'],
 				skin: 'layer-ext-greytitle',//添加自定义样式
-
 				scrollbar: false,
 				yes: function(index, layero) {
 				},
@@ -521,7 +522,7 @@ layui.config({
 						sessionStorage.setItem("_seatscomplete","");
 					}
 					var seatnum = +sessionStorage.getItem("_seatnum") || 0;
-
+					var seatlist = sessionStorage.getItem("_seatids") || "";
 					$.ajax({
 						url: url+"/roomtemplate/addRoomtemplate",
 						type: "POST",
@@ -534,7 +535,8 @@ layui.config({
 							"seatrule": body.find('#seatrule').val(),
 							// "templatecode": body.find('#templatecode').val()
 							"templatecode": templatecode,
-							"seatnum":seatnum
+							"seatnum":seatnum,
+							"seatlist":seatlist,
 						},
 						success: function(data) {
 							if (data.code === 0) {

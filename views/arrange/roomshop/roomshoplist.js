@@ -73,6 +73,27 @@ layui.config({
     //
     //     }
     // });
+    var isding = false;
+    $.ajax({
+        async: false,
+        type: "get",
+        url: url + "/ui/getUsername",
+        datatype: 'json',
+        xhrFields: {
+            withCredentials: true
+        },
+        //成功的回调函数
+        success: function (msg) {
+            console.log(msg.code)
+            if(msg.code===0){
+                isding = true;
+            }else{
+
+            }
+        },
+        error: function (error) {
+        },
+    })
 
     window.pages={
         page: 1,
@@ -136,7 +157,9 @@ layui.config({
                             html.push('<a href="javascript:;" class="x-admin-backlog-body">');
                             html.push('<div class="img_box"><img src='+url+"/shop"+curr.imageurl+' /></div>');
                             html.push('<h3>'+curr.name+'</h3>');
-                            html.push('<p>￥<cite>'+ (curr.price || 0) +'</cite></p>');
+                            if(isding){}else {
+                                html.push('<p style="display: none">￥<cite>'+ (curr.price || 0) +'</cite></p>');
+                            }
                             html.push('</a></div></li>');
 
                             $("#shop").append(html.join(''));
@@ -200,7 +223,9 @@ layui.config({
                         html.push('<a href="javascript:;" class="x-admin-backlog-body">');
                         html.push('<div class="img_box"><img src='+url+"/shop"+curr.imageurl+' /></div>');
                         html.push('<h3>'+curr.name+'</h3>');
-                        html.push('<p>￥<cite>'+ (curr.price || 0) +'</cite></p>');
+                        if(isding){}else {
+                            html.push('<p>￥<cite>'+ (curr.price || 0) +'</cite></p>');
+                        }
                         html.push('</a></div></li>');
 
                         $("#shop").append(html.join(''));

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+<style type="text/css">
+.layui-form-label {
+	width: 100px;
+}
+.layui-input-block {
+	margin-left: 130px;
+}
+.layui-form-label span {
+	color: #f00;
+	font-size: 14px;
+	margin-right: 5px;
+}
+.layui-input-block span,
+p span {
+	color: #f00;
+	font-size: 14px;
+	margin: 0 5px;
+}
+.floatR{
+	display: inline-block;
+	margin-left:10px;
+	vertical-align: middle;
+}
+.floatR span{
+	color: #eee;
+	margin:0 5px
+}
+.red{
+	color: #f00;
+}
+.red:hover{
+	color: #f00;
+	text-decoration: underline;
+}
+.green{
+	color:#1cf51c
+}
+.green:hover{
+	color:#1cf51c;
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+<form class="layui-form" action="" lay-filter="component-form-group">
+	<div class="layui-form-item">
+		<!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+		<label class="layui-form-label">通知标题</label>
+		<div class="layui-input-block">
+			<input type="text" name="noticeTitle" lay-verify="required" placeholder="模版名称" autocomplete="off"
+				id="noticeTitle" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<!-- <label class="layui-form-label"><span>*</span>通知方式</label> -->
+		<label class="layui-form-label">通知方式</label>
+		<div class="layui-input-block">
+			<select name="sendState" lay-skin="select" lay-filter="component-form-select" id="sendState">
+				<option value="">请选择</option>
+				<option value="1">钉钉通知</option>
+				<option value="2">短信通知</option>
+				<option value="3">钉钉短信通知</option>
+			</select>
+		</div>
+	</div>
+<!--	<div class="layui-form-item">-->
+<!--		<label class="layui-form-label">通知范围</label>-->
+<!--		<div class="layui-input-block">-->
+<!--			<input type="radio" name="sex" value="从通讯录选择" title="从通讯录选择" checked="">-->
+<!--			<input type="radio" name="sex" value="从Excel模版导入" title="从Excel模版导入">-->
+<!--		</div>-->
+<!--		<div class="layui-input-block">-->
+<!--			<button type="button" class="layui-btn layui-btn-sm layui-btn-normal">小型按钮</button>-->
+<!--			共选择 19 人 -->
+<!--			<div class="floatR">-->
+<!--				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="layui-input-block">-->
+<!--			<div class="layui-upload-drag" id="test10">-->
+<!--				<i class="layui-icon"></i>-->
+<!--				<p>点击上传，或将文件拖拽到此处</p>-->
+<!--				<div class="layui-hide" id="uploadDemoView">-->
+<!--					<hr>-->
+<!--					<img src="" alt="上传成功后渲染" style="max-width: 196px">-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="floatR">-->
+<!--				<a class="green" href="#">导入详情</a><span>|</span><a href="#" class="red">刷新</a>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">通知内容</label>
+		<div class="layui-input-block">
+			<textarea name="noticeContent" lay-verify="required" placeholder="请输入内容" id="noticeContent" class="layui-textarea"
+			></textarea>
+			<p id="label">已输入<span id="smslength">100</span>个字，约<span>2</span>条短信</p>
+			<a
+					id="person" onclick="test('${接收人}')"><span>${接收人}</span></a>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<!-- <label class="layui-form-label"><span>*</span>报名截止时间</label> -->
+		<label class="layui-form-label">报名截止时间</label>
+		<div class="layui-input-inline">
+			<input type="text" name="date" class="layui-input" id="dates" placeholder="yyyy-MM-dd" autocomplete="off">
+		</div>
+		<div class="layui-input-inline">
+			<input type="text" name="time" class="layui-input" id="times" placeholder="HH:mm:ss" autocomplete="off">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+		<label class="layui-form-label">通知单位</label>
+		<div class="layui-input-block">
+			<input type="text" name="notificationunit" lay-verify="required" placeholder="通知单位" autocomplete="off"
+				   id="notificationunit" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item layui-layout-admin layui-hide">
+		<div class="layui-input-block">
+			<div style="position: absolute;right: 0px;bottom: 0px;">
+				<button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</div>
+</form>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+layui.config({
+	base: '../../../layuiadmin/' //静态资源所在路径
+}).extend({
+	index: 'lib/index' //主入口模块
+}).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+	var $ = layui.$,
+	setter = layui.setter,
+	laydate = layui.laydate,
+	form = layui.form;
+	upload = layui.upload;
+
+	var url = setter.baseUrl;
+	// var url = "http://127.0.0.1:8083"
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);//匹配目标参数
+		if (r != null) return decodeURI(r[2]); return null; //返回参数值
+	}
+	var id = getUrlParam("id");
+	//拖拽上传
+	var day2 = new Date();
+	day2.setTime(day2.getTime());
+	var s2 = day2.getFullYear() + "-" + (day2.getMonth() + 1) + "-" + day2.getDate();
+	var ins22 = laydate.render({
+		elem: '#dates',
+		min: s2,
+		max: '2080-10-14',
+		format: 'yyyy年MM月dd日' //可任意组合
+		,
+		theme: 'molv'
+		,trigger: 'click'
+	});
+
+	laydate.render({
+		elem: '#times',
+		type: 'time',
+		format: 'HH:mm:ss',
+		btns: ['clear', 'now', 'confirm'],
+		theme: 'molv'
+		,trigger: 'click'
+	})
+	form.on('submit(addsms)', function (data) {
+		console.log(data)
+		var data = data.field;
+		console.log(data)
+		if (data.meetingid == -1) {
+			return parent.layer.msg("请选择会议")
+		}
+		if(data.time == ''|data.date == ''){
+	return parent.layer.msg("请选择日期时间")
+}
+
+var date =  data.date;
+var resultdate = date.replace("年","-").replace("月","-").substring(0,date.length-1)
+		var resutdatetime = resultdate +" "+data.time;
+		console.log($('#smslist').val())
+		$.ajax({
+			url: url + "/meetingnotice/modify",
+			type: "post",
+			dataType: "json",
+			data: {
+				id: id,
+				noticeTitle: data.noticeTitle,
+				noticeContent: data.noticeContent,
+				sendState: data.sendState,
+				deadlineForRegistrationTime: resutdatetime,
+				notificationunit: data.notificationunit
+			},
+			async: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			success: function (data) {
+				if (data.code == 0) {
+					parent.layer.msg("修改成功")
+					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+					parent.layer.close(index);
+					parent.reloads();
+				}else{
+					parent.layer.msg(data.msg)
+				}
+			},
+			error: function (error) {
+				console.log(error)
+			}
+
+		})
+		return false;
+	})
+});
+function test(str) {
+	var tc = document.getElementById("content");
+	var tclen = tc.value.length;
+	tc.focus();
+	if (typeof document.selection != "undefined") {
+		document.selection.createRange().text = str;
+	}
+	else {
+		tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+	}
+}
+</script>
+</body>
+</html>

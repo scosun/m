@@ -1,0 +1,101 @@
+/*隐藏浏览器滚动条*/
+::-webkit-scrollbar {display:none;width: 0px;}
+	
+	
+.reseled {
+	border: 1px solid #073dec !important;
+}
+
+
+/* .seatdiv{
+	width:40px;
+	height:40px;
+	text-align:center;
+	line-height:40px;
+	font-size:12px;
+	border:1px solid #ccc;
+	position: absolute;
+} */
+.seatdiv{    
+    display: flex;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+}
+.seled{border:1px solid red  !important;background-color:#D6DFF7;}
+.onlynum{
+	background-color:#fff;
+}
+.aisleseats{
+	border:1px dashed #ccc;
+}
+.rownumseats{
+	border:0px dashed #ccc;
+	color:#ff0000;
+}
+.deleteseats{
+	border:1px dashed #ccc;
+	opacity: 0.5;
+}
+
+.clear{ clear:both} 
+
+.dragcontainer{
+	position:absolute;
+	width:0px;height:0px;
+	margin:0px;padding:0px;
+	left:0px;top:0px;
+	cursor: all-scroll;
+	border:1px dashed #0099FF;
+	/* background-color:#C3D5ED; */
+	z-index:1;
+	opacity:0.6;
+	font-size: 12px;
+	display:none;
+}
+
+.seatcontainer{
+	position: relative;
+	user-select: none;
+	width: 100%;
+	height: 600px;
+
+	/* background: aliceblue; */
+}
+
+.dragbg{
+	background-color: #efe92a4a !important;
+}
+.locked{
+	border: 1px solid #0000ff;
+}
+
+.colDiv {
+	position:absolute;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	font-size: 12px;
+	color: red;
+}
+
+
+.R1{background-color:#FFC0CB !important;}
+.R2{background-color:#6495ED !important;}
+.R3{background-color:#7FFFAA !important;}
+.R4{background-color:#F4A460 !important;}
+.R5{background-color:#F0E68C !important;}
+.R6{background-color:#D2B48C !important;}
+.R7{background-color:#FA8072 !important;}
+.R8{background-color:#00FFFF !important;}
+.R9{background-color:#8A2BE2 !important;}
+.R10{background-color:#FF4500 !important;}
+.R99{
+	background-color:rgb(241, 226, 92)
+}

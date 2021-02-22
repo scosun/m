@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>泉政钉·智慧会务</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<script type="text/javascript" src="js/pmsp.js"></script>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="font/iconfont.css" rel="stylesheet">
+</head>
+<body>
+<ul class="chooseList">
+    <li>
+        <div id="notshow">
+            <i class="iconfont icon-wochuangjiandehuiyi"></i>
+
+        </div>
+        <p>需参加的会议</p>
+    </li>
+    <li id="mymeet">
+        <div>
+            <i class="iconfont icon-wocanjiadehuiyi"></i>
+            <!-- <span>2</span> -->
+        </div>
+        <p>我创建的会议</p>
+    </li>
+</ul>
+<script src="./js/jquery-3.1.1.min.js" ></script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user'], function() {
+        var $ = layui.$,
+            setter = layui.setter;
+        var url = setter.baseUrl;
+        $.ajax({
+            async: true,
+            type: "get",
+            url: url+"/islogin",
+            dataType: "json",
+
+            xhrFields: {
+                withCredentials: true
+            },
+
+            success: function(msg) {
+                if (msg.code == 0) {
+
+                }else {
+                    login()
+                }
+            },
+            error: function(msg) {
+
+
+            }
+
+        })
+        function login(){
+            $.ajax({
+                async: false,
+                type: "post",
+                url: url + "/loginApp",
+                dataType: "json",
+                data: {
+                    "username":"13698626066",
+                    "password":"scosun"
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code === 0) {
+                        layer.msg("登录成功")
+
+                    }
+                },
+                error: function (msg) {
+                    layer.msg("操作失败，系统错误")
+                }
+
+            })
+        }
+
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/meetingnoticerecord/notshow",
+            dataType: "json",
+            data: {
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                if (msg.code === 0) {
+                    if (msg.data !== 0){
+                        $('#notshow').append('<span>'+msg.data+'</span>')
+                    }
+
+                }
+            },
+            error: function (msg) {
+                layer.msg("操作失败，系统错误")
+            }
+
+        })
+    })
+    $('#notshow').click(()=>{
+        location.href = './needmeeting.html'
+    })
+    $('#mymeet').click(()=>{
+        location.href = './mycreatemeet.html'
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video, input, select { margin: 0; padding: 0; border: 0; box-sizing: border-box; font-family:arial }
+html { font-size:.28rem; }/*14rem*/
+body { font-family: "Microsoft Yahei", "Hiragino Sans GB", arial; background-color: #F9F8F8; font-size: 1rem; -webkit-text-size-adjust: none; color:#333; background-color:#f7f7f7 }
+
+.clear { height: 0rem; line-height: 0rem; font-size: 0; clear: both; }
+.clearfix:after { content: "."; display: block; *display: inline;*zoom: 1;height: 0; clear: both; visibility: hidden; }
+*+html .clearfix { overflow: hidden; }
+* html .clearfix { height: 1%; }
+ul, ol { list-style: none }
+a { text-decoration: none; color:#333 }
+ul,ol {
+	list-style:none
+}
+
+
+/* det-sharepop */
+.pop-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 2000;
+}
+.circleExitpop {
+        position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-top: -270px;
+    margin-left: -260px;
+    width: 520px;
+    height: 350px;
+    background: #FFFFFF;
+    box-shadow: 0 0 6px 0 rgba(185,182,182,0.3);
+    border-radius: 4px;
+    z-index: 20;
+    font-weight: bold;
+}
+.det-sharepop-bt {
+        height: 45px;
+        text-align: center;
+        line-height: 45px;
+        font-size: 18px;
+        color: #333333;
+        border-bottom: 1px solid #F6F3F3;
+        font-weight: bold;
+}
+.circleExitpop .det-sharepop-bt {
+        text-align: left;
+        padding-left: 6px;
+}
+.det-sharepop-bt .rbtn {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 40px;
+        width: 40px;
+        background: url(../images/guanbi.png) no-repeat center;
+        background-size: 20px 20px;
+}
+.popcontent-text2 {
+        font-family: PingFang SC;
+        color: #20222A;
+        padding: 10px;
+}
+.popcontent-details{
+        font-size:16px;
+        font-family:PingFang SC;
+        color:#20222A;
+        display:-webkit-box;
+        display:-ms-flexbox;
+        display:flex;
+        align-items:center;
+}
+.popcontent-details-a img{
+        width: 120px;
+        height: 70px;
+        margin-right: 10px;
+}
+.popcontent-details-b{
+        -webkit-box-flex:3;
+        -ms-flex:3;
+        flex:3;
+        line-height: 26px;
+        font-weight: normal;
+}
+.popcontent-details-c {
+        -webkit-box-flex:2;
+        -ms-flex:2;
+        flex:2;
+        line-height: 26px;
+        font-weight: normal;
+}
+.popcontent-details-list{
+        font-weight: normal;
+        font-size: 14px;
+        font-family: PingFang SC;
+        color: #20222A;
+        overflow: auto;
+        /* height: 135px; */
+        margin-top: 4px;
+}
+.popcontent-details-list li{
+        float: left;
+        width: 50%;
+}
+.popcontent-details-list li .wDIV{
+        border-bottom: 1px solid #CCC;
+        padding-bottom: 4px;
+        padding-top: 4px;
+        display:-webkit-box;
+        display:-ms-flexbox;
+        display:flex;
+        align-items:center;
+        margin-right: 6px;
+}
+.popcontent-details-list li .a{
+        -webkit-box-flex:3;
+        -ms-flex:3;
+        flex:3;
+        line-height: 20px;
+}
+.popcontent-details-list li .a span{
+        color: rgb(0,255,0);
+}
+.popcontent-details-list li .a .r{
+        color: #ff0000;
+}
+.popcontent-details-list li .b{
+        width: 45px;
+        margin-right: 6px;
+}
+.popcontent-btn {
+        display: block;
+        height: 20px;
+        line-height: 20px;
+        border: 1px solid #2C7EE2;
+        border-radius: 1px;
+        font-size: 5px;
+        font-family: PingFang SC;
+        color: #2C7EE2;
+        text-align: center;
+        box-sizing: content-box;
+        padding: 1px 0;
+        width: 45px;
+}

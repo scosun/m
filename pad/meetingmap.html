@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8">
+    <title>龙居里® Meeting++</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel='icon' type='image/png' sizes='16x16' href='images/favicon.ico'>
+    <!-- <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all"> -->
+    <!-- <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/> -->
+    <!-- <link rel="stylesheet" href="../../../layuiadmin/font/iconfont.css"> -->
+    <!-- <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all"> -->
+    <link rel="stylesheet" href="css/index.css" media="all">
+    <link rel="stylesheet" href="css/seat.css" media="all">
+    <!-- <link rel="stylesheet" href="rule_zq.css" /> -->
+    
+    <style type="text/css">
+        /* 3: 准备会议发送成功；-3: 准备会议失败； */
+        .sm3{
+            background-color: #ffcbcc;
+        }
+        .sm33{
+            background-color: #d7ffca;
+        }
+
+        /* 4: 暂停会议成功；-4：暂停会议失败； */
+        .sm4{
+            background-color: #d6d6d6;
+        }
+        .sm44{
+            background-color: #9affea;
+        }
+
+        /* 7: 重置桌牌成功；-7：重置桌牌失败； */
+        .sm77{
+            background-color: #f9ffbb;
+        }
+
+        .sm2{
+            background-color: #e7fffa;
+        }
+        .sm22{
+            background-color: #a3ffec;
+        }
+    </style>
+</head>
+<body style="margin: 0px;">
+
+    <!-- <div id="dragseatId" style="font-size:12px;z-index:9;position: absolute;left: 105px;top: 20px;width: 40px;height: 40px;background: red;">105,20</div>
+    
+    <div id="dragcontainerId" class="dragcontainer" style="box-sizing:border-box !important;">105,20</div>
+     -->
+     <!-- 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌 -->
+    <button onclick="changeSeatStatus(0);" style="z-index: 99;position: absolute; top:20px;left: 160px;">会议准备</button>
+    <button onclick="changeSeatStatus(1);" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
+    <button onclick="changeSeatStatus(2);" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
+    <button onclick="changeSeatStatus(3);" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
+    <button onclick="changeSeatStatus(4);" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
+    <button onclick="changeSeatStatus(5);" style="z-index: 99;position: absolute; top:20px;left: 560px;">重启会议</button>
+    <button onclick="changeSeatStatus(6);" style="z-index: 99;position: absolute; top:20px;left: 640px;">设备重置</button>
+
+    <button onclick="addSeat();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button>
+    <button onclick="editSeat();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
+    <button onclick="exchangeSeats();" style="z-index: 99;position: absolute; top:50px;left: 260px;">互换</button>
+    <button onclick="deleteSeats();" style="z-index: 99;position: absolute; top:50px;left: 310px;">删除</button>
+    <button onclick="showSeat();" style="z-index: 99;position: absolute; top:50px;left: 360px;">查看</button>
+    
+
+
+    <div id="seatsbody" style="position: absolute;"></div>
+
+
+    <!--弹框-->
+    <div id="seatInfo" class="pop-mask" style="display: none;">
+        <div class="circleExitpop">
+            <div class="det-sharepop-bt">
+                <div class="ltext">
+                    座位S-1-11-2绑定的电子桌牌
+                </div>
+                <div class="rbtn"></div>
+            </div>
+            <div class="popcontent-text2">
+                <div class="popcontent-details">
+                    <div class="popcontent-details-a">
+                        <img src="images/listimg.jpg" alt="">
+                    </div>
+                    <div class="popcontent-details-b">
+                        <p>型号：MTG Plus (LoRa)</p>
+                        <p>编号：889JJD8888DDD</p>
+                        <p>网络：LoRa</p>
+                    </div>
+                    <div class="popcontent-details-c">
+                        <p>电量：100%</p>
+                        <p>座位：1组11排2号</p>
+                        <p>通讯：正常</p>
+                    </div>
+                </div>
+                <ul class="popcontent-details-list clearfix">
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议准备：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议开始：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议暂停：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议恢复：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议结束：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>会议重启：<span class="r">不正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wDIV">
+                            <div class="a">
+                                <p>设备重置：<span>正常</span></p>
+                                <p>2020-12-16 16:51:53</p>
+                            </div>
+                            <div class="b">
+                                <a href="javascript:void(0);" class="popcontent-btn">重发</a>
+                            </div>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/seatscontrol_drag.js" charset="utf-8"></script>
+    <script src="js/signcontrol.js" charset="utf-8"></script>
+    <script src="js/meetingmap.js" charset="utf-8"></script>
+
+    
+
+    <!-- /* dragDiv 拖动工具箱 3.25*/ -->
+    <script type="text/javascript">
+        /*-------------------------- + 获取id, class, tagName +-------------------------- */
+        var get = {
+            byId: function(id) {
+                return typeof id === "string" ? document.getElementById(id) : id
+            },
+            byClass: function(sClass, oParent) {
+                var aClass = [];
+                var reClass = new RegExp("(^| )" + sClass + "( |$)");
+                var aElem = this.byTagName("*", oParent);
+                for (var i = 0; i < aElem.length; i++) reClass.test(aElem[i].className) && aClass.push(aElem[i]);
+                return aClass
+            },
+            byTagName: function(elem, obj) {
+                return (obj || document).getElementsByTagName(elem)
+            }
+        };
+        /*-------------------------- + 拖拽函数 +-------------------------- */
+        function dragAction(oDrag, handle){
+            var disX = dixY = 0;
+            // var oJreduction = get.byClass("Jreduction", oDrag)[0];
+            handle = handle || oDrag;
+            handle.style.cursor = "move";
+            handle.onmousedown = function (event){
+                var event = event || window.event;
+                disX = event.clientX - oDrag.offsetLeft;
+                disY = event.clientY - oDrag.offsetTop;
+                document.onmousemove = function (event){
+                    var event = event || window.event;
+                    var iL = event.clientX - disX;
+                    var iT = event.clientY - disY;
+                    // var maxL = document.documentElement.clientWidth - oDrag.offsetWidth - 10;
+                    // var maxT = document.documentElement.clientHeight - oDrag.offsetHeight - 10;
+                    var maxL = document.documentElement.clientWidth - oDrag.offsetWidth;
+                    var maxT = document.documentElement.clientHeight - oDrag.offsetHeight;
+                    
+                    // iL <= 8 && (iL = 8);
+                    // iT <= 65 && (iT = 65);
+                    iL >= maxL && (iL = maxL);
+                    iT >= maxT && (iT = maxT);
+
+                    oDrag.innerHTML = (iL + "," + iT);
+                    oDrag.style.left = iL + "px";
+                    oDrag.style.top = iT + "px";
+
+                    dragMatchSeat(iL,iT);
+                    return false
+                };
+                document.onmouseup = function (){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+
+                    var container = $("#dragseatId");
+                    var cx = parseInt(container.css("left"));
+                    var cy = parseInt(container.css("top"));
+        
+                    dragEndMatchSeat(cx,cy,'{"name":"张三","id":48997}');
+                    // this.releaseCapture && this.releaseCapture()
+                };
+                // this.setCapture && this.setCapture();
+                return false
+            };	
+            //还原到原来位置
+            // oJreduction.onclick = function (){
+            // 	oDrag.style.left ='auto';
+            // 	oDrag.style.top = 65 + "px";
+            // };
+        }
+        
+        
+        window.onload = function (){
+            // var oDrag = document.getElementById("dragseatId");
+            // dragAction(oDrag);
+        }
+
+        
+        var seatMapsControl = new SeatMapsControl();
+
+        //会议开始 #ffcbcc #d7ffca
+        //会议结束 #d1e9ff #fff1d9
+        //小程序修改名字 #e2e1ff
+        //web修改名字 #fff1ae
+        //备用 #e7fffa #ffe9fe # f9ffbb
+
+
+        
+        
+
+        // type,seatid,status,name
+        // 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌
+        function changeSeatStatus(type){
+            __signControl.appTableSignControl(+type);
+        }
+        function meetWebSocketMessage(msg){
+            __signControl.meetWebSocketMessage(msg);
+        }
+        function stopMeetWebSocket(){
+            __signControl.stopMeetWebSocket();
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var __x = 0;
+		var __y = 0;
+        //拖动的时间一直调用这个函数
+        function dragMatchSeat(_x,_y){
+            if(Math.abs(__x - _x) < 10 && Math.abs(__y - _y) < 10){
+                return;
+            }
+            __x = _x;
+		    __y = _y;
+            seatMapsControl.dragMatchSeat(_x,_y);
+        }
+
+        //拖动结束的时候调用这个函数
+        function dragEndMatchSeat(x,y,jsonstr){
+            // alert("end---" + jsonstr);
+            if(typeof jsonstr == "string"){
+                try{
+                    var json = JSON.parse(jsonstr);
+                    // alert("name--"+json.name)
+                }catch(ex){
+                    alert("parse error---")
+                }
+            }else{
+                var json = jsonstr;
+                // alert("json对象：" + json.name)
+            }
+            
+            
+            // seatMapsControl.dragMatchSeat(x,y,json);
+            if($(".R99").length > 0){
+                var id = $(".R99").attr("id");
+                $(".R99").removeClass("R99");
+                // $("#"+id).html(json.name);
+                __saveDragSort(+json.id,id);
+            }else{
+                // alert("没有匹配到座位");
+            }
+        }
+
+
+        var __saveTip = false;
+        //保存座区图数据
+        function saveSeats(){
+            __saveTip = true;
+            __saveSeats();
+        }
+
+
+        function promptInputDialog(type,newname){
+            if(type == 1){
+                //修改人员
+                var seats = $("#seatcontainerId .seled");
+                var regnum = /^\d*$/;
+                if(newname && !regnum.test(newname)){
+                    var seatdiv = $("#seatcontainerId .seatdiv");
+                    var ish = true;
+                    seatdiv.each(function(){
+                        var oname = $(this).text();
+                        if(oname == newname){
+                            if(typeof H5JsMeeting != "undefined"){
+                                H5JsMeeting.showTipsDialog(newname+"已存在"+seatno);
+                            }else{
+                                alert(newname+"已存在"+seatno);
+                            }
+                            ish = false;
+                            return false;
+                        }
+                    });
+                    var seatno = $(seats[0]).attr("id");
+                    if(ish){
+                        $("#"+seatno).text(newname);
+                        seats.removeClass("seled");
+                    }
+                }
+            }
+            else if(type == 2){
+                //新增人员
+                var seats = $("#seatcontainerId .seled");
+                var regnum = /^\d*$/;
+                if(newname && !regnum.test(newname)){
+                    var seatdiv = $("#seatcontainerId .seatdiv");
+                    var ish = true;
+                    seatdiv.each(function(){
+                        var oname = $(this).text();
+                        if(oname == newname){
+                            if(typeof H5JsMeeting != "undefined"){
+                                H5JsMeeting.showTipsDialog(newname+"已存在"+seatno);
+                            }else{
+                                alert(newname+"已存在"+seatno);
+                            }
+                            ish = false;
+                            return false;
+                        }
+                    });
+                    var seatno = $(seats[0]).attr("id");
+                    if(ish){
+                        $("#"+seatno).text(newname);
+                        seats.removeClass("seled");
+                    }
+                }
+            }
+        }
+
+        //新增座区图名字
+        function addSeat(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length > 0 && seats.length == 1){
+                var seatname = $(seats[0]).text();
+                var regnum = /^\d*$/;
+                if(regnum.test(seatname)){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showInputDialog(2,"");
+                    }else{
+                        var newname = window.prompt("请输入名字",name);
+                        if(newname && !regnum.test(newname)){
+                            var seatdiv = $("#seatcontainerId .seatdiv");
+                            var ish = true;
+                            seatdiv.each(function(){
+                                var oname = $(this).text();
+                                if(oname == newname){
+                                    alert(newname+"已存在"+seatno);
+                                    ish = false;
+                                    return false;
+                                }
+                            });
+                            var seatno = $(seats[0]).attr("id");
+                            if(ish){
+                                $("#"+seatno).text(newname);
+                                seats.removeClass("seled");
+                            }
+                        }
+                    }
+                }else{
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("请选择一个空座");
+                    }else{
+                        alert("请选择一个空座");
+                    }
+                }
+                
+            }else{
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                }else{
+                    alert("请选择一个座区");
+                }
+            }
+        }
+        
+        //修改座区
+        function editSeat(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length > 0 && seats.length == 1){
+                var seatname = $(seats[0]).text();
+                var regnum = /^\d*$/;
+                if(!regnum.test(seatname)){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showInputDialog(1,seatname);
+                    }else{
+                        var newname = window.prompt("请输入名字",seatname);
+                        
+                        if(newname && !regnum.test(newname)){
+                            var seatdiv = $("#seatcontainerId .seatdiv");
+                            var ish = true;
+                            seatdiv.each(function(){
+                                var oname = $(this).text();
+                                if(oname == newname){
+                                    alert(newname+"已存在"+seatno);
+                                    ish = false;
+                                    return false;
+                                }
+                            });
+                            var seatno = $(seats[0]).attr("id");
+                            if(ish){
+                                $("#"+seatno).text(newname);
+                                seats.removeClass("seled");
+                            }
+                        }
+                    }
+                }else{
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("请选择一个座区");
+                    }else{
+                        alert("请选择一个座区");
+                    }
+                }
+            }else{
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                }else{
+                    alert("请选择一个座区");
+                }
+            }
+        }
+
+        function showSeat(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length > 0 && seats.length == 1){
+                var seatid = seats[0].id;
+                
+                __signControl.findDeviceDetailsTest(seatid);
+                // if(typeof H5JsMeeting != "undefined"){
+                // }else{
+                //     alert(seatid);
+                // }
+            }else{
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                }else{
+                    alert("请选择一个座区");
+                }
+            }
+        }
+
+        function exchangeSeats(){
+            // {nid: "s-1-2-6", did: "s-1-1-1"}
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length == 0){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择座区");
+                }else{
+                    alert("请选择座区");
+                }
+                return;
+            }
+            if(seats.length != 2){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择两个互换座区");
+                }else{
+                    alert("请选择两个互换座区");
+                }
+                return;
+            }
+
+            var ids = [];
+            ids.push({"nid":seats[0].id,"did":seats[1].id});
+
+            seatMapsControl.exChangeOnlySeats(ids);
+            // __saveSeats();
+        }
+
+        //删除座区图名字
+        function deleteSeats(){
+            var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
+            if(seled.length == 0){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择座区");
+                }else{
+                    alert("请选择座区");
+                }
+            }else{
+                var seatids = [];
+                seled.each(function(){
+                    $(this).css("background-color","");
+                    var id = $(this).attr("id");
+                    var ids = id.split("-");
+                    seatids.push(id);
+                    $(this).text(ids[3]);
+                });
+                seled.removeClass("seled");
+
+                alert(seatids.join(','));
+            }
+
+            // saveSeats();
+            // __deleteBingName();
+        }
+
+        var seledPos = [];
+        var seledIds = [];
+        //交换座区
+        function getDragSeatsBox(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length == 0){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择座区");
+                }else{
+                    alert("请选择座区");
+                }
+                return;
+            }
+
+            seledPos = [];
+            seledIds = [];
+
+            var seatWidth = 40;
+            var seatHeight = 40;
+    
+            var seled = $("#seatcontainerId .seled");
+
+            var lefts = [];
+            var tops = [];
+            for(var i = 0,len = seled.length; i < len; i++){
+                var sl = $(seled[i]).position().left;
+                var st = $(seled[i]).position().top;
+
+                lefts.push(+sl);
+                tops.push(+st);
+            }
+
+            lefts = lefts.sort(function(a,b){return a - b;});
+            tops = tops.sort(function(a,b){return a - b;});
+            // console.log(lefts,tops);
+
+            var w = lefts[lefts.length-1] - lefts[0] + seatWidth + 20;
+            var h = tops[tops.length-1] - tops[0] + seatHeight + 20;
+            var l = lefts[0] - 10;
+            var t = tops[0] - 10;
+
+            for(var i = 0,len = seled.length; i < len; i++){
+                var x = $(seled[i]).position().left;
+                var y = $(seled[i]).position().top;
+
+                seledPos.push([x - l,y - t]);
+                seledIds.push($(seled[i]).attr("id"));
+            }
+
+            $("#dragcontainerId").css({"width":w+"px","height":h+"px","left":l+"px","top":t+"px"});
+            $("#dragcontainerId").text(l+","+t);
+            $("#dragcontainerId").show();
+
+            // alert("left:" + l +",top:" + t + "width:" + w + ",height:" + h );
+
+            // var dragseats = seled.clone();
+            // for(var j = 0,len = dragseats.length; j < len; j++){
+            //     var sl = $(seled[j]).position().left + 10;
+            //     var st = $(seled[j]).position().top + 10;
+            //     $(dragseats[j]).css({"left":sl-lefts[0],"top":st-tops[0]});
+            // }
+
+            
+            // // $("#"+selDivId).append(seled);
+
+            // this.removeContainerEvent();
+
+            // seled.removeClass
+            // $("#dragcontainerId").html(dragseats);
+            // $("#dragcontainerId").show();
+
+            $("#dragcontainerId").on({
+                dblclick:function(e){
+                    // console.log("drag dblclick");
+                    // this.dblclickDragSeats();
+
+                    // if(callback){
+                    //     callback.call(this);
+                    // }
+                }.bind(this),
+                mousedown:function(e){
+                    var el=$(e.currentTarget);
+                    var os = el.offset(); dx = e.pageX-os.left, dy = e.pageY-os.top;
+                    $(document).on('mousemove.drag', function(e){
+                        var left = e.pageX - dx;
+                        var top = e.pageY - dy;
+                        el.offset({top: top, left: left});
+                        $("#dragcontainerId").text(left+","+top);
+                        
+                        dragSeatsBox(left,top);
+                    }.bind(this));
+                }.bind(this),
+                mouseup: function(e){
+                    $(document).off('mousemove.drag');
+                }
+            });
+        }
+
+        //移动矩形座区
+        function dragSeatsBox(x,y){
+            seatMapsControl.dragPadContainerMove(x,y,seledPos,seledIds);
+        }
+
+        //结束互换座区
+        function dragEndSeatsBox(){
+            seatMapsControl.dblclickDragSeats();
+            seatMapsControl.bindOneSeats();
+        }
+        
+        
+
+        // 测试会议 410  405
+
+        // $(function(){
+        //     $("#xya").html("分辨率：" + window.screen.width + "," + window.screen.height);
+        //     $("#xyb").html("可视区域：" + window.innerWidth + "," + window.innerHeight);
+        //     $("#xyc").html("网页宽高：" + $("#seatsbody").width() + "," + $("#seatsbody").height())
+        //     $("#xyd").html("屏幕dpi：" + window.devicePixelRatio)
+        // })
+    </script>
+</body>
+</html>
