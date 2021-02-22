@@ -43,6 +43,7 @@ layui.config({
     
 
     var roomId = 0;
+    var ruleId = 0;
     
 
     // var uri = window.location.search;
@@ -58,6 +59,9 @@ layui.config({
     var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
     // 座区数据
     var showSeatsData = [];
+
+    // 规则数据
+    var showRuleData = [];
 
     var dragSortData=[];
 
@@ -171,27 +175,33 @@ layui.config({
         var str = [];
         data.forEach(function(item,i){
             if(i == 0){
-                str.push('<li id="' + item.roomid + '" class="layui-this">' + item.name + '</li>');
+                str.push('<li id="' + item.roomid + '_' + item.ruleid +'" class="layui-this">' + item.name + '</li>');
 
-                getRoomTemplateCode(item.roomid);
+                getRoomTemplateCode(item.roomid,item.ruleid);
             }else{
-                str.push('<li id="' + item.roomid + '">' + item.name + '</li>');
+                str.push('<li id="' + item.roomid + '_' + item.ruleid + '">' + item.name + '</li>');
             }
         });
         $(".layui-tab-title").html(str);
 
         $('.layui-tab-title > li').on('click', function(evt) {
-            var roomid = this.id;
+            var ids = this.id.split('_');
+            var roomid = ids[0];
+            var ruleid = ids[1];
+
             console.log("roomid----",roomid);
 
             saveSeats();
             
-            getRoomTemplateCode(roomid);
+            getRoomTemplateCode(roomid,ruleid);
         });
     }
 
-    function getRoomTemplateCode(roomid){
+    function getRoomTemplateCode(roomid,ruleid){
         roomId = roomid;
+        ruleId = ruleid;
+
+        queryAllSeatStatus(roomid,ruleid);
 
         layer.load(2);
         $.ajax({
@@ -234,6 +244,31 @@ layui.config({
             },
             error:function(){
                 layer.closeAll();
+            }
+        });
+    }
+
+
+    function queryAllSeatStatus(roomid, ruleid) {
+        var data = {};
+        data.action = "s";
+        data.ruletemplateid= ruleid;
+        data.roomtemplateid = roomid;
+
+        $.ajax({
+            type: "get",
+            url: url+"/rulesetup/show",
+            data: data,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: 'json',
+            success: function(data) {
+                var datas = data.data;
+                if (datas && datas instanceof Array) {
+                    showRuleData = datas;
+                    // setSeatStatus(datas);
+                }
             }
         });
     }
@@ -328,7 +363,7 @@ layui.config({
                 attendees.forEach(function(item){
                     //多会场判断只加载当前会议室的数据
                     if(item.roomtemplate_id == roomId){
-                        var colors = item.colors;
+                        var colors = item.colors || {};
                         var cid = colors[ruleselect];
                         if(colorsids.indexOf(cid) == -1){
                             colorsids.push(cid);
@@ -393,9 +428,34 @@ layui.config({
         // var id = +data.value;
         // meetingId = id;
         // getRuleSetups(id);
-        changeSeatColor(showSeatsData);
+
+        $(".seatdiv").removeClass("R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R98 R99");
+        if(showSeatsData && showSeatsData.length > 0){
+            changeSeatColor(showSeatsData);
+        }else{
+            if(showRuleData && showRuleData.length > 0 && +data.value == 1){
+                setSeatStatus(showRuleData);
+            }else{
+                changeSeatColor(showSeatsData);
+            }
+        }
     });
     
+    function setSeatStatus(data) {
+        console.log("001----显示颜色");
+        // console.log(data);
+        if (data && data instanceof Array) {
+            for (var i = 0, len = data.length; i < len; i++) {
+                var items = data[i] || null;
+                if(items){
+                    items = JSON.parse(items);
+                    items.forEach(function(item) {
+                        $("#" + item.seatid).addClass(item.ruleid);
+                    });
+                }
+            }
+        }
+    }
     
     
     var attributestatus = false;
