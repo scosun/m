@@ -87,7 +87,7 @@ $(function(){
             var code = obj.code;
             if(code == 0){
                 var data = obj.data || [];
-                buildMeetTabHtml(data[0]);
+                buildMeetTabHtml(data[0],meetingid);
             }else{
                 if(typeof H5JsMeeting != "undefined"){
                     H5JsMeeting.showTipsDialog("获取会议会议室数据错误");
@@ -100,11 +100,11 @@ $(function(){
         }
     });
 
-    function buildMeetTabHtml(item){
-        getRoomTemplateCode(item.roomid);
+    function buildMeetTabHtml(item,meetingid){
+        getRoomTemplateCode(item.roomid,meetingid);
     }
 
-    function getRoomTemplateCode(roomid){
+    function getRoomTemplateCode(roomid,meetingid){
         roomId = roomid;
 
         $.ajax({
@@ -139,7 +139,7 @@ $(function(){
 
                     //群控缓存数据
                     // getCacheData();
-                    __signControl.getCacheData(roomId);
+                    __signControl.getCacheData(roomid,meetingid);
 
                     // if(showSeatsData.length == 0){
                     //     // 初始化没有数据，查询show接口查名字

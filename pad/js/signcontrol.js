@@ -11,12 +11,14 @@ var SignControl = function (obj){
 SignControl.prototype = {
     constructor:SignControl,
     roomId:0,
+    meetingId:0,
     baseUrl:"https://f.longjuli.com",
     mbaseUrl:"https://m.longjuli.com",
     meetWs:null,
     meetingType:-1,
     backComplete:1,
     userName:"",
+    meetingStatus:0,
 	init: function(){
         console.log("signcontrol-----init");
 
@@ -43,7 +45,8 @@ SignControl.prototype = {
             //     H5JsMeeting.showTipsDialog(username);
             // }
             this.userName = username;
-            // this.createMeetWebSocket(username);
+
+            this.createMeetWebSocket(username);
         }
         // $(window).bind("beforeunload",this.stopMeetWebSocket.bind(this));
 	},
@@ -210,6 +213,8 @@ SignControl.prototype = {
             
             ws.onmessage = function (evt) {
                 var received_msg = evt.data || "";
+
+                console.log("onmessage-----",received_msg)
                 t.meetWebSocketMessage(received_msg);
                 
                 // {
@@ -383,14 +388,14 @@ SignControl.prototype = {
         // | roomid | Integer | 会议室id |
         // | type   | Integer | 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，
         // 4 结束会议，5 重启会议，6 重置桌牌 |
+        
         $.ajax({
             async: true,
             type: "post",
-            url: this.baseUrl +"/tableSign/appTableSignControlTest",
-            // url: "http://m.longjuli.com:8083/tableSign/appTableSignControl",
+            // url: this.baseUrl +"/tableSign/appTableSignControlTest",
+            url: this.baseUrl +"/tableSign/appTableSignControl",
             // dataType: "json",
-            // roomId:this.roomId,
-            data:{type:type},
+            data:{type:type,roomid:this.roomId,meetingid:this.meetingId},
             success: function(obj) {
                 console.log("success")
             },
@@ -401,16 +406,17 @@ SignControl.prototype = {
         });
     },
 
-	getCacheData:function(roomid){
+	getCacheData:function(roomid,meetingid){
         this.roomId = roomid;
-        console.log(this.roomId)
+        this.meetingId = meetingid;
         $.ajax({
             async: true,
             type: "post",
             // url: this.baseUrl +"/tableSign/getCacheData?roomid="+this.roomId,
-            url: this.baseUrl +"/tableSign/getCacheDataTest",
+            // url: this.baseUrl +"/tableSign/getCacheDataTest",
+            url: this.baseUrl +"/tableSign/getCacheData",
             // data:{roomid:this.roomId},
-            data:{roomid:410},
+            data:{roomid:roomid},
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
@@ -471,8 +477,9 @@ SignControl.prototype = {
             async: true,
             type: "post",
             // url: this.baseUrl +"/tableSign/getCacheData?roomid="+this.roomId,
-            url: this.baseUrl +"/tableSign/findDeviceDetailsTest",
-            data:{roomid:this.roomId,seatid:seatid},
+            // url: this.baseUrl +"/tableSign/findDeviceDetailsTest",
+            url: this.baseUrl +"/tableSign/findDeviceDetails",
+            data:{meetingid:this.meetingId,roomid:this.roomId,seatid:seatid},
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
@@ -523,86 +530,149 @@ SignControl.prototype = {
         html.push('<p>网络：'+communication[+obj.communication]+'</p>');
         html.push('</div>');
         html.push('<div class="popcontent-details-c">');
-        html.push('<p>电量：'+obj.electricity+'%</p>');
-        html.push('<p>座位：'+obj.seatid+'</p>');
+        html.push('<p>电量：'+(obj.electricity||"")+'%</p>');
+        html.push('<p>姓名：'+obj.name+'</p>');
         html.push('<p>通讯：'+deviceStatus[obj.deviceStatus]+'</p>');
         html.push('</div>');
         html.push('</div>');
+
+        var meetingStatus = +obj.meetingStatus;
+        this.meetingStatus = meetingStatus;
+
+        /**
+         * 会议状态
+         * 0：未发送；
+         * 1：开始会议发送成功；-1：开始会议发送失败；
+         * 2：结束会议成功; -2:结束会议失败；
+         * 3: 准备会议发送成功；-3: 准备会议失败；
+         * 4: 暂停会议成功；-4：暂停会议失败；
+         * 5: 恢复会议成功；-5: 恢复会议失败；
+         * 6: 重启会议成功；-6: 重启会议失败；
+         * 7: 重置桌牌成功；-7：重置桌牌失败
+         */
+
         html.push('<ul class="popcontent-details-list clearfix">');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议准备：<span>正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议准备：<span>未发送</span></p>');
+        }else if(meetingStatus == -3){
+            html.push('<p>会议准备：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议准备：<span>正常</span></p>');
+        }
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_0" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议开始：<span class="r">不正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议开始：<span>未发送</span></p>');
+        }else if(meetingStatus == -1){
+            html.push('<p>会议开始：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议开始：<span>正常</span></p>');
+        }
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_1" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议暂停：<span>正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议暂停：<span>未发送</span></p>');
+        }else if(meetingStatus == -4){
+            html.push('<p>会议暂停：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议暂停：<span>正常</span></p>');
+        }
+        // html.push('<p>会议暂停：<span>' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_2" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议恢复：<span class="r">不正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议恢复：<span>未发送</span></p>');
+        }else if(meetingStatus == -5){
+            html.push('<p>会议恢复：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议恢复：<span>正常</span></p>');
+        }
+        // html.push('<p>会议恢复：<span class="r">' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_3" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议结束：<span>正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议结束：<span>未发送</span></p>');
+        }else if(meetingStatus == -2){
+            html.push('<p>会议结束：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议结束：<span>正常</span></p>');
+        }
+        // html.push('<p>会议结束：<span>' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_4" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>会议重启：<span class="r">不正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>会议重启：<span>未发送</span></p>');
+        }else if(meetingStatus == -6){
+            html.push('<p>会议重启：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>会议重启：<span>正常</span></p>');
+        }
+        // html.push('<p>会议重启：<span class="r">' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_5" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
-        html.push('<p>设备重置：<span>正常</span></p>');
+        if(meetingStatus == 0){
+            html.push('<p>设备重置：<span>未发送</span></p>');
+        }else if(meetingStatus == -7){
+            html.push('<p>设备重置：<span class="r">不正常</span></p>');
+        }else{
+            html.push('<p>设备重置：<span>正常</span></p>');
+        }
+        // html.push('<p>设备重置：<span>' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
         html.push('<div class="b">');
-        html.push('<a href="javascript:void(0);" class="popcontent-btn">重发</a>');
+        html.push('<a id="status_6" href="javascript:void(0);" class="popcontent-btn">重发</a>');
         html.push('</div>');
         html.push('</div>');
         html.push('</li>');
@@ -614,8 +684,12 @@ SignControl.prototype = {
 
         $("#closeInfoBtn").bind("click",this.closeInfoModel.bind(this));
         
+        $(".popcontent-btn").unbind("click");
+        $(".popcontent-btn").bind("click",this.sendOne.bind(this));
     },
-
+    sendOne(){
+        console.log(this)
+    },
     closeInfoModel(){
         $("#seatInfo").hide();
     }
