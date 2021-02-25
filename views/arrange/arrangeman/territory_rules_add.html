@@ -840,8 +840,48 @@
 				return false;
 			}
 			
+			function getRowSeatMap(rule){
+				var row = [];
+				var rowids = [];
+				rule.forEach(function(item){
+					var ids = item.seatid.split("-");
+					var rownum = ids[2];
+					if(row.indexOf(rownum) == -1){
+						row.push(rownum);
+						rowids.push(ids[0] + "-" + ids[1] + "-" + ids[2]);
+					}
+				});
+				rowids.sort(function(a,b){return a.split("-")[2] - b.split("-")[2];})
+
+				var allrows = [];
+				rowids.forEach(function(item){
+					var srows = [];
+
+					var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)[id^='" + item + "']");
+					seats.each(function(){
+						var id = this.id;
+						var h = rule.filter(function(f){
+							return f.seatid == id;
+						});
+						if(h.length > 0){
+							srows.push({"seated":id,"isSelected": true});
+						}else{
+							srows.push({"seated":id,"isSelected": false});
+						}
+					});
+
+					allrows.push(srows);
+				});
+				console.log(allrows)
+				return allrows;
+			}
+
 			function saveSeatRule(rulename,rule, ruleid, temp_ruletemplateid, roomtemplateid, isincrement) {
+				var allrows = getRowSeatMap(rule);
+
 				var data = {};
+				data.rulematrix = JSON.stringify(allrows);
+
 				data.rulezone = JSON.stringify(rule);
 				data.ruleid = ruleid;
 				data.rulename = rulename;
@@ -871,8 +911,13 @@
 			}
 
 			function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid) {
+
 				var rulez = JSON.parse(rule);
+
 				var data = {};
+				var allrows = getRowSeatMap(rulez);
+				data.rulematrix = JSON.stringify(allrows);
+				
 				data.rule = rulez; //JSON.stringify(rule);
 				data.action = "u";
 				data.rulename = rulename;
@@ -887,6 +932,7 @@
                     },
 				    data: {
 				        "id": rulerecordid,
+						"rulematrix":data.rulematrix,
 				        "rulename": rulename,
 				        "rulezone": rule,
 				        "isincrement": isincrement,
