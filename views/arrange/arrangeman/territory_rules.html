@@ -135,7 +135,7 @@
 <!--      <div class="noData noData2 layui-hide" id="noData"><i class="layui-icon layui-ds iconfont icon-lsh-empty_content"></i>没有任何内容</div>-->
 <!--</body>-->
 <script src="../../../layuiadmin/layui/layui.js"></script>
-<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 <script type="text/javascript">
     var tablezonetable;
     layui.config({
@@ -521,7 +521,11 @@
 
             } else if (obj.event === 'editxq') {
                 editObj = obj;
-                changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement)
+                if(obj.data.ruleid == "R98"){
+                    //点选排序编辑
+                }else{
+                    changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement);
+                }
             }
         });
 
@@ -582,11 +586,26 @@
                         var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
                         rulename = rulename[1] || "";
 
-                        if(ruleselect==''||ruleselect==null)
-                        {return layer.msg("请选择规则")}
-                        if(isincrement==''||isincrement==null)
-                        {return layer.msg("请选择规则")}
-                        setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+                        if(ruleselect == '' || ruleselect == null){
+                            return layer.msg("请选择编排规则");
+                        }
+
+                        if(ruleselect == "R98"){
+                            // setSeatRule(rulename,ruleselect, isincrement,true);
+                            setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+                        }else{
+                            if(isincrement == '' || isincrement == null){
+                                return layer.msg("请选择增补规则");
+                            }
+                            // setSeatRule(rulename,ruleselect, isincrement,true);
+                            setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
+                        }
+
+                        // if(ruleselect==''||ruleselect==null)
+                        // {return layer.msg("请选择规则")}
+                        // if(isincrement==''||isincrement==null)
+                        // {return layer.msg("请选择规则")}
+                        
                         layer.close(index);
                     },
                     success: function(layero, index) {
@@ -614,14 +633,13 @@
                         rulename = rulename[1] || "";
 
                         console.log("ruleselect----",ruleselect)
-
+                        
                         if(ruleselect==''||ruleselect==null){
                             return layer.msg("请选择编排规则");
                         }
 
                         if(ruleselect == "R98"){
-                            var seatids = seatMapsControl.getClickRulePoint();
-                            console.log(seatids)
+                            setSeatRule(rulename,ruleselect, isincrement,true);
                         }else{
                             if(isincrement == '' || isincrement == null){
                                 return layer.msg("请选择增补规则");
@@ -727,6 +745,11 @@
                 // var ckids_now = $("#seatcontainerId .seled");
                 
                 var ckids_now = seatsIdSort();
+                if(ruleselect == "R98"){
+                    //点选 排序 规则
+                    var ckids_now = seatMapsControl.getClickRulePoint();
+                    seatMapsControl.clearClickRulePoint();
+                }
                 
                 if (ckids_now && ckids_now.length > 0) {
                     var rule = [];
@@ -745,6 +768,11 @@
             } else {
                 // var ckids_now = $("#seatcontainerId .seled");
                 var ckids_now = seatsIdSort();
+                if(ruleselect == "R98"){
+                    //点选 排序 规则
+                    var ckids_now = seatMapsControl.getClickRulePoint();
+                    seatMapsControl.clearClickRulePoint();
+                }
 
                 if (ckids_now && ckids_now.length > 0) {
                     var rule = [];
@@ -936,6 +964,7 @@
             data.roomtemplateid = roomtemplateid;
             data.isincrement = isincrement;
             data.seatsnum = rule.length;
+
             $.ajax({
                 type: "POST",
                 url: url + "/rulesetup/addRulesetup",

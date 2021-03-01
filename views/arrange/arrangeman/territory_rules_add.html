@@ -124,7 +124,7 @@
 	</body>
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 <!--	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">-->
-	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
+	<script src="../../../js/seatscontrol_drag.bak1.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		var tablezonetable;
 		layui.config({
@@ -457,7 +457,12 @@
 
 				} else if (obj.event === 'editxq') {
 					editObj = obj;
-					changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement)
+					if(obj.data.ruleid == "R98"){
+						//点选排序编辑
+					}else{
+						changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement);
+						// changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement)
+					}
 				}
 			});
 			var inde = true;
@@ -523,8 +528,9 @@
 							}
 
 							if(ruleselect == "R98"){
-								var seatids = seatMapsControl.getClickRulePoint();
-								console.log(seatids)
+								// var seatids = seatMapsControl.getClickRulePoint();
+								// console.log(seatids)
+								setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
 							}else{
 								if(isincrement == '' || isincrement == null){
 									return layer.msg("请选择增补规则");
@@ -552,18 +558,39 @@
 						area: ['50%', '55%'],
 						btn: ['确定', '取消'],
 						yes: function(index, layero) {
+							// var body = layer.getChildFrame('body', index);
+							// var ruleselect = body.find('#ruleselect').val();
+							// var isincrement = body.find('#isincrement').val();
+							// var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
+							// rulename = rulename[1] || "";
+
+							// if(ruleselect==''||ruleselect==null)
+                            // {return layer.msg("请选择规则");}
+                            // if(isincrement==''||isincrement==null)
+                            // {return layer.msg("请选择规则");}
+							// setSeatRule(rulename,ruleselect, isincrement,true);
+							// layer.close(index);
+
 							var body = layer.getChildFrame('body', index);
 							var ruleselect = body.find('#ruleselect').val();
 							var isincrement = body.find('#isincrement').val();
 							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
 							rulename = rulename[1] || "";
 
-							if(ruleselect==''||ruleselect==null)
-                            {return layer.msg("请选择规则");}
-                            if(isincrement==''||isincrement==null)
-                            {return layer.msg("请选择规则");}
-							setSeatRule(rulename,ruleselect, isincrement,true);
-							layer.close(index);
+							console.log("ruleselect----",ruleselect)
+							
+							if(ruleselect==''||ruleselect==null){
+								return layer.msg("请选择编排规则");
+							}
+
+							if(ruleselect == "R98"){
+								setSeatRule(rulename,ruleselect, isincrement,true);
+							}else{
+								if(isincrement == '' || isincrement == null){
+									return layer.msg("请选择增补规则");
+								}
+								setSeatRule(rulename,ruleselect, isincrement,true);
+							}
 						}
 					});
 				},
@@ -675,6 +702,11 @@
 					// var ckids_now = $("#seatcontainerId .seled");
 
 					var ckids_now = seatsIdSort();
+					if(ruleselect == "R98"){
+						//点选 排序 规则
+						var ckids_now = seatMapsControl.getClickRulePoint();
+						seatMapsControl.clearClickRulePoint();
+					}
 
 					if (ckids_now && ckids_now.length > 0) {
 						var rule = [];
@@ -692,7 +724,14 @@
 					}
 				} else {
 					// var ckids_now = $("#seatcontainerId .seled");
+					// var ckids_now = seatsIdSort();
 					var ckids_now = seatsIdSort();
+					if(ruleselect == "R98"){
+						//点选 排序 规则
+						var ckids_now = seatMapsControl.getClickRulePoint();
+						seatMapsControl.clearClickRulePoint();
+					}
+
 					if (ckids_now && ckids_now.length > 0) {
 						var rule = [];
 						for (var i = 0, len = ckids_now.length; i < len; i++) {
