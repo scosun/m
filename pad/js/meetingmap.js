@@ -5,8 +5,10 @@ function autoLogin(){
         url: "https://f.longjuli.com/loginApp",
         type: "post",
         data:{
-            username:"15621308386",
-            password:"admin321"
+            // username:"15621308386",
+            // password:"admin321"
+            username:"15194138685",
+            password:"123456"
         },
         async: false,
         xhrFields: {

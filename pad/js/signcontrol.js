@@ -55,11 +55,13 @@ SignControl.prototype = {
        
     },
     readyMeeting:function(obj){
-        // 3: 准备会议发送成功；-3: 准备会议失败； 
-        if(+obj.meetingState == 3){
-            $("#" + obj.seatid).addClass("sm3");
+        // 1: 准备会议发送成功；-1: 准备会议失败； 
+        if(+obj.meetingState == 1){
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm1");
         }else{
-            $("#" + obj.seatid).addClass("sm33");
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm11");
         }
         //当前状态已完成
         var status = +obj.status;
@@ -67,15 +69,16 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议准备完成，可以点 会议开始，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(0);
+                H5JsMeeting.finishSeatStatus(1);
             }
         }
     },
     startMeeting:function(obj){
-        // 1：开始会议发送成功；-1：开始会议发送失败；
-        if(+obj.meetingState == 1){
+        // 2：开始会议发送成功；-2：开始会议发送失败；
+        if(+obj.meetingState == 2){
+            $("#" + obj.seatid).removeClass();
             $("#" + obj.seatid).text(obj.name);
-            $("#" + obj.seatid).addClass("sm3");
+            $("#" + obj.seatid).addClass("seatdiv sm1");
         }
         //当前状态已完成
         var status = +obj.status;
@@ -83,16 +86,18 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议开始完成，可以点 会议暂停，会议结束，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(1);
+                H5JsMeeting.finishSeatStatus(2);
             }
         }
     },
     stopMeeting:function(obj){
-        // 4: 暂停会议成功；-4：暂停会议失败；
-        if(+obj.meetingState == 4){
-            $("#" + obj.seatid).addClass("sm4");
+        // 3: 暂停会议成功；-3：暂停会议失败；
+        if(+obj.meetingState == 3){
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm3");
         }else{
-            $("#" + obj.seatid).addClass("sm44");
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm33");
         }
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
@@ -103,16 +108,17 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议暂停完成，可以点 会议恢复，会议结束，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(2);
+                H5JsMeeting.finishSeatStatus(3);
             }
         }
     },
     restoreMeeting:function(obj){
-        // 5: 恢复会议成功；-5: 恢复会议失败；
-        if(+obj.meetingState == 5){
-            $("#" + obj.seatid).removeClass("sm4 sm44");
+        // 4: 恢复会议成功；-4: 恢复会议失败；
+        if(+obj.meetingState == 4){
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm1");
         }else{
-            // $("#" + obj.seatid).removeClass("sm44");
+            // $("#" + obj.seatid).removeClass("sm33");
         }
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
@@ -123,16 +129,18 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议恢复完成，可以点 会议暂停，会议结束，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(3);
+                H5JsMeeting.finishSeatStatus(2);
             }
         }
     },
     finishMeeting:function(obj){
-        // 2：结束会议成功; -2:结束会议失败； 
-        if(+obj.meetingState == 2){
-            $("#" + obj.seatid).addClass("sm2");
+        // 5：结束会议成功; -5:结束会议失败； 
+        if(+obj.meetingState == 5){
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm5");
         }else{
-            $("#" + obj.seatid).addClass("sm22");
+            $("#" + obj.seatid).removeClass();
+            $("#" + obj.seatid).addClass("seatdiv sm55");
         }
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
@@ -143,7 +151,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议结束完成，可以点 会议开始，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(4);
+                H5JsMeeting.finishSeatStatus(5);
             }
         }
     },
@@ -151,9 +159,11 @@ SignControl.prototype = {
         var ele = $("#" + obj.seatid);
         // 6: 重启会议成功；-6: 重启会议失败；
         if(+obj.meetingState == 6){
-            ele.addClass("sm3");
+            ele.removeClass();
+            ele.addClass("seatdiv sm1");
         }else{
-            ele.addClass("sm33");
+            ele.removeClass();
+            ele.addClass("seatdiv sm11");
         }
         //当前状态已完成
         var status = +obj.status;
@@ -161,7 +171,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知会议重启完成，可以点 会议开始，重启会议，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(5);
+                H5JsMeeting.finishSeatStatus(6);
             }
         }
     },
@@ -169,15 +179,17 @@ SignControl.prototype = {
         var ele = $("#" + obj.seatid);
         // 7: 重置桌牌成功；-7：重置桌牌失败；
         if(obj.meetingState == 7){
-            ele.removeClass("sm3 sm33 sm4 sm44 sm77 sm2 sm22");
+            ele.removeClass("sm1 sm11 sm3 sm33 sm77 sm5 sm55");
         }else{
-            ele.removeClass("sm3 sm33 sm4 sm44 sm77 sm2 sm22");
+            ele.removeClass("sm1 sm11 sm3 sm33 sm77 sm5 sm55");
             //重置失败，要不要有颜色标识
             ele.addClass("sm77");
         }
-        var id = obj.seatid;
-        var num = id.split('-')[3];
-        ele.text(num);
+        var id = obj.seatid || "";
+        if(id){
+            var num = id.split('-')[3];
+            ele.text(num);
+        }
 
         //当前状态已完成
         var status = +obj.status;
@@ -185,7 +197,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //调用native 通知重置桌牌完成，可以点 会议准备，设备重置
             if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(6);
+                H5JsMeeting.finishSeatStatus(7);
             }
         }
     },
@@ -262,18 +274,39 @@ SignControl.prototype = {
         // }
         console.log("数据已接收...",received_msg);
 
-        // 会议状态 
-        // 0：未发送； 
-        // 1：开始会议发送成功；-1：开始会议发送失败； 
-        // 2：结束会议成功; -2:结束会议失败； 
-        // 3: 准备会议发送成功；-3: 准备会议失败； 
-        // 4: 暂停会议成功；-4：暂停会议失败；  
+
+        // 会议状态
+        // 0：未发送；
+        // 1：开始会议发送成功；-1：开始会议发送失败；
+        // 2：结束会议成功; -2:结束会议失败；
+        // 3: 准备会议发送成功；-3: 准备会议失败；
+        // 4: 暂停会议成功；-4：暂停会议失败；
         // 5: 恢复会议成功；-5: 恢复会议失败；
         // 6: 重启会议成功；-6: 重启会议失败；
         // 7: 重置桌牌成功；-7：重置桌牌失败；
+
+
+        /**
+         * 会议状态
+         * 0：未发送；
+         * 1: 准备会议发送成功；-1: 准备会议失败；
+         * 2：开始会议发送成功；-2：开始会议发送失败；
+         * 3: 暂停会议成功；-3：暂停会议失败；
+         * 4: 恢复会议成功；-4: 恢复会议失败；
+         * 5：结束会议成功; -5:结束会议失败；
+         * 6: 重启会议成功；-6: 重启会议失败；
+         * 7: 重置桌牌成功；-7：重置桌牌失败
+         * 8: 发送名字
+         */
         
         // name=测试199, seatid=2-10-10, roomid=410, meetingState=3, productKey=productKey199, deviceName=deviceName199, deviceStatus=ONLINE
         
+        // 数据已接收... {"name":"王建武","seatid":"s-5-9-1","meetingid":"438","meetingState":"1","productKey":"a1WR8Q6XiEK","deviceName":"d896e0e00000f266","roomid":"334","deviceStatus":"ONLINE","status":"0"}
+        // 数据已接收... {"name":"丁来杭","seatid":"s-5-1-1","meetingid":"438","meetingState":"1","productKey":"a1WR8Q6XiEK","deviceName":"d896e0e00000f28c","roomid":"334","deviceStatus":"ONLINE","status":"0"}
+        // 数据已接收... {"name":"王建武","seatid":"s-5-9-1","meetingid":"438","meetingState":"1","productKey":"a1WR8Q6XiEK","deviceName":"d896e0e00000f266","roomid":"334","deviceStatus":"ONLINE","status":"0"}
+        // 数据已接收... {"name":"乙晓光","seatid":"s-5-1-2","meetingid":"438","meetingState":"-1","productKey":"a1WR8Q6XiEK","deviceName":"d896e00009000688","roomid":"334","deviceStatus":"UNACTIVE"}
+        // 数据已接收... {"meetingState":"1","status":"1"}
+
         try{
             var obj = received_msg;
             if(typeof received_msg == "string"){
@@ -281,15 +314,15 @@ SignControl.prototype = {
             }
             
             var meetingState = +obj.meetingState;
-            if(meetingState == 3 || meetingState == -3){
+            if(meetingState == 1 || meetingState == -1){
                 t.readyMeeting(obj);
-            }else if(meetingState == 1 || meetingState == -1){
-                t.startMeeting(obj);
-            }else if(meetingState == 4 || meetingState == -4){
-                t.stopMeeting(obj);
-            }else if(meetingState == 5 || meetingState == -5){
-                t.restoreMeeting(obj);
             }else if(meetingState == 2 || meetingState == -2){
+                t.startMeeting(obj);
+            }else if(meetingState == 3 || meetingState == -3){
+                t.stopMeeting(obj);
+            }else if(meetingState == 4 || meetingState == -4){
+                t.restoreMeeting(obj);
+            }else if(meetingState == 5 || meetingState == -5){
                 t.finishMeeting(obj);
             }else if(meetingState == 6 || meetingState == -6){
                 t.rebootMeeting(obj);
@@ -315,15 +348,26 @@ SignControl.prototype = {
     //        alert("您的浏览器不支持 WebSocket!");
     //     }
     // },
+
+
+    showStatusTip:function(msg){
+        $("#errortip").html('<span>'+msg+'...</span>');
+
+        $("#errortip").show();
+        setTimeout(function(){
+            $("#errortip").hide();
+        },2500);
+    },
+
     appTableSignControl:function(type){
         // -1.默认 可以点， 会议准备， 设备重启
-        // 0.会议准备完成，可以点 会议开始，重启会议，设备重置
-        // 1.会议开始完成，可以点 会议暂停，会议结束，重启会议，设备重置
-        // 2.会议暂停完成，可以点 会议恢复，会议结束，重启会议，设备重置
-        // 3.会议恢复完成，可以点 会议暂停，会议结束，重启会议，设备重置
-        // 4.会议结束完成，可以点 会议开始，重启会议，设备重置
-        // 5.会议重启完成，可以点 会议开始，重启会议，设备重置
-        // 6.重置桌牌完成，可以点 会议准备，设备重置
+        // 1.会议准备完成，可以点 会议开始，重启会议，设备重置
+        // 2.会议开始完成，可以点 会议暂停，会议结束，重启会议，设备重置
+        // 3.会议暂停完成，可以点 会议恢复，会议结束，重启会议，设备重置
+        // 4.会议恢复完成，可以点 会议暂停，会议结束，重启会议，设备重置
+        // 5.会议结束完成，可以点 会议开始，重启会议，设备重置
+        // 6.会议重启完成，可以点 会议开始，重启会议，设备重置
+        // 7.重置桌牌完成，可以点 会议准备，设备重置
 
         // if(typeof H5JsMeeting != "undefined"){
         //     H5JsMeeting.showTipsDialog("type----"+type);
@@ -334,47 +378,54 @@ SignControl.prototype = {
         }
 
         if(this.meetingType === -1){
-            if(!(type === 0 || type === 6)){
-                return;
-            }
-        }else if(this.meetingType === 0){
-            if(!(type === 1 || type === 5 || type === 6)){
+            if(!(type === 1 || type === 7)){
                 return;
             }
         }else if(this.meetingType === 1){
-            if(!(type === 2 || type === 4 || type === 5 || type ===6)){
+            if(!(type === 2 || type === 6 || type === 7)){
+                this.showStatusTip("会议准备中");
                 return;
             }
         }else if(this.meetingType === 2){
-            if(!(type === 3 || type === 4 || type === 5 || type ===6)){
+            if(!(type === 3 || type === 5 || type === 6 || type === 7)){
+                this.showStatusTip("会议开始中");
                 return;
             }
         }else if(this.meetingType === 3){
-            if(!(type === 2 || type === 4 || type === 5 || type ===6)){
+            if(!(type === 4 || type === 5 || type === 6 || type === 7)){
+                this.showStatusTip("会议暂停中");
                 return;
             }
         }else if(this.meetingType === 4){
-            if(!(type === 1 || type === 5 || type ===6)){
+            if(!(type === 3 || type === 5 || type === 6 || type === 7)){
+                this.showStatusTip("会议恢复中");
                 return;
             }
         }else if(this.meetingType === 5){
-            if(!(type === 1 || type === 5 || type ===6)){
+            if(!(type === 2 || type === 6 || type === 7)){
+                this.showStatusTip("会议结束中");
                 return;
             }
         }else if(this.meetingType === 6){
-            if(!(type === 0 || type ===6)){
+            if(!(type === 2 || type === 6 || type === 7)){
+                this.showStatusTip("会议重启中");
+                return;
+            }
+        }else if(this.meetingType === 7){
+            if(!(type === 1 || type === 7)){
+                this.showStatusTip("桌牌重启中");
                 return;
             }
         }
         this.meetingType = type;
-        if(type === 4){
+        if(type === 5){
             //会议结束
             // var seats = $("#seatcontainerId .seatdiv");
-            // seats.removeClass("sm3 sm33 sm4 sm44 sm77");
+            // seats.removeClass("sm1 sm33 sm3 sm33 sm77");
         }
-        if(type === 5){
+        if(type === 6){
             var seats = $("#seatcontainerId .seatdiv");
-            seats.removeClass("sm3 sm33 sm4 sm44 sm77 sm2 sm22");
+            seats.removeClass("sm1 sm11 sm3 sm33 sm77 sm5 sm55");
             seats.each(function(i,item){
                 var id = item.id;
                 var num = id.split('-')[3];
@@ -385,10 +436,6 @@ SignControl.prototype = {
         // if(typeof H5JsMeeting != "undefined"){
         //     H5JsMeeting.showTipsDialog("type--ajax--------------"+type);
         // }
-
-        // | roomid | Integer | 会议室id |
-        // | type   | Integer | 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，
-        // 4 结束会议，5 重启会议，6 重置桌牌 |
         
         $.ajax({
             async: true,
@@ -396,7 +443,7 @@ SignControl.prototype = {
             // url: this.baseUrl +"/tableSign/appTableSignControlTest",
             url: this.baseUrl +"/tableSign/appTableSignControl",
             // dataType: "json",
-            data:{type:type,roomid:this.roomId,meetingid:this.meetingId},
+            data:{type:type,roomid:this.roomId,meetingid:this.meetingId,phone:this.userName},
             success: function(obj) {
                 console.log("success")
             },
@@ -471,7 +518,7 @@ SignControl.prototype = {
     },
 
     
-    findDeviceDetailsTest:function(seatid){
+    findDeviceDetails:function(seatid){
         this.seatId = seatid;
         // this.roomId = roomid;
         // console.log(this.roomId)
@@ -553,22 +600,35 @@ SignControl.prototype = {
          * 7: 重置桌牌成功；-7：重置桌牌失败
          */
 
+         /**
+         * 会议状态
+         * 0：未发送；
+         * 1: 准备会议发送成功；-1: 准备会议失败；
+         * 2：开始会议发送成功；-2：开始会议发送失败；
+         * 3: 暂停会议成功；-3：暂停会议失败；
+         * 4: 恢复会议成功；-4: 恢复会议失败；
+         * 5：结束会议成功; -5:结束会议失败；
+         * 6: 重启会议成功；-6: 重启会议失败；
+         * 7: 重置桌牌成功；-7：重置桌牌失败
+         * 8: 发送名字
+         */
+        
         html.push('<ul class="popcontent-details-list clearfix">');
         html.push('<li>');
         html.push('<div class="wDIV">');
         html.push('<div class="a">');
         if(meetingStatus == 0){
             html.push('<p>会议准备：<span class="n">未发送</span></p>');
-        }else if(meetingStatus == -3){
+        }else if(meetingStatus == -1){
             html.push('<p>会议准备：<span class="r">不正常</span></p>');
-        }else if(meetingStatus == 3 || meetingStatus == 1 || meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 2 || meetingStatus == 6){
+        }else if(meetingStatus == 1 || meetingStatus == 2 || meetingStatus == 3 || meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 6){
             html.push('<p>会议准备：<span >正常</span></p>');
         }else{
             html.push('<p>会议准备：<span class="n">未发送</span></p>');
         }
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
-        if(meetingStatus == -3){
+        if(meetingStatus == -1){
             html.push('<div class="b">');
             html.push('<a id="status_0" href="javascript:void(0);" class="popcontent-btn">重发</a>');
             html.push('</div>');
@@ -580,16 +640,16 @@ SignControl.prototype = {
         html.push('<div class="a">');
         if(meetingStatus == 0){
             html.push('<p>会议开始：<span class="n">未发送</span></p>');
-        }else if(meetingStatus == -1){
+        }else if(meetingStatus == -2){
             html.push('<p>会议开始：<span class="r">不正常</span></p>');
-        }else if(meetingStatus == 1 || meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 2 || meetingStatus == 6){
+        }else if(meetingStatus == 2 || meetingStatus == 3 || meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 6){
             html.push('<p>会议开始：<span>正常</span></p>');
         }else{
             html.push('<p>会议开始：<span class="n">未发送</span></p>');
         }
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
-        if(meetingStatus == -1){
+        if(meetingStatus == -2){
             html.push('<div class="b">');
             html.push('<a id="status_1" href="javascript:void(0);" class="popcontent-btn">重发</a>');
             html.push('</div>');
@@ -601,9 +661,9 @@ SignControl.prototype = {
         html.push('<div class="a">');
         if(meetingStatus == 0){
             html.push('<p>会议暂停：<span class="n">未发送</span></p>');
-        }else if(meetingStatus == -4){
+        }else if(meetingStatus == -3){
             html.push('<p>会议暂停：<span class="r">不正常</span></p>');
-        }else if(meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 2 || meetingStatus == 6){
+        }else if(meetingStatus == 3 || meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 6){
             html.push('<p>会议暂停：<span>正常</span></p>');
         }else{
             html.push('<p>会议暂停：<span class="n">未发送</span></p>');
@@ -611,7 +671,7 @@ SignControl.prototype = {
         // html.push('<p>会议暂停：<span>' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
-        if(meetingStatus == -4){
+        if(meetingStatus == -3){
             html.push('<div class="b">');
             html.push('<a id="status_2" href="javascript:void(0);" class="popcontent-btn">重发</a>');
             html.push('</div>');
@@ -623,9 +683,9 @@ SignControl.prototype = {
         html.push('<div class="a">');
         if(meetingStatus == 0){
             html.push('<p>会议恢复：<span class="n">未发送</span></p>');
-        }else if(meetingStatus == -5){
+        }else if(meetingStatus == -4){
             html.push('<p>会议恢复：<span class="r">不正常</span></p>');
-        }else if(meetingStatus == 5 || meetingStatus == 2 || meetingStatus == 6){
+        }else if(meetingStatus == 4 || meetingStatus == 5 || meetingStatus == 6){
             html.push('<p>会议恢复：<span>正常</span></p>');
         }else{
             html.push('<p>会议恢复：<span class="n">未发送</span></p>');
@@ -633,7 +693,7 @@ SignControl.prototype = {
         // html.push('<p>会议恢复：<span class="r">' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
-        if(meetingStatus == -5){
+        if(meetingStatus == -4){
             html.push('<div class="b">');
             html.push('<a id="status_3" href="javascript:void(0);" class="popcontent-btn">重发</a>');
             html.push('</div>');
@@ -645,9 +705,9 @@ SignControl.prototype = {
         html.push('<div class="a">');
         if(meetingStatus == 0){
             html.push('<p>会议结束：<span class="n">未发送</span></p>');
-        }else if(meetingStatus == -2){
+        }else if(meetingStatus == -5){
             html.push('<p>会议结束：<span class="r">不正常</span></p>');
-        }else if(meetingStatus == 2 || meetingStatus == 6){
+        }else if(meetingStatus == 5 || meetingStatus == 6){
             html.push('<p>会议结束：<span>正常</span></p>');
         }else{
             html.push('<p>会议结束：<span class="n">未发送</span></p>');
@@ -655,7 +715,7 @@ SignControl.prototype = {
         // html.push('<p>会议结束：<span>' + (meetingStatus == 0 ? '未发送' : '') +'</span></p>');
         html.push('<p>2020-12-16 16:51:53</p>');
         html.push('</div>');
-        if(meetingStatus == -2){
+        if(meetingStatus == -5){
             html.push('<div class="b">');
             html.push('<a id="status_4" href="javascript:void(0);" class="popcontent-btn">重发</a>');
             html.push('</div>');
@@ -720,34 +780,34 @@ SignControl.prototype = {
     sendOne(evt){
         var id = evt.currentTarget.id;
         // console.log(this,id);
-        if(this.meetingStatus == -3 && id == "status_0"){
+        if(this.meetingStatus == -1 && id == "status_0"){
             //单发 会议准备
             console.log("status_0");
-            this.sendOneNewTableSign(0);
-        }else if(this.meetingStatus == -1 && id == "status_1"){
+            this.sendOneNewTableSign(1);
+        }else if(this.meetingStatus == -2 && id == "status_1"){
             //单发 会议开始
             console.log("status_1");
-            this.sendOneNewTableSign(1);
-        }else if(this.meetingStatus == -4 && id == "status_2"){
+            this.sendOneNewTableSign(2);
+        }else if(this.meetingStatus == -3 && id == "status_2"){
             //单发 会议暂停
             console.log("status_2");
-            this.sendOneNewTableSign(2);
-        }else if(this.meetingStatus == -5 && id == "status_3"){
+            this.sendOneNewTableSign(3);
+        }else if(this.meetingStatus == -4 && id == "status_3"){
             //单发 会议恢复
             console.log("status_3");
-            this.sendOneNewTableSign(3);
-        }else if(this.meetingStatus == -2 && id == "status_4"){
+            this.sendOneNewTableSign(4);
+        }else if(this.meetingStatus == -5 && id == "status_4"){
             //单发 会议结束
             console.log("status_4");
-            this.sendOneNewTableSign(4);
+            this.sendOneNewTableSign(5);
         }else if(this.meetingStatus == -6 && id == "status_5"){
             //单发 会议重启
             console.log("status_5");
-            this.sendOneNewTableSign(5);
+            this.sendOneNewTableSign(6);
         }else if(this.meetingStatus == -7 && id == "status_6"){
             //单发 会议重置
             console.log("status_6");
-            this.sendOneNewTableSign(6);
+            this.sendOneNewTableSign(7);
         }
     },
     sendOneNewTableSign:function(type){
@@ -762,6 +822,26 @@ SignControl.prototype = {
                     
                 }else{
                     alert("获取座区详情数据失败");
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    },
+
+    updatePName:function(seatid,name){
+        $.ajax({
+            async: true,
+            type: "post",
+            url: this.baseUrl +"/tableSign/updatePName",
+            data:{meetingid:this.meetingId,roomid:this.roomId,seatid:seatid,name:name},
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                    
+                }else{
                 }
             }.bind(this),
             //失败的回调函数

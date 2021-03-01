@@ -17,19 +17,19 @@
     <!-- <link rel="stylesheet" href="rule_zq.css" /> -->
     
     <style type="text/css">
-        /* 3: 准备会议发送成功；-3: 准备会议失败； */
-        .sm3{
+        /* 1: 准备会议发送成功；-1: 准备会议失败； */
+        .sm1{
             background-color: #ffcbcc;
         }
-        .sm33{
+        .sm11{
             background-color: #d7ffca;
         }
 
-        /* 4: 暂停会议成功；-4：暂停会议失败； */
-        .sm4{
+        /* 3: 暂停会议成功；-3：暂停会议失败； */
+        .sm3{
             background-color: #d6d6d6;
         }
-        .sm44{
+        .sm33{
             background-color: #9affea;
         }
 
@@ -38,10 +38,10 @@
             background-color: #f9ffbb;
         }
 
-        .sm2{
+        .sm5{
             background-color: #e7fffa;
         }
-        .sm22{
+        .sm55{
             background-color: #a3ffec;
         }
         .popcontent-details-list li .a .n{
@@ -74,13 +74,14 @@
     <div id="dragcontainerId" class="dragcontainer" style="box-sizing:border-box !important;">105,20</div>
      -->
      <!-- 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌 -->
-    <button onclick="changeSeatStatus(0);" style="z-index: 99;position: absolute; top:20px;left: 160px;">会议准备</button>
-    <button onclick="changeSeatStatus(1);" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
-    <button onclick="changeSeatStatus(2);" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
-    <button onclick="changeSeatStatus(3);" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
-    <button onclick="changeSeatStatus(4);" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
-    <button onclick="changeSeatStatus(5);" style="z-index: 99;position: absolute; top:20px;left: 560px;">重启会议</button>
-    <button onclick="changeSeatStatus(6);" style="z-index: 99;position: absolute; top:20px;left: 640px;">设备重置</button>
+     <!-- 类型：1 准备会议，2 开始会议，3 暂停会议，4 恢复会议，5 结束会议，6 重启会议，7 重置桌牌 -->
+    <button onclick="changeSeatStatus(1);" style="z-index: 99;position: absolute; top:20px;left: 160px;">会议准备</button>
+    <button onclick="changeSeatStatus(2);" style="z-index: 99;position: absolute; top:20px;left: 240px;">会议开始</button>
+    <button onclick="changeSeatStatus(3);" style="z-index: 99;position: absolute; top:20px;left: 320px;">会议暂停</button>
+    <button onclick="changeSeatStatus(4);" style="z-index: 99;position: absolute; top:20px;left: 400px;">会议恢复</button>
+    <button onclick="changeSeatStatus(5);" style="z-index: 99;position: absolute; top:20px;left: 480px;">会议结束</button>
+    <button onclick="changeSeatStatus(6);" style="z-index: 99;position: absolute; top:20px;left: 560px;">重启会议</button>
+    <button onclick="changeSeatStatus(7);" style="z-index: 99;position: absolute; top:20px;left: 640px;">设备重置</button>
 
     <!-- <button onclick="addSeat();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button> -->
     <button onclick="editSeat();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
@@ -94,7 +95,7 @@
     <div id="seatsbody" style="position: absolute;"></div>
 
 
-    <div class="errortip"><span>会议开始中...</span></div>
+    <div id="errortip" class="errortip"><span>会议开始中...</span></div>
 
     <!--弹框-->
     <div id="seatInfo" class="pop-mask" style="display: none;">
@@ -300,7 +301,7 @@
         
 
         // type,seatid,status,name
-        // 类型：0 准备会议，1 开始会议，2 暂停会议，3 恢复会议，4 结束会议，5 重启会议，6 重置桌牌
+        // 类型：1 准备会议，2 开始会议，3 暂停会议，4 恢复会议，5 结束会议，6 重启会议，7 重置桌牌
         function changeSeatStatus(type){
             __signControl.appTableSignControl(+type);
         }
@@ -318,7 +319,7 @@
             if(seats.length > 0 && seats.length == 1){
                 var seatid = seats[0].id;
                 
-                __signControl.findDeviceDetailsTest(seatid);
+                __signControl.findDeviceDetails(seatid);
                 // if(typeof H5JsMeeting != "undefined"){
                 // }else{
                 //     alert(seatid);
@@ -356,6 +357,8 @@
                                 }
                             });
                             var seatno = $(seats[0]).attr("id");
+
+                            __signControl.updatePName(seatno,newname);
                             // if(ish){
                             //     $("#"+seatno).text(newname);
                             //     seats.removeClass("seled");
