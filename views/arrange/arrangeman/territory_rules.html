@@ -522,10 +522,13 @@
             } else if (obj.event === 'editxq') {
                 editObj = obj;
                 if(obj.data.ruleid == "R98"){
-                    //点选排序编辑
-                }else{
-                    changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement);
+                    //点选排序编辑, 激活单选
+                    __isClickRule = true;
+                    seatMapsControl.bindClickRule();
+                    seatMapsControl.setClickRulePoint(obj.data.rulezone);
                 }
+
+                changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement);
             }
         });
 
