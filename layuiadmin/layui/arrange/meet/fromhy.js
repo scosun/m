@@ -192,7 +192,7 @@ layui.config({
        console.log(newdates)
 
         var datatime = data.field.date +newdates+ datime;
-        
+
         console.log(data.field);
         // $.ajax({
         //     async: false,
@@ -217,13 +217,13 @@ layui.config({
         //         if (msg.state == 1) {
         //             layer.msg("增加成功");
         //             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-        //             parent.layer.close(index);
+        //             parent.layer.closeAll();;
         //             parent.location.reload(); // 父页面刷新
 
         //         } else {
         //             layer.msg("增加失败");
         //             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-        //             parent.layer.close(index);
+        //             parent.layer.closeAll();;
         //             parent.location.reload(); // 父页面刷新
 
 

@@ -456,6 +456,9 @@ layui.config({
 
         },
         upload: function () {
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再批量导入")
+            }
             layer.open({
                 type: 2,
                 title: '<p style="">批量导入</p>',
@@ -476,10 +479,13 @@ layui.config({
             })
         },
         download: function () {
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再下载模板")
+            }
             layer.open({
                 type: 2,
                 title: '<p style="">下载模板</p>',
-                content: 'downloadattender.html',
+                content: 'downloadattender.html?id='+$('#select-room').val(),
                 maxmin: true,
                 area: ['60%', '75%'],
                 btn: ['确定', '取消'],
@@ -495,6 +501,7 @@ layui.config({
             })
         },
         uploadphoto: function () {
+
             if($('#select-room').val() ==-1){
                 return layer.msg("请先选择会议再上传图片")
             }
@@ -502,7 +509,7 @@ layui.config({
                 type: 2,
                 title: '批量上传参会人员信息',
                 content: 'uploadphotos.html',
-                 maxmin: true,
+                maxmin:true,
                 area: ['60%', '71%'],
                 btn: ['提交', '取消'],
                 yes: function (index, layero) {},

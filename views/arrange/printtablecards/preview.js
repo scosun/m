@@ -890,7 +890,7 @@ layui.config({
                 if(obj.code == 0){
                     parent.layer.msg("添加成功");
                     var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
+                    parent.layer.closeAll();;
                     parent.reloads();
                 }else{
                     layer.msg("添加席签模板错误");
@@ -934,7 +934,7 @@ layui.config({
                 if(obj.code == 0){
                     parent.layer.msg("修改成功");
                     var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
+                    parent.layer.closeAll();;
                     parent.reloads();
                 }else{
                     layer.msg("修改席签模板错误");
@@ -974,11 +974,11 @@ layui.config({
             },
             cancel: function() {
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index); //再执行关闭
+                parent.layer.closeAll();; //再执行关闭
             },
             close:function(){
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index); //再执行关闭
+                parent.layer.closeAll();; //再执行关闭
             }
         };
 

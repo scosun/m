@@ -63,15 +63,15 @@
 			margin-right: 450px;
 			margin-top: 9px;
 		}
-		
+
 		.bindmac{
 			background: #ff000040;
 		}
 	</style>
-<script type="text/javascript">  
-    function doNothing(){  
-        window.event.returnValue=false;  
-        return false;  
+<script type="text/javascript">
+    function doNothing(){
+        window.event.returnValue=false;
+        return false;
     }
 </script>
 </head>
@@ -127,7 +127,7 @@
 <script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
 <script type="text/javascript">
 
-	
+
 
 	layui.config({
 		base: '../../../layuiadmin/' //静态资源所在路径
@@ -172,7 +172,7 @@
 			success: function(data) {
 				var datas = data.data;
 				$("body").append(datas.code);
-				
+
 				getFindByseatmac();
 			}
 		});
@@ -218,7 +218,7 @@
 					}else{
 						layer.msg(res.msg || "修改mac失败");
 					}
-					
+
 				}
 			});
 		}
@@ -243,10 +243,10 @@
 				});
 				layer.close(index);
 			}.bind(this));
-			
+
 		}
 
-		
+
 
 		function setSeatBindStatus(data){
 			$(".bindmac").removeClass("bindmac");
@@ -274,7 +274,7 @@
 					chkseat = macdata.filter(function(item){
 						return item.seatid == seatid;
 					})[0] || {seatid:seatid};
-					
+
 				} else {
 					sel.removeClass('seled');
 					chkseat = {};
@@ -300,7 +300,7 @@
 						if(mac && mac != chkseat.mac){
 							setmacByroomid(mac);
 						}
-						
+
 						layer.close(index);
 					},
 					success:function(layero) {
@@ -308,11 +308,11 @@
 					}
 				});
 			}
-			
+
 		}
 
 
-		
+
 		function bindContextMenu(){
 			removeContainerEvent();
 
@@ -357,9 +357,9 @@
 						deleteSeatMac();
 					}
 				}
-				
+
 			];
-			
+
 			if($("#"+seatno).length > 0){
 				ContextMenu.bind("#"+seatno, menuJson);
 			}
@@ -376,12 +376,12 @@
 		startInterval();
 	});
 
-	
+
 	var $ = layui.$,
 	active = {
 		close: function() {
 			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-			parent.layer.close(index); //再执行关闭 
+			parent.layer.closeAll();; //再执行关闭
 			// parent.reloads()
 		}
 	};

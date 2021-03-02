@@ -119,10 +119,10 @@
             color: #ff0000;
         }
     </style>
-<script type="text/javascript">  
-    function doNothing(){  
-        window.event.returnValue=false;  
-        return false;  
+<script type="text/javascript">
+    function doNothing(){
+        window.event.returnValue=false;
+        return false;
     }
 </script>
 </head>
@@ -372,7 +372,7 @@
             // >    "seatid":"1-10"
             // >  }
 
-            
+
             // bindContextMenu();
         }
 
@@ -399,8 +399,8 @@
                 console.log("数据发送中...",roomid+"&faceTest");
                 var msgid = layer.msg("设备启动中...")
                 meetWs.send(roomid+"&faceTest");
-                
-                meetWs.onmessage = function (evt) { 
+
+                meetWs.onmessage = function (evt) {
                     var received_msg = evt.data || "";
                     console.log("数据已接收...",received_msg);
                     try{
@@ -410,7 +410,7 @@
                     }catch(ex){
                     }
                 };
-                
+
             }else{
                // 浏览器不支持 WebSocket
                alert("您的浏览器不支持 WebSocket!");
@@ -427,7 +427,7 @@
             }
         }
 
-        
+
 
         function bindOneClick(){
             removeContainerEvent();
@@ -456,7 +456,7 @@
             })
         }
 
-        
+
         // https://f.longjuli.com/seatmac/delmacByroomid
         function setNameBySeatid(name,seatid){
             $.ajax({
@@ -473,7 +473,7 @@
                         var obj = res.data || {};
                         $("#" + obj.seatid).html(obj.name);
                         $("#" + obj.seatid).css("background","#fff1ae");
-                        
+
                     }else{
                         layer.msg(res.msg || "修改mac失败");
                     }
@@ -556,20 +556,20 @@
 				// 		deleteSeatMac();
 				// 	}
 				// }
-				
+
 			];
-			
+
 			if($("#"+seatno).length > 0){
 				ContextMenu.bind("#"+seatno, menuJson);
 			}
         }
-        
+
 
         var $ = layui.$,
             active = {
                 close: function() {
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭
+                    parent.layer.closeAll();; //再执行关闭
                     // parent.reloads()
                 }
             };
@@ -579,7 +579,7 @@
             active[type] ? active[type].call(this) : '';
         });
     });
-    
+
 
     function asd() {
         location.reload();

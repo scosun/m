@@ -78,7 +78,7 @@ layui.config({
         if (data.field.close == "on") {
             ruletype = 1;
         }
-        
+
         var openid = 0;
         var ruleid;
         var roomid;
@@ -102,7 +102,7 @@ layui.config({
                 if (msg.code == '0') {
                     var data = msg.state;
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭 
+                    parent.layer.closeAll();; //再执行关闭
                     open(msg);
                 } else {
 
@@ -116,7 +116,7 @@ layui.config({
         })
 
         function open(msg) {
-            
+
             parent.layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',
@@ -140,7 +140,7 @@ layui.config({
 
 
         // if(openid == 1) {
-        // 	  
+        //
         // }
 
         return false;
@@ -149,12 +149,12 @@ layui.config({
 
 
         // var rowname = $("#select-room").find("option[value='"+data.field.interest+"']").text();
-      
+
 
         var openid = 0;
         var ruleid;
         var roomid;
-      
+
         $.ajax({
             async: false,
             type: "post",
@@ -173,9 +173,9 @@ layui.config({
             success: function(msg) {
                 if (msg.code == '0') {
                     var data = msg.state;
-                    var index = parent.layer.getFrameIndex(window.name); 
+                    var index = parent.layer.getFrameIndex(window.name);
                     parent.reloads()//先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭 
+                    parent.layer.closeAll();; //再执行关闭
                     open(msg);
                 } else {
 
@@ -207,14 +207,14 @@ layui.config({
                     // parent.$("#roomid").val(msg.roomid);
                     // body.find("#roomid").val(msg.roomid);
                 },
-               
+
             })
 
         }
 
 
         // if(openid == 1) {
-        // 	  
+        //
         // }
 
         return false;

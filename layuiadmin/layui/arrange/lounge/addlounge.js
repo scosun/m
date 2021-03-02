@@ -67,14 +67,14 @@ layui.config({
                 if (res.code == '0') {
                     parent.layer.msg('添加成功');
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                     parent.ajaxs(indexs)
                 } else {
                     layer.msg(res.msg, {
                         icon: 5
                     });
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                 }
             },
             error: function (error) {

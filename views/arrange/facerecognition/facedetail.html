@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
-	
+
 	<div class="layui-form-item">
 		显示参会人  证件编号，姓名，单位（职务），手机号，照片，座位片区，座位号
 	</div>
@@ -31,7 +31,7 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
+
 		$('#colnum').on('keydown', function (event) {
 			if (event.keyCode == 13) {
 				var layer = layui.layer;
@@ -39,7 +39,7 @@ layui.config({
 				var colnum = +$("#colnum").val() || 0;
 				if(rownum > 0 && colnum > 0){
 					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
+               		parent.layer.closeAll();;		//关闭窗口
 					window.parent.creatSeats(rownum,colnum);
 				}else{
 					layer.msg('行，列数字输入错误');

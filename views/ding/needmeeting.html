@@ -215,7 +215,7 @@
                 // 1 . 下拉刷新 回调函数
                 loadUpFn : function(me){
                     console.log("loadUpFn------");
-                    page = 1; 
+                    page = 1;
                     dropme = me;
                     me.resetload();
                     me.unlock();
@@ -230,7 +230,7 @@
                 },
                 threshold : 150
             });
-        } 
+        }
 
         dropInit();
 
@@ -249,19 +249,25 @@
                 },
                 success: function (msg) {
                     if (msg.code === 0) {
-                        
+
                         var len = msg.data.length;
                         var html = [];
                         msg.data.map(function (x){
                             if (x.meetingstatus === 0){
                                 var display;
                                 var signup;
+                                var show;
                                 if (x.meetingid !=null){
                                     display = 'display';
                                     signup = 'none';
                                 }else {
                                     display = 'none';
                                     signup = 'display';
+                                }
+                                if (x.isshow == 1){
+                                    show = 'none'
+                                }else {
+                                    show = 'display'
                                 }
                                 html.push('<li>\n' +
                                     '        <h3 class="bt">'+x.mname+'</h3>\n' +
@@ -271,7 +277,7 @@
                                     '            </div>\n' +
                                     '            <div class="r">\n' +
                                     '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="blue">点击报名</a></span>\n' +
-                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'&name='+x.name+'" ><i class="iconfont icon-zuowei1"></i>座区图</a></span>\n'+
+                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'&name='+x.name+'" ><i class="iconfont icon-zuowei1" ></i>座区图</a></span>\n'+
                                     '            </div>\n' +
                                     '        </div>\n' +
                                     '        <div class="sinfo">\n' +
@@ -279,17 +285,23 @@
 
                                     '            <span>报名截止时间：'+x.deadlineForRegistrationTime+'</span>\n' +
                                     '        </div>\n' +
-                                    '        <div class="bjNew"><i class="iconfont icon-biaoqian"></i></div>\n' +
+                                    '        <div class="bjNew" style="display: '+show+'"><i class="iconfont icon-biaoqian"></i></div>\n' +
                                     '    </li>'
                                 )
                             }else if (x.meetingstatus === 1) {
                                 var display;
                                 var signup = '';
+                                var show;
                                 if (x.meetingid !=null){
                                     display = 'display';
                                 }else {
                                     display = 'none';
                                     signup = 'display';
+                                }
+                                if (x.isshow == 1){
+                                    show = 'none'
+                                }else {
+                                    show = 'display'
                                 }
                                 html.push('<li>\n' +
                                     '        <h3 class="bt">'+x.mname+'</h3>\n' +
@@ -299,14 +311,14 @@
                                     '            </div>\n' +
                                     '            <div class="r">\n' +
                                     '                <span style="display: '+signup+'"><a href="./meetingdetails.html?id='+x.mid+'&recordid='+x.id+'&isshow='+x.isshow+'" class="green">已报名</a></span>\n' +
-                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'&name='+x.name+'" ><i class="iconfont icon-zuowei1"></i>座区图</a></span>\n'+
+                                    '          <span class="gray" style="display: '+display+'" ><a href="./roomtemplate.html?meetingid='+x.meetingid+'&name='+x.name+'" ><i class="iconfont icon-zuowei1" ></i>座区图</a></span>\n'+
                                     '            </div>\n' +
                                     '        </div>\n' +
                                     '        <div class="sinfo">\n' +
                                     '            <span>'+x.notificationunit+'</span>\n' +
                                     '            <span>报名截止时间：'+x.deadlineForRegistrationTime+'</span>\n' +
                                     '        </div>\n' +
-                                    '        <div class="bjNew"><i class="iconfont icon-biaoqian"></i></div>\n' +
+                                    '        <div class="bjNew" style="display: '+show+'"><i class="iconfont icon-biaoqian" ></i></div>\n' +
                                     '    </li>'
                                 )
                             } else if (x.meetingstatus == 2){

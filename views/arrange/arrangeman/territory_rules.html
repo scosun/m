@@ -66,10 +66,10 @@
         }
 
     </style>
-<script type="text/javascript">  
-    function doNothing(){  
-        window.event.returnValue=false;  
-        return false;  
+<script type="text/javascript">
+    function doNothing(){
+        window.event.returnValue=false;
+        return false;
     }
 </script>
 </head>
@@ -318,9 +318,9 @@
                 // layer.closeAll();
                 if(datas.templatecode !=null){
                     $("body").append(datas.templatecode);
-                    
+
                     seatMapsControl.selectSeats();
-                    
+
                     queryAllSeatStatus(roomid, ruleid);
                     layer.closeAll();
                 }else{
@@ -545,7 +545,7 @@
                     seatMapsControl.clearClickRulePoint();
                     seatMapsControl.selectSeats();
                 }
-                
+
             },
             dragcontainer:function(){
                 if(__handDrag){
@@ -605,7 +605,7 @@
                         // {return layer.msg("请选择规则")}
                         // if(isincrement==''||isincrement==null)
                         // {return layer.msg("请选择规则")}
-                        
+
                         layer.close(index);
                     },
                     success: function(layero, index) {
@@ -633,7 +633,7 @@
                         rulename = rulename[1] || "";
 
                         console.log("ruleselect----",ruleselect)
-                        
+
                         if(ruleselect==''||ruleselect==null){
                             return layer.msg("请选择编排规则");
                         }
@@ -668,8 +668,8 @@
                 }
             },
             close: function() {
-                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index); //再执行关闭
+                // var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.closeAll(); //再执行关闭
                 parent.reloads();
             }
         }
@@ -743,14 +743,14 @@
             if (isaddrule) {
                 var count = 0;
                 // var ckids_now = $("#seatcontainerId .seled");
-                
+
                 var ckids_now = seatsIdSort();
                 if(ruleselect == "R98"){
                     //点选 排序 规则
                     var ckids_now = seatMapsControl.getClickRulePoint();
                     seatMapsControl.clearClickRulePoint();
                 }
-                
+
                 if (ckids_now && ckids_now.length > 0) {
                     var rule = [];
                     for (var i = 0, len = ckids_now.length; i < len; i++) {
@@ -832,7 +832,7 @@
                             var id = seatids[i];
                             var st = $("#"+id).position().top;
                             var h = $("#"+id).height();
-                            
+
                             var kid = seatMapsControl.isRow(seledgroup,(st - h/2),(st + h/2));
                             if(kid){
                                 seledgroup[kid].push(id);
@@ -988,7 +988,7 @@
 
         function updateSeatRule(rulename,rule, ruleid, rulerecordid, isincrement, oldruleid,ruletemplateid) {
             var rulez = JSON.parse(rule);
-            
+
             var data = {};
             var allrows = getRowSeatMap(rulez);
             data.rulematrix = JSON.stringify(allrows);

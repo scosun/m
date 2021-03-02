@@ -50,14 +50,14 @@ layui.config({
 				layer.msg('座位数量输入错误');
 				return false;
 			}
-			
+
 			var condi = {};
 			condi.type = 1;
 			condi.edges = 1;
 			condi.seat_nums = [+seatnum];
 			getCustomSeats(condi);
 
-			
+
 			return false;
 		}
 	});
@@ -75,7 +75,7 @@ layui.config({
 			async: true,
 			type: "post",
 			data: JSON.stringify(condi),
-			contentType: 'application/json', 
+			contentType: 'application/json',
 			url: seatUrl + "/v1/editor",
 			dataType: "json",
 			success: function(obj) {
@@ -86,7 +86,7 @@ layui.config({
 				layer.closeAll();
 
 				var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-				parent.layer.close(index);
+				parent.layer.closeAll();;
 			},
 			//失败的回调函数
 			error: function() {
@@ -94,7 +94,7 @@ layui.config({
 				layer.closeAll();
 
 				var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-				parent.layer.close(index);
+				parent.layer.closeAll();;
 			}
 		});
 	}

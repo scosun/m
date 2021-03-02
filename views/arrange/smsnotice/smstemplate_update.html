@@ -55,7 +55,7 @@
 						<a
 								id="person" onclick="test('${座位号}')"><span>${座位号}</span></a>
 						<a
-								id="person" onclick="test('${报名截止时间}')"><span>${报名截止时间}</span></a> 
+								id="person" onclick="test('${报名截止时间}')"><span>${报名截止时间}</span></a>
 					</p>
 				</div>
 			</div>
@@ -131,7 +131,7 @@
 						if (msg.code == 0) {
 							parent.layer.msg("修改成功")
 							var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-							parent.layer.close(index);
+							parent.layer.closeAll();;
 							parent.reloads();
 						} else {
 							parent.layer.msg(msg.msg)

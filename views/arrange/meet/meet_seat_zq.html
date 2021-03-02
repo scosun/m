@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../../web.contextmenu/web.contextmenu.css" media="all">
     <link rel="stylesheet" href="../../../css/seat.css" media="all">
     <link rel="stylesheet" href="rule_zq.css" />
-    
+
     <style type="text/css">
         .layui-tab {
             margin: 68px 0 0 15px;
@@ -100,7 +100,7 @@
 			margin-right: 685px;
 			margin-top: 9px;
 		}
-		
+
         .dragh3{
             cursor: pointer;
         }
@@ -124,19 +124,19 @@
             top: 40px;
             border:1px solid #ccc;
             background-color: #fff;
-            
+
         }
         .setpop .layui-form-item{
             margin: 10px 0;
-            
+
         }
         .setpop .layui-form-item input{
             vertical-align: middle;
-        } 
+        }
         .setpop .layui-form-item label{
             display: inline-block;
             vertical-align: -2px;
-        } 
+        }
         .settoparr{
             position:absolute;
             top: -10px;
@@ -156,10 +156,10 @@
 
 
 	</style>
-	<script type="text/javascript">  
-		function doNothing(){  
-			window.event.returnValue=false;  
-			return false;  
+	<script type="text/javascript">
+		function doNothing(){
+			window.event.returnValue=false;
+			return false;
 		}
 	</script>
 </head>
@@ -182,8 +182,8 @@
             <i id="revertbtn" data-type="revertbtn" data="撤销上一步"><img src="../../../images/toolkit/prev_step.svg"></i>
 			<i id="leavebtn" data-type="askLeave" data="显示请假人员列表"><img src="../../../images/Closedleave.svg"></i>
 			<i id="importedbtn" data-type="notImport" data="显示未导入人员列表"><img src="../../../images/Closeduser-group.svg"></i>
-			
-			
+
+
 			<i id="drag-container" data-type="dragcontainer" data="拖拽画布"><img src="../../../images/toolkit/hand-80.svg"></i>
 			<i id="nav-parallelism" data-type="parallelism" data="对应关系绑定"><img src="../../../images/parallelism.png"></i>
 			<i id="nav-lock" data-type="bindLockSeats" data="锁定"><img src="../../../images/lock.png"></i>
@@ -198,13 +198,13 @@
 			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
 			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
 			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
-			
+
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
             <i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
 
             <i id="nav-uploadseatbtn" data-type="uploadseatbtn" data="word人员导入"><img src="../../../images/inbox-archive-fill.svg"></i>
             <i id="nav-uploadseat" data-type="uploadseat" style="display: none;" data="word人员导入"><img src="../../../images/inbox-archive-fill.svg"></i>
-            
+
             <i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
 			<!-- <input type="file" name="file" id="upload-file" style="display:none;" onchange="uploadFile()"/> -->
 			<i id="nav-word" data-type="word" data="导出模板"><img src="../../../images/word.png"></i>
@@ -212,7 +212,7 @@
 		</span>
 		<!-- 右侧菜单 end-->
     </div>
-    
+
     <!-- <div class="clearfix">
         <span class="layui-right-nav">
             <i id="nav-ClosedaskLeave" data-type="askLeave" class="layui-ds" data="关闭请假人员列表"><img src="../../../images/Closedlist.svg"></i>
@@ -241,7 +241,7 @@
                 一层
             </div>
              -->
-            <!-- tab3 
+            <!-- tab3
             <div class="layui-tab-item">二层</div>
             -->
 
@@ -299,7 +299,7 @@
             <div class="float-right" style="display: none;" id="notImport">
                 <h3 id="notImportTitle" class="dragh3" >未导入人员列表</h3>
                 <span id="setattribute" class="iconfont icon-xitongguanli" style="position: absolute;top: 8px;right: 10px;"></span>
-                
+
                 <div id="attributelist" class="setpop" style="display: none;">
                     <div class="settoparr"></div>
                     <div id="radiolist" class="radiodiv">
@@ -379,13 +379,13 @@
     <script src="../../../web.contextmenu/web.contextmenu.js"></script>
     <script src="../../../layuiadmin/layui/layui.js"></script>
     <script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
-    <script src="meet_seat_zq.js"></script>
+    <script src="meet_seat_zq.js" version="1.0"></script>
 
     <!-- <script src="../../../js/scosun.js"></script> -->
-    
-    
 
-    
+
+
+
 
     <!-- /* dragDiv 拖动工具箱 3.25*/ -->
     <script type="text/javascript">
@@ -421,7 +421,7 @@
                     var iT = event.clientY - disY;
                     var maxL = document.documentElement.clientWidth - oDrag.offsetWidth - 10;
                     var maxT = document.documentElement.clientHeight - oDrag.offsetHeight - 10;
-                    
+
                     iL <= 8 && (iL = 8);
                     iT <= 65 && (iT = 65);
                     iL >= maxL && (iL = maxL);
@@ -437,7 +437,7 @@
                 };
                 this.setCapture && this.setCapture();
                 return false
-            };	
+            };
             //还原到原来位置
             // oJreduction.onclick = function (){
             // 	oDrag.style.left ='auto';
@@ -448,7 +448,7 @@
             var oDrag = document.getElementById("askLeave");
             var oTitle = document.getElementById("askLeaveTitle");
             dragAction(oDrag, oTitle);
-            
+
             var oDrag2 = document.getElementById("notImport");
             var oTitle2 = document.getElementById("notImportTitle");
             dragAction(oDrag2, oTitle2);

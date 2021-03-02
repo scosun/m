@@ -48,7 +48,7 @@ layui.config({
         },
         //成功的回调函数
         data: {
-           
+
         },
         success: function(msg) {
 
@@ -56,9 +56,9 @@ layui.config({
 
             $.each(data, function(idx, con) {
                 $("#select_meet").after("<option value=" + con.id + ">" + con.name + "</option>");
-                
+
             })
-            
+
              $("#meeting_list").val($("#meetingid").val());
 
 
@@ -105,35 +105,35 @@ layui.config({
                 if(obj.data.children.length !=0){
                     $.each(obj.data.children,(idx,con)=>{
                         attributes.push(con.id);
-                    })    
+                    })
                 }else{
                     attributes.push(obj.data.id);
                 }
-               
+
             }else{
                 if(obj.data.children.length !=0){
                     $.each(obj.data.children,(idx,con)=>{
                         attributes.splice($.inArray(con.id,attributes),1)
-                    })    
+                    })
                 }else{
                     var i = $.inArray(obj.data.id,attributes)
-                    
+
                 if( i != -1){
                     attributes.splice(i,1)
-                } 
                 }
-                
-             
-               
+                }
+
+
+
             }
         }
 
     });
-    
+
     upload.render({
         elem: '#test-upload-drag'
         ,url: '/upload/',
-        auto: false,    
+        auto: false,
         bindAction:'#btn99',
         choose: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
             obj.preview(function(index, file, result){
@@ -142,11 +142,11 @@ layui.config({
                 uploadfile = file;//得到文件对象
                 // console.log(uploadfile)
                 // console.log(result); //得到文件base64编码，比如图片
-                
+
                 //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
-                
+
                 //这里还可以做一些 append 文件列表 DOM 的操作
-                
+
                 //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
                 //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
               });
@@ -155,7 +155,7 @@ layui.config({
             console.log(res)
         }
     });
-    
+
     // upload.render({
     //     elem: '#test-upload-drag'
     //     ,url: '/upload/'
@@ -182,7 +182,7 @@ layui.config({
             $("#viprooms").css("display","none");
         }
     });
-	
+
 	form.on('submit(updatameeting)', function(data) {
 		console.log("22222");
 		console.log(data);
@@ -230,14 +230,14 @@ layui.config({
 			    if (res.code == '0') {
 			        parent.layer.msg('维护成功');
 					var index = parent.layer.getFrameIndex(window.name)
-					parent.layer.close(index)
+					parent.layer.closeAll();
 					parent.ajaxs(data.field.meeting_list)
 			    } else {
 			        layer.msg(res.msg, {
 			            icon: 5
 			        });
 					var index = parent.layer.getFrameIndex(window.name)
-					parent.layer.close(index)
+					parent.layer.closeAll();
 			    }
 			},
 			error: function (error) {
@@ -247,9 +247,9 @@ layui.config({
 			    layer.close(index);
 			}
 		});
-		
+
 	});
-	
+
     form.on('submit(addmeeting)', function(data) {
         console.log(data)
         console.log()
@@ -276,7 +276,7 @@ layui.config({
         formdata.append('compareimg1','');
         formdata.append('compareimg2','');
         formdata.append('compareimg3','');
-        
+
         $.ajax({
             async: false,
             type: "post",
@@ -289,16 +289,16 @@ layui.config({
             },
             //成功的回调函数
             success: function (msg) {
-                
+
                 if(msg.code==0){
                     parent.layer.msg(msg.msg)
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                     parent.ajaxs(data.field.meeting_list)
                 }else{
                     parent.layer.msg(msg.msg)
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                 }
 
             },
@@ -306,7 +306,7 @@ layui.config({
                 console.log(error)
             },
         })
-        
+
         return false;
     });
 })

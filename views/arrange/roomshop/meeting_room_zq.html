@@ -64,15 +64,15 @@
         }
 
     </style>
-	<script type="text/javascript">  
-		function doNothing(){  
-			window.event.returnValue=false;  
-			return false;  
+	<script type="text/javascript">
+		function doNothing(){
+			window.event.returnValue=false;
+			return false;
 		}
 	</script>
 </head>
 <body oncontextmenu="doNothing()">
-	
+
 	<header>
 		<span class="layui-breadcrumb" style="line-height: 3.5rem;">
 			<a style="margin-left: 10px"><cite id="rulename"></cite></a>
@@ -87,12 +87,12 @@
 
 	<script src="../../../layuiadmin/layui/layui.js"></script>
 	<script src="../../../js/seatscontrol_drag.js" charset="utf-8"></script>
-	
+
 	<script type="text/javascript">
 		function asd() {
 			location.reload();
 		}
-	
+
 		layui.config({
 			base: '../../../layuiadmin/' //静态资源所在路径
 		}).extend({
@@ -124,7 +124,7 @@
 
 			$('#rulename').text(name);
 			layer.load(2);
-			
+
 			$.ajax({
 				url: url+"/roomshop/QueryByid",
 				type: "get",
@@ -149,10 +149,10 @@
 				error:function(){
 					layer.closeAll();
 				}
-				
+
 			});
 
-			
+
 			function cloneTemp(){
 				$.ajax({
 					url: url+"/roomshop/clone",
@@ -174,7 +174,7 @@
 					error:function(){
 						layer.msg("会场克隆错误");
 					}
-					
+
 				});
 			}
 
@@ -203,7 +203,7 @@
 				},
 				close: function() {
 					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-					parent.layer.close(index); //再执行关闭
+					parent.layer.closeAll();; //再执行关闭
 					parent.reloads();
 				}
 			}
@@ -214,6 +214,6 @@
 			});
 		});
 	</script>
-	
+
 </body>
 </html>

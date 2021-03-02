@@ -63,10 +63,10 @@
 				display: block;
 			}
 		</style>
-	<script type="text/javascript">  
-		function doNothing(){  
-			window.event.returnValue=false;  
-			return false;  
+	<script type="text/javascript">
+		function doNothing(){
+			window.event.returnValue=false;
+			return false;
 		}
 	</script>
 	</head>
@@ -115,7 +115,7 @@
 <!--			-->
 <!--		</script>-->
 		<script type="text/html" id="test-table-operate-barDemo">
-			<a  title="显示" lay-event="show" > <img src="../../../images/border.svg" width="23px" height="23px""> </a>
+			<a  title="显示" lay-event="show" > <img src="../../../images/border.svg" width="23px" height="23px"> </a>
 			<a  title="修改参数" lay-event="edit" style="margin-left: 5px;"><img src="../../../images/Adjust.png" width="18px" height="18px">  </a>
 			<a  title="修改选区" lay-event="editxq" style="margin-left: 5px;"><img src="../../../images/groupedit.png" width="18px" height="18px"> </a>
 			<a  title="删除规则" lay-event="del" style="margin-left: 5px;"><img src="../../../images/delete.png" width="18px" height="18px"> </a>
@@ -140,7 +140,7 @@
 				layer = layui.layer,
 				router = layui.router();
 			//全局变量编排规则id
-			
+
 
 			var seatMapsControl = new SeatMapsControl();
 
@@ -174,9 +174,9 @@
 			        "roomtemplateid": roomid
 			    },
 			    success: function(msg) {
-			
+
 			        var data = msg.data;
-			
+
 			        var i = 0;
 			        tablezonetable = table.render({
 			            elem: '#zonetable',
@@ -185,7 +185,7 @@
 			            cols: [
 			                [
 			                    // 表头
-			
+
 			                    {
 			                        field: 'bgcolor',
 			                        title: '规则对应底色',
@@ -202,13 +202,13 @@
 			                        title: '座位数量',
 			                        width: '10%',
 			                        align: "center"
-			
+
 			                    }, {
 			                        field: 'rulename',
 			                        title: '座次规则',
 			                        width: '15%',
 			                        align: "center"
-			
+
 			                    },
 			                    {
 			                        field: 'ordernum',
@@ -220,24 +220,24 @@
 			                            i++;
 			                            return i;
 			                        },
-			
-			
+
+
 			                    },
 			                    {
 			                        field: 'isincrement',
 			                        title: '递增补规则',
-			
+
 			                        width: '15%',
 			                        align: "center"
-			
-			
+
+
 			                    }, {
 			                        field: 'modifytime',
 			                        title: '更新时间',
 			                        width: '15%',
 			                        sort: true,
 			                        align: "center"
-			
+
 			                    }, {
 			                        width: '20%',
 			                        align: 'center',
@@ -252,7 +252,7 @@
 			            limits: [5, 10, 15], //显示
 			            limit: 15 //每页默认显示的数量
 			        });
-			
+
 			    },
 			    //失败的回调函数
 			    error: function() {
@@ -300,9 +300,9 @@
 				        "roomtemplateid": roomid
 				    },
 				    success: function(msg) {
-				
+
 				        var data = msg.data;
-				
+
 				        var i = 0;
 				        tablezonetable = table.render({
 				            elem: '#zonetable',
@@ -311,7 +311,7 @@
 				            cols: [
 				                [
 				                    // 表头
-				
+
 				                    {
 				                        field: 'bgcolor',
 				                        title: '规则对应底色',
@@ -328,13 +328,13 @@
 				                        title: '座位数量',
 				                        width: '10%',
 				                        align: "center"
-				
+
 				                    }, {
 				                        field: 'rulename',
 				                        title: '座次规则',
 				                        width: '15%',
 				                        align: "center"
-				
+
 				                    },
 				                    {
 				                        field: 'ordernum',
@@ -346,24 +346,24 @@
 				                            i++;
 				                            return i;
 				                        },
-				
-				
+
+
 				                    },
 				                    {
 				                        field: 'isincrement',
 				                        title: '递增补规则',
-				
+
 				                        width: '15%',
 				                        align: "center"
-				
-				
+
+
 				                    }, {
 				                        field: 'modifytime',
 				                        title: '更新时间',
 				                        width: '15%',
 				                        sort: true,
 				                        align: "center"
-				
+
 				                    }, {
 				                        width: '20%',
 				                        align: 'center',
@@ -378,7 +378,7 @@
 				            limits: [5, 10, 15], //显示
 				            limit: 15 //每页默认显示的数量
 				        });
-				
+
 				    },
 				    //失败的回调函数
 				    error: function() {
@@ -394,7 +394,7 @@
 					console.log(obj)
 					layer.confirm('确定删除规则吗?', function(index) {
 					    obj.del();
-					
+
 					    $.ajax({
 					        async: false,
 					        type: "get",
@@ -438,7 +438,7 @@
 
 							var rulename = body.find('#ruleselect option:selected').text().split('-') || [];
 							rulename = rulename[1] || "";
-							
+
 							console.log(ruleselect)
 							console.log(isincrement)
 							var oldruleid = obj.data.ruleid;
@@ -480,7 +480,7 @@
 						seatMapsControl.clearClickRulePoint();
 						seatMapsControl.selectSeats();
 					}
-					
+
 				},
 				dragcontainer:function(){
 					if(__handDrag){
@@ -537,7 +537,7 @@
 								}
 								setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
 							}
-							
+
 							layer.close(index);
 						},
 						success: function(layero, index) {
@@ -578,7 +578,7 @@
 							rulename = rulename[1] || "";
 
 							console.log("ruleselect----",ruleselect)
-							
+
 							if(ruleselect==''||ruleselect==null){
 								return layer.msg("请选择编排规则");
 							}
@@ -625,7 +625,7 @@
 				},
 				close: function() {
 					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-					parent.layer.close(index); //再执行关闭 
+					parent.layer.close(index); //再执行关闭
 					parent.reloads();
 				}
 			}
@@ -635,7 +635,7 @@
 				active[type] && active[type].call(this);
 			});
 
-			
+
 
 			var changeRuleZone = [];
 			var rulerecordid = 0;
@@ -644,7 +644,7 @@
 
 			var temp_ruletemplateid = 0;
 			var roomtemplateid = 0;
-			
+
 			var seatObj = {};
 			var ckids_now = [];
 			var changeSeatIds = [];
@@ -658,7 +658,7 @@
             	// var roomtemplateid = 0;
             	data. ruletemplateid= ruleid;
             	data.roomtemplateid = roomid;
-                   
+
             	// data.rule_id = temp_ruletemplateid;
             	// data.room_id = roomtemplateid;
             	// rule_id=180&room_id=67
@@ -790,7 +790,7 @@
 								var id = seatids[i];
 								var st = $("#"+id).position().top;
 								var h = $("#"+id).height();
-								
+
 								var kid = seatMapsControl.isRow(seledgroup,(st - h/2),(st + h/2));
 								if(kid){
 									seledgroup[kid].push(id);
@@ -878,7 +878,7 @@
 				}
 				return false;
 			}
-			
+
 			function getRowSeatMap(rule){
 				var row = [];
 				var rowids = [];
@@ -956,7 +956,7 @@
 				var data = {};
 				var allrows = getRowSeatMap(rulez);
 				data.rulematrix = JSON.stringify(allrows);
-				
+
 				data.rule = rulez; //JSON.stringify(rule);
 				data.action = "u";
 				data.rulename = rulename;
