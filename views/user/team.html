@@ -101,7 +101,26 @@
                 console.log("error")
             }
         })
+        $.ajax({
+            async: false,
+            type: "get",
+            url: url + "/team/findstatus",
+            xhrFields: {
+                withCredentials: true
+            },
 
+            //成功的回调函数
+            success: function (msg) {
+                var data = msg.data;
+                console.log(data);
+                $('#team').val(data.teamId);
+                form.render();
+            },
+            //失败的回调函数
+            error: function () {
+                console.log("error")
+            }
+        })
         form.on('submit(addsms)', function (data) {
             $.ajax({
                 url: url + "/team/switchteam",
