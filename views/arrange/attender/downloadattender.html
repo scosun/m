@@ -17,7 +17,7 @@
         <div class="layui-input-block">
             <div id="tree"></div>
         </div>
-        
+
     </div>
     <!-- <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list">
          <div class="layui-upload-drag" id="test-upload-drag" style="margin-left: 150px;margin-top: 50px;">
@@ -52,6 +52,13 @@
             var uploadfile = null;
             var attributes = [];
               var data;
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var uri = decodeURI(window.location.search);
+                var r = uri.substr(1).match(reg);  //匹配目标参数
+                if (r != null) return r[2]; return null; //返回参数值
+            }
+            var meetingid = getUrlParam("id")
         $.ajax({
             async: false,
             type: "get",
@@ -87,7 +94,7 @@
                         // console.log(i)
                     if( i != -1){
                         attributes.splice(i,1)
-                    } 
+                    }
                     // console.log(attributes)
                 }
             }
@@ -127,9 +134,7 @@
                 // formdata.append('file', uploadfile);
                 var attribute = attributes.join(",")
                 // console.log(attribute)
-                window.location=url + "/excel/download/"+attribute;
-                
-
+                window.location=url + "/excel/download/"+attribute+"/"+meetingid;
                 return false;
             });
         })

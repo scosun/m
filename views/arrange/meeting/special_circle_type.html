@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
-	
+
 	<div class="layui-form-item">
 		<label class="layui-form-label">绘制方式</label>
         <div class="layui-input-block">
@@ -38,11 +38,11 @@
 		<label class="layui-form-label">向心点选择</label>
         <div class="layui-input-block">
             <select class="dialogRuleSelect" lay-skin="select" lay-filter="point-form-select"  id="select_point">
-                
+
             </select>
         </div>
 	</div>
-	
+
 	<div class="layui-form" >
 		<div class="layui-form-item">
 			<label class="layui-form-label">环形座位数</label>
@@ -75,10 +75,10 @@
 	<div class="layui-form-item" style="display: none;">
 		<label class="layui-form-label">显示桌号</label>
 		<div class="layui-input-block" >
-			<input type="checkbox" id="diningtable" name="" title="" lay-skin="primary" > 
+			<input type="checkbox" id="diningtable" name="" title="" lay-skin="primary" >
 		</div>
 	</div>
-	
+
 	<!-- <div class="layui-form-item">
 		<label class="layui-form-label">列数</label>
 		<div class="layui-input-block">
@@ -101,7 +101,7 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-	
+
 		form.on('select(meetrule-form-select)', function(data){
 			var id = +data.value;
 			if(id == 1){
@@ -147,12 +147,12 @@ layui.config({
 				window.parent.seatmaps.createCircleSeatMap(ccx,ccy,r1,seatnum,select_ruleid,0);
 			}
 			var index = parent.layer.getFrameIndex(window.name);
-			parent.layer.close(index);
+			parent.layer.closeAll();;
 			return false
 		}
 	});
 
-	
+
 	addPonitList();
 	//加载本地数据
 	function addPonitList(){

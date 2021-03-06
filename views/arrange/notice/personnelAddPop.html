@@ -126,7 +126,7 @@ layui.config({
 				if (data.code == 0) {
 					parent.layer.msg("添加成功")
 					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-					parent.layer.close(index);
+					parent.layer.closeAll();;
 					parent.reloads();
 				}else{
 					parent.layer.msg(data.msg)

@@ -40,17 +40,17 @@ layui.config({
     }
     var meetingid = +getUrlParam("meetingid") || null;
     // var meetingname = getUrlParam("name") || null;
-    
+
 
     var roomId = 0;
     var ruleId = 0;
-    
+
 
     // var uri = window.location.search;
     // var str = uri.substr(1);
     // var roomtemplateid;
-    
- 
+
+
     if(!meetingid){
         layer.msg("没有获取到会议id");
         return;
@@ -105,7 +105,7 @@ layui.config({
     });
 
 
-    
+
     upload.render({
         elem: '#nav-upload',
         url:  url+"/wordtemplate/uploadWordTemplate",
@@ -138,7 +138,7 @@ layui.config({
             }
         }
     });
-    
+
     $("#nav-uploadseat").bind("click",function(evt){
         evt.preventDefault();
         evt.stopPropagation();
@@ -192,7 +192,7 @@ layui.config({
             console.log("roomid----",roomid);
 
             saveSeats();
-            
+
             getRoomTemplateCode(roomid,ruleid);
         });
     }
@@ -223,7 +223,7 @@ layui.config({
                     datas.templatecode = datas.templatecode.replace('style="position: fixed;left: 25px;top: 15px;"','style="position: fixed;left: 25px;top: 125px;"')
 
                     $("#seatsbody").html(datas.templatecode);
-                    
+
                     // 激活框选功能
                     seatMapsControl.selectSeats();
 
@@ -239,7 +239,7 @@ layui.config({
                 }else{
                     layer.msg("获取会议室模板错误");
                 }
-                
+
                 layer.closeAll();
             },
             error:function(){
@@ -403,7 +403,7 @@ layui.config({
         }
     }
 
-    
+
 
     /*右侧菜单HOVER显示提示文字*/
     var subtips;
@@ -423,7 +423,7 @@ layui.config({
     });
     /*右侧菜单HOVER显示提示文字 end*/
 
-    
+
     form.on('select(component-ruleselect)', function(data){
         // var id = +data.value;
         // meetingId = id;
@@ -440,7 +440,7 @@ layui.config({
             }
         }
     });
-    
+
     function setSeatStatus(data) {
         console.log("001----显示颜色");
         // console.log(data);
@@ -456,8 +456,8 @@ layui.config({
             }
         }
     }
-    
-    
+
+
     var attributestatus = false;
     var attrcurrent = "";
     $("#setattribute").bind("click",function(){
@@ -477,7 +477,7 @@ layui.config({
         var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
         seled.each(function(){
             // var id = $(this).attr("id");
-            
+
             // var seat = showSeatsData.filter(function(item){
             //     return item.seatid == id;
             // })[0] || null;
@@ -505,14 +505,14 @@ layui.config({
             async: true,
             type: "post",
             data: JSON.stringify(condi),
-            contentType: 'application/json', 
+            contentType: 'application/json',
             url: seatUrl +"/v1/meetings/sort",
             dataType: "json",
             success: function(obj) {
                 console.log("--importSeatsDataBySort---",condi);
                 if(obj && obj.attendees){
                     showSeatsData = obj.attendees;
-                    
+
                     //导入数据是全部的数据，重新获取模板加载人员
                     getRoomTemplateCode(roomId);
                 }else{
@@ -532,7 +532,7 @@ layui.config({
             async: true,
             type: "post",
             data: JSON.stringify(data),
-            contentType: 'application/json', 
+            contentType: 'application/json',
             url: seatUrl +"/v1/meetings/store",
             dataType: "json",
             success: function(obj) {
@@ -560,7 +560,7 @@ layui.config({
 
 
     getPending();
-    
+
     var groupids = {};
 
     // 获取未导入人员列表
@@ -644,10 +644,10 @@ layui.config({
             li.push('</li>');
         }
         $("#askLeaveTitleList").html(li.join(''));
-        
+
         bindStaffListEvent();
     }
-    
+
     //获取未导入人员列表
     function getNotImportData(obj){
         // console.log(data)
@@ -710,10 +710,10 @@ layui.config({
             li.push('</li>');
         }
         $("#notImportList").html(li.join(''));
-        
+
         bindStaffListEvent();
     }
-    
+
     function setAttributeHtml(data){
         var html = [];
         data.forEach(function(item,index){
@@ -771,7 +771,7 @@ layui.config({
             }
             item.ondragend = function(evt){
                 // console.log("ondragend-----------------",evt,this.id);
-                
+
                 seatMapsControl.unbindStaffDrap();
                 if($(".R99").length > 0){
                     var id = $(".R99").attr("id");
@@ -796,7 +796,7 @@ layui.config({
                 }
             }
         });
-    
+
     }
 
     function dragSaveChangeStaffHtml(attendees){
@@ -807,7 +807,7 @@ layui.config({
         });
         $(ids.join(",")).addClass("drag-hide");
 
-        
+
         //如果组下面没人员了 隐藏组
         $('#askLeaveTitleList > li').each(function(item){
             var list = this.find(".list-body");
@@ -829,7 +829,7 @@ layui.config({
     }
 
 
-    
+
 
     function saveDragSort(data){
         $.ajax({
@@ -891,7 +891,7 @@ layui.config({
 
                 $("#" + item.seatid).css("background-color","");
                 $("#" + item.seatid).html(item.seatid.split('-')[3]);
-                
+
                 $("#pa_" + item.id).removeClass("drag-hide");
             }
 
@@ -916,7 +916,7 @@ layui.config({
     }
 
 
-    
+
     function saveSeats(){
         var seats = $("#seatcontainerId .seatdiv:not(.rownumseats)");
         var seatsobj = {
@@ -925,7 +925,7 @@ layui.config({
         };
         var ids = {};
         var names = {};
-        
+
         showSeatsData.forEach(function(item){
             if(item.roomtemplate_id == roomId){
                 ids[item.seatid] = item.id;
@@ -997,11 +997,11 @@ layui.config({
     }
 
 
-    
 
-    
-    
-    
+
+
+
+
     // function uploads(meetingid,newroomid,file){
     //     var formData = new FormData();
     //     console.log(meetingid+","+newroomid+","+file);
@@ -1022,7 +1022,7 @@ layui.config({
     //         }
     //     })
     // }
-    
+
     var __handDrag = null;
     var inde = false;
     var inde1 = false;
@@ -1151,9 +1151,9 @@ layui.config({
             // printJS('seatcontainer', 'html');
             // printdiv("seatcontainer");
             $("#seatcontainer").jqprint({
-                debug: false, 
-                importCSS: true, 
-                printContainer: true, 
+                debug: false,
+                importCSS: true,
+                printContainer: true,
                 operaSupport: false
             });
         },
@@ -1195,16 +1195,16 @@ layui.config({
             // })
         },
         close: function() {
-            
-            var index = parent.layer.getFrameIndex(window.name) || 0; //先得到当前iframe层的索引
-            parent.layer.close(index); //再执行关闭 
+            // alert('6666');
+            // var index = parent.layer.getFrameIndex(window.name) || 0; //先得到当前iframe层的索引
+            // parent.layer.close(index); //再执行关闭
 
-            // parent.layer.closeAll();
+            parent.layer.closeAll();
 
-            // parent.reloads()
+            parent.reloads()
         }
     };
-    
+
     // function Drag(){
     //     this.dragWrap = $("#seatcontainer");
     //     this.init.apply(this,arguments);

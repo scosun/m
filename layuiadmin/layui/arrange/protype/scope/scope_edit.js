@@ -10,23 +10,23 @@
        			laydate = layui.laydate,
        			form = layui.form;
                 var url="http://127.0.0.1:8083"
-       	
-       
-       
+
+
+
        		form.render(null, 'component-form-group');
-       
+
        		laydate.render({
        			elem: '#LAY-component-form-group-date'
        		});
-       
-       		
-       
-       
+
+
+
+
        		/* 监听指定开关 */
        		form.on('select(component-form-select)', function(data) {
-       			
+
        		});
-       
+
        		/* 监听提交 */
        		form.on('submit(component-form-demo1)', function(data) {
        			$.ajax({
@@ -43,9 +43,9 @@
        					if(msg.code=='0'){
        			            parent.layer.msg("修改成功");
        			            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-       			            parent.layer.close(index);
+       			            parent.layer.closeAll();;
        			            parent.reloads();
-       			         
+
        			        }else{
        			            layer.msg(msg.msg);
        			        }
@@ -55,7 +55,7 @@
        					console.log("ajax : error")
        				}
        			})
-       			
+
        			return false;
        		});
        	});

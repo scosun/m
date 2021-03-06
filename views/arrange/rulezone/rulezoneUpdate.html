@@ -643,7 +643,7 @@
 
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 
-                parent.layer.close(index); //再执行关闭
+                parent.layer.closeAll();; //再执行关闭
 
 
                 // parent.reloads()
@@ -972,7 +972,7 @@
         //重置layui 无数据情况
         var noData ='<i class="layui-icon layui-ds iconfont icon-wuneirong"></i>当前没有任何记录</<i>'
         $(".layui-none").addClass('noData').removeClass('layui-none').html(noData);
-        
+
         function GetQueryString(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则

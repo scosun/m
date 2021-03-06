@@ -77,7 +77,7 @@ layui.config({
         if (data.field.close == "on") {
             ruletype = 1;
         }
-        
+
         var openid = 0;
         var ruleid;
         var roomid;
@@ -101,7 +101,7 @@ layui.config({
                 if (msg.code == '0') {
                     var data = msg.state;
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭 
+                    parent.layer.closeAll();; //再执行关闭
                     open(msg);
                 } else {
 
@@ -115,7 +115,7 @@ layui.config({
         })
 
         function open(msg) {
-            
+
             parent.layer.open({
                 type: 2,
                 //title: '收藏管理 (考生姓名：张无忌)',

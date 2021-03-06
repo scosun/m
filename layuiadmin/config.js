@@ -1,8 +1,10 @@
 /**
+
  @Name：layuiAdmin iframe版全局配置
  @Author：贤心
  @Site：http://www.layui.com/admin/
  @License：LPPL（layui付费产品协议）
+
  */
 
 layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
@@ -42,10 +44,10 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     ]
 
     //全局配置url
-     ,baseUrl:'https://f.longjuli.com'
+      ,baseUrl:'https://f.longjuli.com'
     //,baseUrl:'http://81.70.37.92:8083'
-      //,baseUrl:'http://127.0.0.1:8083'
-      //,baseUrl:'http://longjuli.cn.utools.club'
+    //           ,baseUrl:'http://127.0.0.1:8083'
+    //    ,baseUrl:'http://longjuli.cn1.utools.club'
 
 
       ,seatBaseUrl:'https://m.longjuli.com'

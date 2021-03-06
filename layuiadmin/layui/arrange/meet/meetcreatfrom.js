@@ -41,13 +41,13 @@ layui.config({
                $("#select_rule").parent().find("option").filter(".selectOp").remove();
                form.render(null, 'component-form-group');
                $.each(data, function(idx, con) {
-                
-       
+
+
                    $("#select_rule").after("<option class='selectOp' value=" + con
                        .id + ">" + con.name + "</option>");
                })
                form.render(null, 'component-form-group');
-       
+
                // .parent()
                // }
            },
@@ -55,9 +55,9 @@ layui.config({
            error: function() {
                console.log("error")
            }
-       }) 
+       })
     form.render(null, 'component-form-group');
-    
+
     }
 
     var ins22 = laydate.render({
@@ -176,7 +176,7 @@ layui.config({
       location.href = decodeURI("./meeting_room.html?name="+name+"&meeting="+meeting+"&ruleid="+ruleid+"&dates="+dates+"&times="+times+"&remake="+remake)
  })
  $('#addrule').click(()=>{
-  
+
     if ($('#meeting').val() == '') {
     	return layer.msg('请选择会议后再新建规则');
     }
@@ -228,13 +228,13 @@ layui.config({
                 $("#select_rule").parent().find("option").filter(".selectOp").remove();
                 form.render(null, 'component-form-group');
                 $.each(data, function(idx, con) {
-                 
-        
+
+
                     $("#select_rule").after("<option class='selectOp' value=" + con
                         .id + ">" + con.name + "</option>");
                 })
                 form.render(null, 'component-form-group');
-        
+
                 // .parent()
                 // }
             },
@@ -263,7 +263,7 @@ function getMyDay(date){
     var active = {
         cancel:function () {
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-            parent.layer.close(index);
+            parent.layer.closeAll();;
             parent.reloads(); // 父页面刷新
 
         }
@@ -272,7 +272,7 @@ function getMyDay(date){
     form.on('submit(addmeeting)', function(data) {
         // data.field.time   需要进行一个时间的转换 - 判断是否大于12点？上午:下午
        console.log(data.field);
-      
+
        var newdate = data.field.date.replace('年','-').replace('月','-').slice(0,data.field.date.length-1);
        var newdates =" ("+getMyDay(new Date(newdate))+") "
         var datime = "";
@@ -286,8 +286,8 @@ function getMyDay(date){
         console.log(datatime);
 
         // console.log(data.field.addressd);
-      
-     
+
+
         $.ajax({
             async: false,
             type: "post",
@@ -309,13 +309,13 @@ function getMyDay(date){
                 if (msg.code == 0) {
                     parent.layer.msg("增加成功");
                     var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
+                    parent.layer.closeAll();;
                     parent.reloads(); // 父页面刷新
 
                 } else {
                     layer.msg("增加失败");
                     var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                    parent.layer.close(index);
+                    parent.layer.closeAll();;
                     // parent.location.reload(); // 父页面刷新
 
 

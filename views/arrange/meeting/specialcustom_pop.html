@@ -48,7 +48,7 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
+
 		$('#ballNumber1,#centernum').on('keydown', function (event) {
 			if (event.keyCode == 13) {
 				// var layer = layui.layer;
@@ -70,10 +70,10 @@ layui.config({
 				// 	layer.msg('座位数量输入错误');
 				// 	return false;
 				// }
-				
+
 				// if(centernum == ""){
 				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// 	parent.layer.close(index);		//关闭窗口
+               	// 	parent.layer.closeAll();;		//关闭窗口
 				// 	window.parent.createCircleSeatMap(ccx,ccy,r1,ballNumber1);
 				// }else{
 				// 	if(centernum <= 0){
@@ -81,13 +81,13 @@ layui.config({
 				// 		return false;
 				// 	}
 				// 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// 	parent.layer.close(index);		//关闭窗口
+               	// 	parent.layer.closeAll();;		//关闭窗口
 				// 	window.parent.createRunSeatMap(ccx,ccy,r1,ballNumber1,centernum);
 				// }
 
 				// // if(ccx > 0 && ccy > 0 && ){
 				// // 	var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               	// // 	parent.layer.close(index);		//关闭窗口
+               	// // 	parent.layer.closeAll();;		//关闭窗口
 				// // 	window.parent.creatSeats(rownum,colnum);
 				// // }else{
 				// // 	layer.msg('行，列数字输入错误');

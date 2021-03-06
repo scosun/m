@@ -49,7 +49,7 @@
                 tree = layui.tree
             var url = setter.baseUrl;
             var uploadfile = null;
-            var attributes = [];      
+            var attributes = [];
             upload.render({
                 elem: '#test-upload-drag'
                 , url: '/upload/',
@@ -103,12 +103,12 @@
                         if (msg.code == 0) {
                             parent.layer.msg(msg.msg)
                             var index = parent.layer.getFrameIndex(window.name)
-                            parent.layer.close(index)
+                            parent.layer.closeAll();
                             parent.ajaxs(meetingid)
                         } else {
                             parent.layer.msg(msg.msg)
                             var index = parent.layer.getFrameIndex(window.name)
-                            parent.layer.close(index)
+                            parent.layer.closeAll();
                         }
 
                     },

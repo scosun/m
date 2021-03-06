@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="layui-form" action="" lay-filter="component-form-group" style="padding: 20px 30px 0 0;">
-	
+
 	<div class="layui-form-item">
 		<label class="layui-form-label">绘制方式</label>
         <div class="layui-input-block">
@@ -38,7 +38,7 @@
 		<label class="layui-form-label">向心点选择</label>
         <div class="layui-input-block">
             <select class="dialogRuleSelect" lay-skin="select" lay-filter="point-form-select"  id="select_point">
-                
+
             </select>
         </div>
 	</div>
@@ -94,7 +94,7 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
+
 		form.on('select(meetrule-form-select)', function(data){
 			var id = +data.value;
 			if(id == 1){
@@ -127,7 +127,7 @@ layui.config({
 					layer.msg('中间座位数输入错误');
 					return false;
 				}
-				
+
 				if(typeid == 1){
 					window.parent.seatmaps.mouseCreateSeatMap(2,seatnum,centernum,select_ruleid);
 				}else{
@@ -145,7 +145,7 @@ layui.config({
 					window.parent.seatmaps.createRunSeatMap(ccx,ccy,r1,seatnum,centernum,select_ruleid,0);
 				}
 				var index = parent.layer.getFrameIndex(window.name);
-				parent.layer.close(index);
+				parent.layer.closeAll();;
 				return false
 			}
 		});

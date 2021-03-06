@@ -61,12 +61,12 @@
 			margin-right: 485px;
 			margin-top: 9px;
 		}
-		
+
 	</style>
-	<script type="text/javascript">  
-		function doNothing(){  
-			window.event.returnValue=false;  
-			return false;  
+	<script type="text/javascript">
+		function doNothing(){
+			window.event.returnValue=false;
+			return false;
 		}
 	</script>
 </head>
@@ -97,7 +97,7 @@
 			<i id="nav-save" data-type="saveseats" data="保存"><img src="../../../images/save.png"></i>
 			<i id="nav-import" data-type="importData" data="导入座区数据"><img src="../../../images/import.png"></i>
 			<!-- <i id="nav-createPdf" data="生成PDF座区图"><img src="../../../images/createPdf.png"></i> -->
-			
+
 			<!-- <i id="nav-rewrite" data="改写"><img src="../../../images/rewrite.png"></i> -->
 			<i id="nav-print" data-type="print" data="设定打印区域"><img src="../../../images/print.png"></i>
 			<i id="nav-upload" data-type="upload" data="word上传模板"><img src="../../../images/wordupload.png"></i>
@@ -146,13 +146,13 @@
 		window.meetingid=str.substring(str.lastIndexOf("=")+1)
 		window. roomid=str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
 		window. newroomid=roomid.substring(roomid.indexOf("=")+1,roomid.length)
-		
+
 		var seatcolors = ['#ffffff','#b3ffaf','#fffcb6','#ffb2b9','#91dfff'];
 		var seatsdata = [];
 
 		/*右侧菜单HOVER显示提示文字 end*/
 		layer.load(2);
-		
+
 		$.ajax({
 			url: url+"/roomtemplate/findByIdTemplatecode",
 			type: "post",
@@ -162,12 +162,12 @@
 			},
 			data: {
 				"id": newroomid,
-				
+
 			},
 			success: function(data) {
 				var datas = data.data
 				$("body").append(datas.templatecode);
-				
+
 				selectSeats();
 
 				var condi = {
@@ -191,16 +191,16 @@
 			},
 			data: {
 				"id": meetingid,
-				
+
 			},
 			success: function(data) {
 				var datas = data.data
-				
+
 				$("#meetingname").text(datas[0].name);
 				$("#meetingaddress").text("地点："+datas[0].address);
 				$("#meetingremark").text("备注："+datas[0].memo);
 				$("#meetingtime").text("时间："+datas[0].meetingtime);
-				
+
 				// selectSeats();
 
 				// var condi = {
@@ -225,7 +225,7 @@
 				}
 			}
 		});
-		
+
 		form.on('select(component-ruleselect)', function(data){
 			var id = +data.value;
 			// meetingId = id;
@@ -238,7 +238,7 @@
        	// 	var type = $(this).data('type');
        	// 	active[type] && active[type].call(this);
 		//    });
-		   
+
 
 
 
@@ -268,7 +268,7 @@
 				async: true,
 				type: "post",
 				data: JSON.stringify(condi),
-				contentType: 'application/json', 
+				contentType: 'application/json',
 				url: seatUrl +"/v1/meetings/sort",
 				dataType: "json",
 				success: function(obj) {
@@ -291,7 +291,7 @@
 				async: false,
 				type: "post",
 				data: JSON.stringify(data),
-				contentType: 'application/json', 
+				contentType: 'application/json',
 				url: seatUrl +"/v1/meetings/store",
 				dataType: "json",
 				success: function(obj) {
@@ -309,10 +309,10 @@
 			});
 		}
 
-	
-	
-		
-		
+
+
+
+
 		window.serverSeatIds = [];
 		function changeSeatColor(attendees){
 			if(attendees.length > 0){
@@ -322,7 +322,7 @@
 					for(var i = 0,len = attendees.length; i < len; i++){
 						// {"seatid":"1-1","attender":"028","id":"39"}
 						var item = attendees[i] || {};
-						
+
 						$("#" + item.seatid).css("background-color",item.bgcolor);
 						$("#" + item.seatid).html(item.attender);
 
@@ -430,7 +430,7 @@
 			// document.body.innerHTML = oldhtml;
 			// return false;
 		}
-		
+
 		//上传模板文件的类型判断
 		/* function uploadFile(){
 			var fileName = $("#upload-file").val();
@@ -445,7 +445,7 @@
 				upload(meetingid,newroomid,file);
 			}
 		} */
-		
+
 		$('#upload-file').on('change', function() {
 			var fileName = $("#upload-file").val();
 			var fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
@@ -459,7 +459,7 @@
 				upload(meetingid,newroomid,file);
 			}
 		});
-		
+
 		function upload(meetingid,newroomid,file){
 			var formData = new FormData();
 			console.log(meetingid+","+newroomid+","+file);
@@ -481,7 +481,7 @@
 				}
 			})
 		}
-		
+
 		var __handDrag = null;
 		var $ = layui.$,
 		active = {
@@ -537,7 +537,7 @@
 						iframe.init(meetingid,newroomid);
 					},
 					yes: function(index, layero) {
-						
+
 						/* var url = "http://127.0.0.1:8083"; */
 						// var url = "https://f.longjuli.com";
 						// var url = "https://f.longjuli.com";
@@ -581,9 +581,9 @@
 				// printJS('seatcontainer', 'html');
 				// printdiv("seatcontainer");
 				$("#seatcontainer").jqprint({
-					debug: false, 
-					importCSS: true, 
-					printContainer: true, 
+					debug: false,
+					importCSS: true,
+					printContainer: true,
 					operaSupport: false
 				});
 			},
@@ -595,7 +595,7 @@
 			},
 			close: function() {
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-				parent.layer.close(index); //再执行关闭 
+				parent.layer.closeAll();; //再执行关闭
 				// parent.reloads()
 			}
 			// getCheckLength: function() { //获取选中数目
@@ -637,11 +637,11 @@
 			// 					rule_bindings[index].rulesetup_id = +item.id;
 			// 					rule_bindings[index].sort_item = +item.sort_item;
 			// 					rule_bindings[index].attribute_ids = item.treeCheckedIds;
-								
+
 			// 				});
 			// 			}
 			// 			console.log(condi);
-						
+
 			// 			saveAttendee2rules(condi,index);
 			// 		}
 			// 	});
@@ -719,7 +719,7 @@
 		};
 
 	});
-	
+
 
 	function asd() {
         location.reload();

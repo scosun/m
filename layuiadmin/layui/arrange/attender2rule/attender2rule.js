@@ -42,7 +42,7 @@ layui.config({
 				var data = msg.data;
 				data.reverse();
 				// console.log(data)
-				
+
 				arrangeList = [];
 
 				table.render({
@@ -74,13 +74,13 @@ layui.config({
 								title: '会议名称',
 								//width: '15%',
 								//align: "center"
-	
+
 							}, {
 								field: 'rule_num',
 								title: '规则数量',
 								//width: '8%',
 								//align: "center"
-	
+
 							},{
 								field: 'attendee_num',
 								title: '对应人数',
@@ -107,7 +107,7 @@ layui.config({
 					limits: [5, 10, 15], //显示
 					limit: 10 //每页默认显示的数量
 				});
-	
+
 			},
 			//失败的回调函数
 			error: function() {
@@ -121,7 +121,7 @@ layui.config({
 			async: true,
 			type: "post",
 			data: JSON.stringify(condi),
-			contentType: 'application/json', 
+			contentType: 'application/json',
 			url: seatUrl + "/v1/attendee2rules",
 			dataType: "json",
 			success: function(obj) {
@@ -196,9 +196,9 @@ layui.config({
 		if (obj.event === 'unused') {//未用
 			//layer.msg('ID：' + data.id + ' 的查看操作');
 		} else if (obj.event === 'use') {//使用
-				
+
 		} else if (obj.event === 'binding') {//绑定
-			
+
 		} else if (obj.event === 'edit') {
 			//编辑
 			var _id = data.id;
@@ -243,11 +243,11 @@ layui.config({
 							// rule_bindings[index].sort_item = +item.sort_item;
 							rule_bindings[index].sort_items = item.sortSelectItemData;
 							rule_bindings[index].attribute_ids = item.treeCheckedIds;
-							
+
 						});
 					}
 					console.log(condi);
-					
+
 					saveAttendee2rules(condi,index);
 				}
 			});
@@ -260,7 +260,7 @@ layui.config({
 					url: seatUrl + "/v1/attendee2rules/batch_delete",
 					type: "POST",
 					data: JSON.stringify(condi),
-					contentType: 'application/json', 
+					contentType: 'application/json',
 					success: function(data) {
 						if (data.code == 0) {
 							layer.msg('成功删除', {
@@ -313,7 +313,7 @@ layui.config({
                     layer.close(index);
                 });
             },
-			allcheck: function() { 
+			allcheck: function() {
                 var cb = $(".layui-form-checkbox");
                 $(".layui-form-checkbox").each(function() {
                     $(this).click();
@@ -335,7 +335,7 @@ layui.config({
 						url: seatUrl + "/v1/attendee2rules/batch_delete",
 						type: "POST",
 						data: JSON.stringify(condi),
-						contentType: 'application/json', 
+						contentType: 'application/json',
 						success: function(msg) {
 							if (msg.code == 0) {
 								layer.msg("删除成功");
@@ -395,7 +395,7 @@ layui.config({
 							});
 						}
 						console.log(condi);
-						
+
 						saveAttendee2rules(condi,index);
 					}
 				});
@@ -406,8 +406,8 @@ layui.config({
 			},
 			close:function(){
 				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-	
-				parent.layer.close(index); //再执行关闭 
+
+				parent.layer.closeAll();; //再执行关闭
 			}
 		};
 	$('.icon-fanhuishangyibu,.layui-icon-refresh-3,.icon-wodehuiyi,.test-table-operate-btn .layui-btn,.test-table-operate-btn .layui-ds,.test-table-reload-btn .layui-allcheck').on('click', function() {

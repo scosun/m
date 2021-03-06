@@ -74,7 +74,7 @@ layui.config({
 	// var url = "http://127.0.0.1:8083"
 	var uploadfile = null;
 
-	
+
 
 	$.ajax({
 		async: false,
@@ -200,8 +200,8 @@ var resultdate = date.replace("年","-").replace("月","-").substring(0,date.len
 				if (data.code == 0) {
 					parent.layer.msg("添加成功")
 					var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-					parent.layer.close(index);
-					parent.reloads();	
+					parent.layer.closeAll();;
+					parent.reloads();
 				}else{
 					parent.layer.msg(data.msg)
 				}

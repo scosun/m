@@ -37,14 +37,14 @@ layui.config({
                 if (res.code == '0') {
                     parent.layer.msg('修改成功');
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                     parent.ajaxs(roomid)
                 } else {
                     layer.msg(res.msg, {
                         icon: 5
                     });
                     var index = parent.layer.getFrameIndex(window.name)
-                    parent.layer.close(index)
+                    parent.layer.closeAll();
                 }
             },
             error: function (error) {

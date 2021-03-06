@@ -25,7 +25,7 @@ layui.config({
         //提交 Ajax 成功后，关闭当前弹层并重载表格
         //$.ajax({});
         parent.layui.table.reload('test-table-operate'); //重载表格
-        parent.layer.close(index); //再执行关闭
+        parent.layer.closeAll();; //再执行关闭
     });
 
     var editid = +$("#editid").val();

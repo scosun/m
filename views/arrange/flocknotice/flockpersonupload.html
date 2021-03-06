@@ -105,12 +105,12 @@
                         if (msg.code == 0) {
                             parent.layer.msg(msg.msg)
                             var index = parent.layer.getFrameIndex(window.name)
-                            parent.layer.close(index)
+                            parent.layer.closeAll();
                             parent.ajaxs(meetingid)
                         } else {
                             parent.layer.msg(msg.msg)
                             var index = parent.layer.getFrameIndex(window.name)
-                            parent.layer.close(index)
+                            parent.layer.closeAll();
                         }
 
                     },

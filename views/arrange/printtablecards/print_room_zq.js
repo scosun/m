@@ -17,20 +17,20 @@ layui.config({
 
     // $('#group').append('<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="print" id="batchmeet">打印<s></s></a>');
     // $('#group').after('<div class="assistBtn"><span class="fengeline">/</span><i class="layui-icon layui-ds layui-icon-refresh-3" data-type="refresh"></i></div>')
-    
+
 
     var seatMapsControl = new SeatMapsControl();
 
     var url = setter.baseUrl;
     var seatUrl = setter.seatBaseUrl;
-    
+
     var uri = window.location.search;
     var str = uri.substr(1);
     // window.ruleid = str.substring(str.indexOf("=")+1,str.indexOf("&"));
     // window.meetingid = str.substring(str.lastIndexOf("=")+1)
     // window.roomid = str.substring(str.indexOf("&")+1,str.lastIndexOf("&"))
     // window.newroomid = roomid.substring(roomid.indexOf("=")+1,roomid.length);
-    
+
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
          var uri = window.location.search;
@@ -77,7 +77,7 @@ layui.config({
             }else{
                 str.push('<li id="' + item.roomid + '">' + item.name + '</li>');
             }
-            
+
         });
         $(".layui-tab-title").html(str);
 
@@ -86,7 +86,7 @@ layui.config({
             console.log("roomid----",roomid);
 
             // saveSeats();
-            
+
             getRoomTemplateCode(roomid);
         });
     }
@@ -96,7 +96,7 @@ layui.config({
         roomId = roomid;
 
         layer.load(2);
-    
+
         $.ajax({
             url: url+"/roomtemplate/findByIdTemplatecode",
             type: "post",
@@ -123,11 +123,11 @@ layui.config({
 
                     //查询座区人员
                     queryAllSeatStatus();
-                    
+
                 }else{
                     layer.msg("获取会议室模板错误");
                 }
-                
+
                 layer.closeAll();
             },
             error:function(){
@@ -173,7 +173,7 @@ layui.config({
                 console.log("--queryAllSeatStatus---");
                 if(obj && obj.attendees){
                     seatsdata = obj.attendees;
-                    
+
                     changeSeatColor(obj.attendees);
                 }
             },
@@ -199,7 +199,7 @@ layui.config({
 
                         $("#" + item.seatid).css("background-color",item.bgcolor);
                         $("#" + item.seatid).html(item.attender);
-                        
+
                         // serverSeatIds.push(item.seatid);
                     }
                 }
@@ -249,7 +249,7 @@ layui.config({
                 names.push(name);
             }
         });
-        
+
         return names;
     }
 
@@ -299,7 +299,7 @@ layui.config({
                     // 预览
                     yes: function(index){
                         sessionStorage.setItem("_printnames",deviceList.join(','));
-                        window.open("previewprint.html?isgrouplist="+isgrouplist,"_blank");  
+                        window.open("previewprint.html?isgrouplist="+isgrouplist,"_blank");
                         // layer.open({
                         //     type: 2,
                         //     title: '桌牌打印',
@@ -321,12 +321,12 @@ layui.config({
                 });
             },
             search: function() {
-                
+
 
             },
             close: function() {
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index); //再执行关闭 
+                parent.layer.closeAll();; //再执行关闭
                 // parent.reloads()
             },
             dragcontainer:function(){
@@ -372,7 +372,7 @@ layui.config({
         //         $('#seatcontainer').bind('mouseup',function(e){
         //             t.mouseUp(e);
         //         });
-    
+
         //         $('#seatcontainer').bind('mousemove',function(e){
         //             if (t.down) {
         //                 t.mouseMove(e);

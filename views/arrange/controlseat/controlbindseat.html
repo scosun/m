@@ -12,17 +12,17 @@
 		    .layui-form-label {
 		        width: 100px;
 		    }
-		
+
 		    .layui-input-block {
 		        margin-left: 130px;
 		    }
-		
+
 		    .layui-form-label span {
 		        color: #f00;
 		        font-size: 14px;
 		        margin-right: 5px;
 		    }
-		
+
 		    .layui-input-block span,
 		    p span {
 		        color: #f00;
@@ -103,16 +103,16 @@
 		                console.log("error")
 		            }
 		        })
-				
+
 				//var id = getUrlParam("id");
 				function getUrlParam(name) {
 				    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 				    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
 				    if (r != null) return decodeURI(r[2]); return null; //返回参数值
 				}
-				
+
 				var deviceInfo = null;
-				
+
 				//颜色选择器常规使用
 				//表单赋值
 				colorpicker.render({
@@ -122,8 +122,8 @@
 				     $('#test-form-input').val(color);
 				  }
 				});
-			
-				
+
+
 		        form.on('submit(addsms)', function (data) {
 					return true;
 					// console.log(deviceInfo.deviceName)
@@ -152,7 +152,7 @@
 		   //                  if (data.code == 0) {
 		   //                      parent.layer.msg("绑定成功")
 		   //                      var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-		   //                      parent.layer.close(index);
+		   //                      parent.layer.closeAll();;
 		   //                      parent.ajaxs(window.indexs);
 		   //                  }else{
 		   //                      parent.layer.msg(data.msg)
@@ -162,8 +162,8 @@
 		   //                  console.log(error)
 		   //              }
 		   // )}
-		
-		           
+
+
 		        })
 		    });
 		</script>

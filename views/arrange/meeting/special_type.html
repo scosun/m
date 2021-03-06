@@ -74,7 +74,7 @@ layui.config({
 		table = layui.table,
 		layer = layui.layer,
 		router = layui.router();
-		
+
 		// form.on('select(meetrule-form-select)', function(data){
 		// 	var id = +data.value;
 		// 	if(id == 1){
@@ -93,7 +93,7 @@ layui.config({
 				var colnum = +$("#colnum").val() || 0;
 				if(rownum > 0 && colnum > 0){
 					var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-               		parent.layer.close(index);		//关闭窗口
+               		parent.layer.closeAll();;		//关闭窗口
 					window.parent.seatmaps.creatSeats(rownum,colnum);
 				}else{
 					layer.msg('行，列数字输入错误');
@@ -123,10 +123,10 @@ layui.config({
 		// 			layer.msg('座位数量输入错误');
 		// 			return false;
 		// 		}
-				
+
 		// 		if(centernum == ""){
 		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-        //        		parent.layer.close(index);		//关闭窗口
+        //        		parent.layer.closeAll();;		//关闭窗口
 		// 			// window.parent.createCircleSeatMap(ccx,ccy,r1,seatnum);
 		// 			window.parent.mouseCreateSeatMap(1,seatnum);
 		// 		}else{
@@ -135,7 +135,7 @@ layui.config({
 		// 				return false;
 		// 			}
 		// 			var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-        //        		parent.layer.close(index);		//关闭窗口
+        //        		parent.layer.closeAll();;		//关闭窗口
 		// 			// window.parent.createRunSeatMap(ccx,ccy,r1,seatnum,centernum);
 		// 			window.parent.mouseCreateSeatMap(2,seatnum,centernum);
 		// 		}
