@@ -89,6 +89,7 @@
     <!-- <button onclick="deleteSeats();" style="z-index: 99;position: absolute; top:50px;left: 310px;">删除</button> -->
     <button onclick="showSeat();" style="z-index: 99;position: absolute; top:50px;left: 310px;">查看</button>
     <button style="z-index: 99;position: absolute; top:50px;left: 360px;">控制</button>
+    <button style="z-index: 99;position: absolute; top:50px;left: 360px;">人工校正</button>
     
 
 
@@ -339,7 +340,7 @@
             if(seats.length > 0 && seats.length == 1){
                 var seatname = $(seats[0]).text();
                 var regnum = /^\d*$/;
-                if(!regnum.test(seatname)){
+                // if(!regnum.test(seatname)){
                     if(typeof H5JsMeeting != "undefined"){
                         H5JsMeeting.showInputDialog(1,seatname);
                     }else{
@@ -365,13 +366,13 @@
                             // }
                         }
                     }
-                }else{
-                    if(typeof H5JsMeeting != "undefined"){
-                        H5JsMeeting.showTipsDialog("请选择一个座区");
-                    }else{
-                        alert("请选择一个座区");
-                    }
-                }
+                // }else{
+                //     if(typeof H5JsMeeting != "undefined"){
+                //         H5JsMeeting.showTipsDialog("请选择一个座区");
+                //     }else{
+                //         alert("请选择一个座区");
+                //     }
+                // }
             }else{
                 if(typeof H5JsMeeting != "undefined"){
                     H5JsMeeting.showTipsDialog("请选择一个座区");
