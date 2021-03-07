@@ -54,6 +54,7 @@
             top: 50%;
             margin: 0 auto;
             width: 100%;
+            z-index: 9999;
             display: none;
         }
         .errortip span{
@@ -84,12 +85,12 @@
     <button onclick="changeSeatStatus(7);" style="z-index: 99;position: absolute; top:20px;left: 640px;">设备重置</button>
 
     <!-- <button onclick="addSeat();" style="z-index: 99;position: absolute; top:50px;left: 160px;">新增</button> -->
-    <button onclick="editSeat();" style="z-index: 99;position: absolute; top:50px;left: 210px;">修改</button>
-    <button onclick="exchangeSeats();" style="z-index: 99;position: absolute; top:50px;left: 260px;">互换</button>
+    <button onclick="exchangeSeats();"  style="z-index: 99;position: absolute; top:50px;left: 210px;">互换</button>
+    <button onclick="editSeat();" style="z-index: 99;position: absolute; top:50px;left: 260px;">修改</button>
     <!-- <button onclick="deleteSeats();" style="z-index: 99;position: absolute; top:50px;left: 310px;">删除</button> -->
     <button onclick="showSeat();" style="z-index: 99;position: absolute; top:50px;left: 310px;">查看</button>
     <button style="z-index: 99;position: absolute; top:50px;left: 360px;">控制</button>
-    <button style="z-index: 99;position: absolute; top:50px;left: 360px;">人工校正</button>
+    <button onclick="checkStatus();" style="z-index: 99;position: absolute; top:50px;left: 360px;">人工校正</button>
     
 
 
@@ -291,15 +292,21 @@
         }
 
         
-        var seatMapsControl = new SeatMapsControl();
+
+
+
+
+
+
 
         //会议开始 #ffcbcc #d7ffca
         //会议结束 #d1e9ff #fff1d9
         //小程序修改名字 #e2e1ff
         //web修改名字 #fff1ae
         //备用 #e7fffa #ffe9fe # f9ffbb
-        
-        
+
+        var seatMapsControl = new SeatMapsControl();
+
 
         // type,seatid,status,name
         // 类型：1 准备会议，2 开始会议，3 暂停会议，4 恢复会议，5 结束会议，6 重启会议，7 重置桌牌
@@ -314,25 +321,45 @@
         }
         
 
-
-        function showSeat(){
+        function exchangeSeats(){
+            // {nid: "s-1-2-6", did: "s-1-1-1"}
             var seats = $("#seatcontainerId .seled");
-            if(seats.length > 0 && seats.length == 1){
-                var seatid = seats[0].id;
-                
-                __signControl.findDeviceDetails(seatid);
-                // if(typeof H5JsMeeting != "undefined"){
-                // }else{
-                //     alert(seatid);
-                // }
-            }else{
+            if(seats.length == 0){
                 if(typeof H5JsMeeting != "undefined"){
-                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                    H5JsMeeting.showTipsDialog("请选择座区");
                 }else{
-                    alert("请选择一个座区");
+                    alert("请选择座区");
                 }
+                return;
             }
+            if(seats.length != 2){
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择两个互换座区");
+                }else{
+                    alert("请选择两个互换座区");
+                }
+                return;
+            }
+
+            var ids = [];
+            ids.push({"nid":seats[0].id,"did":seats[1].id});
+
+            var seatno1 = seats[1].id;
+            var newname1 = $(seats[0]).text();
+            var seatno2 = seats[0].id;
+            var newname2 = $(seats[1]).text();
+            var regnum = /^\d*$/;
+            if(regnum.test(newname1)){
+                newname1 = "";
+            }
+            regnum.lastIndex = 0;
+            if(regnum.test(newname2)){
+                newname2 = "";
+            }
+
+            __signControl.updatePName(seatno1,newname1,seatno2,newname2);
         }
+
 
         //修改座区
         function editSeat(){
@@ -340,39 +367,32 @@
             if(seats.length > 0 && seats.length == 1){
                 var seatname = $(seats[0]).text();
                 var regnum = /^\d*$/;
-                // if(!regnum.test(seatname)){
+                if(!regnum.test(seatname)){
                     if(typeof H5JsMeeting != "undefined"){
                         H5JsMeeting.showInputDialog(1,seatname);
                     }else{
                         var newname = window.prompt("请输入名字",seatname);
                         
-                        if(newname && !regnum.test(newname)){
-                            var seatdiv = $("#seatcontainerId .seatdiv");
-                            var ish = true;
-                            seatdiv.each(function(){
-                                var oname = $(this).text();
-                                if(oname == newname){
-                                    alert(newname+"已存在"+seatno);
-                                    ish = false;
-                                    return false;
-                                }
-                            });
-                            var seatno = $(seats[0]).attr("id");
-
-                            __signControl.updatePName(seatno,newname);
-                            // if(ish){
-                            //     $("#"+seatno).text(newname);
-                            //     seats.removeClass("seled");
-                            // }
+                        if((newname && !regnum.test(newname)) || newname == ""){
+                            updateNewName(newname);
+                        }else{
+                            //输入名字 不合法 不处理
                         }
                     }
-                // }else{
-                //     if(typeof H5JsMeeting != "undefined"){
-                //         H5JsMeeting.showTipsDialog("请选择一个座区");
-                //     }else{
-                //         alert("请选择一个座区");
-                //     }
-                // }
+                }else{
+                    //数字，新增名字
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showInputDialog(2,seatname);
+                    }else{
+                        var newname = window.prompt("请输入名字",seatname) || "";
+                        var regnum = /^\d*$/;
+                        if((newname && !regnum.test(newname)) || newname == ""){
+                            updateNewName(newname);
+                        }else{
+                            //输入名字 不合法 不处理
+                        }
+                    }
+                }
             }else{
                 if(typeof H5JsMeeting != "undefined"){
                     H5JsMeeting.showTipsDialog("请选择一个座区");
@@ -382,7 +402,69 @@
             }
         }
 
+        
+        function showSeat(){
+            var seats = $("#seatcontainerId .seled");
+            if(seats.length > 0 && seats.length == 1){
+                var seatid = seats[0].id;
+                __signControl.findDeviceDetails(seatid);
+            }else{
+                if(typeof H5JsMeeting != "undefined"){
+                    H5JsMeeting.showTipsDialog("请选择一个座区");
+                }else{
+                    alert("请选择一个座区");
+                }
+            }
+        }
 
+        function promptInputDialog(type,newname){
+            if(type == 1){
+                //修改人员
+                updateNewName(newname);
+            }
+            else if(type == 2){
+                //新增人员
+                updateNewName(newname);
+            }
+        }
+
+
+        function checkStatus(){
+            __signControl.sendMoreNewTableSign();
+        }
+
+
+        function updateNewName(newname){
+            var seatdiv = $("#seatcontainerId .seatdiv");
+            var seats = $("#seatcontainerId .seled");
+            var seatno = $(seats[0]).attr("id");
+
+            var ish = true;
+            if(newname){
+                seatdiv.each(function(){
+                    var oname = $(this).text();
+                    var onid = $(this).attr("id");
+                    if(oname == newname && onid != seatno){
+                        if(typeof H5JsMeeting != "undefined"){
+                            H5JsMeeting.showTipsDialog(newname+"已存在"+onid);
+                        }else{
+                            alert(newname+"已存在"+onid);
+                        }
+                        ish = false;
+                        return false;
+                    }
+                });
+            }
+
+            if(ish){
+                __signControl.updatePName(seatno,newname);
+            }
+
+            // if(ish){
+            //     $("#"+seatno).text(newname);
+            //     seats.removeClass("seled");
+            // }
+        }
 
 
 
@@ -451,61 +533,7 @@
             __saveSeats();
         }
 
-
-        function promptInputDialog(type,newname){
-            if(type == 1){
-                //修改人员
-                var seats = $("#seatcontainerId .seled");
-                var regnum = /^\d*$/;
-                if(newname && !regnum.test(newname)){
-                    var seatdiv = $("#seatcontainerId .seatdiv");
-                    var ish = true;
-                    seatdiv.each(function(){
-                        var oname = $(this).text();
-                        if(oname == newname){
-                            if(typeof H5JsMeeting != "undefined"){
-                                H5JsMeeting.showTipsDialog(newname+"已存在"+seatno);
-                            }else{
-                                alert(newname+"已存在"+seatno);
-                            }
-                            ish = false;
-                            return false;
-                        }
-                    });
-                    var seatno = $(seats[0]).attr("id");
-                    if(ish){
-                        $("#"+seatno).text(newname);
-                        seats.removeClass("seled");
-                    }
-                }
-            }
-            else if(type == 2){
-                //新增人员
-                var seats = $("#seatcontainerId .seled");
-                var regnum = /^\d*$/;
-                if(newname && !regnum.test(newname)){
-                    var seatdiv = $("#seatcontainerId .seatdiv");
-                    var ish = true;
-                    seatdiv.each(function(){
-                        var oname = $(this).text();
-                        if(oname == newname){
-                            if(typeof H5JsMeeting != "undefined"){
-                                H5JsMeeting.showTipsDialog(newname+"已存在"+seatno);
-                            }else{
-                                alert(newname+"已存在"+seatno);
-                            }
-                            ish = false;
-                            return false;
-                        }
-                    });
-                    var seatno = $(seats[0]).attr("id");
-                    if(ish){
-                        $("#"+seatno).text(newname);
-                        seats.removeClass("seled");
-                    }
-                }
-            }
-        }
+        
 
         //新增座区图名字
         function addSeat(){
@@ -557,32 +585,7 @@
 
         
 
-        function exchangeSeats(){
-            // {nid: "s-1-2-6", did: "s-1-1-1"}
-            var seats = $("#seatcontainerId .seled");
-            if(seats.length == 0){
-                if(typeof H5JsMeeting != "undefined"){
-                    H5JsMeeting.showTipsDialog("请选择座区");
-                }else{
-                    alert("请选择座区");
-                }
-                return;
-            }
-            if(seats.length != 2){
-                if(typeof H5JsMeeting != "undefined"){
-                    H5JsMeeting.showTipsDialog("请选择两个互换座区");
-                }else{
-                    alert("请选择两个互换座区");
-                }
-                return;
-            }
-
-            var ids = [];
-            ids.push({"nid":seats[0].id,"did":seats[1].id});
-
-            seatMapsControl.exChangeOnlySeats(ids);
-            // __saveSeats();
-        }
+        
 
         //删除座区图名字
         function deleteSeats(){
