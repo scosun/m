@@ -42,7 +42,9 @@
 		if(!(seatids instanceof Array)){
 			seatids = JSON.parse(seatids);
 		}
-		this.clickRuleIds = seatids;
+		this.clickRuleIds = seatids.map(function(item){
+			return item.seatid;
+		});
 
 		this.clickRuleIds.forEach(function(item,index){
 			$("#" + item).text(index+1);
