@@ -37,6 +37,20 @@
 		return this.clickRuleIds;
 	}
 
+	//赋值点选数据
+	seatMapsControl.prototype.setClickRulePoint = function(seatids){
+		if(!(seatids instanceof Array)){
+			seatids = JSON.parse(seatids);
+		}
+		this.clickRuleIds = seatids.map(function(item){
+			return item.seatid;
+		});
+
+		this.clickRuleIds.forEach(function(item,index){
+			$("#" + item).text(index+1);
+		});
+	}
+
 	//清空点选数据
 	seatMapsControl.prototype.clearClickRulePoint = function(){
 		this.clickRuleIds.forEach(function(item,index){
@@ -45,7 +59,7 @@
 		});
 		this.clickRuleIds = [];
 	}
-
+	
 	//点选设置排序规则
 	seatMapsControl.prototype.bindClickRule = function(){
 		this.removeContainerEvent();
