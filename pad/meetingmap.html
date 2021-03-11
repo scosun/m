@@ -19,31 +19,38 @@
     <style type="text/css">
         /* 1: 准备会议发送成功；-1: 准备会议失败； */
         .sm1{
-            background-color: #ffcbcc;
+            background-color: #ffd4d5;
         }
         .sm11{
-            background-color: #d7ffca;
+            background-color: #ff9d9f;
         }
 
         /* 3: 暂停会议成功；-3：暂停会议失败； */
         .sm3{
-            background-color: #d6d6d6;
+            background-color: #c5c5c5;
         }
         .sm33{
-            background-color: #9affea;
+            background-color: #a9a9a9;
+        }
+
+        .sm5{
+            background-color: #befdff;
+        }
+        .sm55{
+            background-color: #81f7fb;
+        }
+
+        /* 7: 重置桌牌成功；-6：重启会议； */
+        .sm66{
+            background-color: #e5f793;
         }
 
         /* 7: 重置桌牌成功；-7：重置桌牌失败； */
         .sm77{
-            background-color: #f9ffbb;
+            background-color: #ffcd9e;
         }
 
-        .sm5{
-            background-color: #e7fffa;
-        }
-        .sm55{
-            background-color: #a3ffec;
-        }
+        
         .popcontent-details-list li .a .n{
             color:#868686;
         }
@@ -65,6 +72,23 @@
             display: block;
             margin: 0 auto;
             color: #fff;
+        }
+
+        .param{
+            height: 45px;
+            line-height: 45px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        .param input{
+            border: 1px solid #ccc;
+            height: 30px;
+            padding: 0 5px;
+            font-size: 12px;
+            width: 200px;
+        }
+        .param input:focus {
+            outline:none;
         }
     </style>
 </head>
@@ -91,7 +115,8 @@
     <button onclick="showSeat();" style="z-index: 99;position: absolute; top:50px;left: 310px;">查看</button>
     <button style="z-index: 99;position: absolute; top:50px;left: 360px;">控制</button>
     <button onclick="checkStatus();" style="z-index: 99;position: absolute; top:50px;left: 360px;">人工校正</button>
-    
+    <button onclick="changeStatus();" style="z-index: 99;position: absolute; top:50px;left: 440px;">同步状态</button>
+    <button onclick="setThreadParameter();" style="z-index: 99;position: absolute; top:50px;left: 440px;">设置参数</button>
 
 
     <div id="seatsbody" style="position: absolute;"></div>
@@ -204,6 +229,38 @@
                     </li>
                     
                 </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="parameterInfo" class="pop-mask"  style="display: none;">
+        <div class="circleExitpop" style="width: 450px;">
+            <div class="det-sharepop-bt">
+                <div class="ltext">
+                    群控线程池参数
+                </div>
+                <div id="closebtn" class="rbtn"></div>
+            </div>
+            <div class="popcontent-text2">
+                <div class="param">
+                    <span>第一次执行结束等待消息时间(ms):</span>
+                    <input id="first_end_waitingtime" value="6000" />
+                </div>
+                <div class="param">
+                    <span>第二次执行结束等待消息时间(ms):</span>
+                    <input id="two_end_waitingtime" value="12000" />
+                </div>
+                <div class="param">
+                    <span style="margin-left: 28px;">打开线程池数量(一次发几个):</span>
+                    <input id="open_threadnum" value="1" />
+                </div>
+                <div class="param">
+                    <span style="margin-left: 72px;">线程等待的时间(ms):</span>
+                    <input id="thread_waitingtime" value="200" />
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button id="savebtn" style="width: 100px;height: 34px;">保存</button>
             </div>
         </div>
     </div>
@@ -433,6 +490,13 @@
             __signControl.sendMoreNewTableSign();
         }
 
+        function changeStatus(){
+            __signControl.changeSeatStatus();
+        }
+
+        function setThreadParameter(){
+            __signControl.setThreadParameter();
+        }
 
         function updateNewName(newname){
             var seatdiv = $("#seatcontainerId .seatdiv");

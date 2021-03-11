@@ -457,7 +457,7 @@
 
 				} else if (obj.event === 'editxq') {
 					editObj = obj;
-					if(obj.data.ruleid == "R98"){
+					if(obj.data.ruleid == "R11"){
 						//点选排序编辑, 激活单选
 						__isClickRule = true;
 						seatMapsControl.bindClickRule();
@@ -529,7 +529,7 @@
 								return layer.msg("请选择编排规则");
 							}
 
-							if(ruleselect == "R98"){
+							if(ruleselect == "R11"){
 								// var seatids = seatMapsControl.getClickRulePoint();
 								// console.log(seatids)
 								setSeatRule(rulename,ruleselect, isincrement,false,editObj,editObj.data.ruleid);
@@ -585,7 +585,7 @@
 								return layer.msg("请选择编排规则");
 							}
 
-							if(ruleselect == "R98"){
+							if(ruleselect == "R11"){
 								setSeatRule(rulename,ruleselect, isincrement,true);
 							}else{
 								if(isincrement == '' || isincrement == null){
@@ -704,7 +704,7 @@
 					// var ckids_now = $("#seatcontainerId .seled");
 
 					var ckids_now = seatsIdSort();
-					if(ruleselect == "R98"){
+					if(ruleselect == "R11"){
 						//点选 排序 规则
 						var ckids_now = seatMapsControl.getClickRulePoint();
 						seatMapsControl.clearClickRulePoint();
@@ -728,7 +728,7 @@
 					// var ckids_now = $("#seatcontainerId .seled");
 					// var ckids_now = seatsIdSort();
 					var ckids_now = seatsIdSort();
-					if(ruleselect == "R98"){
+					if(ruleselect == "R11"){
 						//点选 排序 规则
 						var ckids_now = seatMapsControl.getClickRulePoint();
 						seatMapsControl.clearClickRulePoint();

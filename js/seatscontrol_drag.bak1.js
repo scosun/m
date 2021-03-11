@@ -80,7 +80,7 @@
 				return;
 			}
 
-			var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R98","R99"];
+			var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R11","R99"];
 			for(var i = 0,len = rclass.length; i < len; i++){
 				if(sel.hasClass(rclass[i])){
 					return;
@@ -638,7 +638,7 @@
 					// if(selList[i].className.indexOf("reseled") == -1){
 					if(!sel.hasClass("seled")){
 						//首先判断当选座位没有绑定规则
-						var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R98","R99"];
+						var rclass = ["R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R11","R99"];
 						var isr = false;
 						for(var r = 0; r < rclass.length; r++){
 							if(this.selList[i].className.indexOf(rclass[r]) != -1){
@@ -676,7 +676,7 @@
 								this.sckids.push(sid);
 								sel.removeClass("seled");
 								// sel.css("background","");
-								sel.removeClass("reseled R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R98 R99");
+								sel.removeClass("reseled R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R99");
 							}
 						}
 					}
