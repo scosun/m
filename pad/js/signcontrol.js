@@ -737,7 +737,7 @@ SignControl.prototype = {
         html.push('<p>网络：'+communication[+obj.communication]+'</p>');
         html.push('</div>');
         html.push('<div class="popcontent-details-c">');
-        html.push('<p>电量：'+(obj.electricity||"")+'%</p>');
+        html.push('<p>电量：'+(obj.electricity||0)+'%</p>');
         html.push('<p>姓名：'+obj.name+'</p>');
         html.push('<p>通讯：'+deviceStatus[obj.deviceStatus]+'</p>');
         html.push('</div>');
@@ -1232,12 +1232,20 @@ SignControl.prototype = {
     getParameter(){
         $.ajax({
             async: true,
-            type: "post",
+            type: "get",
             url: this.baseUrl +"/threadParameter/selectList",
             data:{meetingid:this.meetingId,roomid:this.roomId},
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    var data = obj.data[0] || "";
+                    if(data){
+                        this.paramId = data.id;
+                        $("#first_end_waitingtime").val(data.first_end_waitingtime);
+                        $("#two_end_waitingtime").val(data.two_end_waitingtime);
+                        $("#open_threadnum").val(data.open_threadnum);
+                        $("#thread_waitingtime").val(data.thread_waitingtime);
+                    }
                 }else{
                     alert(obj.msg);
                 }
@@ -1250,7 +1258,7 @@ SignControl.prototype = {
     },
     saveParameter(){
         var first_end_waitingtime = +$("#first_end_waitingtime").val() || 0;
-        var two_end_waitingtime = +$("#two_end_waitingtime") || 0;
+        var two_end_waitingtime = +$("#two_end_waitingtime").val() || 0;
         var open_threadnum = +$("#open_threadnum").val() || 0;
         var thread_waitingtime = +$("#thread_waitingtime").val() || 0;
 
@@ -1287,6 +1295,11 @@ SignControl.prototype = {
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("修改成功");
+                    }else{
+                        alert("修改成功");
+                    }
                 }else{
                     alert(obj.msg);
                 }
@@ -1313,6 +1326,11 @@ SignControl.prototype = {
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("添加成功");
+                    }else{
+                        alert("添加成功");
+                    }
                 }else{
                     alert(obj.msg);
                 }
