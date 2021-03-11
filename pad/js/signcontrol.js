@@ -26,6 +26,9 @@ SignControl.prototype = {
     //是否补发
     resend:false,
 
+    //参数id
+    paramId:0,
+
 	init: function(){
         console.log("signcontrol-----init");
 
@@ -56,9 +59,12 @@ SignControl.prototype = {
             this.createMeetWebSocket(username);
         }
         // $(window).bind("beforeunload",this.stopMeetWebSocket.bind(this));
+
+        this.bindEvent();
 	},
 	bindEvent:function(){
-       
+       $("#closebtn").bind("click",this.closeParameter.bind(this));
+       $("#savebtn").bind("click",this.saveParameter.bind(this));
     },
 
     getAllSeatsIds:function(){
@@ -242,8 +248,9 @@ SignControl.prototype = {
             ele.removeClass();
             ele.addClass("seatdiv");
         }else{
-            // ele.removeClass();
-            // ele.addClass("seatdiv sm11");
+            ele.removeClass();
+            //重置失败，要不要有颜色标识
+            ele.addClass("seatdiv sm66");
         }
         //当前状态已完成
         var status = +obj.status;
@@ -615,7 +622,7 @@ SignControl.prototype = {
             // url: this.baseUrl +"/tableSign/getCacheDataTest",
             url: this.baseUrl +"/tableSign/getCacheData",
             // data:{roomid:this.roomId},
-            data:{roomid:roomid},
+            data:{roomid:roomid,meetingid:this.meetingId},
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
@@ -1149,8 +1156,172 @@ SignControl.prototype = {
         });
     },
 
-    closeInfoModel(){
+    changeSeatStatus:function(){
+        var seled = $("#seatcontainerId .seatdiv.seled:not(.rownumseats)");
+        var seatids = [];
+        seled.each(function() {
+            seatids.push(this.id);
+        });
+
+        // this.meetingType = 1
+        if(this.meetingType > 0){
+            if(this.meetingType == 1){
+                seled.removeClass();
+                seled.addClass("seatdiv sm1");
+            }else if(this.meetingType == 2 || this.meetingType == 3 || this.meetingType == 4){
+                seled.removeClass();
+                //要获取人名
+                if(this.meetingType == 2){
+                    seled.addClass("seatdiv sm1");
+                }else if(this.meetingType == 3){
+                    seled.addClass("seatdiv sm3");
+                }else if(this.meetingType == 4){
+                    seled.addClass("seatdiv sm1");
+                }
+                this.getNameBySeatid(seatids);
+            }else if(this.meetingType == 5){
+                seled.each(function() {
+                    var num = this.id.split('-')[3];
+                    ele.text(num);
+                });
+                seled.removeClass();
+                seled.addClass("seatdiv sm5");
+            }else if(this.meetingType == 6 || this.meetingType == 7){
+                seled.removeClass();
+                seled.addClass("seatdiv");
+            }
+        }
+        // console.log(seatids)
+    },
+    getNameBySeatid:function(seatids){
+        console.log("getNameBySeatid----",seatids)
+        $.ajax({
+            async: true,
+            type: "get",
+            url: this.baseUrl +"/tableSign/getNameBySeatid",
+            data:{meetingid:this.meetingId,roomid:this.roomId,seatid:seatids.join(',')},
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                    var data = obj.data || [];
+                    data.forEach(function(item){
+                        $("#"+item.seatid).html(item.name);
+                    });
+                }else{
+                    alert(obj.msg);
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    },
+    closeInfoModel:function(){
         $("#seatInfo").hide();
+    },
+
+    closeParameter(){
+        $("#parameterInfo").hide();
+    },
+    setThreadParameter(){
+        $("#parameterInfo").show();
+
+        this.getParameter();
+    },
+    getParameter(){
+        $.ajax({
+            async: true,
+            type: "post",
+            url: this.baseUrl +"/threadParameter/selectList",
+            data:{meetingid:this.meetingId,roomid:this.roomId},
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                }else{
+                    alert(obj.msg);
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    },
+    saveParameter(){
+        var first_end_waitingtime = +$("#first_end_waitingtime").val() || 0;
+        var two_end_waitingtime = +$("#two_end_waitingtime") || 0;
+        var open_threadnum = +$("#open_threadnum").val() || 0;
+        var thread_waitingtime = +$("#thread_waitingtime").val() || 0;
+
+        if(first_end_waitingtime && two_end_waitingtime && open_threadnum && thread_waitingtime){
+
+            if(this.paramId){
+                this.updateParamter(first_end_waitingtime,two_end_waitingtime,open_threadnum,thread_waitingtime);
+            }else{
+                this.addParamter(first_end_waitingtime,two_end_waitingtime,open_threadnum,thread_waitingtime);
+            }
+            
+        }else{
+            if(typeof H5JsMeeting != "undefined"){
+                H5JsMeeting.showTipsDialog("参数错误");
+            }else{
+                alert("参数错误");
+            }
+        }
+    },
+    updateParamter(first,two,open,thread){
+        $.ajax({
+            async: true,
+            type: "post",
+            url: this.baseUrl +"/threadParameter/updateSelective",
+            data:{
+                id:this.paramId,
+                meetingid:this.meetingId,
+                roomid:this.roomId,
+                first_end_waitingtime:first,
+                two_end_waitingtime:two,
+                open_threadnum:open,
+                thread_waitingtime:thread
+            },
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                }else{
+                    alert(obj.msg);
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
+    },
+    addParamter(first,two,open,thread){
+        $.ajax({
+            async: true,
+            type: "post",
+            url: this.baseUrl +"/threadParameter/insertSelective",
+            data:{
+                meetingid:this.meetingId,
+                roomid:this.roomId,
+                first_end_waitingtime:first,
+                two_end_waitingtime:two,
+                open_threadnum:open,
+                thread_waitingtime:thread
+            },
+            dataType: "json",
+            success: function(obj) {
+                if(obj.code == 0){
+                }else{
+                    alert(obj.msg);
+                }
+            }.bind(this),
+            //失败的回调函数
+            error: function() {
+                console.log("error")
+            }
+        });
     }
 };
 
