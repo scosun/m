@@ -25,7 +25,6 @@ layui.config({
     var devices = {};
     var attenderList = [];
     var ids = -1
-    layer.msg("上方下拉框选择会议后自动加载相关人员");
     $.ajax({
         async: false,
         type: "get",
@@ -99,42 +98,108 @@ layui.config({
         // },
         done: function (res) {
             layer.msg(res.msg)
-            ajaxs(window.indexs);
-
         }
     });
 
     //渲染下拉框的ajax
-    $.ajax({
-        async: true,
-        type: "get",
-        url: url + "/meeting/findByMeeting",
-        dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        //成功的回调函数
-        success: function (msg) {
-            var data = msg;
-            console.log(data)
-            $.each(data.data.reverse(), function (idx, con) {
-                $("#select_meets").after("<option value=" + con.id + ">" + con.name +
-                    "</option>");
-            })
-            form.render();
-        },
-        //失败的回调函数
-        error: function () {
-            console.log("error")
-        }
-    })
     //选中以后更新表的ajax
     // window.ajaxs = function (value) {
 
         table.render({
             elem: '#test-table-operate',
             // height: 'full-200',
-            url: url + "/addressbook    /pageList" //数据接口
+            url: url + "/addressbook/pageList" //数据接口
+            ,
+            xhrFields: {
+                withCredentials: true
+            },
+            method: 'get',
+            page: {
+                layout: ['prev', 'page', 'next', 'count', 'skip']
+            },
+            cols: [
+                [ //表头
+                    {
+                        type: 'checkbox',
+                        fixed: 'left'
+                    },
+                    // {
+                    //     field: 'id',
+                    //     title: 'ID',
+                    //     align: 'left',
+                    //     unresize: 'false',
+                    //     width: 80
+                    // },
+                    {
+                        field: 'name',
+                        title: '姓名',
+                        align: 'leftleft',
+                    },
+                    {
+                        field: 'duties',
+                        // width: '25%',
+                        title: '单位职务',
+                        align: 'left',
+                    }, {
+                    field: 'phone1',
+                    align: 'left',
+                    title: '联系电话'
+                },
+                    {
+                        width: 80,
+                        field: 'isleave',
+                        align: 'left',
+                        title: '是否请假',
+                        templet: function(data) {
+                            if (data.isleave == 0) {
+                                return '参会'
+                            }
+                            if (data.isleave == 1) {
+                                return '请假'
+                            }
+                            if (data.isleave == undefined) {
+                                return ''
+                            }
+                        },
+                    },
+
+                    {
+                        field: 'modifytime',
+                        title: '时间',
+                        align: 'left',
+
+                    },
+                    {
+                        width: 140,
+                        //align: 'right',
+                        //flxed: 'right',
+                        title: '操作',
+                        toolbar: '#table-content-list',
+                    }
+                ]
+            ],
+
+            event: true,
+            page: true,
+            limit: 15,
+            skin: 'line',
+            even: true,
+            limits: [5, 10, 15],
+            done: function (res, curr, count) {
+                table_data = res.data;
+
+                layer.closeAll('loading');
+                attenderList.length = 0;
+                // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
+                // layer.close(index);    //返回数据关闭loading
+            },
+        });
+    // }
+    window.reload = function (){
+        table.render({
+            elem: '#test-table-operate',
+            // height: 'full-200',
+            url: url + "/addressbook/pageList" //数据接口
             ,
             xhrFields: {
                 withCredentials: true
@@ -224,8 +289,7 @@ layui.config({
                 // layer.close(index);    //返回数据关闭loading
             },
         });
-    // }
-
+    }
     window.onkeyup = function(ev) {
         var key = ev.keyCode || ev.which;
         if (key == 27) { //按下Escape
@@ -237,12 +301,7 @@ layui.config({
 
         }
     }
-    //监听下拉框选中
-    form.on('select(component-form-select)', function (data) {
 
-        ajaxs(data.value)
-        window.indexs = data.value;
-    });
     //监听选中的复选框
     table.on('checkbox(test-table-operate)', function (obj) {
         if (obj.checked && obj.type == 'one') {
@@ -280,7 +339,7 @@ layui.config({
             layer.open({
                 type: 2,
                 title: '信息维护',
-                content: 'attender_upform.html',
+                content: 'modify_address_book.html',
                 maxmin: true,
                 area: ['60%', '80%'],
                 btn: ['确定', '取消'],
@@ -301,23 +360,12 @@ layui.config({
                     body.find('#phone1').val(age.phone1)
                     body.find('#sexid').val(age.sexid)
                     body.find('#phone2').val(age.phone2)
-                    body.find('#groupid').val(age.groupid)
-                    body.find('#partyid').val(age.partyid)
-                    body.find('#differentid').val(age.differentid)
-                    body.find('#isconvenor').val(age.isconvenor)
-                    body.find('#specialid').val(age.specialid)
                     body.find('#contacts').val(age.contacts)
                     body.find('#contactsphone').val(age.contactsPhone)
                     body.find('#contacts').val(age.contacts)
                     body.find('#cardid').val(age.cardId)
                     body.find('#convenornum').val(age.convenornum)
                     body.find('#isconvenor_list').val(age.isconvenor)
-                    body.find('#specialid').val(age.specialid)
-                    body.find('#viproom').val(age.viproomId)
-                    body.find('#isstagger').val(age.isstage)
-                    body.find('#roomnum').val(age.roomnum)
-                    body.find('#address').val(age.address)
-                    body.find('#szm').val(age.szx)
                     var a = indexs + "";
                     body.find('#meetingid').val(indexs)
                     body.find('#id').val(age.id)
@@ -330,12 +378,11 @@ layui.config({
         }  else if (obj.event === 'del') {
             layer.confirm('&nbsp;&nbsp;&nbsp;&nbsp;您正在执行删除参会人员操作,执行删除操作后，与参会人员相关联座区自动编排数据也将一并被删除,是否确认继续进行该操作？？',{title:'温馨提示'}, function () {
                 $.ajax({
-                    url: url + "/meetingcanhui/deleteMeetingCanHui",
+                    url: url + "/addressbook/delete",
                     type: "get",
                     data: {
 
                         "id": age.id,
-                        "url": age.imageUrl
                     },
                     xhrFields: {
                         withCredentials: true
@@ -432,14 +479,10 @@ layui.config({
     var active = {
         add: function () {
             //  console.log($('#select-room').val())
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选择会议后再添加人员")
-            }
-
             layer.open({
                 type: 2,
                 title: '<p style="">新增人员</p>',
-                content: 'attender_form.html',
+                content: 'save_address_book.html',
                 maxmin: true,
                 area: ['60%', '80%'],
                 btn: ['确定', '取消'],
@@ -456,9 +499,6 @@ layui.config({
 
         },
         upload: function () {
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选择会议后再批量导入")
-            }
             layer.open({
                 type: 2,
                 title: '<p style="">批量导入</p>',
@@ -479,9 +519,6 @@ layui.config({
             })
         },
         download: function () {
-            if ($('#select-room').val() == '-1') {
-                return layer.msg("请选择会议后再下载模板")
-            }
             layer.open({
                 type: 2,
                 title: '<p style="">下载模板</p>',
@@ -501,10 +538,6 @@ layui.config({
             })
         },
         uploadphoto: function () {
-
-            if($('#select-room').val() ==-1){
-                return layer.msg("请先选择会议再上传图片")
-            }
             layer.open({
                 type: 2,
                 title: '批量上传参会人员信息',
@@ -528,11 +561,10 @@ layui.config({
             table.render({
                 elem: '#test-table-operate',
                 // height: 'full-200',
-                url: url + "/meetingcanhui/selectSeatch" //数据接口
+                url: url + "/addressbook/search" //数据接口
                 ,
                 where: {
-                    "name": $('#demoReload').val(),
-                    "meetingId": $('#select-room').val(),
+                    "content": $('#demoReload').val(),
                 },
 
                 method: 'get',
@@ -625,6 +657,26 @@ layui.config({
 
             });
 
+        },
+        importaddress:function (){
+            layer.open({
+                type: 2,
+                title: '<p style="">批量导入</p>',
+                content: 'importattender.html',
+                maxmin: true,
+                area: ['40%', '40%'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var submit = layero.find('iframe').contents().find("#click");
+                    submit.click();
+                },
+                success: function (layero, index) {
+                    var body = layui.layer.getChildFrame('body', index);
+                    // console.log($('#select-room').val())
+
+                    body.find('#meetingid').val($('#select-room').val())
+                }
+            })
         },
         getCheckData: function () { //获取选中数据
 
