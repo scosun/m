@@ -500,6 +500,68 @@ layui.config({
                 }
             })
         },
+        addressbook: function () {
+            if ($('#select-room').val() == '-1') {
+                return layer.msg("请选择会议后再通讯录导入")
+            }
+            layer.open({
+                type: 2,
+                title: '<p style="">通讯录导入</p>',
+                // content: 'downloadattender.html?id='+$('#select-room').val(),
+                area: ['70%', '95%'],
+                btn: ['确定', '取消'],
+                maxmin: true,
+                content: 'addressBookPop.html?notice=' + $('#select-room').val(),
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+
+                    var datas = iframeWin._shuuulebox.getSelectedItem();
+                    if(datas.length == 0){
+                        layer.msg("请选择通讯录中的人员并移动到右侧")
+                    }else{
+                        layer.confirm('确认新增'+datas.length+'个人员吗？', {title: '温馨提示'},function(index){
+                            
+                            var userids = datas.map(function(item){
+                                return item.id;
+                            });
+                            
+                            var arr = userids.join(',')
+                            $.ajax({
+                                async: false,
+                                type: "post",
+                                url: url + "/meetingcanhui/importAddressPerson",
+                                dataType: "json",
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                //成功的回调函数
+                                data: {
+                                    "ids": arr,
+                                    "meetingid":$('#select-room').val()
+
+                                },
+                                success: function (msg) {
+                                    if (msg.code == 0) {
+                                        layer.msg("添加成功");
+                                        ajaxs($('#select-room').val())
+
+                                    } else {
+                                        layer.msg(msg.msg);
+
+
+                                    }
+
+                                },
+                                //失败的回调函数
+                                error: function () {
+                                    console.log("error")
+                                }
+                            })
+                        });
+                    }
+                }
+            })
+        },
         uploadphoto: function () {
 
             if($('#select-room').val() ==-1){
