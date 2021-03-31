@@ -107,7 +107,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议准备完成");
             }else{
                 this.showStatusTip("会议准备完成");
             }
@@ -132,7 +132,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议开始完成");
             }else{
                 this.showStatusTip("会议开始完成");
             }
@@ -161,7 +161,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议暂停完成");
             }else{
                 this.showStatusTip("会议暂停完成");
             }
@@ -189,7 +189,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议恢复完成");
             }else{
                 this.showStatusTip("会议恢复完成");
             }
@@ -206,7 +206,7 @@ SignControl.prototype = {
             var id = obj.seatid || "";
             if(id){
                 var num = id.split('-')[3];
-                ele.text(num);
+                $("#" + obj.seatid).text(num);
             }
             
             $("#" + obj.seatid).removeClass();
@@ -224,7 +224,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议结束完成");
             }else{
                 this.showStatusTip("会议结束完成");
             }
@@ -258,7 +258,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("会议重启完成");
             }else{
                 this.showStatusTip("会议重启完成");
             }
@@ -299,7 +299,7 @@ SignControl.prototype = {
             this.backComplete = 1;
             //默认补发一次
             if(this.resend){
-                this.sendMoreNewTableSign();
+                this.sendMoreNewTableSign("设备重置完成");
             }else{
                 this.showStatusTip("设备重置完成");
             }
@@ -512,14 +512,14 @@ SignControl.prototype = {
     },
 
     appTableSignControl:function(type){
-        // -1.默认 可以点， 会议准备， 设备重启
+        // -1.默认 可以点， 会议准备， 重启会议，设备重启
         // 1.会议准备完成，可以点 会议准备，会议开始，重启会议，设备重置
         // 2.会议开始完成，可以点 开始完成，会议暂停，会议结束，重启会议，设备重置
         // 3.会议暂停完成，可以点 会议暂停，会议恢复，会议结束，重启会议，设备重置
         // 4.会议恢复完成，可以点 会议暂停，会议恢复，会议结束，重启会议，设备重置
         // 5.会议结束完成，可以点 会议准备，会议结束，重启会议，设备重置
         // 6.会议重启完成，可以点 会议准备，重启会议，设备重置
-        // 7.重置桌牌完成，可以点 会议准备，设备重置
+        // 7.重置桌牌完成，可以点 会议准备，重启会议，设备重置
 
         // if(typeof H5JsMeeting != "undefined"){
         //     H5JsMeeting.showTipsDialog("type----"+type);
@@ -531,7 +531,7 @@ SignControl.prototype = {
         }
 
         if(this.meetingType === -1){
-            if(!(type === 1 || type === 7)){
+            if(!(type === 1 || type === 6 || type === 7)){
                 return;
             }
         }else if(this.meetingType === 1){
@@ -559,7 +559,7 @@ SignControl.prototype = {
                 return;
             }
         }else if(this.meetingType === 7){
-            if(!(type === 1 || type === 7)){
+            if(!(type === 1 || type === 6 || type === 7)){
                 return;
             }
         }
@@ -737,7 +737,7 @@ SignControl.prototype = {
         html.push('<p>网络：'+communication[+obj.communication]+'</p>');
         html.push('</div>');
         html.push('<div class="popcontent-details-c">');
-        html.push('<p>电量：'+(obj.electricity||"")+'%</p>');
+        html.push('<p>电量：'+(obj.electricity||0)+'%</p>');
         html.push('<p>姓名：'+obj.name+'</p>');
         html.push('<p>通讯：'+deviceStatus[obj.deviceStatus]+'</p>');
         html.push('</div>');
@@ -1031,32 +1031,25 @@ SignControl.prototype = {
         // console.log(this,id);
         if(id == "status_1"){
             //单发 会议准备
-            console.log("status_1");
             this.sendOneNewTableSign(1);
         }else if(id == "status_2"){
             //单发 会议开始
-            console.log("status_2");
             this.sendOneNewTableSign(2);
         }else if(id == "status_3"){
             //单发 会议暂停
-            console.log("status_3");
             this.sendOneNewTableSign(3);
         }else if(id == "status_4"){
             //单发 会议恢复
-            console.log("status_4");
             this.sendOneNewTableSign(4);
         }else if(id == "status_5"){
             //单发 会议结束
-            console.log("status_5");
             this.sendOneNewTableSign(5);
         }else if(id == "status_6"){
             //单发 会议重启
-            console.log("status_6");
             this.sendOneNewTableSign(6);
         }else if(id == "status_7"){
             // this.meetingStatus == -7 && 
             //单发 会议重置
-            console.log("status_7");
             this.sendOneNewTableSign(7);
         }
         this.closeInfoModel();
@@ -1066,7 +1059,7 @@ SignControl.prototype = {
             this.currentTip();
             return;
         }
-
+        console.log("sendOneNewTableSign",type,this.seatId);
         this.backComplete = 0;
         $.ajax({
             async: true,
@@ -1090,7 +1083,13 @@ SignControl.prototype = {
     },
 
     updatePName:function(seatid,name,seatid2,name2){
-        console.log("updatePName----",seatid,name)
+
+        if(this.backComplete == 0){
+            this.currentTip();
+            return;
+        }
+
+        console.log("updatePName----",seatid,name);
         $.ajax({
             async: true,
             type: "post",
@@ -1121,7 +1120,7 @@ SignControl.prototype = {
         });
     },
 
-    sendMoreNewTableSign:function(){
+    sendMoreNewTableSign:function(msg){
         if(this.backComplete == 0){
             this.currentTip();
             return;
@@ -1130,6 +1129,13 @@ SignControl.prototype = {
         var seatids = this.allSeatIds.filter(item=>{
             return item.status == 0;
         }).map(item=>item.seatid).join(',');
+
+        if(!seatids){
+            //全部成功不用重发
+            this.resend = false;
+            this.showStatusTip(msg);
+            return;
+        }
 
         console.log(seatids,this.meetingType);
         this.backComplete = 0;
@@ -1163,6 +1169,19 @@ SignControl.prototype = {
             seatids.push(this.id);
         });
 
+        //如果没有选择一个席签，提示重置状态
+        if(seled.length == 0){
+            var b = window.confirm("确定要重置当前会议状态吗？");
+            if(b){
+                //给一个特殊状态，让全部 按钮都能点
+                this.meetingType = -2;
+                this.backComplete = 1;
+                return;
+            }else{
+                return;
+            }
+        }
+
         // this.meetingType = 1
         if(this.meetingType > 0){
             if(this.meetingType == 1){
@@ -1182,7 +1201,7 @@ SignControl.prototype = {
             }else if(this.meetingType == 5){
                 seled.each(function() {
                     var num = this.id.split('-')[3];
-                    ele.text(num);
+                    $("#" + this.id).text(num);
                 });
                 seled.removeClass();
                 seled.addClass("seatdiv sm5");
@@ -1232,12 +1251,20 @@ SignControl.prototype = {
     getParameter(){
         $.ajax({
             async: true,
-            type: "post",
+            type: "get",
             url: this.baseUrl +"/threadParameter/selectList",
             data:{meetingid:this.meetingId,roomid:this.roomId},
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    var data = obj.data[0] || "";
+                    if(data){
+                        this.paramId = data.id;
+                        $("#first_end_waitingtime").val(data.first_end_waitingtime);
+                        $("#two_end_waitingtime").val(data.two_end_waitingtime);
+                        $("#open_threadnum").val(data.open_threadnum);
+                        $("#thread_waitingtime").val(data.thread_waitingtime);
+                    }
                 }else{
                     alert(obj.msg);
                 }
@@ -1250,7 +1277,7 @@ SignControl.prototype = {
     },
     saveParameter(){
         var first_end_waitingtime = +$("#first_end_waitingtime").val() || 0;
-        var two_end_waitingtime = +$("#two_end_waitingtime") || 0;
+        var two_end_waitingtime = +$("#two_end_waitingtime").val() || 0;
         var open_threadnum = +$("#open_threadnum").val() || 0;
         var thread_waitingtime = +$("#thread_waitingtime").val() || 0;
 
@@ -1287,6 +1314,11 @@ SignControl.prototype = {
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("修改成功");
+                    }else{
+                        alert("修改成功");
+                    }
                 }else{
                     alert(obj.msg);
                 }
@@ -1313,6 +1345,11 @@ SignControl.prototype = {
             dataType: "json",
             success: function(obj) {
                 if(obj.code == 0){
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.showTipsDialog("添加成功");
+                    }else{
+                        alert("添加成功");
+                    }
                 }else{
                     alert(obj.msg);
                 }
