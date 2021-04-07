@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../../css/scosun.css"/>
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+        .layui-input-block {
+            margin-left: 130px;
+        }
+        .layui-form-label span {
+            color: #f00;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .layui-input-block span,
+        p span {
+            color: #f00;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        .floatR{
+            display: inline-block;
+            margin-left:10px;
+            vertical-align: middle;
+        }
+        .floatR span{
+            color: #eee;
+            margin:0 5px
+        }
+        .red{
+            color: #f00;
+        }
+        .red:hover{
+            color: #f00;
+            text-decoration: underline;
+        }
+        .green{
+            color:#1cf51c
+        }
+        .green:hover{
+            color:#1cf51c;
+            text-decoration: underline;
+        }
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:40%}
+        .info {
+            z-index: 999;
+            width: auto;
+            min-width: 22rem;
+            padding: .75rem 1.25rem;
+            margin-left: 1.25rem;
+            position: fixed;
+            top: 1rem;
+            background-color: #fff;
+            border-radius: .25rem;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+        #username {
+            overflow: hidden;
+            width: 1000px;height: 500px
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-card-body" style="padding: 20px 20px 0 0;">
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">会场名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入会场名称" autocomplete="off"
+                       id="name" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知方式</label> -->
+            <label class="layui-form-label">会场类型</label>
+            <div class="layui-input-block">
+                <select name="siteType" lay-skin="select" lay-filter="component-form-select" id="siteType">
+                    <option value="">请选择</option>
+                    <option value="M">会议场地</option>
+                    <option value="P">配套场地</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知方式</label> -->
+            <label class="layui-form-label">场地规格</label>
+            <div class="layui-input-block">
+                <select name="siteSpecifications" lay-skin="select" lay-filter="component-form-select" id="siteSpecifications">
+                    <option value="">请选择</option>
+                    <option value="M">会堂型</option>
+                    <option value="Z">课桌型</option>
+                    <option value="K">口字型</option>
+                    <option value="U">U字型</option>
+                    <option value="Y">宴会型</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!--             <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <!--            <div class = "layui-form-label info" id="info"  ></div>-->
+            <div class="layui-input-block" id="username">
+            </div>
+            <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">所在地</label>
+            <div class="layui-input-block">
+                <input type="text" name="location" lay-verify="required" placeholder="请点击地图获取" autocomplete="off"
+                       id="location" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>报名截止时间</label> -->
+            <label class="layui-form-label">经纬度</label>
+            <div class="layui-input-inline">
+                <input type="text" name="longitude" class="layui-input" id="longitude" placeholder="请点击地图获取经度" autocomplete="off">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="latitude" class="layui-input" id="latitude" placeholder="点击地图获取纬度、" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">具体地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" lay-verify="required" placeholder="请填写具体地址" autocomplete="off"
+                       id="address" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">场地提供方</label>
+            <div class="layui-input-block">
+                <input type="text" name="siteProvider" lay-verify="required" placeholder="请填写场地提供方" autocomplete="off"
+                       id="siteProvider" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">预定电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="reservationPhone" lay-verify="required" placeholder="请填写预定电话" autocomplete="off"
+                       id="reservationPhone" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">联系人姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="contactPerson" lay-verify="required" placeholder="请填写联系人姓名" autocomplete="off"
+                       id="contactPerson" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">联系人电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="contactPhone" lay-verify="required" placeholder="请填写联系人电话" autocomplete="off"
+                       id="contactPhone" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知标题</label> -->
+            <label class="layui-form-label">价格</label>
+            <div class="layui-input-block">
+                <input type="text" name="sitePrice" lay-verify="required" placeholder="请填写价格(保留小数点两位)" value="0.00" autocomplete="off"
+                       id="sitePrice" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <!-- <label class="layui-form-label"><span>*</span>通知方式</label> -->
+            <label class="layui-form-label">是否有配套场地</label>
+            <div class="layui-input-block">
+                <select name="isSupportingVenue" lay-skin="select" lay-filter="component-form-select" id="isSupportingVenue">
+                    <option value="">请选择</option>
+                    <option value="T">是</option>
+                    <option value="F">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-layout-admin layui-hide">
+            <div class="layui-input-block">
+                <div style="position: absolute;right: 0px;bottom: 0px;">
+                    <button class="layui-btn" lay-submit="" lay-filter="addsms" id="click">增加</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=Xwog08qh62xlT7zRTHrVDiZnpnaGXG4n"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'element', 'upload'], function () {
+        var $ = layui.$,
+            setter = layui.setter,
+            laydate = layui.laydate,
+            form = layui.form;
+        upload = layui.upload;
+
+        var url = setter.baseUrl;
+        // var url = "http://127.0.0.1:8083"
+        var lng = 0;
+        var lat = 0;
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);//匹配目标参数
+            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        }
+        var id = getUrlParam("id");
+        console.log(lng)
+        var map = new BMap.Map("username");
+
+        var longitude = $("#longitude").val();
+        var latitude = $("#latitude").val();
+        if (longitude!=undefined&&longitude!=""&& latitude !=undefined&latitude!=""){
+            initMap(longitude,latitude);
+        }else {
+            var geolocation = new BMap.LocalCity();
+            function myFun(result) {
+                var cityName = result.name;
+                map.centerAndZoom(cityName, 11);
+            }
+            geolocation.get(myFun);
+        }
+
+        function  initMap(longitude,latitude){
+            var point = new BMap.Point(longitude,latitude);
+            map.centerAndZoom(point, 18);
+            map.addOverlay(new BMap.Marker(point))
+        }
+        map.enableScrollWheelZoom(true);
+        var scaleCtrl = new BMap.ScaleControl();  // 添加比例尺控件
+        map.addControl(scaleCtrl);
+        function ZoomControl() {
+            // 设置默认停靠位置和偏移量  
+            this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+            this.defaultOffset = new BMap.Size(700, 10);
+        }
+        ZoomControl.prototype = new BMap.Control();
+        ZoomControl.prototype.initialize = function(map) {
+            // 创建一个DOM元素  
+            var div = document.createElement("div");
+            // 添加文字说明  
+            var iframes=document.getElementsByTagName("iframe")
+            var input0 = div.appendChild(document.createElement("input"));
+            input0.setAttribute("id", "text");
+            input0.setAttribute("type", "text");
+            input0.setAttribute("class","layui-input layui-input-inline")
+            input0.setAttribute("style","padding-right:50px")
+            var input1 = div.appendChild(document.createElement("input"));
+            input1.type = "button";
+            input1.value = "搜索  ";
+            input1.setAttribute("id", "search")
+            input1.setAttribute("lay-filter", "search")
+            input1.setAttribute("class","layui-btn")
+            // // 设置样式  
+            div.style.cursor = "pointer";
+            div.style.border = "0px solid gray";
+            // div.style.backgroundColor = "white";
+            input1.onclick = function() {
+                var name=$("#text").val();
+                setmap(name);
+
+                // window.location.href="${pageContext.request.contextPath }/device/devicelist1.do?name="+encodeURIComponent(encodeURIComponent(name,'UTF-8'),'UTF-8');
+            }
+
+            map.getContainer().appendChild(div);
+            // 将DOM元素返回  
+            return div;
+        }
+        // $("#search").click(function (){
+        //     var name=$("#text").val();
+        //     alert(666);
+        //
+        // })
+        var myZoomCtrl = new ZoomControl();
+        // 添加到地图当中  
+        map.addControl(myZoomCtrl);
+        map.addEventListener('click', function(e) {
+            showInfo(e)
+        });
+        var geoc = new BMap.Geocoder();
+        function showInfo(e) {
+            // document.getElementById('lng').value = ;
+            // document.getElementById('lat').value = e.point.lat;
+            geoc.getLocation(e.point, function (rs) {
+                var addComp = rs.addressComponents;
+                console.log(addComp);
+                var address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                $('#location').val(address);
+                $("#longitude").val(e.point.lng);
+                $("#latitude").val(e.point.lat);
+                // if (confirm("确定要地址是" + address + "?")) {
+                //
+                //     console.log(address)
+                //     // document.getElementById('sitePersonMap').style.display = 'none';
+                //     // document.getElementById('address').value = address;
+                // }
+            });
+        }
+            function G(id) {
+            return document.getElementById(id);
+        }
+
+        function setmap(myValue){
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun(){
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));    //添加标注
+            }
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        }
+        // 初始化地图,设置城市和地图级别。
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+            {"input" : "text"
+                ,"location" : map
+            });
+
+        ac.addEventListener("", function(e) {//鼠标放在下拉列表上的事件
+            console.log("6666")
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            }
+            str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            }
+            str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+            G("searchResultPanel").innerHTML = str;
+        });
+
+        var myValue;
+        ac.addEventListener("onconfirm", function(e) {
+            console.log("666")//鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+            setPlace();
+        });
+
+        function setPlace(){
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun(){
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));    //添加标注
+            }
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        }
+        //拖拽上传
+
+        form.on('submit(addsms)', function (data) {
+            var data = data.field;
+            console.log(data);
+            $.ajax({
+                url: url + "/site",
+                type: "put",
+                dataType: "json",
+                data: {
+                    "id":id,
+                    "name": data.name,
+                    "siteType": data.siteType,
+                    "siteSpecifications": data.siteSpecifications,
+                    "location": data.location,
+                    "address": data.address,
+                    "siteProvider": data.siteProvider,
+                    "isSupportingVenue": data.isSupportingVenue,
+                    "reservationPhone": data.reservationPhone,
+                    "contactPerson": data.contactPerson,
+                    "contactPhone": data.contactPhone,
+                    "longitude": data.longitude,
+                    "latitude": data.latitude,
+                    "sitePrice": data.sitePrice
+                },
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        parent.layer.msg("添加成功")
+                        var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                        parent.layer.closeAll();;
+                        parent.reloads();
+                    }else{
+                        parent.layer.msg(data.msg)
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+
+            })
+            return false;
+        })
+    });
+    function test(str) {
+        var tc = document.getElementById("content");
+        var tclen = tc.value.length;
+        tc.focus();
+        if (typeof document.selection != "undefined") {
+            document.selection.createRange().text = str;
+        }
+        else {
+            tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+        }
+    }
+</script>
+</body>
+</html>

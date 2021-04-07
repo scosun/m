@@ -11,7 +11,7 @@ layui.config({
         $ = layui.jquery;
     var url = setter.baseUrl;
     // var url = "http://127.0.0.1:8083";
-    
+
 
     $("#print").bind('click',function(){
         printContainer();
@@ -44,9 +44,9 @@ layui.config({
     function printContainer(){
         window.print()
         // $("#container").jqprint({
-        //     debug: false, 
-        //     importCSS: false, 
-        //     printContainer: true, 
+        //     debug: false,
+        //     importCSS: false,
+        //     printContainer: true,
         //     operaSupport: false
         // });
     }
@@ -59,12 +59,12 @@ layui.config({
         layer.open({
             type: 2,
             title: '设置',
-            area: ['550px', '360px'],
+            area: ['55%', '70%'],
             btn: ['确定', '取消'],
             maxmin: true,
             content: 'setup_pop.html',
             success: function(layero, index) {
-                
+
             },
             yes:function (index,layero) {
                 var sign = sessionStorage.getItem("__selectsign") || "";
@@ -84,7 +84,7 @@ layui.config({
                     }else{
                         layer.msg("没有获取到席签模板样式");
                     }
-                    
+
                 }else{
                     $("#smallbtn").html("设置席签模板");
                 }
@@ -96,13 +96,13 @@ layui.config({
         })
     }
 
-    
+
     function showName(fontStyles){
         // var namestr = sessionStorage.getItem("_printnames") || "";
         var textarea = document.getElementById("name");
         var value = textarea.value;
         var names = value.split("\n");
-        
+
         if(!fontStyles){
             layer.msg("请选择席签模板");
             return;
@@ -116,7 +116,7 @@ layui.config({
             //0:单页双面,1:单页单面(2页), 2:单页单面(1页);单页双面 就是 一正一反;单页单面(2页) 就是两个一样;单页单面(1页) 就是 一个名字
 
             //transform: rotate(180deg);
-            var type = 0; 
+            var type = 0;
 
             fontStyles.forEach(function(fb){
                 var styles = fb.style;
@@ -124,7 +124,7 @@ layui.config({
                 if(!containerStyle){
                     containerStyle = "width:" + styles.width + "mm;height:" + styles.height + "mm;";
 
-                    type = +styles.type; 
+                    type = +styles.type;
                 }
                 // var classtext = "preview_left_text ";
                 // if(styles.position || styles.align){
@@ -166,7 +166,7 @@ layui.config({
 
                 nameFontStyles.push(namestyle);
             });
-            
+
 
             // $("#printnametext").css({
             //     "font-size":(+seatSignData.fontSize/fontcc)+"mm",
@@ -179,7 +179,7 @@ layui.config({
                 var name = names[i] || "";
                 //多段文本
                 var moname = name.split(",");
-                    
+
                 if(name && moname.length > 0){
                     if(type == 0){
                         html.push('<div>');
@@ -221,8 +221,8 @@ layui.config({
                         });
                         html.push('</div>');
                         html.push('</div>');
-                        
-                        
+
+
                         html.push('<div>');
                         html.push('<div class="preview_left_text"  style="' + containerStyle + '">');
                         moname.forEach(function(name,idx){
@@ -249,7 +249,7 @@ layui.config({
                         html.push('</div>');
                         html.push('</div>');
                     }
-                    
+
                 }
             }
             $("#container").html(html.join(''));
@@ -281,10 +281,10 @@ layui.config({
         },
         //选择区域打印
         print: function() {
-            
+
         },
         search: function() {
-            
+
 
         }
     };

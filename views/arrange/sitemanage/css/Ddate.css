@@ -1,0 +1,88 @@
+﻿#datescroll div{float:left;margin-top: 50px;height: 120px;}
+#datescroll_datetime div{float: left;margin-left: 10%;padding-right: 22px;}
+#yearwrapper{position: absolute;left:15px;top:0;bottom: 60px;width:33.333%;
+    -webkit-mask: -webkit-gradient(linear, 0% 50%, 0% 100%, from(#debb47), to(rgba(36, 142, 36, 0)));
+    -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0));
+}
+#monthwrapper{position: absolute;left: 33.333%;top:0;bottom: 60px;width:33.33%;
+    -webkit-mask: -webkit-gradient(linear, 0% 50%, 0% 100%, from(#debb47), to(rgba(36, 142, 36, 0)));
+    -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0));
+}
+#daywrapper{position: absolute;left:63%;top:0;bottom: 60px;width:33.33%;
+    -webkit-mask: -webkit-gradient(linear, 0% 50%, 0% 100%, from(#debb47), to(rgba(36, 142, 36, 0)));
+    -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0));
+}
+#Hourwrapper{position: absolute;left: 0;top:195px;bottom: 68px;width:80%;}
+#Minutewrapper{position: absolute;left: 26%;top:195px;bottom: 68px;width:80%;}
+#Secondwrapper{position: absolute;left: 50%;top:195px;bottom: 68px;width:80%;}
+#Hourwrapper ul li{color: #898989;font-size: 12px;}
+#Minutewrapper ul li{color: #898989;font-size: 12px;}
+#Secondwrapper ul li{color: #898989;font-size: 12px;}
+#yearwrapper ul li{color: #333;font-size: 16px;height: 40px;line-height: 40px;}
+#monthwrapper ul li{color: #333;font-size: 16px;height: 40px;line-height: 40px;}
+#monthwrapper ul li.crently,#yearwrapper ul li.crently,#daywrapper ul li.crently{color:#0079ff;}
+#daywrapper ul li{color: #333;font-size: 16px;height: 40px;line-height: 40px;}
+#markhour{position:relative; margin-left: 62px;top:-2px;}
+#markminut{position:relative; margin-left: 58px;top:-2px;}
+#marksecond{position:relative; margin-left: 68px;top:-2px;}
+#dateheader{width: 100%;height:50px;background: #79C12F;text-align: center;color: #fff;line-height: 50px;font-size: 20px;}
+#datePlugin{overflow:hidden;position:fixed;left:0;top:0;z-index:99999;background:rgba(0,0,0,0.2);width:100%;height:100%;display:none;font-size: 10px;}
+#datePlugin.show{display:block;}
+#setcancle ul{text-align: center; }
+#setcancle ul li{
+    background:#f1f2f4;list-style-type: none;
+    font-family:'microsoft yahei';
+    width:50%;float:left;
+    position:relative;
+    color: #666;
+    font-size: 1.5em;
+    line-height: 1em;
+    text-align: right;
+    padding: 1em;
+}
+#setcancle ul li#datecancle{text-align: left;}
+#datePage{
+    height: 170px;
+    padding-top: 40px;/*总高度*/
+    width:100%;
+    background: #fff;
+    z-index:9999999;
+    position:fixed;
+    left:0;
+    bottom:0;
+    overflow:hidden;
+}
+#datetitle{width: 100%;height:50px;background: #79C12F;text-align: center;color: #fff;line-height: 50px;font-size: 20px;font-family:'microsoft yahei';display:none;}
+#datetitle h1{font-weight:normal;}
+#datemark{
+    font-size: 18px;
+    left:0;
+    width: 100%;
+    height:40px;
+    position:absolute;
+    top: 90px;
+    /* background: #fff1f0; */
+}
+#datemark a{position:relative;width:20%;margin:0 6.666%;height:46px;float:left;}
+#timemark{font-size: 18px;left:5%;width:90%;height: 20px;position:absolute;top:242px;background:#e6e6e6;border:1px solid #e6e6e6;display:none;}
+#datescroll{
+    width:90%;
+    padding: 10px 0 0;
+    margin:0 auto;
+    height: 130px;
+    text-align:center;
+    line-height: 40px;
+    -webkit-mask: -webkit-gradient(linear, 0% 40%, 0% 0%, from(#debb47), to(rgba(36, 142, 36, 0)));
+    -webkit-mask: -webkit-linear-gradient(bottom, #debb47 50%, rgba(36, 142, 36, 0));
+}
+#datescroll_datetime{display: none;background:#F8F8F8;width:94%; margin:10px 3%;margin-top: 10px;border: 1px solid #E0E0E0;border-radius: 4px;height: 120px;text-align: center;line-height: 40px;}
+#yearwrapper ul,#monthwrapper ul,#daywrapper ul{}
+#Hourwrapper ul,#Minutewrapper ul,#Secondwrapper ul{width:40%;}
+#dateFooter{width: 100%;
+    background: #fff;
+    height: 50px;/*确认 取消高度*/
+    position: absolute;
+    left: 0;
+    top: 0;
+
+}

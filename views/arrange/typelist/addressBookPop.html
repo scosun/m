@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../images/font/iconfont.css">
+    <style type="text/css">
+        .layui-fanhui-btn {
+            display: block;
+            border-bottom: 1px solid #e6e6e6;
+            text-align: center;
+            line-height: 36px;
+        }
+
+        .layui-fanhui-btn:hover {
+            background-color: #f2f2f2;
+        }
+
+        .icon-touxiang:before {
+            margin-right: 5px;
+        }
+
+        .icon-wenjianjia:before {
+            margin-right: 5px;
+        }
+
+        .layui-form-checked span,
+        .layui-form-checked:hover span {
+            background-color: transparent;
+        }
+
+        .layui-transfer-active .layui-btn {
+            background-color: #ffce00;
+            border-color: #ffce00;
+        }
+
+        .layui-btn:hover {
+            opacity: .8;
+            filter: alpha(opacity=80);
+            color: #fff;
+        }
+
+        .layui-transfer-active .layui-btn-disabled {
+            background-color: #FBFBFB;
+            border-color: #e6e6e6;
+            color: #C9C9C9;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="padding: 20px;">
+        <div id="test4" class="demo-transfer">
+            <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-4">
+                <div class="layui-transfer-box" data-index="0" style="width: 300px; height: 400px;">
+                    <div class="layui-transfer-search">
+                        <i class="layui-icon layui-icon-search"></i>
+                        <input id="keysearch" type="input" autocomplete="off" class="layui-input" placeholder="关键词搜索" />
+                    </div>
+                    <a id="prebtn" class="layui-fanhui-btn" href="javascript:;">根目录</a>
+                    <ul id="selectbox" class="layui-transfer-data" style="height: 300px;">
+                        <!--
+                        <li>
+                            <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                                <span class="iconfont icon-touxiang">李白</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                                <span class="iconfont icon-wenjianjia">后勤组</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li>
+                        -->
+                    </ul>
+                </div>
+                <div class="layui-transfer-active">
+                    <!-- layui-btn-disabled -->
+                    <button id="addbtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="0"><i class="layui-icon layui-icon-next"></i></button>
+                    <button id="removebtn" type="button" class="layui-btn layui-btn-sm layui-btn-warm" data-index="1"><i class="layui-icon layui-icon-prev"></i></button>
+                </div>
+                <div class="layui-transfer-box" data-index="1" style="width: 300px; height: 400px;">
+                    <ul id="selectedbox" class="layui-transfer-data" style="height: 400px;">
+                        <!-- <li>
+                            <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                                <span class="iconfont icon-touxiang">李白</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                                <span class="iconfont icon-wenjianjia">后勤组</span>
+                                <i class="layui-icon layui-icon-ok"></i>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- <button id="getPersonBtn" type="button" class="layui-btn layui-btn-primary">获取已选人员</button> -->
+    </div>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="../../../js/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            ShuttleBox = function (obj){
+                this.init.apply(this,arguments);
+            };
+
+            ShuttleBox.prototype = {
+                constructor:ShuttleBox,
+                //type=1 人员;  type=2 组
+                selectData:[],
+                baseUrl:"",
+                parentId:[],
+                currentId:"",
+                keyWord:"",
+                isSearch:false,
+                keyOut:null,
+                deptname:"",
+
+                init: function(obj){
+                    // console.log("ShuttleBox-----init",obj);
+                    this.baseUrl = obj.baseUrl;
+
+                    this.bindEvent();
+                    this.parentId.push(0);
+                    this.getDataHttp(0,"");
+                },
+                bindEvent:function(){
+                    $("#prebtn").bind("click",this.preList.bind(this));
+                    $("#addbtn").bind("click",this.addItem.bind(this));
+                    $("#removebtn").bind("click",this.removeItem.bind(this));
+                    $('#keysearch').bind('input propertychange',this.keySearch.bind(this));
+                },
+
+                getSelectedItem(){
+                    var data = this.selectData.filter(function(item){
+                        return item.hidden == true && item.type == 1;
+                    });
+                    return data;
+                },
+
+                keySearch(){
+                    var key = $("#keysearch").val() || "";
+
+                    console.log("key----",key);
+                    this.keyWord = key;
+
+                    clearTimeout(this.keyOut);
+                    this.keyOut = setTimeout(function(){
+                        if(!this.isSearch){
+                            // this.parentId = [];
+                            this.searchDataHttp(this.keyWord);
+                        }
+                    }.bind(this),200)
+                },
+
+                preList(){
+                    if(this.currentId == 0){
+                        return;
+                    }
+
+                    var id = this.parentId.pop() || 0;
+                    // if(id == this.currentId && id != 0){
+                    //     id = this.parentId.pop() || 0;
+                    // }
+                    if(id){
+                        id = this.parentId[this.parentId.length - 1];
+                    }
+                    if(id == 0){
+                        if(this.keyWord){
+                            this.searchDataHttp(this.keyWord);
+                            return;
+                        }
+                    }
+                    this.getDataHttp(id);
+                },
+
+                addItem(){
+                    var ckitems = this.selectData.filter(function(item){
+                        return item.checked == true;
+                    });
+
+                    //如果是 文件夹，查询具体人员，是人员直接移到右边
+                    var person = ckitems.filter(function(item){
+                        return item.type == 1;
+                    });
+                    var group = ckitems.filter(function(item){
+                        return item.type == 0;
+                    });
+
+                    if(person.length > 0){
+                        person.map(function(item){
+                            item.checked = false;
+                            item.hidden = true;
+                        }.bind(this));
+
+                        this.addSelectData();
+                        this.addSelectedData();
+                    }
+
+                    if(group.length > 0){
+                        //去查询组内人员
+                        var names = group.map(function(item){return item.deptname;});
+                        if(names.length > 0){
+                            this.searchGroupDataHttp(names.join(','));
+                        }
+                    }
+
+                    // console.log(person,group,this.selectedData);
+                },
+
+                removeItem(){
+                    var ckitems = this.selectData.filter(function(item){
+                        return item.checked == true;
+                    });
+
+                    //左边只有人员，直接移到右边
+                    var person = ckitems.filter(function(item){
+                        return item.type == 1;
+                    });
+
+                    if(person.length > 0){
+                        person.map(function(item){
+                            item.checked = false;
+                            item.hidden = false;
+                        }.bind(this));
+
+                        this.addSelectData();
+                        this.addSelectedData();
+                    }
+
+                },
+
+                ckItemClick(evt){
+                    // console.log("itemclick----",evt);
+                    var ele = evt.currentTarget;
+
+                    var id = $(ele).attr("data");
+
+                    var item = this.selectData.filter(function(item){
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
+                    })[0];
+
+                    if(item.checked){
+                        $(ele).find(".layui-unselect").removeClass("layui-form-checked");
+                        item.checked = false;
+                    }else{
+                        $(ele).find(".layui-unselect").addClass("layui-form-checked");
+                        item.checked = true;
+                    }
+                },
+                itemClick(evt){
+                    // console.log("itemclick----",evt);
+
+                    var ele = evt.currentTarget;
+
+                    var id = $(ele).parent().attr("data");
+
+                    var item = this.selectData.filter(function(item){
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
+                    })[0];
+
+                    // 0是文件夹 1是人
+                    if(item.type == 1){
+
+                    }
+
+                    if(item.checked){
+                        $(ele).parent().removeClass("layui-form-checked");
+                        item.checked = false;
+                    }else{
+                        $(ele).parent().addClass("layui-form-checked");
+                        item.checked = true;
+                    }
+                },
+
+                folderItemClick(evt){
+                    // console.log("folderItemClick----",evt);
+                    var ele = evt.currentTarget;
+
+                    var id = $(ele).parent().attr("data");
+
+                    var item = this.selectData.filter(function(item){
+                        if(item.type == 1){
+                            return item.userid == id;
+                        }else{
+                            return item.id == id;
+                        }
+                    })[0];
+
+
+                    // 0是文件夹 1是人
+                    if(item.type == 1){
+                        if(item.checked){
+                            $(ele).parent().removeClass("layui-form-checked");
+                            item.checked = false;
+                        }else{
+                            $(ele).parent().addClass("layui-form-checked");
+                            item.checked = true;
+                        }
+                    }else{
+                        this.parentId.push(item.id);
+                        this.getDataHttp(item.id,item.deptname);
+                    }
+                },
+
+                getDataHttp(id,deptname){
+                    this.currentId = id;
+
+                    this.setPreBtnStatus(id);
+
+                    $.ajax({
+                        async: true,
+                        type: "get",
+                        url: this.baseUrl +"/qzdDept/findByparent",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data:{
+                            id:id,
+                            deptname:deptname
+                        },
+                        success: function(obj) {
+                            if(obj.code == 0){
+                                var data = obj.data || [];
+                                data.map(function(item){
+                                    item.checked = false;
+                                    item.hidden = false;
+                                }.bind(this));
+
+                                if(this.selectData && this.selectData.length > 0){
+                                    var ckdata = this.selectData.filter(function(item){
+                                        return item.hidden == true;
+                                    });
+                                    ckdata = ckdata.reverse();
+
+                                    ckdata.map(function(ck){
+                                        var p = data.filter(function(f){
+                                            return f.userid == ck.userid;
+                                        });
+                                        if(p.length > 0){
+                                            p[0].checked = false;
+                                            p[0].hidden = true;
+                                        }else{
+                                            data.unshift(ck);
+                                        }
+                                    });
+                                }
+
+                                this.selectData = data;
+
+                                this.addSelectData();
+                                this.addSelectedData();
+                            }
+                            // console.log(obj)
+                            // console.log("success")
+                        }.bind(this),
+                        //失败的回调函数
+                        error: function() {
+                            console.log("error")
+                        }
+                    });
+                },
+
+                searchDataHttp(key){
+
+                    if(key==""){
+                        this.parentId = [0];
+                        this.getDataHttp(0,"");
+                        return;
+                    }
+
+                    this.isSearch = true;
+
+                    $.ajax({
+                        async: true,
+                        type: "get",
+                        url: this.baseUrl +"/qzdDept/search",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data:{deptname:key},
+                        success: function(obj) {
+                            this.parentId = [0];
+
+                            if(obj.code == 0 && this.keyWord != ""){
+                                if(key == this.keyWord){
+                                    var data = obj.data || [];
+                                    data.map(function(item){
+                                        item.checked = false;
+                                        item.hidden = false;
+                                    });
+
+                                    if(this.selectData && this.selectData.length > 0){
+                                        var ckdata = this.selectData.filter(function(item){
+                                            return item.hidden == true;
+                                        });
+                                        ckdata = ckdata.reverse();
+
+                                        ckdata.map(function(ck){
+                                            var p = data.filter(function(f){
+                                                return f.userid == ck.userid;
+                                            });
+                                            if(p.length > 0){
+                                                p[0].checked = false;
+                                                p[0].hidden = true;
+                                            }else{
+                                                data.unshift(ck);
+                                            }
+                                        });
+                                    }
+                                    this.selectData = data;
+                                    this.addSelectData();
+                                }else{
+                                    this.isSearch = false;
+                                    this.keySearch(this.keyWord);
+                                }
+
+                            }
+                            this.isSearch = false;
+                            // console.log(obj)
+                            // console.log("success")
+                        }.bind(this),
+                        //失败的回调函数
+                        error: function() {
+                            console.log("error")
+                        }
+                    });
+                },
+
+                searchGroupDataHttp(deptname){
+
+                    // if(key==""){
+                    //     this.getDataHttp(0);
+                    //     return;
+                    // }
+
+                    // this.isSearch = true;
+
+                    $.ajax({
+                        async: true,
+                        type: "get",
+                        url: this.baseUrl +"/qzdDept/findDeptNameByPerson",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data:{deptname:deptname},
+                        success: function(obj) {
+                            if(obj.code == 0){
+                                var data = obj.data || [];
+                                if(this.selectData && this.selectData.length > 0){
+                                    data.map(function(item){
+                                        item.checked = false;
+                                        item.hidden = true;
+
+                                        var h = this.selectData.filter(function(s){
+                                            return s.userid == item.userid;
+                                        });
+                                        if(h.length == 0){
+                                            this.selectData.push(item);
+                                        }
+                                    }.bind(this));
+                                }else{
+                                    data.map(function(item){
+                                        item.checked = false;
+                                        item.hidden = true;
+                                    }.bind(this));
+
+                                    this.selectData = data;
+                                }
+
+                                console.log(this.selectData)
+                            }
+                            this.addSelectData();
+                            this.addSelectedData();
+                        }.bind(this),
+                        //失败的回调函数
+                        error: function() {
+                            console.log("error")
+                        }
+                    });
+                },
+
+                setPreBtnStatus(id){
+                    if(id == 0){
+                        $("#prebtn").html("根目录");
+                    }else{
+                        $("#prebtn").html("返回上一级");
+                    }
+                },
+
+                addSelectData(){
+                    var html = [];
+                    if(this.selectData && this.selectData.length){
+                        var data = this.selectData.filter(function(item){
+                            return item.hidden == false;
+                        });
+                        for(var i = 0, len = data.length; i < len; i++){
+                            var item = data[i] || {};
+
+                            var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
+                            var ck = item.checked ? "layui-form-checked" : "";
+
+                            var id = item.type == 1 ? item.userid : item.id;
+
+                            html.push('<li >');
+                            html.push('<div data="' + id + '" class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
+                            html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
+                            html.push('<i class="layui-icon layui-icon-ok"></i>');
+                            html.push('</div>');
+                            html.push('</li>');
+                        }
+                    }
+
+                    $("#selectbox").html(html.join(''));
+
+                    $("#selectbox > li span").unbind("click");
+                    $("#selectbox > li i").unbind("click");
+                    $("#selectbox > li span").bind("click",this.folderItemClick.bind(this));
+                    $("#selectbox > li i").bind("click",this.itemClick.bind(this));
+                },
+
+                addSelectedData(){
+                    var html = [];
+                    if(this.selectData && this.selectData.length){
+                        var data = this.selectData.filter(function(item){
+                            return item.hidden == true;
+                        });
+                        for(var i = 0, len = data.length; i < len; i++){
+                            var item = data[i] || {};
+
+                            var icon = item.type == 1 ? "icon-touxiang" : "icon-wenjianjia";
+                            var ck = item.checked ? "layui-form-checked" : "";
+                            var id = item.type == 1 ? item.userid : item.id;
+
+                            html.push('<li data="' + id + '" >');
+                            html.push('<div class="layui-unselect layui-form-checkbox ' + ck + '" lay-skin="primary">');
+                            html.push('<span class="iconfont ' + icon + '">' + item.name + '</span>');
+                            html.push('<i class="layui-icon layui-icon-ok"></i>');
+                            html.push('</div>');
+                            html.push('</li>');
+                        }
+                    }
+
+                    $("#selectedbox").html(html.join(''));
+
+                    $("#selectedbox > li").unbind("click");
+                    $("#selectedbox > li").bind("click",this.ckItemClick.bind(this));
+                }
+            }
+        });
+
+
+
+
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index','transfer', 'layer', 'util'], function () {
+            var $ = layui.$
+                , transfer = layui.transfer
+                , layer = layui.layer
+                , setter = layui.setter
+                , util = layui.util;
+                var url = setter.baseUrl;
+
+            window._shuuulebox = new ShuttleBox({baseUrl:url});
+
+            // $("#getPersonBtn").bind('click',function(){
+
+            //     var data = _shuuulebox.getSelectedItem();
+            //     console.log(data)
+            // });
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+{
+  "id": "2256153",
+  "name": "dingdingqianru",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6842465",
+      "name": "日历",
+      "font_class": "rili",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "11177860",
+      "name": "更多",
+      "font_class": "ziyuan",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "13604662",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "17479343",
+      "name": "日历",
+      "font_class": "rili1",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "9538387",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "ed13",
+      "unicode_decimal": 60691
+    },
+    {
+      "icon_id": "11864149",
+      "name": "放大镜",
+      "font_class": "fangdajing",
+      "unicode": "e6c1",
+      "unicode_decimal": 59073
+    },
+    {
+      "icon_id": "1524043",
+      "name": "标签",
+      "font_class": "biaoqian",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "13389345",
+      "name": "座位",
+      "font_class": "zuowei1",
+      "unicode": "e873",
+      "unicode_decimal": 59507
+    },
+    {
+      "icon_id": "15296931",
+      "name": "我创建的会议",
+      "font_class": "wochuangjiandehuiyi",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "15296948",
+      "name": "我参加的会议",
+      "font_class": "wocanjiadehuiyi",
+      "unicode": "e699",
+      "unicode_decimal": 59033
+    }
+  ]
+}

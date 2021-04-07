@@ -1,4 +1,4 @@
-layui.config({
+    layui.config({
     base: '../../../layuiadmin/' //静态资源所在路径
 }).extend({
     index: 'lib/index' //主入口模块
@@ -20,8 +20,8 @@ layui.config({
         // "<button class='layui-btn layui-ds' data-type='screening' id='screening'>筛选</button><button class='layui-btn layui-ds' data-type='detailedinfo' id='detailedinfo' style='position: relative;'>详细信息</button>"
         '<a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="screening" id="screening">筛选<s></s></a><a class="layui-ds layui-btn-a-grey" href="javascript:;" data-type="detailedinfo" id="detailedinfo">详细<s></s></a>'
     )
-    
-    
+
+
     $.ajax({
         async: true,
         type: "get",
@@ -45,9 +45,9 @@ layui.config({
         }
     })
     $("#searchinput").focus();
-   
+
          $('#searchinput').blur(function () {
-       
+
         setTimeout( function(){
             if(!flag){
                 $("#searchinput").focus();
@@ -56,7 +56,7 @@ layui.config({
             }, 100 );
                     
                   });
-    
+
     form.on('select(component-form-select)', function (data) {
 
         ajaxs(data.value)
@@ -375,7 +375,7 @@ layui.config({
         });
 
     }
- 
+
 
     window.onkeyup = function (ev) {
         var key = ev.keyCode || ev.which;
@@ -436,7 +436,7 @@ layui.config({
                     },
                     success: function (layero, index) {
                         var body = layui.layer.getChildFrame('body', index);
-                        
+
                     }
                     // content: '/gkzytb/franchiser/rigthColumnJsonList'
                 });
@@ -445,7 +445,7 @@ layui.config({
                 if ($('#select-room').val() == -1) {
                     return layer.msg("请选择会议后再筛选")
                 }
-                
+
                 table.render({
                     elem: '#test-table-operate',
                     // height: 'full-200',
@@ -570,7 +570,7 @@ layui.config({
                         flag = false
                         $("#searchinput").val(undefined);
                         $("#searchinput").focus();
-                        
+
                         // layer.close(layer.index); //它获取的始终是最新弹出的某个层，值是由layer内部动态递增计算的
                         // layer.close(index);    //返回数据关闭loading
                     },
@@ -582,13 +582,13 @@ layui.config({
 
         Date.prototype.Format = function (fmt) {
             var o = {
-                "M+": this.getMonth() + 1, //月份 
-                "d+": this.getDate(), //日 
-                "H+": this.getHours(), //小时 
-                "m+": this.getMinutes(), //分 
-                "s+": this.getSeconds(), //秒 
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-                "S": this.getMilliseconds() //毫秒 
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
             };
             if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
             for (var k in o)
@@ -623,9 +623,9 @@ layui.config({
                         body.find("#sex").text('女');
                     }
                     if(obj.data.isleave == 0){
-                        body.find("#state").text("参会")  
+                        body.find("#state").text("参会")
                     }else if(obj.data.isleave == 1){
-                        body.find("#state").text("参会") 
+                        body.find("#state").text("参会")
                     }
                     body.find("#address").text(obj.data.address)
                     body.find("#datetime").text(date)
@@ -675,7 +675,7 @@ layui.config({
                     $("#searchinput").focus();
                     var submit = layero.find('iframe').contents().find("#click");
                     submit.click();
-                   
+
                 },
                 cancel: function (index, layero) {
                     flag = false

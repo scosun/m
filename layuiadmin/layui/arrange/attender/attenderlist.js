@@ -520,11 +520,11 @@ layui.config({
                         layer.msg("请选择通讯录中的人员并移动到右侧")
                     }else{
                         layer.confirm('确认新增'+datas.length+'个人员吗？', {title: '温馨提示'},function(index){
-                            
+
                             var userids = datas.map(function(item){
                                 return item.id;
                             });
-                            
+
                             var arr = userids.join(',')
                             $.ajax({
                                 async: false,
@@ -562,11 +562,15 @@ layui.config({
                 }
             })
         },
+        exportPerson:function (){
+            if($('#select-room').val() ==-1){
+                return layer.msg("请先选择会议再导出人员")
+            }
+            window.location= url+ '/meetingcanhui/exportAddressPerson/'+$('#select-room').val();
+        },
         uploadphoto: function () {
 
-            if($('#select-room').val() ==-1){
-                return layer.msg("请先选择会议再上传图片")
-            }
+
             layer.open({
                 type: 2,
                 title: '批量上传参会人员信息',
@@ -721,7 +725,7 @@ layui.config({
                     },
                     //成功的回调函数
                     data: {
-                        "meetingcanhuiid": attenderList.join(",")
+                            "meetingcanhuiid": attenderList.join(",")
 
                     },
                     success: function (msg) {
