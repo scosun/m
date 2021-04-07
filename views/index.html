@@ -91,7 +91,7 @@
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
                         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <dd><a lay-href="set/user/phone.html">换绑手机</a></dd>
-<!--                           <dd><a data-type="team" class="layui-ds">切换团队</a></dd>-->
+                           <dd><a data-type="team" class="layui-ds">切换团队</a></dd>
                         <hr>
 
                         <dd layadmin-event="1" id="logout"><a>退出</a></dd>
@@ -276,19 +276,32 @@
                             <dd id="meetingnoticeperson"><a lay-href="arrange/notice/personnelList.html">会议通知人员</a></dd>
                         </dl>
                     </li>
-                    <li data-name="component" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="场地管理" lay-direction="2">
-                            <i class="layui-icon iconfont icon-xitongguanli"></i>
-                            <cite>场地管理</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd data-name="grid" id="team">
-                                <a href="javascript:;" lay-href="arrange/meetingsite/meetingsitemanage_list.html    " lay-tips="团队协作" >
-                                    场地管理
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
+<!--                    <li data-name="component" class="layui-nav-item">-->
+<!--                        <a href="javascript:;" lay-tips="场地管理" lay-direction="2">-->
+<!--                            <i class="layui-icon iconfont icon-xitongguanli"></i>-->
+<!--                            <cite>场地管理</cite>-->
+<!--                        </a>-->
+<!--                        <dl class="layui-nav-child">-->
+<!--                            <dd data-name="grid" id="team">-->
+<!--                                <a href="javascript:;" lay-href="arrange/meetingsite/meetingsitemanage_list.html    " lay-tips="团队协作" >-->
+<!--                                    场地管理-->
+<!--                                </a>-->
+<!--                            </dd>-->
+<!--                        </dl>-->
+<!--                    </li>-->
+                                        <li data-name="component" class="layui-nav-item">
+                                            <a href="javascript:;" lay-tips="团队协作" lay-direction="2">
+                                                <i class="layui-icon iconfont icon-xitongguanli"></i>
+                                                <cite>团队协作</cite>
+                                            </a>
+                                            <dl class="layui-nav-child">
+                                                <dd data-name="grid" id="team">
+                                                    <a href="javascript:;" lay-href="arrange/teamcollaboration/teamlist.html" lay-tips="团队协作" >
+                                                        团队管理
+                                                    </a>
+                                                </dd>
+                                            </dl>
+                                        </li>
                     <!--                    <li data-name="component" class="layui-nav-item" id="avirGroup">-->
                     <!--                           <a href="javascript:;" lay-tips="系统管理" lay-direction="2">-->
                     <!--                            <i class="layui-icon iconfont icon-xitongguanli"></i>-->
