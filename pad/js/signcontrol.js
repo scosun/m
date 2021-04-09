@@ -42,6 +42,7 @@ SignControl.prototype = {
             if (r != null) return r[2]; return null;
         }
         var username = getUrlParam("username") || null;
+        var testWeb = getUrlParam("test") || null;
 
         if(!username){
             // if(typeof H5JsMeeting != "undefined"){
@@ -56,12 +57,19 @@ SignControl.prototype = {
             // }
             this.userName = username;
 
-            this.createMeetWebSocket(username);
+            if(testWeb == "web"){
+                $("#testweb").show();
+                this.createMeetWebSocket(username);
+            }else{
+                $("#testweb").hide();
+            }
+            
         }
         // $(window).bind("beforeunload",this.stopMeetWebSocket.bind(this));
 
         this.bindEvent();
 	},
+
 	bindEvent:function(){
        $("#closebtn").bind("click",this.closeParameter.bind(this));
        $("#savebtn").bind("click",this.saveParameter.bind(this));
@@ -90,7 +98,7 @@ SignControl.prototype = {
         // console.log(this.allSeatIds)
     },
 
-    readyMeeting:function(obj){
+    readyMeeting:function(obj,cache){
         // 1: 准备会议发送成功；-1: 准备会议失败； 
         if(+obj.meetingState == 1){
             this.setSeatsIdsStatus(obj.seatid);
@@ -101,23 +109,25 @@ SignControl.prototype = {
             $("#" + obj.seatid).removeClass();
             $("#" + obj.seatid).addClass("seatdiv sm11");
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议准备完成");
-            }else{
-                this.showStatusTip("会议准备完成");
-            }
-            
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(1);
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议准备完成，下一步可以操作会议准备，会议开始，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议准备完成，下一步可以操作会议准备，会议开始，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(1);
+                    }
+                }
             }
         }
     },
-    startMeeting:function(obj){
+    startMeeting:function(obj,cache){
         // 2：开始会议发送成功；-2：开始会议发送失败；
         if(+obj.meetingState == 2){
             this.setSeatsIdsStatus(obj.seatid);
@@ -126,22 +136,26 @@ SignControl.prototype = {
             $("#" + obj.seatid).text(obj.name);
             $("#" + obj.seatid).addClass("seatdiv sm1");
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议开始完成");
-            }else{
-                this.showStatusTip("会议开始完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(2);
+
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议开始完成，下一步可以操作会议开始，会议暂停，会议结束，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议开始完成，下一步可以操作会议开始，会议暂停，会议结束，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(2);
+                    }
+                }
             }
         }
     },
-    stopMeeting:function(obj){
+    stopMeeting:function(obj,cache){
         // 3: 暂停会议成功；-3：暂停会议失败；
         if(+obj.meetingState == 3){
             this.setSeatsIdsStatus(obj.seatid);
@@ -155,22 +169,26 @@ SignControl.prototype = {
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议暂停完成");
-            }else{
-                this.showStatusTip("会议暂停完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(3);
+
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议暂停完成，下一步可以操作会议暂停，会议恢复，会议结束，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议暂停完成，下一步可以操作会议暂停，会议恢复，会议结束，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(3);
+                    }
+                }
             }
         }
     },
-    restoreMeeting:function(obj){
+    restoreMeeting:function(obj,cache){
         // 4: 恢复会议成功；-4: 恢复会议失败；
         if(+obj.meetingState == 4){
             this.setSeatsIdsStatus(obj.seatid);
@@ -183,22 +201,27 @@ SignControl.prototype = {
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议恢复完成");
-            }else{
-                this.showStatusTip("会议恢复完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(2);
+
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议恢复完成，下一步可以操作会议暂停，会议恢复，会议结束，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议恢复完成，下一步可以操作会议暂停，会议恢复，会议结束，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(4);
+                    }
+                }
+                
             }
         }
     },
-    finishMeeting:function(obj){
+    finishMeeting:function(obj,cache){
         // 5：结束会议成功; -5:结束会议失败； 
         if(+obj.meetingState == 5){
             this.setSeatsIdsStatus(obj.seatid);
@@ -218,22 +241,26 @@ SignControl.prototype = {
         if(obj.name){
             $("#" + obj.seatid).text(obj.name);
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议结束完成");
-            }else{
-                this.showStatusTip("会议结束完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(5);
+
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议结束完成，下一步可以操作会议准备，会议结束，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议结束完成，下一步可以操作会议准备，会议结束，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(5);
+                    }
+                }
             }
         }
     },
-    rebootMeeting:function(obj){
+    rebootMeeting:function(obj,cache){
         var ele = $("#" + obj.seatid);
         // 6: 重启会议成功；-6: 重启会议失败；
         if(+obj.meetingState == 6){
@@ -252,22 +279,26 @@ SignControl.prototype = {
             //重置失败，要不要有颜色标识
             ele.addClass("seatdiv sm66");
         }
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("会议重启完成");
-            }else{
-                this.showStatusTip("会议重启完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(6);
+
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("会议重启完成，下一步可以操作会议准备，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("会议重启完成，下一步可以操作会议准备，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(6);
+                    }
+                }
             }
         }
     },
-    resetMeeting:function(obj){
+    resetMeeting:function(obj,cache){
         var ele = $("#" + obj.seatid);
         // 7: 重置桌牌成功；-7：重置桌牌失败；
         if(obj.meetingState == 7){
@@ -293,18 +324,21 @@ SignControl.prototype = {
             ele.addClass("seatdiv sm77");
         }
 
-        //当前状态已完成
-        var status = +obj.status;
-        if(status == 1){
-            this.backComplete = 1;
-            //默认补发一次
-            if(this.resend){
-                this.sendMoreNewTableSign("设备重置完成");
-            }else{
-                this.showStatusTip("设备重置完成");
-            }
-            if(typeof H5JsMeeting != "undefined"){
-                H5JsMeeting.finishSeatStatus(7);
+        if(!cache){
+            //当前状态已完成
+            var status = +obj.status;
+            if(status == 1){
+                this.backComplete = 1;
+                //默认补发一次
+                if(this.resend){
+                    this.sendMoreNewTableSign("设备重置完成，下一步可以操作会议准备，重启会议，设备重置");
+                }else{
+                    this.showStatusTip("设备重置完成，下一步可以操作会议准备，重启会议，设备重置");
+                    
+                    if(typeof H5JsMeeting != "undefined"){
+                        H5JsMeeting.finishSeatStatus(7);
+                    }
+                }
             }
         }
     },
@@ -464,48 +498,52 @@ SignControl.prototype = {
     // },
 
 
-    showStatusTip:function(msg){
-        $("#errortip").html('<span>'+msg+'...</span>');
+    showStatusTip:function(msg,time){
+        if(typeof H5JsMeeting != "undefined" && H5JsMeeting.showToast){
+            H5JsMeeting.showToast(msg,time || 6000);
+        }else{
+            $("#errortip").html('<span>'+msg+'</span>');
 
-        $("#errortip").show();
-        setTimeout(function(){
-            $("#errortip").hide();
-        },2500);
+            $("#errortip").show();
+            setTimeout(function(){
+                $("#errortip").hide();
+            },6000);
+        }
     },
     currentTip:function(){
         if(this.meetingType === 1){
             // if(!(type === 1 || type === 2 || type === 6 || type === 7)){
-                this.showStatusTip("会议准备中");
+                this.showStatusTip("不能执行当前操作，会议准备中...");
                 return;
             // }
         }else if(this.meetingType === 2){
             // if(!(type === 2 || type === 3 || type === 5 || type === 6 || type === 7)){
-                this.showStatusTip("会议开始中");
+                this.showStatusTip("不能执行当前操作，会议开始中...");
                 return;
             // }
         }else if(this.meetingType === 3){
             // if(!(type === 3 || type === 4 || type === 5 || type === 6 || type === 7)){
-                this.showStatusTip("会议暂停中");
+                this.showStatusTip("不能执行当前操作，会议暂停中...");
                 return;
             // }
         }else if(this.meetingType === 4){
             // if(!(type === 3 || type === 4 || type === 5 || type === 6 || type === 7)){
-                this.showStatusTip("会议恢复中");
+                this.showStatusTip("不能执行当前操作，会议恢复中...");
                 return;
             // }
         }else if(this.meetingType === 5){
             // if(!(type === 1 || type === 5 || type === 6 || type === 7)){
-                this.showStatusTip("会议结束中");
+                this.showStatusTip("不能执行当前操作，会议结束中...");
                 return;
             // }
         }else if(this.meetingType === 6){
             // if(!(type === 1 || type === 6 || type === 7)){
-                this.showStatusTip("会议重启中");
+                this.showStatusTip("不能执行当前操作，会议重启中...");
                 return;
             // }
         }else if(this.meetingType === 7){
             // if(!(type === 1 || type === 7)){
-                this.showStatusTip("桌牌重启中");
+                this.showStatusTip("不能执行当前操作，设备重启中...");
                 return;
             // }
         }
@@ -540,6 +578,7 @@ SignControl.prototype = {
             }
         }else if(this.meetingType === 2){
             if(!(type === 2 || type === 3 || type === 5 || type === 6 || type === 7)){
+                this.currentTip();
                 return;
             }
         }else if(this.meetingType === 3){
@@ -582,6 +621,22 @@ SignControl.prototype = {
         // if(typeof H5JsMeeting != "undefined"){
         //     H5JsMeeting.showTipsDialog("type--ajax--------------"+type);
         // }
+
+        if(type == 1){
+            this.showStatusTip("发送会议准备指令...");
+        }else if(type == 2){
+            this.showStatusTip("发送会议开始指令...");
+        }else if(type == 3){
+            this.showStatusTip("发送会议暂停指令...");
+        }else if(type == 4){
+            this.showStatusTip("发送会议恢复指令...");
+        }else if(type == 5){
+            this.showStatusTip("发送会议结束指令...");
+        }else if(type == 6){
+            this.showStatusTip("发送会议重启指令...");
+        }else if(type == 7){
+            this.showStatusTip("发送设备重置指令...");
+        }
         
         this.backComplete = 0;
 
@@ -648,25 +703,25 @@ SignControl.prototype = {
             var meetingState = +obj.meetingState;
             if(meetingState == 1 || meetingState == -1){
                 this.meetingType = 1;
-                this.readyMeeting(obj);
+                this.readyMeeting(obj,"cache");
             }else if(meetingState == 2 || meetingState == -2){
                 this.meetingType = 2;
-                this.startMeeting(obj);
+                this.startMeeting(obj,"cache");
             }else if(meetingState == 3 || meetingState == -3){
                 this.meetingType = 3;
-                this.stopMeeting(obj);
+                this.stopMeeting(obj,"cache");
             }else if(meetingState == 4 || meetingState == -4){
                 this.meetingType = 4;
-                this.restoreMeeting(obj);
+                this.restoreMeeting(obj,"cache");
             }else if(meetingState == 5 || meetingState == -5){
                 this.meetingType = 5;
-                this.finishMeeting(obj);
+                this.finishMeeting(obj,"cache");
             }else if(meetingState == 6 || meetingState == -6){
                 this.meetingType = 6;
-                this.rebootMeeting(obj);
+                this.rebootMeeting(obj,"cache");
             }else if(meetingState == 7 || meetingState == -7){
                 this.meetingType = 7;
-                this.resetMeeting(obj);
+                this.resetMeeting(obj,"cache");
             }
         }.bind(this));
 
@@ -1171,14 +1226,24 @@ SignControl.prototype = {
 
         //如果没有选择一个席签，提示重置状态
         if(seled.length == 0){
-            var b = window.confirm("确定要重置当前会议状态吗？");
-            if(b){
-                //给一个特殊状态，让全部 按钮都能点
-                this.meetingType = -2;
-                this.backComplete = 1;
+            //同步不了，有逻辑问题，暂时没想明白，先必须选了
+            if(typeof H5JsMeeting != "undefined"){
+                // H5JsMeeting.showResetDialog("确定要重置当前会议状态吗？",1);
+                H5JsMeeting.showTipsDialog("请选择要同步状态的座区");
                 return;
-            }else{
+            }
+            else{
+                alert("请选择要同步状态的座区");
                 return;
+                // var b = window.confirm("确定要重置当前会议状态吗？");
+                // if(b){
+                //     //给一个特殊状态，让全部 按钮都能点
+                //     this.meetingType = -2;
+                //     this.backComplete = 1;
+                //     return;
+                // }else{
+                //     return;
+                // }
             }
         }
 

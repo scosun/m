@@ -47,6 +47,7 @@ $(function(){
     }
     var meetingid = +getUrlParam("meetingid") || null;
     var token = getUrlParam("token") || null;
+    var testWeb = getUrlParam("test") || null;
     
     // 座区数据
     var showSeatsData = [];
@@ -55,7 +56,7 @@ $(function(){
     
 
     //开发使用，做一次自动登录
-    if(!token){
+    if(testWeb == "web" && !token){
         autoLogin();
         return;
     }
@@ -179,10 +180,12 @@ $(function(){
                 var code = obj.code;
                 if(code == 0){
                     var datas = obj.data || {};
-                    $("#meetingname").text(datas[0].name);
-                    $("#meetingaddress").text("地点："+datas[0].address);
-                    $("#meetingremark").text("备注："+datas[0].memo);
-                    $("#meetingtime").text("时间："+datas[0].meetingtime);
+                    if(datas[0]){
+                        $("#meetingname").text(datas[0].name);
+                        $("#meetingaddress").text("地点："+datas[0].address);
+                        $("#meetingremark").text("备注："+datas[0].memo);
+                        $("#meetingtime").text("时间："+datas[0].meetingtime);
+                    }
                 }
             }
         });
