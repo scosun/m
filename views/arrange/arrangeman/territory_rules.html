@@ -532,7 +532,7 @@
 
                 changeSeatRuleArea(obj.data.id, obj.data.rulezone, obj.data.ruleid, obj.data.isincrement);
 
-                
+
             }
         });
 
@@ -1019,7 +1019,8 @@
                     "rulename": rulename,
                     "isincrement": isincrement,
                     "ruleid": ruleid,
-                    "ruletemplateid":ruletemplateid
+                    "ruletemplateid":ruletemplateid,
+                    "seatsnum":rulez.length
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -1121,7 +1122,7 @@
 
     })
     //重置layui 无数据情况
-    var noData ='<i class="layui-icon layui-ds iconfont icon-wuneirong"></i>当前没有任何记录</<i>'
+    var noData ='<i class="layui-icon layui-ds iconfont icon-wuneirong"></i>当前没有任何记录</i>'
     $(".layui-none").addClass('noData').removeClass('layui-none').html(noData);
 
     function asd() {
@@ -1136,4 +1137,5 @@
         }
     }
 </script>
+</body>
 </html>

@@ -112,9 +112,10 @@
             //成功的回调函数
             success: function (msg) {
                 var data = msg.data;
-                console.log(data);
-                $('#team').val(data.teamId);
-                form.render();
+                if(data==null || data == undefined){}else{
+                    $('#team').val(data.teamId);
+                    form.render();
+                }
             },
             //失败的回调函数
             error: function () {
